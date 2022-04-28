@@ -104,18 +104,20 @@ public class LmsController {
 		int resultCnt = 0;
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			paramMap.put("UserAccount", request.getSession().getAttribute("AdminAccount"));
-		    paramMap.put("sqlName", "updateContents");	
-		    resultCnt = lmsService.updateData(paramMap);
+			paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
 		      
 		    String fileAddpath  = this.filePath + File.separator + paramMap.get("file_gubun");
 		    Map<String, Object> fileSave = null;
 		    if (file1 != null) {
 		    	fileSave = FileUtil.uploadFile(file1, fileAddpath, request); 
+		    	paramMap.put("file_id", fileSave.get("file_uuid"));
 		    	resultCnt = this.lmsService.insertCommonFile(paramMap, fileSave, 1);
 	    	}     
 		    
-		    if(resultCnt < 1) {
+		    paramMap.put("sqlName", "updateContents");	
+		    resultCnt = lmsService.updateData(paramMap);
+		    
+		    if(resultCnt > 0) {
 		        result.put("result", "SUCCESS");
 		    }else {
 		        result.put("result", "FAIL");	 

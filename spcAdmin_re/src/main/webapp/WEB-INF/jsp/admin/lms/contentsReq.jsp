@@ -28,12 +28,6 @@
 	            <tr>
 	                <th>분류1,2</th>
 	                <td>${result.CATEGORY1_NAME} / ${result.CATEGORY2_NAME}
-			                           <select class="select"  id="category2_key" name="category2_key">
-			            	<option value='' >선택 하세요</option>
-							<c:forEach var="result" items="${category2list}" varStatus="status">
-								<option value='${result.CATEGORY2_KEY}' >${result.CATEGORY2_NAME}</option>
-							</c:forEach>
-			            </select>
 	                </td>
 	            </tr>
 	            <tr>
@@ -63,11 +57,7 @@
 	                <th>콘텐츠 등록</th>
 	                <td>
 	                    <div class="upload-box">
-	                        <input type="file" id="file1" name="file1"/>
-	                        <button class="sm-btn black-btn">삭제</button>
-	                        <label>파일명: <span>2021년 강사 안내문</span></label>
-	                        <button class="sm-btn white-btn">미리보기</button>
-	                        <span class="point">권장사이즈 : 10MB이내</span>
+	                        <input type="text" id="edu_con_url" name="edu_con_url" value="${result.EDU_CON_URL}"/>
 	                    </div>
 	                </td>
 	            </tr>
@@ -75,10 +65,14 @@
 	                <th>교육자료 등록</th>
 	                <td>
 	                    <div class="upload-box">
-	                        <input type="file" id="file2" name="file2"/>
+	                    <c:if test="${result.FILE_ID == null || result.FILE_ID == ''}">
+	                        <input type="file" id="file1" name="file1"/>
+	                    </c:if>
+	                    <c:if test="${result.FILE_ID != null && result.FILE_ID != ''}">
 	                        <button class="sm-btn black-btn">삭제</button>
 	                        <label>파일명: <span>2021년 강사 안내문</span></label>
-	                        <button class="sm-btn white-btn">미리보기</button>
+	                    </c:if>
+	                        <!-- <button class="sm-btn white-btn">미리보기</button> -->
 	                        <span class="point">권장사이즈 : 10MB이내</span>
 	                    </div>
 	                </td>
@@ -166,7 +160,7 @@ function fn_save(){
 	}
 
 	var msg = "콘텐츠 등록 하시겠습니까?";
-	formData.append("file1",    $("input[name=file1]")[0].files[0]);
+	formData.append("file1",    $("input[name=file1]")[0]);
 		
 		var yn = confirm(msg);	
 		if(yn){

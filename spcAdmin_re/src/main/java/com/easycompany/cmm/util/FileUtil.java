@@ -291,6 +291,7 @@ public class FileUtil {
 			// 설정한 path에 파일저장 
 			File serverFile = new File( file_full_path );			
 			file.transferTo(serverFile);
+			map = new HashMap<String,Object>();
 			map.put("file_size", file_size);
 			map.put("file_uuid", file_uuid);
 			map.put("file_name", file_name);

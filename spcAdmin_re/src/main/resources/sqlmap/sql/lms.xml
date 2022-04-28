@@ -177,8 +177,7 @@
 	
 	<update id="updateContents" parameterType="java.util.Map">
 		UPDATE EDU_REGISTRATION_DETAIL 
-		   SET LMS_CNT = #{lms_cnt}
-	      	, FILE_ID =  #{file_id}
+		   SET FILE_ID =  #{file_id}
 	      	, EDU_CON_URL =  #{edu_con_url}
 	      	, EDU_ON_APP_TIME =  #{edu_on_app_time}
 	      	<!-- , EDU_CON_STAT = #{edu_status} -->

@@ -55,7 +55,7 @@ public class LmsServiceImpl extends EgovAbstractServiceImpl implements LmsServic
 			  paramMap.put("file_id",(String)fileSave.get("file_uuid"));
 			  paramMap.put("file_name",(String)fileSave.get("file_name"));
 			  paramMap.put("file_full_path",(String)fileSave.get("file_full_path"));
-			  paramMap.put("file_size",(String)fileSave.get("file_size"));
+			  paramMap.put("file_size",fileSave.get("file_size"));
 			  if(gubun == 1) {
 			        cnt = this.lmsMapper.insertCommonFile(paramMap);
 			  }else {
