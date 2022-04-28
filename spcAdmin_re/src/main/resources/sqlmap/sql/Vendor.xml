@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.easycompany.mapper.VendorMapper">
+	
+	<select id="getVendorList" parameterType="com.easycompany.service.vo.VendorVo"	resultType="com.easycompany.service.vo.VendorVo">
+	    /**  com.easycompany.mapper.VendorMapper.getVendorList **/
+	   SELECT VENDOR_SEQ
+			, NAME
+			, MANAGER
+			, MANAGER_TEL
+			, COMPANY
+			, COMPANY_TEL
+			, COMMENT  
+			, REG_DATE 
+			, DEL_YN   
+			, END_DATE 
+			, SMS_PRICE
+			, LMS_PRICE
+			, MMS_PRICE
+		    , CAST( DATE_FORMAT( INS_DATE, '%Y-%m-%d %H:%i:%s' ) AS CHAR(19) ) AS INS_DATE
+			, CAST( DATE_FORMAT( UPD_DATE, '%Y-%m-%d %H:%i:%s' ) AS CHAR(19) ) AS UPD_DATE  
+		FROM  TB_VENDOR
+	  <choose>
+		<when test ="searchCondition !=null and searchCondition !='' and searchCondition =='NAME' and searchKeyword !=null and searchKeyword !='' ">
+		   WHERE  NAME  LIKE CONCAT('%', #{searchKeyword} ,'%')
+		</when>
+	  </choose>
+	  ORDER BY INS_DATE DESC
+	  LIMIT #{recordCountPerPage}  OFFSET  #{offset}
+		
+	</select>
+	
+	<select id="getVendorCount" parameterType="com.easycompany.service.vo.VendorVo" resultType="int">
+	    /**  com.easycompany.mapper.VendorMapper.getVendorCount **/
+    	SELECT count(1) getCnt
+		 FROM  TB_VENDOR
+	  <choose>
+		<when test ="searchCondition !=null and searchCondition !='' and searchCondition =='NAME' and searchKeyword !=null and searchKeyword !='' ">
+		   WHERE  NAME  LIKE CONCAT('%', #{searchKeyword} ,'%')
+		</when>
+	  </choose>
+	</select>
+	
+	<select id="getVendorView" parameterType="com.easycompany.service.vo.VendorVo"	resultType="com.easycompany.service.vo.VendorVo">
+	  /**  com.easycompany.mapper.VendorMapper.getVendorView **/
+	  SELECT  VENDOR_SEQ
+	        , NAME
+			, MANAGER
+			, MANAGER_TEL
+			, COMPANY
+			, COMPANY_TEL
+			, COMMENT  
+			, REG_DATE 
+			, DEL_YN   
+			, END_DATE 
+			, SMS_PRICE
+			, LMS_PRICE
+			, MMS_PRICE
+		    , CAST( DATE_FORMAT( INS_DATE, '%Y-%m-%d %H:%i:%s' ) AS CHAR(19) ) AS INS_DATE
+			, CAST( DATE_FORMAT( UPD_DATE, '%Y-%m-%d %H:%i:%s' ) AS CHAR(19) ) AS UPD_DATE  
+	    FROM  TB_VENDOR
+	   WHERE  VENDOR_SEQ  = #{vendor_seq}
+	</select>
+	
+	<update id="updateVendor" parameterType="com.easycompany.service.vo.VendorVo">
+		 /**  com.easycompany.mapper.VendorMapper.updateVendor **/
+		UPDATE TB_VENDOR 
+		   SET NAME       = #{name}
+		 	 , MANAGER    = #{manager}
+			 , MANAGER_TEL= #{manager_tel}
+			 , COMPANY    = #{company}
+			 , COMPANY_TEL= #{company_tel}
+			 , REG_DATE   = #{reg_date}
+			 , END_DATE   = #{end_date}
+			 , COMMENT    = #{comment} 
+			 , DEL_YN     = #{del_yn}   			 
+			 , SMS_PRICE  = #{sms_price}
+			 , LMS_PRICE  = #{lms_price}
+			 , MMS_PRICE  = #{mms_price}
+		     , UPD_DATE   = NOW()
+ 		WHERE VENDOR_SEQ  = #{vendor_seq}
+	</update>
+	
+	<insert id="insertVendor" parameterType="com.easycompany.service.vo.VendorVo">
+		 /**  com.easycompany.mapper.VendorMapper.insertVendor **/
+		INSERT 
+		INTO TB_VENDOR 
+		(
+		  	  NAME
+			, MANAGER
+			, MANAGER_TEL
+			, COMPANY
+			, COMPANY_TEL
+			, REG_DATE 
+			, END_DATE
+			, COMMENT 
+			, DEL_YN   			 
+			, SMS_PRICE
+			, LMS_PRICE
+			, MMS_PRICE
+			, INS_DATE
+
+		) 
+		VALUES 
+		(
+			  #{name}
+			, #{manager}
+			, #{manager_tel}
+			, #{company}
+			, #{company_tel}
+			, #{reg_date}
+			, #{end_date}
+			, #{comment}			
+			, #{del_yn}
+			, #{sms_price}
+			, #{lms_price}	
+			, #{mms_price}
+			, NOW()					
+		)	
+	</insert>
+
+	<delete id="deleteVendor" parameterType="com.easycompany.service.vo.VendorVo">
+	   /**  com.easycompany.mapper.VendorMapper.deleteVendor **/
+	   DELETE 
+		 FROM TB_VENDOR 
+		WHERE VENDOR_SEQ  = #{vendor_seq}
+	</delete>
+	
+	
+</mapper>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">  
+ 
+<tiles-definitions>  
+  
+	<definition name="instructor01List" extends="common-definition">  
+	   <put-attribute name="title" value="공지사항" />  
+	   <put-attribute name="body" value="/WEB-INF/jsp/web/instructor/instructor01List.jsp" />  
+	</definition> 
+	
+	<definition name="instructor01View" extends="common-definition">  
+	   <put-attribute name="title" value="공지사항" />  
+	   <put-attribute name="body" value="/WEB-INF/jsp/web/instructor/instructor01View.jsp" />  
+	</definition> 
+	
+	<definition name="instructor02List" extends="common-definition">  
+	   <put-attribute name="title" value="자료실" />  
+	   <put-attribute name="body" value="/WEB-INF/jsp/web/instructor/instructor02List.jsp" />  
+	</definition> 
+	
+	<definition name="instructor02View" extends="common-definition">  
+	   <put-attribute name="title" value="자료실" />  
+	   <put-attribute name="body" value="/WEB-INF/jsp/web/instructor/instructor02View.jsp" />  
+	</definition> 
+	
+	<definition name="instructor03List" extends="common-definition">  
+	   <put-attribute name="title" value="활동신청" />  
+	   <put-attribute name="body" value="/WEB-INF/jsp/web/instructor/instructor03List.jsp" />  
+	</definition> 
+	
+	<definition name="instructor04List" extends="common-definition">  
+	   <put-attribute name="title" value="강사자격정보" />  
+	   <put-attribute name="body" value="/WEB-INF/jsp/web/instructor/instructor04List.jsp" />  
+	</definition> 
+	
+	<definition name="instructor04lecture" extends="common-definition">  
+	   <put-attribute name="title" value="강의내역" />  
+	   <put-attribute name="body" value="/WEB-INF/jsp/web/instructor/instructor04lecture.jsp" />  
+	</definition> 
+	
+	<definition name="instructor04absence" extends="common-definition">  
+	   <put-attribute name="title" value="강사휴직신청" />  
+	   <put-attribute name="body" value="/WEB-INF/jsp/web/instructor/instructor04absence.jsp" />  
+	</definition> 
+	
+	<definition name="instructor05List" extends="common-definition">  
+	   <put-attribute name="title" value="강사 보수 교육" />  
+	   <put-attribute name="body" value="/WEB-INF/jsp/web/instructor/instructor05List.jsp" />  
+	</definition> 
+	
+	
+	<!-- * 관리자 -->
+	
+	<definition name="instructorAdm01List" extends="base-definition">  
+       <put-attribute name="title" value="강사자격 정보" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/instructor/instructorAdm01List.jsp" />  
+    </definition>
+    
+    <definition name="instructorAdm01View" extends="base-definition">  
+       <put-attribute name="title" value="강사자격 정보" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/instructor/instructorAdm01View.jsp" />  
+    </definition>
+    
+    <definition name="instructorAdm02List" extends="base-definition">  
+       <put-attribute name="title" value="강사 활동 현황" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/instructor/instructorAdm02List.jsp" />  
+    </definition>
+    
+    <definition name="instructorAdm03List" extends="base-definition">  
+       <put-attribute name="title" value="강사 활동 신청현황" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/instructor/instructorAdm03List.jsp" />  
+    </definition>
+    
+    <definition name="instructorAdm04List" extends="base-definition">  
+       <put-attribute name="title" value="강사 휴직 신청" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/instructor/instructorAdm04List.jsp" />  
+    </definition>
+    	
+</tiles-definitions>

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.easycompany.mapper.BoardMapper">
+	
+	<select id="getBoardList" parameterType="com.easycompany.cmm.vo.DefaultVO"	resultType="com.easycompany.service.vo.BoardVo">
+		 /**  com.easycompany.mapper.BoardMapper.getBoardList **/
+	    SELECT A.BOARD_SEQ 
+			 , A.BOARD_RE_REF 
+			 , A.BOARD_RE_LEV 
+			 , A.BOARD_RE_SEQ 
+			 , A.BOARD_WRITER 
+			 , A.BOARD_SUBJECT 
+			 , A.BOARD_CONTENT 
+			 , A.BOARD_HITS
+			 , A.FILE_UUID
+			 , A.DEL_YN 
+			 , INS_USER_ID
+			 , CAST( DATE_FORMAT( A.INS_DATE, '%Y-%m-%d %H:%i:%s' ) AS CHAR(19) ) AS INS_DATE
+			 , UPD_USER_ID
+			 , CAST( DATE_FORMAT( A.UPD_DATE, '%Y-%m-%d %H:%i:%s' ) AS CHAR(19) ) AS UPD_DATE  
+			 , B.FILE_NAME
+			 , B.FILE_FULL_PATH
+			 , B.FILE_SEQ
+			 , B.FILE_SIZE
+	    FROM  TB_BOARD A
+	    LEFT OUTER JOIN TB_BOARD_FILE B
+	      ON A.FILE_UUID = B.FILE_UUID
+	   WHERE 1 = 1 
+	     <choose>
+		<when test ="searchCondition !=null and searchCondition !='' and searchCondition =='board_writer' and searchKeyword !=null and searchKeyword !='' ">
+		   AND  BOARD_WRITER  LIKE CONCAT('%', #{searchKeyword} ,'%')
+		</when>
+		<when test ="searchCondition !=null and searchCondition !='' and  searchCondition =='board_subject' and searchKeyword !=null and searchKeyword !='' ">
+		  AND  BOARD_SUBJECT LIKE CONCAT('%', #{searchKeyword} ,'%')
+		</when>
+	  </choose>
+	  ORDER BY BOARD_RE_REF DESC, BOARD_RE_SEQ ASC
+	  LIMIT #{recordCountPerPage}  OFFSET  #{offset}
+		
+	</select>
+	
+	<select id="getBardCount" parameterType="com.easycompany.cmm.vo.DefaultVO" resultType="int">
+	    /**  com.easycompany.mapper.BoardMapper.getBardCount **/
+    	SELECT COUNT(*) boardcount
+		 FROM  TB_BOARD
+		WHERE 1=1
+	  <choose>
+		<when test ="searchCondition !=null and searchCondition !='' and searchCondition =='board_writer' and searchKeyword !=null and searchKeyword !='' ">
+		   AND  BOARD_WRITER  LIKE CONCAT('%', #{searchKeyword} ,'%')
+		</when>
+		<when test ="searchCondition !=null and searchCondition !='' and  searchCondition =='board_subject' and searchKeyword !=null and searchKeyword !='' ">
+		  AND  BOARD_SUBJECT LIKE CONCAT('%', #{searchKeyword} ,'%')
+		</when>
+	  </choose>
+	</select>
+	
+	<insert id="insertBoard" parameterType="com.easycompany.service.vo.BoardVo">
+		/**  com.easycompany.mapper.BoardMapper.insertBoard **/	
+		<selectKey resultType="int" keyProperty="board_re_ref" order="BEFORE">			
+			SELECT IFNULL(MAX(BOARD_RE_REF), 0) + 1 
+			FROM TB_BOARD			  
+		</selectKey>
+		
+		INSERT 
+		INTO TB_BOARD 
+		(
+		  	  BOARD_RE_REF
+		  	, BOARD_RE_LEV
+		  	, BOARD_RE_SEQ
+		  	, BOARD_WRITER
+		  	, BOARD_SUBJECT
+		  	, BOARD_CONTENT
+		  	, INS_USER_ID
+		  	, INS_DATE
+		  	, UPD_USER_ID
+		  	, UPD_DATE
+		  	, BOARD_HITS
+		  	, FILE_UUID
+		) 
+		VALUES 
+		(
+			  #{board_re_ref}
+			, 0
+			, 0
+			, #{board_writer}
+			, #{board_subject}
+			, #{board_content}
+			, 'NONMEMBER'
+			, NOW() 
+			, 'NONMEMBER'
+			, NOW() 
+			, 0
+			, #{file_uuid}
+		)	
+	</insert>
+	
+	<insert id="insertBoardFile" parameterType="com.easycompany.service.vo.BoardVo">
+		/**  com.easycompany.mapper.BoardMapper.insertBoardFile **/	
+		INSERT 
+		INTO TB_BOARD_FILE 
+		(
+		  	  FILE_UUID
+		  	, FILE_NAME
+		  	, FILE_FULL_PATH
+		  	, FILE_SIZE
+		 ) 
+		VALUES 
+		(
+			  #{file_uuid}
+			, #{file_name}
+			, #{file_full_path}
+			, #{file_size}
+		)	
+	</insert>
+	<update id="updateBoardHits" parameterType="com.easycompany.service.vo.BoardVo">
+		/**  com.easycompany.mapper.BoardMapper.updateBoardHits **/	
+		UPDATE TB_BOARD 
+		   SET BOARD_HITS  = BOARD_HITS + 1		     
+		     , UPD_USER_ID = 'NONMEMBER'
+		     , UPD_DATE    = NOW()
+ 		WHERE BOARD_SEQ    = #{board_seq}	
+	</update>
+	
+	<select id="getBoardDetail" parameterType="com.easycompany.service.vo.BoardVo" resultType="com.easycompany.service.vo.BoardVo">
+		/**  com.easycompany.mapper.BoardMapper.getBoardDetail **/	
+		SELECT A.BOARD_SEQ 
+			 , A.BOARD_RE_REF 
+			 , A.BOARD_RE_LEV 
+			 , A.BOARD_RE_SEQ 
+			 , A.BOARD_WRITER 
+			 , A.BOARD_SUBJECT 
+			 , A.BOARD_CONTENT 
+			 , A.BOARD_HITS
+			 , A.FILE_UUID
+			 , A.DEL_YN 
+			 , INS_USER_ID
+			 , CAST( DATE_FORMAT( A.INS_DATE, '%Y-%m-%d %H:%i:%s' ) AS CHAR(19) ) AS INS_DATE
+			 , UPD_USER_ID
+			 , CAST( DATE_FORMAT( A.UPD_DATE, '%Y-%m-%d %H:%i:%s' ) AS CHAR(19) ) AS UPD_DATE  
+			 , B.FILE_NAME
+			 , B.FILE_FULL_PATH
+			 , B.FILE_SEQ
+			 , B.FILE_SIZE
+	    FROM  TB_BOARD A
+	    LEFT OUTER JOIN TB_BOARD_FILE B
+	      ON A.FILE_UUID = B.FILE_UUID
+		WHERE BOARD_SEQ = #{board_seq}	
+	</select>
+   
+	<delete id="deleteBoard" parameterType="com.easycompany.service.vo.BoardVo">
+	/**  com.easycompany.mapper.BoardMapper.deleteBoard **/	
+		DELETE 
+		 FROM TB_BOARD 
+		WHERE BOARD_SEQ = #{board_seq}	
+	</delete>
+	
+	<update id="updateBoard" parameterType="com.easycompany.service.vo.BoardVo">
+		/**  com.easycompany.mapper.BoardMapper.updateBoard **/	
+		UPDATE TB_BOARD 
+		   SET BOARD_SUBJECT = #{board_subject}
+		     , BOARD_CONTENT = #{board_content}
+		     , UPD_USER_ID = 'NONMEMBER'
+		     , UPD_DATE = NOW()
+ 		WHERE BOARD_SEQ = #{board_seq}	
+	</update>
+	
+	<select id="getBoardReplyInfo" parameterType="com.easycompany.service.vo.BoardVo" resultType="com.easycompany.service.vo.BoardVo">
+		/**  com.easycompany.mapper.BoardMapper.getBoardReplyInfo **/	
+		SELECT BOARD_SEQ
+			 , BOARD_RE_REF
+			 , BOARD_RE_LEV
+			 , BOARD_RE_SEQ
+	    FROM TB_BOARD
+	    WHERE BOARD_SEQ = #{board_parent_seq}
+	</select>
+	
+	<update id="updateBoardReSeq" parameterType="com.easycompany.service.vo.BoardVo">
+	    /**  com.easycompany.mapper.BoardMapper.updateBoardReSeq **/
+			UPDATE TB_BOARD
+		   SET BOARD_RE_SEQ = BOARD_RE_SEQ + 1
+		     , UPD_USER_ID = 'NONMEMBER'
+		     , UPD_DATE = NOW()
+		 WHERE BOARD_RE_REF = #{board_re_ref} 
+	       AND BOARD_RE_SEQ > #{board_re_seq}
+	</update>
+	
+	<insert id="insertBoardReply" parameterType="com.easycompany.service.vo.BoardVo">
+		/**  com.easycompany.mapper.BoardMapper.insertBoardReply **/
+		INSERT 
+		INTO TB_BOARD 
+		(
+		  	  BOARD_RE_REF
+		  	, BOARD_RE_LEV
+		  	, BOARD_RE_SEQ
+		  	, BOARD_WRITER
+		  	, BOARD_SUBJECT
+		  	, BOARD_CONTENT
+		  	, INS_USER_ID
+		  	, INS_DATE
+		  	, UPD_USER_ID
+		  	, UPD_DATE
+		  	, BOARD_HITS
+		) 
+		VALUES 
+		(
+			  #{board_re_ref}
+			, #{board_re_lev} + 1
+			, #{board_re_seq} + 1
+			, #{board_writer}
+			, #{board_subject}
+			, #{board_content}
+			, 'NONMEMBER'
+			, NOW() 
+			, 'NONMEMBER'
+			, NOW() 
+			, 0
+		)
+	</insert>
+</mapper>

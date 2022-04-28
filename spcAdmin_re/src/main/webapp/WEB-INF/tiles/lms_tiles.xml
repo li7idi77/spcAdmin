@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">  
+ 
+<tiles-definitions>  
+  
+   <definition name="contentsList" extends="base-definition">  
+       <put-attribute name="title" value="LMS" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/lms/contentsList.jsp" />  
+   </definition>
+   
+   <definition name="contentsReq" extends="base-definition">  
+       <put-attribute name="title" value="LMS 등록/수정" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/lms/contentsReq.jsp" />  
+   </definition>
+   
+   <definition name="studentList" extends="base-definition">  
+       <put-attribute name="title" value="수강생/수료생 현황" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/lms/studentList.jsp" />  
+   </definition>
+   
+   <definition name="studentLearn" extends="base-definition">  
+       <put-attribute name="title" value="수강생/수료생 현황" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/lms/studentLearn.jsp" />  
+   </definition>
+   
+   <definition name="studentGraduate" extends="base-definition">  
+       <put-attribute name="title" value="수강생/수료생 현황" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/lms/studentGraduate.jsp" />  
+   </definition>
+   
+</tiles-definitions>

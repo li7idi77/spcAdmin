@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.easycompany.mapper.AddressMapper">
+	
+    <select id="getAddressList" parameterType="com.easycompany.cmm.vo.DefaultVO"	resultType="com.easycompany.service.vo.AddressVo">
+    /**  com.easycompany.mapper.AddressMapper.getAddressList **/	 
+    SELECT ADDRESS_HP
+           ,ADDRESS_NAME
+      FROM TB_ADDRESS	    
+	</select>
+	
+    <select id="getAddressListXml" parameterType="com.easycompany.cmm.vo.DefaultVO"	resultType="com.easycompany.service.vo.AddressVo">
+    /**  com.easycompany.mapper.AddressMapper.getAddressListXml **/	 
+    SELECT ADDRESS_HP
+           ,ADDRESS_NAME
+      FROM TB_ADDRESS	    
+	</select>
+	
+	<delete id="deleteAll" >
+	/**  com.easycompany.mapper.AddressMapper.deleteAll **/	
+		DELETE 
+		 FROM TB_ADDRESS
+	</delete>
+	
+	
+	
+	<insert id="insertAddress" parameterType="com.easycompany.service.vo.AddressVo">
+	/**  com.easycompany.mapper.BoardMapper.insertAddress **/
+		INSERT 
+		INTO TB_ADDRESS 
+		(
+		  	  ADDRESS_HP
+		  	, ADDRESS_NAME
+		) 
+		VALUES 
+		(
+			  #{address_hp}
+			, #{address_name} 
+		)
+	</insert>
+</mapper>

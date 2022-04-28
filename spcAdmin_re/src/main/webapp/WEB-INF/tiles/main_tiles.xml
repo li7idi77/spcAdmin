@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">  
+ 
+<tiles-definitions>  
+   
+   
+    <!-- admin > 메인화면  > List Page -->
+   <definition name="logoList" extends="base-definition">  
+       <put-attribute name="title" value="로고 관리" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/main/logoList.jsp" />  
+   </definition> 
+   
+    <!-- admin > 메인이미지 List Page -->
+   <definition name="imgList" extends="base-definition">  
+       <put-attribute name="title" value="메인이미지 관리" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/main/imgList.jsp" />  
+   </definition> 
+   
+    <!-- admin > 메인이미지 등록  -->
+   <definition name="imgReg" extends="base-definition">  
+       <put-attribute name="title" value="로고 등록" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/main/imgReg.jsp" />  
+   </definition> 
+   
+    <!-- admin > 배너 관리 List Page -->
+   <definition name="bannerList" extends="base-definition">  
+       <put-attribute name="title" value="배너 관리" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/main/bannerList.jsp" />  
+   </definition> 
+   
+    <!-- admin > 배너 관리 등록  -->
+   <definition name="bannerReg" extends="base-definition">  
+       <put-attribute name="title" value="배너 등록" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/main/bannerReg.jsp" />  
+   </definition> 
+   
+    <!-- admin > 팝업 관리 List Page -->
+   <definition name="popupList" extends="base-definition">  
+       <put-attribute name="title" value="팝업 관리" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/main/popupList.jsp" />  
+   </definition> 
+   
+    <!-- admin > 팝업 관리 등록  -->
+   <definition name="popupReg" extends="base-definition">  
+       <put-attribute name="title" value="팝업 등록" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/main/popupReg.jsp" />  
+   </definition> 
+   
+   
+  </tiles-definitions>

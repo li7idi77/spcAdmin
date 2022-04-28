@@ -1,0 +1,2376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.easycompany.mapper.EduMapper">
+
+
+
+	<sql id="eduInfoOnlineListSearch">
+		<if test=" inst_nm !=null and inst_nm !=''">
+			AND INST_NM LIKE CONCAT('%', #{inst_nm} ,'%')
+		</if>
+		<if test=" coper_nm !=null and coper_nm !=''">
+			AND COPER_NM LIKE CONCAT('%', #{coper_nm} ,'%')
+		</if>
+		<if test=" edu_target !=null and edu_target !=''">
+			AND EDU_TARGET LIKE CONCAT('%', #{edu_target} ,'%')
+		</if>
+		<if test=" category3_name !=null and category3_name !='' and category3_name !='선택 하세요'">
+			AND CATEGORY3_NAME LIKE CONCAT('%', #{category3_name} ,'%')
+		</if>
+		<if test=" category3_name1 !=null and category3_name1 !='' and category3_name1 !='선택 하세요'">
+			AND CATEGORY3_NAME LIKE CONCAT('%', #{category3_name1} ,'%')
+		</if>
+		<if test=" category1_key !=null and category1_key !=0">
+			AND CATEGORY1_KEY = #{category1_key} 
+		</if>
+		<if test=" category2_key !=null and category2_key !=0 ">
+			AND CATEGORY2_KEY = #{category2_key} 
+		</if>
+		<if test=" category3_key !=null and category3_key !=0">
+			AND CATEGORY3_KEY = #{category3_key} 
+		</if>
+		<choose>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='ALL' ">
+			</when>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='TODAY' ">
+				AND TRAIN_S_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
+			</when>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='TERM' ">
+		   <![CDATA[
+		     AND  TRAIN_S_DATE >= #{train_s_date} AND TRAIN_E_DATE <= #{train_e_date} 
+		    ]]>
+			</when>
+		</choose>
+	</sql>
+
+
+
+
+	<select id="getCategoryList1"		parameterType="com.easycompany.service.vo.CategoryVo"
+		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getCategoryList1 **/
+		SELECT   CATEGORY1_KEY
+			   , CATEGORY1_NAME
+		  FROM EDU_CATEGORY1
+		 ORDER BY CATEGORY1_KEY
+		 LIMIT #{recordCountPerPage} OFFSET #{offset}
+
+	</select>
+
+	<select id="getCategoryList2"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getCategoryList2 **/
+		SELECT CATEGORY1_KEY
+			, CATEGORY2_KEY
+			, CATEGORY2_NAME
+		FROM EDU_CATEGORY2
+		WHERE CATEGORY1_KEY = #{category1_key}
+		ORDER BY CATEGORY2_KEY
+		LIMIT #{recordCountPerPage} OFFSET #{offset}
+
+	</select>
+
+	<select id="getCategoryList3"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getCategoryList3 **/
+	  SELECT CATEGORY1_KEY
+		     , CATEGORY1_NAME
+		FROM EDU_CATEGORY1
+	   ORDER BY CATEGORY1_KEY
+		LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+
+
+	<select id="getCategoryList"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getCategoryList **/
+	   SELECT a.CATEGORY1_KEY, b.CATEGORY2_KEY,c.CATEGORY3_KEY, a.CATEGORY1_NAME,
+		      b.CATEGORY2_NAME,c.CATEGORY3_NAME
+		FROM EDU_CATEGORY1 AS A left OUTER JOIN EDU_CATEGORY2 AS B
+		  on a.CATEGORY1_KEY = b.CATEGORY1_KEY left OUTER JOIN EDU_CATEGORY3 AS C
+		  ON b.CATEGORY2_KEY = c.CATEGORY2_KEY
+	   ORDER BY a.CATEGORY1_KEY
+	   LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+
+
+	<select id="getCategoryClassList1"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getCategoryClassList1 **/
+		SELECT CATEGORY1_KEY
+			 , CATEGORY1_NAME
+			 , A.CD_NO
+		 FROM EDU_CLASS_CATEGORY1 A
+		WHERE SITE = #{site}
+		ORDER BY CATEGORY1_KEY
+		LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+
+	<select id="getCategoryClassList2"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getCategoryClassList2 **/
+		SELECT A.CATEGORY1_KEY
+				,(SELECT b.CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 b
+				WHERE b.CATEGORY1_KEY = a.CATEGORY1_KEY
+				) CATEGORY1_NAME
+				, A.CATEGORY2_KEY
+				, A.CATEGORY2_NAME
+				, A.CD_NO
+		FROM EDU_CLASS_CATEGORY2 A
+       WHERE SITE = #{site}
+		 AND a.CATEGORY1_KEY = #{category1_key}
+	   ORDER BY a.CATEGORY1_KEY
+	   LIMIT #{recordCountPerPage} OFFSET #{offset}
+
+	</select>
+
+	<select id="getCategoryClassList3"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getCategoryClassList3 **/
+		SELECT  A.CATEGORY1_KEY
+				, A.CATEGORY2_KEY
+				,(SELECT b.CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 b
+				WHERE b.CATEGORY1_KEY = a.CATEGORY1_KEY
+				) CATEGORY1_NAME
+				,(SELECT b.CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 b
+				   WHERE b.CATEGORY1_KEY = a.CATEGORY1_KEY
+					AND b.CATEGORY2_KEY = a.CATEGORY2_KEY
+				) CATEGORY2_NAME
+				, CATEGORY3_KEY
+				, CATEGORY3_NAME
+				, A.CD_NO
+          FROM EDU_CLASS_CATEGORY3 A
+	  	 WHERE A.SITE = #{site}
+		   AND A.CATEGORY1_KEY = #{category1_key}
+		   AND A.CATEGORY2_KEY = #{category2_key}
+		 ORDER BY A.CATEGORY1_KEY
+		 LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+
+	<select id="getEeuInfoOnlineLList"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getEeuInfoOnlineLList **/
+		SELECT A.CATEGORY1_KEY
+				, A.CATEGORY2_KEY
+				,(SELECT b.CATEGORY1_NAME 
+				    FROM EDU_CLASS_CATEGORY1 b
+				   WHERE b.CATEGORY1_KEY = a.CATEGORY1_KEY
+				) CATEGORY1_NAME
+				,(SELECT b.CATEGORY2_NAME 
+				    FROM EDU_CLASS_CATEGORY2 b
+				   WHERE b.CATEGORY1_KEY = a.CATEGORY1_KEY
+				     AND b.CATEGORY2_KEY = a.CATEGORY2_KEY
+				) CATEGORY2_NAME
+				, CATEGORY3_KEY
+				, CATEGORY3_NAME
+		 FROM EDU_CLASS_CATEGORY3 A
+		WHERE A.SITE = #{site}
+		  AND A.CATEGORY1_KEY = #{category1_key}
+		  AND A.CATEGORY2_KEY = #{category2_key}
+		ORDER BY A.CATEGORY1_KEY
+		LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+
+	<select id="getCategoryClassList"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getCategoryClassList **/
+		WITH
+		A AS (
+			SELECT *
+			FROM EDU_CLASS_CATEGORY1
+			WHERE SITE = #{site}
+			),
+	   B AS (
+			SELECT *
+			FROM EDU_CLASS_CATEGORY2
+			WHERE SITE = #{site}
+			),
+		C AS (
+			SELECT *
+			FROM EDU_CLASS_CATEGORY3
+			WHERE SITE = #{site}
+			),
+		D AS (
+			SELECT A.CATEGORY1_KEY, B.CATEGORY2_KEY,C.CATEGORY3_KEY, A.CATEGORY1_NAME,
+		           B.CATEGORY2_NAME,C.CATEGORY3_NAME,A.SITE
+			  FROM a AS A LEFT OUTER JOIN b AS B
+			    ON A.CATEGORY1_KEY = B.CATEGORY1_KEY
+			  LEFT OUTER JOIN c AS C
+		    	ON B.CATEGORY2_KEY = C.CATEGORY2_KEY
+		    )
+		SELECT CATEGORY1_KEY, CATEGORY2_KEY,CATEGORY3_KEY, CATEGORY1_NAME,
+		       CATEGORY2_NAME, CATEGORY3_NAME,SITE
+		  FROM D
+	     WHERE SITE= #{site}
+		 ORDER BY CATEGORY1_KEY
+	  	 LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+
+	<select id="getCategoryCount"		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getCategoryList **/
+		SELECT COUNT(*)
+		cnt
+		FROM EDU_CATEGORY1 AS A left OUTER JOIN EDU_CATEGORY2 AS B
+		on a.CATEGORY1_KEY = b.CATEGORY1_KEY left OUTER JOIN EDU_CATEGORY3 AS C
+		ON b.CATEGORY2_KEY = c.CATEGORY2_KEY
+	</select>
+
+	<select id="getCategoryCount1"
+		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getCategoryCount1 **/
+		SELECT COUNT(*) cnt
+		FROM EDU_CATEGORY1
+	</select>
+
+	<select id="getCategoryCount2"
+		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getCategoryCount2 **/
+		SELECT COUNT(*) cnt
+		FROM EDU_CATEGORY2
+		WHERE CATEGORY1_KEY = #{category1_key}
+	</select>
+
+	<select id="getCategoryCount3"
+		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getCategoryCount3 **/
+		SELECT COUNT(*) cnt
+		FROM EDU_CATEGORY3
+		WHERE 1=1
+	</select>
+
+	<select id="getCategoryClassCount"		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getCategoryClassCount **/
+		WITH
+		A AS (
+		SELECT *
+		FROM EDU_CLASS_CATEGORY1
+		WHERE SITE = #{site}
+		),
+		B AS (
+		SELECT *
+		FROM EDU_CLASS_CATEGORY2
+		WHERE SITE = #{site}
+		),
+		C AS (
+		SELECT *
+		FROM EDU_CLASS_CATEGORY3
+		WHERE SITE = #{site}
+		),
+		D AS (
+		SELECT A.CATEGORY1_KEY, B.CATEGORY2_KEY,C.CATEGORY3_KEY, A.CATEGORY1_NAME,
+		B.CATEGORY2_NAME,C.CATEGORY3_NAME,A.SITE
+		FROM a AS A LEFT OUTER JOIN b AS B
+		ON A.CATEGORY1_KEY = B.CATEGORY1_KEY
+		LEFT OUTER JOIN c AS C
+		ON B.CATEGORY2_KEY = C.CATEGORY2_KEY
+		)
+		SELECT COUNT(*) cnt
+		FROM D
+		WHERE SITE= #{site}
+	</select>
+
+	<select id="getCategoryClassCount1"		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getCategoryClassCount1 **/
+		SELECT COUNT(*) cnt
+		FROM EDU_CLASS_CATEGORY1
+		WHERE SITE = #{site}
+	</select>
+
+	<select id="getCategoryClassCount2"		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getCategoryClassCount2 **/
+		SELECT COUNT(*) cnt
+		FROM EDU_CLASS_CATEGORY2
+		WHERE SITE = #{site}
+		AND CATEGORY1_KEY = #{category1_key}
+	</select>
+
+	<select id="getCategoryClassCount3"		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getCategoryClassCount3 **/
+		SELECT COUNT(*) cnt
+		FROM EDU_CLASS_CATEGORY3
+		WHERE SITE = #{site}
+		AND CATEGORY1_KEY = #{category1_key}
+		AND CATEGORY2_KEY = #{category2_key}
+	</select>
+
+	<select id="getEeuInfoOnlineCount"		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getEeuInfoOnlineCount **/
+		SELECT COUNT(*) cnt
+		FROM EDU_CLASS_CATEGORY3
+		WHERE SITE = #{site}
+		AND CATEGORY1_KEY = #{category1_key}
+		AND CATEGORY2_KEY = #{category2_key}
+	</select>
+
+	<select id="getCategoryExist1"		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getCategoryExist1 **/
+		SELECT COUNT(*) cnt
+		FROM EDU_CATEGORY1
+		WHERE CATEGORY1_NAME = #{categoryName}
+	</select>
+
+	<select id="getCategoryExist2"		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getCategoryExist2 **/
+		SELECT COUNT(*) cnt
+		FROM EDU_CATEGORY2
+		WHERE CATEGORY1_KEY = #{category1_key}
+		AND CATEGORY2_NAME = #{categoryName}
+	</select>
+
+	<select id="getCategoryExist3"		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getCategoryExist3 **/
+		SELECT COUNT(*) cnt
+		FROM EDU_CATEGORY3
+		WHERE CATEGORY1_NAME = #{categoryName}
+	</select>
+
+	<select id="getClassCategoryExist1"		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getClassCategoryExist1 **/
+		SELECT COUNT(*) cnt
+		FROM EDU_CLASS_CATEGORY1
+		WHERE SITE = #{site}
+		AND CATEGORY1_NAME = #{categoryName}
+	</select>
+
+	<select id="getClassCategoryExist2"		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getClassCategoryExist2 **/
+		SELECT COUNT(*) cnt
+		FROM EDU_CLASS_CATEGORY2
+		WHERE SITE = #{site}
+		AND CATEGORY1_KEY = #{category1_key}
+		AND CATEGORY2_NAME = #{categoryName}
+	</select>
+
+	<select id="getClassCategoryExist3"		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getClassCategoryExist3 **/
+		SELECT COUNT(*) cnt
+		FROM EDU_CLASS_CATEGORY3
+		WHERE SITE = #{site}
+		AND CATEGORY1_KEY = #{category1_key}
+		AND CATEGORY2_KEY = #{category2_key}
+		AND CATEGORY3_NAME = #{categoryName}
+	</select>
+	
+	<select id="getBasketExist"		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getBasketExist **/
+	   SELECT COUNT(*) cnt
+		 FROM EDU_BASKET
+		WHERE EDU_NO  = #{edu_no}
+		<if test=" schedule_no !=null and schedule_no  != 0">
+			AND SCHEDULE_NO = #{schedule_no}
+		</if>
+		  AND USER_ID = #{user_id}
+	</select>
+	
+	<select id="getCourseExist"		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getCourseExist **/
+		SELECT COUNT(*) cnt
+		  FROM EDU_COURSE_REGISTRATION
+		 WHERE EDU_NO  = #{edu_no}
+		 <if test=" schedule_no !=null and schedule_no != 0">
+			AND SCHEDULE_NO = #{schedule_no}
+		</if>
+		   AND USER_ID = #{user_id}
+	</select>
+	
+	<select id="getCourseStatus"		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getCourseStatus **/
+		WITH C AS
+				(SELECT COUNT(*) AS CNT ,  #{edu_no} AS EDU_NO
+				  FROM EDU_COURSE_REGISTRATION
+				 WHERE EDU_NO = #{edu_no}
+				 ),
+			 R AS (		 
+				 SELECT  CASE
+				         WHEN EDU_GARDEN = '0'
+				         THEN '999999999'
+				         ELSE CAST(IFNULL(EDU_GARDEN,'999999999') AS INTEGER )
+				     	 END AS EDU_GARDEN
+					   , EDU_NO  
+				  FROM edu_registration
+				 WHERE EDU_NO = #{edu_no}
+				 )
+			SELECT (EDU_GARDEN - CNT) CNT	 
+			  FROM  C,R
+			  WHERE C.EDU_NO = R.EDU_NO
+	</select>
+
+	<insert id="insertCategory1"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.insertCategory1 **/
+		<selectKey resultType="int" keyProperty="category1_key"
+			order="BEFORE">
+			SELECT IFNULL(MAX(CATEGORY1_KEY), 0) + 1
+			FROM EDU_CATEGORY1
+		</selectKey>
+
+		INSERT
+		INTO EDU_CATEGORY1
+		(
+		CATEGORY1_KEY
+		, CATEGORY1_NAME
+		, REG_ID
+		)
+		VALUES
+		(
+		#{category1_key}
+		, #{categoryName}
+		, IFNULL(#{user_id},'SYSTEM')
+		)
+	</insert>
+
+	<insert id="insertCategory2"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.insertCategory2 **/
+		<selectKey resultType="int" keyProperty="category2_key"
+			order="BEFORE">
+			SELECT IFNULL(MAX(CATEGORY2_KEY), 0) + 1
+			FROM EDU_CATEGORY2
+		</selectKey>
+
+		INSERT
+		INTO EDU_CATEGORY2
+		(
+		CATEGORY1_KEY
+		, CATEGORY2_KEY
+		, CATEGORY2_NAME
+		, REG_ID
+		)
+		VALUES
+		(
+		#{category1_key}
+		, #{category2_key}
+		, #{categoryName}
+		, IFNULL(#{user_id},'SYSTEM')
+		)
+	</insert>
+
+	<select id="getCategory3No"		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getCategory3No **/
+		SELECT IFNULL(MAX(CATEGORY3_KEY), 0) + 1
+		  FROM EDU_CATEGORY3
+	</select>
+	
+	<insert id="insertCategory3"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.insertCategory3 **/
+		INSERT
+		INTO EDU_CATEGORY3
+		(
+		  CATEGORY1_KEY
+		, CATEGORY2_KEY
+		, CATEGORY3_KEY
+		, CATEGORY3_NAME
+		, CATEGORY3_CONT
+		, REG_ID
+		, FILE_UUID
+		)
+		VALUES
+		(
+		  #{category1_key}
+		, #{category2_key}
+		, #{category3_key}
+		, #{category3_name}
+		, #{category3_cont}
+		, IFNULL(#{user_id},'SYSTEM')
+		, #{file_uuid}
+		)
+	</insert>
+	
+	<select id="getCommonFileList"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getCommonFileList **/
+	  SELECT FILE_FULL_PATH, FILE_ID AS FILE_UUID, FILE_NAME, FILE_SEQ, FILE_SIZE, FILE_KEY
+		FROM EDU_FILE
+		<if test=" gubun2 !=null and gubun2 !='' and gubun2 =='category1' ">
+		WHERE FILE_KEY   IN (SELECT CATEGORY3_KEY 
+		                       FROM EDU_CATEGORY3 
+		                       WHERE CATEGORY1_KEY = #{category1_key} 
+		                     )
+		  AND FILE_GUBUN = 'category3'
+		</if>
+		<if test=" gubun2 !=null and gubun2 !='' and gubun2 =='category2' ">
+		WHERE FILE_KEY   IN (SELECT CATEGORY3_KEY 
+		                       FROM EDU_CATEGORY3 
+		                      WHERE CATEGORY1_KEY = #{category1_key} 
+		                        AND CATEGORY2_KEY = #{category2_key}
+		                     )
+		  AND FILE_GUBUN = 'category3'
+		</if>
+		<if test=" gubun2 !=null and gubun2 !='' and gubun2 =='category3' ">
+		WHERE FILE_KEY   = #{category3_key}
+		  AND FILE_GUBUN = #{gubun2}
+		</if>
+	</select>
+
+	<insert id="insertClassCategory1"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.insertClassCategory1 **/
+		<selectKey resultType="int" keyProperty="category1_key"
+			order="BEFORE">
+			SELECT IFNULL(MAX(CATEGORY1_KEY), 0) + 1
+			FROM EDU_CLASS_CATEGORY1
+		</selectKey>
+
+		INSERT
+		INTO EDU_CLASS_CATEGORY1
+		(
+		CATEGORY1_KEY
+		, CATEGORY1_NAME
+		, SITE
+		, REG_ID
+		)
+		VALUES
+		(
+		#{category1_key}
+		, #{categoryName}
+		, #{site}
+		, IFNULL(#{user_id},'SYSTEM')
+		)
+	</insert>
+
+	<insert id="insertClassCategory2"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.insertClassCategory2 **/
+		<selectKey resultType="int" keyProperty="category2_key"
+			order="BEFORE">
+			SELECT IFNULL(MAX(CATEGORY2_KEY), 0) + 1
+			FROM EDU_CLASS_CATEGORY2
+		</selectKey>
+
+		INSERT
+		INTO EDU_CLASS_CATEGORY2
+		(
+		CATEGORY1_KEY
+		, CATEGORY2_KEY
+		, CATEGORY2_NAME
+		, SITE
+		, REG_ID
+		)
+		VALUES
+		(
+		#{category1_key}
+		, #{category2_key}
+		, #{categoryName}
+		, #{site}
+		, IFNULL(#{user_id},'SYSTEM')
+		)
+	</insert>
+
+	<insert id="insertClassCategory3"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.insertClassCategory3 **/
+		<selectKey resultType="int" keyProperty="category3_key"
+			order="BEFORE">
+			SELECT IFNULL(MAX(CATEGORY3_KEY), 0) + 1
+			FROM EDU_CLASS_CATEGORY3
+		</selectKey>
+
+		INSERT
+		INTO EDU_CLASS_CATEGORY3
+		(
+		CATEGORY1_KEY
+		, CATEGORY2_KEY
+		, CATEGORY3_KEY
+		, CATEGORY3_NAME
+		, SITE
+		, REG_ID
+		)
+		VALUES
+		(
+		#{category1_key}
+		, #{category2_key}
+		, #{category3_key}
+		, #{categoryName}
+		, #{site}
+		, IFNULL(#{user_id},'SYSTEM')
+		)
+	</insert>
+
+	<select id="getEduInfoOnlineNo"		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getEduInfoOnlineNo **/
+		SELECT IFNULL(MAX(EDU_NO), 0) + 1
+		FROM EDU_REGISTRATION
+	</select>
+
+	<insert id="insertEduInfoOnline"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.insertEduInfoOnline **/
+		INSERT
+		INTO EDU_REGISTRATION
+		(
+		EDU_NO
+		, EDU_SITE
+		, CATEGORY1_KEY
+		, CATEGORY2_KEY
+		, CATEGORY3_KEY
+
+		, INST_NM
+		, SET_USE_YN
+		, TRAIN_S_DATE
+		, TRAIN_E_DATE
+
+		, EDU_CONT
+		, EDU_METHOD
+		, EDU_TIME
+		, EDU_TARGET
+		, EDU_GARDEN
+
+
+		, EDU_STATUS
+		, EXP_USE_YN
+		, EDU_NOTICE
+
+		, EDU_INTRO
+		, EDU_GOALS
+
+
+		, REG_ID
+
+		<if test=" coper_nm !=null and coper_nm !=''">
+			, COPER_NM
+		</if>
+		<if test=" coper_nm_auto !=null and coper_nm_auto !=''">
+			, COPER_NM_AUTO
+		</if>
+		<if test=" coper_id !=null and coper_id !=''">
+			, COPER_ID
+		</if>
+		<if test=" coper_check !=null and coper_check !=''">
+			, COPER_CHECK
+		</if>
+		<if test=" app_s_date !=null and app_s_date !=''">
+			, APP_S_DATE
+		</if>
+		<if test=" app_e_date !=null and app_e_date !=''">
+			, APP_E_DATE
+		</if>
+		)
+		VALUES
+		(
+		#{edu_no}
+		, #{edu_site}
+		, #{category1_key}
+		, #{category2_key}
+		, #{category3_key}
+
+		, #{inst_nm}
+		, #{set_use_yn}
+		, #{train_s_date}
+		, #{train_e_date}
+
+		, #{edu_cont}
+		, #{edu_method}
+		, #{edu_time}
+		, #{edu_target}
+		, #{edu_garden}
+
+		, #{edu_status}
+		, #{exp_use_yn}
+		, #{edu_notice}
+
+		, #{edu_intro}
+		, #{edu_goals}
+
+		, IFNULL(#{user_id},'SYSTEM')
+
+		<if test=" coper_nm !=null and coper_nm !=''">
+			, #{coper_nm}
+		</if>
+		<if test=" coper_nm_auto !=null and coper_nm_auto !=''">
+			, #{coper_nm_auto}
+		</if>
+		<if test=" coper_id !=null and coper_id !=''">
+			, #{coper_id}
+		</if>
+		<if test=" coper_check !=null and coper_check !=''">
+			, #{coper_check}
+		</if>
+		<if test=" app_s_date !=null and app_s_date !=''">
+			, #{app_s_date}
+		</if>
+		<if test=" app_e_date !=null and app_e_date !=''">
+			, #{app_e_date}
+		</if>
+		)
+	</insert>
+
+
+
+	<insert id="insertEduInfoOnlineSub"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.insertEduInfoOnlineSub **/
+		<selectKey resultType="int" keyProperty="edu_sub_no"
+			order="BEFORE">
+			SELECT IFNULL(MAX(EDU_SUB_NO), 0) + 1
+			FROM EDU_REGISTRATION_DETAIL
+		</selectKey>
+		INSERT
+		INTO EDU_REGISTRATION_DETAIL
+		(
+		EDU_NO
+		, EDU_SUB_NO
+		, EDU_CURR1
+		, EDU_CURR2
+		, EDU_CURR3
+		, REG_ID
+		)
+		VALUES
+		(
+		#{edu_no}
+		, #{edu_sub_no}
+		, #{edu_curr1}
+		, #{edu_curr2}
+		, #{edu_curr3}
+		, IFNULL(#{user_id},'SYSTEM')
+		)
+	</insert>
+
+	<update id="updateEduInfoOnline"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.updateEduInfoOnline **/
+		UPDATE EDU_REGISTRATION
+		SET CATEGORY1_KEY = #{category1_key}
+		, CATEGORY2_KEY = #{category2_key}
+		, CATEGORY3_KEY = #{category3_key}
+		, INST_NM = #{inst_nm}
+		, SET_USE_YN = #{set_use_yn}
+		, TRAIN_S_DATE = #{train_s_date}
+		, TRAIN_E_DATE = #{train_e_date}
+		, EDU_CONT = #{edu_cont}
+		, EDU_METHOD = #{edu_method}
+		, EDU_TIME = #{edu_time}
+		, EDU_TARGET = #{edu_target}
+		, EDU_GARDEN = #{edu_garden}
+		, EDU_STATUS = #{edu_status}
+		, EXP_USE_YN = #{exp_use_yn}
+		, EDU_NOTICE = #{edu_notice}
+		, EDU_INTRO = #{edu_intro}
+		, EDU_GOALS = #{edu_goals}
+		, CHG_ID = IFNULL(#{user_id},'SYSTEM')
+		, CHG_DT = NOW()
+
+		<if test=" coper_nm !=null and coper_nm !=''">
+			, COPER_NM = #{coper_nm}
+		</if>
+		<if test=" coper_nm_auto !=null and coper_nm_auto !=''">
+			, COPER_NM_AUTO = #{coper_nm_auto}
+		</if>
+		<if test=" coper_id !=null and coper_id !=''">
+			, COPER_ID = #{coper_id}
+		</if>
+		<if test=" coper_check !=null and coper_check !=''">
+			, COPER_CHECK = #{coper_check}
+		</if>
+		<if test=" app_s_date !=null and app_s_date !=''">
+			, APP_S_DATE = #{app_s_date}
+		</if>
+		<if test=" app_e_date !=null and app_e_date !=''">
+			, APP_E_DATE = #{app_e_date}
+		</if>
+
+		WHERE EDU_NO = #{edu_no}
+	</update>
+
+	<insert id="insertCommonFile"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.insertCommonFile **/
+		<selectKey resultType="int" keyProperty="file_seq"
+			order="BEFORE">
+			SELECT IFNULL(MAX(FILE_SEQ), 0) + 1
+			FROM EDU_FILE
+		</selectKey>
+		INSERT
+		INTO EDU_FILE
+		(
+		  FILE_GUBUN
+		, FILE_ID
+		, FILE_NAME
+		, FILE_FULL_PATH
+		, FILE_SEQ
+		, FILE_SIZE
+		<if test=" gubun2 !=null and gubun2 !='' and gubun2 =='category3' ">
+		,   FILE_KEY
+		</if>
+		)
+		VALUES
+		(
+		  #{gubun2}
+		, #{edu_notice}
+		, #{file_name}
+		, #{file_full_path}
+		, #{file_seq}
+		, #{file_size}
+		<if test=" gubun2 !=null and gubun2 !='' and gubun2 =='category3' ">
+		, #{category3_key}
+		</if>
+		)
+	</insert>
+
+	<update id="updateCommonFile" parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.updateCommonFile
+		**/
+		UPDATE EDU_FILE
+		   SET FILE_NAME      = #{file_name}
+		     , FILE_FULL_PATH = #{file_full_path}
+		     , FILE_SIZE      = #{file_size}
+		     , FILE_ID        = #{file_uuid}
+		 WHERE FILE_GUBUN     = #{gubun2}
+		   AND FILE_ID        = #{edu_notice}
+		   <if test=" gubun2 !=null and gubun2 !='' and gubun2 =='category3' ">
+		   AND FILE_KEY       = #{category3_key}
+		   </if>
+	</update>
+
+	<select id="getEduCationDetail"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getEduCationDetail **/
+		SELECT A.EDU_NO, A.EDU_SITE, A.CATEGORY1_KEY, A.CATEGORY2_KEY,
+				A.CATEGORY3_KEY, A.EDU_VER, A.INST_NM, A.SET_USE_YN
+				, A.COPER_NM , A.COPER_NM_AUTO, A.COPER_ID, A.COPER_CHECK
+				, A.TRAIN_S_DATE , A.TRAIN_E_DATE,A.TRAIN_E_DATE, A.APP_S_DATE,
+				A.APP_E_DATE, A.EDU_CONT, A.EDU_METHOD ,A.EDU_TIME, A.EDU_TARGET,
+				A.EDU_GARDEN
+				, A.EDU_STATUS , A.EXP_USE_YN, A.EDU_NOTICE, A.EDU_INTRO, A.EDU_GOALS
+				, (SELECT FILE_NAME FROM EDU_FILE WHERE FILE_ID = A.EDU_NOTICE) AS
+				FILE_NAME
+				, (
+				SELECT CATEGORY1_NAME
+				FROM EDU_CLASS_CATEGORY1
+				WHERE CATEGORY1_KEY= A.CATEGORY1_KEY
+				AND SITE = #{site}
+				) AS CATEGORY1_NAME
+				, (
+				SELECT CATEGORY2_NAME
+				FROM EDU_CLASS_CATEGORY2
+				WHERE CATEGORY1_KEY= A.CATEGORY1_KEY
+				AND CATEGORY2_KEY= A.CATEGORY2_KEY
+				AND SITE = #{site}
+				) AS CATEGORY2_NAME
+				, (
+				SELECT CATEGORY3_NAME
+				FROM EDU_CLASS_CATEGORY3
+				WHERE CATEGORY1_KEY= A.CATEGORY1_KEY
+				AND CATEGORY2_KEY= A.CATEGORY2_KEY
+				AND CATEGORY3_KEY= A.CATEGORY3_KEY
+				AND SITE = #{site}
+				) AS CATEGORY3_NAME
+		 FROM EDU_REGISTRATION A
+		WHERE EDU_NO = #{edu_no}
+		  AND EDU_SITE = #{edu_site}
+	</select>
+
+	<select id="getEduCationDetailSub"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getEduCationDetailSub
+		**/
+		SELECT A.EDU_NO, A.EDU_SUB_NO, A.EDU_CURR1, A.EDU_CURR2, A.EDU_CURR3
+		FROM EDU_REGISTRATION_DETAIL A
+		WHERE EDU_NO = #{edu_no}
+	</select>
+
+	<select id="getEduInfoOnlineList"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getEduInfoOnlineList **/
+		WITH TEMP
+		AS (
+		SELECT A.EDU_NO, A.CATEGORY1_KEY, A.CATEGORY2_KEY, A.CATEGORY3_KEY,
+				A.INST_NM, A.TRAIN_S_DATE, A.TRAIN_E_DATE, A.APP_S_DATE, A.APP_E_DATE
+				, A.EDU_TARGET,A.EDU_TIME, A.EDU_NOTICE
+				, A.EDU_GARDEN, A.EDU_STATUS,A.EDU_CONT,A.EDU_METHOD, A.EXP_USE_YN
+				, A.COPER_NM , A.COPER_NM_AUTO, A.COPER_ID, A.COPER_CHECK
+				,  CASE
+			         WHEN A.COPER_CHECK = 'HAND'
+			         THEN A.COPER_NM
+			         WHEN A.COPER_CHECK = 'AUTO'
+			         THEN A.COPER_NM_AUTO
+			         ELSE A.COPER_NM_AUTO
+			       END AS COPER_NM1
+				, (
+					SELECT CATEGORY1_NAME
+					  FROM EDU_CLASS_CATEGORY1
+					 WHERE CATEGORY1_KEY= A.CATEGORY1_KEY
+					   AND SITE = #{site}
+				) AS CATEGORY1_NAME
+				, (
+					SELECT CATEGORY2_NAME
+					  FROM EDU_CLASS_CATEGORY2
+					 WHERE CATEGORY1_KEY= A.CATEGORY1_KEY
+					   AND CATEGORY2_KEY= A.CATEGORY2_KEY
+					   AND SITE = #{site}
+				) AS CATEGORY2_NAME
+				, (
+					SELECT CATEGORY3_NAME
+					  FROM EDU_CLASS_CATEGORY3
+					 WHERE CATEGORY1_KEY= A.CATEGORY1_KEY
+				  	   AND CATEGORY2_KEY= A.CATEGORY2_KEY
+					   AND CATEGORY3_KEY= A.CATEGORY3_KEY
+					   AND SITE = #{site}
+				) AS CATEGORY3_NAME
+		FROM EDU_REGISTRATION A
+		WHERE A.EDU_SITE = #{edu_site}
+		)
+		SELECT A.*, (SELECT COUNT(*) FROM EDU_COURSE_REGISTRATION WHERE EDU_NO = A.EDU_NO) CNT
+		  FROM TEMP A
+		 WHERE 1 = 1
+		<include refid="eduInfoOnlineListSearch" />
+		ORDER BY EDU_NO DESC
+		LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+
+	<select id="getEduInfoOnlineCount"		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getEduInfoOnlineCount **/
+		WITH
+		TEMP
+		AS (
+		SELECT A.EDU_NO, A.CATEGORY1_KEY, A.CATEGORY2_KEY, A.CATEGORY3_KEY,
+		A.INST_NM, A.TRAIN_S_DATE, A.TRAIN_E_DATE, A.EDU_TARGET,A.EDU_TIME
+		, A.EDU_GARDEN, A.EDU_STATUS,A.EDU_CONT,A.EDU_METHOD, A.EXP_USE_YN
+		, A.COPER_NM , A.COPER_NM_AUTO, A.COPER_ID, A.COPER_CHECK
+		, (
+		SELECT CATEGORY1_NAME
+		FROM EDU_CLASS_CATEGORY1
+		WHERE CATEGORY1_KEY= A.CATEGORY1_KEY
+		AND SITE = #{site}
+		) AS CATEGORY1_NAME
+		, (
+		SELECT CATEGORY2_NAME
+		FROM EDU_CLASS_CATEGORY2
+		WHERE CATEGORY1_KEY= A.CATEGORY1_KEY
+		AND CATEGORY2_KEY= A.CATEGORY2_KEY
+		AND SITE = #{site}
+		) AS CATEGORY2_NAME
+		, (
+		SELECT CATEGORY3_NAME
+		FROM EDU_CLASS_CATEGORY3
+		WHERE CATEGORY1_KEY= A.CATEGORY1_KEY
+		AND CATEGORY2_KEY= A.CATEGORY2_KEY
+		AND CATEGORY3_KEY= A.CATEGORY3_KEY
+		AND SITE = #{site}
+		) AS CATEGORY3_NAME
+		FROM EDU_REGISTRATION A
+		WHERE A.EDU_SITE = #{edu_site}
+		)
+		SELECT count(*) cnt
+		FROM TEMP
+		WHERE 1= 1
+		<include refid="eduInfoOnlineListSearch" />
+	</select>
+
+	
+	<select id="getOrgPopSearchList"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getOrgPopSearchList **/
+		SELECT A.USER_ID, A.AREA_CD CD, B.CD_NM, A.COPER_NM
+		  FROM COM_USER A, COM_CD_MNG B
+	 	 WHERE A.AREA_CD = B.CD
+		   AND B.UP_CD_NO ='32' 
+           AND A.USER_STTUS_CD = 'Y' 
+           AND A.USER_GU = '1' 
+           AND A.COPER_NM IS NOT NULL 
+           <![CDATA[
+		      AND A.COPER_NM <> ''
+		   ]]>
+		  <if test=" coper_nm !=null and coper_nm !=''">
+		   AND  A.COPER_NM LIKE CONCAT('%', #{coper_nm} ,'%')
+		  </if>
+          <if test=" cd_nm !=null and cd_nm !=''">
+		   AND  B.CD_NM LIKE CONCAT('%', #{cd_nm} ,'%')
+		  </if>
+		ORDER BY A.INSTRUCTOR_COPER_NM
+		LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+
+	<select id="getOrgPopSearchCount"		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.getOrgPopSearchCount **/
+		SELECT count(*) cnt
+	 	  FROM COM_USER A, COM_CD_MNG B
+	 	 WHERE A.AREA_CD = B.CD
+		   AND B.UP_CD_NO ='32' 
+           AND A.USER_STTUS_CD = 'Y' 
+           AND A.USER_GU = '1' 
+           AND A.COPER_NM IS NOT NULL 
+           <![CDATA[
+		   AND A.COPER_NM <> ''
+		   ]]>
+		  <if test=" coper_nm !=null and coper_nm !=''">
+		   AND  A.COPER_NM LIKE CONCAT('%', #{coper_nm} ,'%')
+		  </if>
+          <if test=" cd_nm !=null and cd_nm !=''">
+		   AND  B.CD_NM LIKE CONCAT('%', #{cd_nm} ,'%')
+		  </if>
+	</select>
+	
+	<select id="getCategoryDetail"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getCategoryDetail **/
+		WITH TEMP AS(
+				SELECT a.CATEGORY1_KEY, b.CATEGORY2_KEY,c.CATEGORY3_KEY, a.CATEGORY1_NAME,
+				b.CATEGORY2_NAME,c.CATEGORY3_NAME, C.CATEGORY3_CONT
+				FROM EDU_CATEGORY1 AS A
+				LEFT OUTER
+				JOIN EDU_CATEGORY2 AS B ON a.CATEGORY1_KEY = b.CATEGORY1_KEY
+				LEFT OUTER
+				JOIN EDU_CATEGORY3 AS C ON b.CATEGORY2_KEY = c.CATEGORY2_KEY
+		)
+		SELECT CATEGORY1_KEY, CATEGORY2_KEY, CATEGORY3_KEY, CATEGORY1_NAME,
+		CATEGORY2_NAME, CATEGORY3_NAME, CATEGORY3_CONT
+		FROM TEMP
+		WHERE CATEGORY1_KEY = #{category1_key}
+		AND CATEGORY2_KEY = #{category2_key}
+	</select>
+
+
+	<select id="getEduInfoDetail"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getEduInfoDetail **/
+		SELECT A.CATEGORY1_KEY, A.CATEGORY2_KEY, A.CATEGORY3_KEY, A.EDU_NAME,
+		A.EDU_START_DATE, A.EDU_END_DATE, A.EDU_ORG_NAME, A.EDU_TARGET,
+		A.EDU_NUMBER, A.EDU_TEAC_NAME, A.EDU_KEY
+		, (
+		SELECT CATEGORY1_NAME
+		FROM EDU_CATEGORY1
+		WHERE CATEGORY1_KEY= A.CATEGORY1_KEY
+		) AS CATEGORY1_NAME
+		, (
+		SELECT CATEGORY2_NAME
+		FROM EDU_CATEGORY2
+		WHERE CATEGORY1_KEY= A.CATEGORY1_KEY
+		AND CATEGORY2_KEY= A.CATEGORY2_KEY
+		) AS CATEGORY2_NAME
+		, (
+		SELECT CATEGORY3_NAME
+		FROM EDU_CATEGORY3
+		WHERE CATEGORY1_KEY= A.CATEGORY1_KEY
+		AND CATEGORY2_KEY= A.CATEGORY2_KEY
+		AND CATEGORY3_KEY= A.CATEGORY3_KEY
+		) AS CATEGORY3_NAME
+		FROM EDU_SCHEDULE A
+		WHERE A.EDU_KEY = #{edu_key}
+	</select>
+
+	<select id="getEeuInfoOnlineDetail"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getEeuInfoOnlineDetail
+		**/
+		SELECT A.CATEGORY1_KEY, A.CATEGORY2_KEY, A.CATEGORY3_KEY, A.EDU_NAME,
+		A.EDU_START_DATE, A.EDU_END_DATE, A.EDU_ORG_NAME, A.EDU_TARGET,
+		A.EDU_NUMBER, A.EDU_TEAC_NAME, A.EDU_KEY
+		, (
+		SELECT CATEGORY1_NAME
+		FROM EDU_CATEGORY1
+		WHERE CATEGORY1_KEY= A.CATEGORY1_KEY
+		) AS CATEGORY1_NAME
+		, (
+		SELECT CATEGORY2_NAME
+		FROM EDU_CATEGORY2
+		WHERE CATEGORY1_KEY= A.CATEGORY1_KEY
+		AND CATEGORY2_KEY= A.CATEGORY2_KEY
+		) AS CATEGORY2_NAME
+		, (
+		SELECT CATEGORY3_NAME
+		FROM EDU_CATEGORY3
+		WHERE CATEGORY1_KEY= A.CATEGORY1_KEY
+		AND CATEGORY2_KEY= A.CATEGORY2_KEY
+		AND CATEGORY3_KEY= A.CATEGORY3_KEY
+		) AS CATEGORY3_NAME
+		FROM EDU_SCHEDULE A
+		WHERE A.EDU_KEY = #{edu_key}
+	</select>
+
+	<delete id="deleteCategory1"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.deleteCategory1 **/
+		DELETE
+		  FROM EDU_CATEGORY1
+		 WHERE CATEGORY1_KEY = #{category1_key}
+	</delete>
+
+	<delete id="deleteCategory1Sub2"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.deleteCategory1Sub2 **/
+		DELETE
+		  FROM EDU_CATEGORY2
+		 WHERE CATEGORY1_KEY = #{category1_key}
+	</delete>
+
+	<delete id="deleteCategory1Sub3"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.deleteCategory1Sub2 **/
+		DELETE
+		  FROM EDU_CATEGORY3
+		 WHERE CATEGORY1_KEY = #{category1_key}
+	</delete>
+
+	<delete id="deleteCategory2"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.deleteCategory2 **/
+		DELETE
+	 	  FROM EDU_CATEGORY2
+		  WHERE CATEGORY1_KEY = #{category1_key}
+		    AND CATEGORY2_KEY = #{category2_key}
+	</delete>
+
+	<delete id="deleteCategory2Sub3"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.deleteCategory2Sub3 **/
+		DELETE
+		  FROM EDU_CATEGORY3
+		 WHERE CATEGORY1_KEY = #{category1_key}
+	       AND CATEGORY2_KEY = #{category2_key}
+	</delete>
+
+	<delete id="deleteCategory3"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.deleteCategory3 **/
+		DELETE
+		 FROM EDU_CATEGORY3
+		WHERE CATEGORY1_KEY = #{category1_key}
+		  AND CATEGORY2_KEY = #{category2_key}
+		  AND CATEGORY3_KEY = #{category3_key}
+	</delete>
+
+	<delete id="deleteClassCategory1"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.deleteClassCategory1 **/
+		DELETE
+		FROM EDU_CLASS_CATEGORY1
+		WHERE CATEGORY1_KEY = #{category1_key}
+		AND SITE = #{site}
+	</delete>
+
+	<delete id="deleteClassCategory1Sub2"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.deleteClassCategory1Sub2 **/
+		DELETE
+		FROM EDU_CLASS_CATEGORY2
+		WHERE CATEGORY1_KEY = #{category1_key}
+		AND SITE = #{site}
+	</delete>
+
+	<delete id="deleteClassCategory1Sub3"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.deleteClassCategory1Sub3 **/
+		DELETE
+		FROM EDU_CLASS_CATEGORY3
+		WHERE CATEGORY1_KEY = #{category1_key}
+		AND SITE = #{site}
+	</delete>
+
+	<delete id="deleteClassCategory2"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.deleteClassCategory2 **/
+		DELETE
+		FROM EDU_CLASS_CATEGORY2
+		WHERE CATEGORY1_KEY = #{category1_key}
+		AND CATEGORY2_KEY = #{category2_key}
+		AND SITE = #{site}
+	</delete>
+
+	<delete id="deleteClassCategory2Sub3"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.deleteClassCategory2Sub3 **/
+		DELETE
+		FROM EDU_CLASS_CATEGORY3
+		WHERE CATEGORY1_KEY = #{category1_key}
+		AND CATEGORY2_KEY = #{category2_key}
+		AND SITE = #{site}
+	</delete>
+
+	<delete id="deleteClassCategory3"		parameterType="com.easycompany.service.vo.CategoryVo">
+	    /** com.easycompany.mapper.EduMapper.deleteClassCategory3 **/
+		DELETE
+		  FROM EDU_CLASS_CATEGORY3
+		 WHERE CATEGORY1_KEY = #{category1_key}
+	       AND CATEGORY2_KEY = #{category2_key}
+		   AND CATEGORY3_KEY = #{category3_key}
+	       AND SITE = #{site}
+	</delete>
+
+	<delete id="deleteEduCationFile"		parameterType="com.easycompany.service.vo.CategoryVo">
+	    /** com.easycompany.mapper.EduMapper.deleteEduCationFile **/
+		DELETE
+		  FROM EDU_FILE	  	
+	  	<choose>
+			<when test="gubun2 !=null and gubun2 !='' and gubun2 =='category3' ">
+		 WHERE FILE_SEQ   = #{file_seq}
+		   AND FILE_GUBUN = #{gubun2}
+			</when>
+			<otherwise> 
+    	 WHERE FILE_ID = (SELECT EDU_NOTICE
+         			        FROM EDU_REGISTRATION
+                 	       WHERE EDU_NO   = #{edu_no}
+                   			AND  EDU_SITE = #{edu_site}
+                  		)
+			</otherwise>
+		</choose>
+	</delete>
+	
+	<delete id="deleteCommonMutilFile"		parameterType="com.easycompany.service.vo.CategoryVo">
+	    /** com.easycompany.mapper.EduMapper.deleteCommonMutilFile **/
+		DELETE
+		  FROM EDU_FILE	  
+	  	<choose>
+			<when test="gubun2 !=null and gubun2 !='' and gubun2 =='category1' ">
+		  WHERE FILE_KEY   IN (SELECT CATEGORY3_KEY 
+		                       FROM EDU_CATEGORY3 
+		                       WHERE CATEGORY1_KEY = #{category1_key} 
+		                     )
+		  AND FILE_GUBUN = 'category3'
+			</when>
+			<when test="gubun2 !=null and gubun2 !='' and gubun2 =='category2' ">
+		  WHERE FILE_KEY   IN (SELECT CATEGORY3_KEY 
+		                       FROM EDU_CATEGORY3 
+		                      WHERE CATEGORY1_KEY = #{category1_key} 
+		                        AND CATEGORY2_KEY = #{category2_key}
+		                     )
+		  AND FILE_GUBUN = 'category3'
+			</when>
+			<when test="gubun2 !=null and gubun2 !='' and gubun2 =='category3' ">
+		  WHERE FILE_KEY = #{category3_key}
+		    AND FILE_GUBUN = #{gubun2}
+			</when>
+			<otherwise> 
+    	 WHERE FILE_ID =  #{edu_no}
+			</otherwise>
+		</choose>
+	</delete>
+	
+	
+
+	<select id="getEduCationFile"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getEduCationFile **/
+		SELECT FILE_FULL_PATH, FILE_ID AS FILE_UUID, FILE_NAME, FILE_SEQ, FILE_SIZE, FILE_KEY
+		  FROM EDU_FILE
+		 <choose>
+			<when test="gubun2 !=null and gubun2 !='' and gubun2 =='category3' ">
+			     WHERE FILE_SEQ = #{file_seq}
+			</when>
+			<otherwise> 
+    	 WHERE FILE_ID = (SELECT EDU_NOTICE
+         			        FROM EDU_REGISTRATION
+                 	       WHERE EDU_NO   = #{edu_no}
+                   			AND  EDU_SITE = #{edu_site}
+                  		)
+			</otherwise>
+		</choose>
+	</select>
+
+	<delete id="deleteEduCationDetail"		parameterType="com.easycompany.service.vo.CategoryVo">
+	    /** com.easycompany.mapper.EduMapper.deleteEduCationDetail **/
+		DELETE
+		FROM EDU_REGISTRATION_DETAIL
+		WHERE EDU_NO = #{edu_no}
+	</delete>
+
+	<delete id="deleteEduCation"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.deleteEduCation **/
+		DELETE
+		FROM EDU_REGISTRATION
+		WHERE EDU_NO = #{edu_no}
+		AND EDU_SITE = #{edu_site}
+	</delete>
+
+	<update id="updateCategory1"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.updateCategory1 **/
+		UPDATE EDU_CATEGORY1
+		SET CATEGORY1_NAME = #{category1_name}
+		, CHG_ID = IFNULL(#{user_id},'SYSTEM')
+		, CHG_DT = NOW()
+		WHERE CATEGORY1_KEY = #{category1_key}
+	</update>
+
+	<update id="updateCategory2"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.updateCategory2 **/
+		UPDATE EDU_CATEGORY2
+		  SET CATEGORY2_NAME = #{category2_name}
+		    , CHG_ID = IFNULL(#{user_id},'SYSTEM')
+		    , CHG_DT = NOW()
+		WHERE CATEGORY1_KEY = #{category1_key}
+		  AND CATEGORY2_KEY = #{category2_key}
+	</update>
+
+
+	<update id="updateCategory3"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.updateCategory3 **/
+		UPDATE EDU_CATEGORY3
+		   SET CATEGORY3_NAME = #{category3_name}
+		     , CATEGORY3_CONT = #{category3_cont}
+		     , CHG_ID = IFNULL(#{user_id},'SYSTEM')
+		     , CHG_DT = NOW()
+		 WHERE CATEGORY1_KEY = #{category1_key}
+		   AND CATEGORY2_KEY = #{category2_key}
+		   AND CATEGORY3_KEY = #{category3_key}
+	</update>
+
+	<update id="updateClassCategory1"	parameterType="com.easycompany.service.vo.CategoryVo">
+		/**
+		com.easycompany.mapper.EduMapper.updateClassCategory1 **/
+		UPDATE EDU_CLASS_CATEGORY1
+		SET CATEGORY1_NAME = #{category1_name}
+		, CHG_ID = IFNULL(#{user_id},'SYSTEM')
+		, CHG_DT = NOW()
+		WHERE CATEGORY1_KEY = #{category1_key}
+		AND SITE = #{site}
+	</update>
+
+	<update id="updateClassCategory2"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/**
+		com.easycompany.mapper.EduMapper.updateClassCategory2 **/
+		UPDATE EDU_CLASS_CATEGORY2
+		SET CATEGORY2_NAME = #{category2_name}
+		, CHG_ID = IFNULL(#{user_id},'SYSTEM')
+		, CHG_DT = NOW()
+		WHERE CATEGORY1_KEY = #{category1_key}
+		AND CATEGORY2_KEY = #{category2_key}
+		AND SITE = #{site}
+	</update>
+
+
+	<update id="updateClassCategory3"	parameterType="com.easycompany.service.vo.CategoryVo">
+		/**
+		com.easycompany.mapper.EduMapper.updateClassCategory3 **/
+		UPDATE EDU_CLASS_CATEGORY3
+		SET CATEGORY3_NAME = #{category3_name}
+		, CHG_ID = IFNULL(#{user_id},'SYSTEM')
+		, CHG_DT = NOW()
+		WHERE CATEGORY1_KEY = #{category1_key}
+		AND CATEGORY2_KEY = #{category2_key}
+		AND CATEGORY3_KEY = #{category3_key}
+		AND SITE = #{site}
+	</update>
+
+	<select id="getCategoryCodeList"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getCategoryCodeList **/
+		WITH TEMP AS(
+		SELECT a.CATEGORY1_KEY, b.CATEGORY2_KEY,c.CATEGORY3_KEY, a.CATEGORY1_NAME,
+		b.CATEGORY2_NAME,c.CATEGORY3_NAME, C.CATEGORY3_CONT
+		FROM EDU_CATEGORY1 AS A
+		LEFT OUTER
+		JOIN EDU_CATEGORY2 AS B ON a.CATEGORY1_KEY = b.CATEGORY1_KEY
+		LEFT OUTER
+		JOIN EDU_CATEGORY3 AS C ON b.CATEGORY2_KEY = c.CATEGORY2_KEY
+		)
+		<choose>
+			<when test="gubun3 !=null and gubun3 !='' and gubun3 =='categorycode1' ">
+				SELECT CATEGORY1_KEY AS CODE_CD, CATEGORY1_NAME AS CODE_NAME
+				FROM TEMP
+				WHERE CATEGORY3_KEY IS NOT NULL
+				GROUP BY CATEGORY1_KEY, CATEGORY1_NAME
+			</when>
+			<when test="gubun3 !=null and gubun3 !='' and gubun3 =='categorycode2' ">
+				SELECT CATEGORY2_KEY AS CODE_CD, CATEGORY2_NAME AS CODE_NAME
+				FROM TEMP
+				WHERE CATEGORY3_KEY IS NOT NULL
+				AND CATEGORY1_KEY = #{category1_key}
+				GROUP BY CATEGORY2_KEY, CATEGORY2_NAME
+			</when>
+			<when test="gubun3 !=null and gubun3 !='' and gubun3 =='categorycode3' ">
+				SELECT CATEGORY3_KEY AS CODE_CD, CATEGORY3_NAME AS CODE_NAME
+				FROM TEMP
+				WHERE CATEGORY3_KEY IS NOT NULL
+				AND CATEGORY1_KEY = #{category1_key}
+				AND CATEGORY2_KEY = #{category2_key}
+				GROUP BY CATEGORY3_KEY, CATEGORY3_NAME
+			</when>
+		</choose>
+	</select>
+
+	<select id="getComnonCodeList"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+	    /** com.easycompany.mapper.EduMapper.getComnonCodeList **/
+	    SELECT CD, CD_NM 
+		  FROM COM_CD_MNG
+		 WHERE USE_YN ='Y' 
+		   AND UP_CD_NO =  #{up_cd_no}
+	 	 ORDER BY SORT_ORDR
+    </select>
+    
+	<select id="getOnlineCategoryCodeList"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getOnlineCategoryCodeList **/
+		WITH TEMP AS(
+		SELECT a.CATEGORY1_KEY, b.CATEGORY2_KEY,c.CATEGORY3_KEY, a.CATEGORY1_NAME,
+		b.CATEGORY2_NAME,c.CATEGORY3_NAME,a.SITE
+		FROM EDU_CLASS_CATEGORY1 AS A
+		LEFT OUTER
+		JOIN EDU_CLASS_CATEGORY2 AS B ON a.CATEGORY1_KEY = b.CATEGORY1_KEY
+		LEFT OUTER
+		JOIN EDU_CLASS_CATEGORY3 AS C ON b.CATEGORY2_KEY = c.CATEGORY2_KEY
+		)
+		<choose>
+			<when test="gubun3 !=null and gubun3 !='' and gubun3 =='categorycode1' ">
+				SELECT CATEGORY1_KEY AS CODE_CD, CATEGORY1_NAME AS CODE_NAME
+				FROM TEMP
+				WHERE CATEGORY3_KEY IS NOT NULL
+				AND SITE= #{site}
+				GROUP BY CATEGORY1_KEY, CATEGORY1_NAME
+			</when>
+			<when test="gubun3 !=null and gubun3 !='' and gubun3 =='categorycode2' ">
+				SELECT CATEGORY2_KEY AS CODE_CD, CATEGORY2_NAME AS CODE_NAME
+				FROM TEMP
+				WHERE CATEGORY3_KEY IS NOT NULL
+				AND SITE= #{site}
+				AND CATEGORY1_KEY = #{category1_key}
+				GROUP BY CATEGORY2_KEY, CATEGORY2_NAME
+			</when>
+			<when	test="gubun3 !=null and gubun3 !='' and gubun3 =='categorycode3' ">
+				SELECT CATEGORY3_KEY AS CODE_CD, CATEGORY3_NAME AS CODE_NAME
+				FROM TEMP
+				WHERE CATEGORY3_KEY IS NOT NULL
+				AND SITE= #{site}
+				AND CATEGORY1_KEY = #{category1_key}
+				AND CATEGORY2_KEY = #{category2_key}
+				GROUP BY CATEGORY3_KEY, CATEGORY3_NAME
+			</when>
+		</choose>
+	</select>
+
+	<select id="getEduAppCodeList"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getEduAppCodeList **/
+		WITH 
+		CLASS AS
+			(
+			SELECT A.CATEGORY1_KEY, B.CATEGORY2_KEY,C.CATEGORY3_KEY, A.CATEGORY1_NAME, 
+			  	   B.CATEGORY2_NAME,C.CATEGORY3_NAME,A.SITE
+			  FROM EDU_CLASS_CATEGORY1 AS A
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY2 AS B ON(A.CATEGORY1_KEY = B.CATEGORY1_KEY AND A.SITE = B.SITE)
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY3 AS C ON (B.CATEGORY2_KEY = C.CATEGORY2_KEY AND C.SITE = B.SITE)
+			),
+		REGI_D AS 
+		    (
+			SELECT A.EDU_SITE, A.CATEGORY1_KEY, A.CATEGORY2_KEY,A.CATEGORY3_KEY, B.CATEGORY1_NAME, 
+				   B.CATEGORY2_NAME,B.CATEGORY3_NAME
+			  FROM EDU_REGISTRATION A, CLASS B
+			 WHERE A.CATEGORY1_KEY = B.CATEGORY1_KEY 
+			   AND A.CATEGORY2_KEY = B.CATEGORY2_KEY 
+			   AND A.CATEGORY3_KEY = B.CATEGORY3_KEY 
+			   AND A.EXP_USE_YN ='Y'
+		  	   AND A.EDU_STATUS =#{edu_status}
+			   AND A.EDU_SITE   =#{edu_site} 
+			   <if test=" category1_key !=null and category1_key !=0">
+			   AND A.CATEGORY1_KEY = #{category1_key} 
+			   </if>
+			   <if test=" category2_key !=null and category2_key !=0 ">
+			   AND A.CATEGORY2_KEY = #{category2_key} 
+			  </if>
+			   <if test=" category3_key !=null and category3_key !=0">
+			   AND A.CATEGORY3_KEY = #{category3_key} 
+			  </if>
+	        )
+		<choose>
+			<when test="gubun3 !=null and gubun3 !='' and gubun3 =='categorycode1' ">
+				SELECT CATEGORY1_KEY AS CODE_CD, CATEGORY1_NAME AS CODE_NAME
+				  FROM REGI_D
+				GROUP BY CATEGORY1_KEY, CATEGORY1_NAME
+			</when>
+			<when test="gubun3 !=null and gubun3 !='' and gubun3 =='categorycode2' ">
+				SELECT CATEGORY2_KEY AS CODE_CD, CATEGORY2_NAME AS CODE_NAME
+				  FROM REGI_D
+				 GROUP BY CATEGORY2_KEY, CATEGORY2_NAME
+			</when>
+			<when	test="gubun3 !=null and gubun3 !='' and gubun3 =='categorycode3' ">
+				SELECT CATEGORY3_KEY AS CODE_CD, CATEGORY3_NAME AS CODE_NAME
+				  FROM REGI_D
+			 	 GROUP BY CATEGORY3_KEY, CATEGORY3_NAME
+			</when>
+		</choose>
+	</select>
+	
+	<select id="getLifeEduOnLineList"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getLifeEduOnLineList **/
+		WITH 
+		CLASS AS
+			(
+			SELECT A.CATEGORY1_KEY, B.CATEGORY2_KEY,C.CATEGORY3_KEY, A.CATEGORY1_NAME, 
+			  	   B.CATEGORY2_NAME,C.CATEGORY3_NAME,A.SITE
+			  FROM EDU_CLASS_CATEGORY1 AS A
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY2 AS B ON(A.CATEGORY1_KEY = B.CATEGORY1_KEY AND A.SITE = B.SITE)
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY3 AS C ON (B.CATEGORY2_KEY = C.CATEGORY2_KEY AND C.SITE = B.SITE)
+			),
+		REGI_D AS 
+		    (
+			SELECT  A.EDU_NO, A.EDU_SITE, A.CATEGORY1_KEY, A.CATEGORY2_KEY,A.CATEGORY3_KEY, B.CATEGORY1_NAME
+				   , B.CATEGORY2_NAME,B.CATEGORY3_NAME
+ 				   , A.INST_NM, A.TRAIN_S_DATE, A.TRAIN_E_DATE, A.EDU_TARGET,A.EDU_TIME
+		           , A.EDU_GARDEN, A.EDU_STATUS,A.EDU_CONT,A.EDU_METHOD, A.EXP_USE_YN
+		           , A.COPER_NM , A.COPER_NM_AUTO, A.COPER_ID, A.COPER_CHECK,A.REG_DT
+			  FROM EDU_REGISTRATION A, CLASS B
+			 WHERE A.CATEGORY1_KEY = B.CATEGORY1_KEY 
+			   AND A.CATEGORY2_KEY = B.CATEGORY2_KEY 
+			   AND A.CATEGORY3_KEY = B.CATEGORY3_KEY 
+			   AND A.EXP_USE_YN ='Y'
+		  	   AND A.EDU_STATUS =#{edu_status}
+			   AND A.EDU_SITE   =#{edu_site} 
+			   <if test=" category1_key !=null and category1_key !=0">
+			   AND A.CATEGORY1_KEY = #{category1_key} 
+			   </if>
+			   <if test=" category2_key !=null and category2_key !=0 ">
+			   AND A.CATEGORY2_KEY = #{category2_key} 
+			  </if>
+			  <if test=" category3_key !=null and category3_key !=0">
+			   AND A.CATEGORY3_KEY = #{category3_key} 
+			  </if>
+			   
+	        )
+	    SELECT *
+		  FROM REGI_D
+	   	 WHERE 1=1
+	   	 <choose>
+			<when test ="searchCondition !=null and searchCondition !='' and searchCondition =='INST_NM'        and searchKeyword !=null and searchKeyword !='' ">
+			   AND  INST_NM  LIKE CONCAT('%', #{searchKeyword} ,'%')
+			</when>
+			<when test ="searchCondition !=null and searchCondition !='' and searchCondition =='CATEGORY3_NAME' and searchKeyword !=null and searchKeyword !='' ">
+			  AND  CATEGORY3_NAME LIKE CONCAT('%', #{searchKeyword} ,'%')
+			</when>
+		  </choose>
+		   <if test=" sort_ordr !=null and sort_ordr =='TRAIN_S_DATE'">
+			  ORDER BY TRAIN_S_DATE  DESC
+		   </if>
+		   	<if test=" sort_ordr !=null and sort_ordr =='REG_DT'">
+			  ORDER BY REG_DT  DESC
+			 </if>
+	   	 LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+	
+	<select id="getLifeEduOnLineCount"		parameterType="com.easycompany.service.vo.CategoryVo"	resultType="int">
+		/** com.easycompany.mapper.EduMapper.getLifeEduOnLineCount **/
+		WITH 
+		CLASS AS
+			(
+			SELECT A.CATEGORY1_KEY, B.CATEGORY2_KEY,C.CATEGORY3_KEY, A.CATEGORY1_NAME, 
+			  	   B.CATEGORY2_NAME,C.CATEGORY3_NAME,A.SITE
+			  FROM EDU_CLASS_CATEGORY1 AS A
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY2 AS B ON(A.CATEGORY1_KEY = B.CATEGORY1_KEY AND A.SITE = B.SITE)
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY3 AS C ON (B.CATEGORY2_KEY = C.CATEGORY2_KEY AND C.SITE = B.SITE)
+			),
+		REGI_D AS 
+		    (
+			SELECT A.EDU_SITE, A.CATEGORY1_KEY, A.CATEGORY2_KEY,A.CATEGORY3_KEY, B.CATEGORY1_NAME
+				   , B.CATEGORY2_NAME,B.CATEGORY3_NAME
+ 				   , A.INST_NM, A.TRAIN_S_DATE, A.TRAIN_E_DATE, A.EDU_TARGET,A.EDU_TIME
+		           , A.EDU_GARDEN, A.EDU_STATUS,A.EDU_CONT,A.EDU_METHOD, A.EXP_USE_YN
+		           , A.COPER_NM , A.COPER_NM_AUTO, A.COPER_ID, A.COPER_CHECK,A.REG_DT
+			  FROM EDU_REGISTRATION A, CLASS B
+			 WHERE A.CATEGORY1_KEY = B.CATEGORY1_KEY 
+			   AND A.CATEGORY2_KEY = B.CATEGORY2_KEY 
+			   AND A.CATEGORY3_KEY = B.CATEGORY3_KEY 
+			   AND A.EXP_USE_YN ='Y'
+		  	   AND A.EDU_STATUS =#{edu_status}
+			   AND A.EDU_SITE   =#{edu_site} 
+			   <if test=" category1_key !=null and category1_key !=0">
+			   AND A.CATEGORY1_KEY = #{category1_key} 
+			   </if>
+			   <if test=" category2_key !=null and category2_key !=0 ">
+			   AND A.CATEGORY2_KEY = #{category2_key} 
+			  </if>
+			   <if test=" category3_key !=null and category3_key !=0">
+			   AND A.CATEGORY3_KEY = #{category3_key} 
+			  </if>
+	        )
+	    SELECT count(*)
+		  FROM REGI_D
+	   	 WHERE 1=1
+	   	  <choose>
+			<when test ="searchCondition !=null and searchCondition !='' and searchCondition =='INST_NM' and searchKeyword !=null and searchKeyword !='' ">
+			   AND  INST_NM  LIKE CONCAT('%', #{searchKeyword} ,'%')
+			</when>
+			<when test ="searchCondition !=null and searchCondition !='' and  searchCondition =='CATEGORY3_NAME' and searchKeyword !=null and searchKeyword !='' ">
+			  AND  CATEGORY3_NAME LIKE CONCAT('%', #{searchKeyword} ,'%')
+			</when>
+		  </choose>
+	</select>
+	
+	
+	<select id="getlifeEduSchList"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getlifeEduSchList **/
+		WITH 
+		CLASS AS
+			(
+			SELECT A.CATEGORY1_KEY, B.CATEGORY2_KEY,C.CATEGORY3_KEY, A.CATEGORY1_NAME, 
+			  	   B.CATEGORY2_NAME,C.CATEGORY3_NAME,A.SITE
+			  FROM EDU_CLASS_CATEGORY1 AS A
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY2 AS B ON(A.CATEGORY1_KEY = B.CATEGORY1_KEY AND A.SITE = B.SITE)
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY3 AS C ON (B.CATEGORY2_KEY = C.CATEGORY2_KEY AND C.SITE = B.SITE)
+			),
+		EDU_REGISTRATION AS 
+		  (
+		  SELECT a.SCHEDULE_NO,A.edu_key, A.CATEGORY1_KEY, A.CATEGORY2_KEY,A.CATEGORY3_KEY,
+	             a.EDU_NAME,
+	             a.EDU_START_DATE AS train_s_date,
+	               CONCAT(SUBSTR(TIME(b.START_TIME),1,2),':',SUBSTR(TIME(b.START_TIME),4,2),'~',SUBSTR(TIME(b.END_TIME),1,2),':',SUBSTR(TIME(b.END_TIME),4,2)) AS EDU_DATETIME,
+	               (SELECT EDU_TIME FROM EDU_REGISTRATION WHERE EDU_NO = a.EDU_KEY) AS EDU_TIME,
+	             a.EDU_ORG_NAME coper_nm,
+	             a.EDU_TARGET ,
+	             a.EDU_TEAC_NAME inst_nm,
+	             a.EDU_NUMBER edu_garden,
+	             b.EDU_PLACE,
+	             a.REG_DT,
+	             CASE 
+	               WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL THEN '섭외중'
+	               WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL THEN '완료'
+	               WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL THEN '완료'
+	            END
+	               AS INS_STATUS,
+	             <![CDATA[
+	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN ''
+						WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+						WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+						WHEN b.SCH_STATUS = 'C' THEN '신청취소'
+						WHEN b.SCH_STATUS IS NULL AND a.EDU_START_DATE <= NOW() THEN '교육완료'
+						WHEN b.SCH_STATUS = 'S' THEN '보고완료'
+					END
+	               AS SCH_STATUS
+	               ]]>             
+	      FROM EDU_SCHEDULE a,
+	          EDU_SCHEDULE_DETAIL b
+	      WHERE a.SCHEDULE_NO = b.SCHEDULE_NO
+	      ),
+      REGI_D AS 
+		    (
+      SELECT  A.*,  B.CATEGORY1_NAME				   , B.CATEGORY2_NAME,B.CATEGORY3_NAME
+			  FROM EDU_REGISTRATION A, CLASS B
+			 WHERE A.CATEGORY1_KEY = B.CATEGORY1_KEY 
+			   AND A.CATEGORY2_KEY = B.CATEGORY2_KEY 
+			   AND A.CATEGORY3_KEY = B.CATEGORY3_KEY
+			   AND A.SCH_STATUS IN ('신청완료')
+			   )
+	    SELECT *
+		  FROM REGI_D
+	   	 WHERE CATEGORY3_NAME LIKE CONCAT('%', #{category3_name} ,'%')
+		   <choose>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='ALL' ">
+			</when>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='TODAY' ">
+				AND train_s_date = DATE_FORMAT(NOW(),'%x-%m-%d')
+			</when>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='TERM' ">
+		   <![CDATA[
+		     AND  train_s_date >= #{train_s_date} AND train_s_date <= #{train_e_date} 
+		    ]]>
+			</when>
+		</choose>
+		ORDER BY TRAIN_S_DATE  DESC
+	   	 LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+	
+	<select id="getlifeEduSchCount"		parameterType="com.easycompany.service.vo.CategoryVo"	resultType="int">
+		/** com.easycompany.mapper.EduMapper.getlifeEduSchCount **/
+		WITH 
+		CLASS AS
+			(
+			SELECT A.CATEGORY1_KEY, B.CATEGORY2_KEY,C.CATEGORY3_KEY, A.CATEGORY1_NAME, 
+			  	   B.CATEGORY2_NAME,C.CATEGORY3_NAME,A.SITE
+			  FROM EDU_CLASS_CATEGORY1 AS A
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY2 AS B ON(A.CATEGORY1_KEY = B.CATEGORY1_KEY AND A.SITE = B.SITE)
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY3 AS C ON (B.CATEGORY2_KEY = C.CATEGORY2_KEY AND C.SITE = B.SITE)
+			),
+		EDU_REGISTRATION AS 
+		  (
+		  SELECT a.SCHEDULE_NO,A.edu_key, A.CATEGORY1_KEY, A.CATEGORY2_KEY,A.CATEGORY3_KEY,
+	             a.EDU_NAME,
+	             a.EDU_START_DATE AS train_s_date,
+	               CONCAT(SUBSTR(TIME(b.START_TIME),1,2),':',SUBSTR(TIME(b.START_TIME),4,2),'~',SUBSTR(TIME(b.END_TIME),1,2),':',SUBSTR(TIME(b.END_TIME),4,2)) AS EDU_DATETIME,
+	               (SELECT EDU_TIME FROM EDU_REGISTRATION WHERE EDU_NO = a.EDU_KEY) AS EDU_TIME,
+	              a.EDU_ORG_NAME coper_nm,
+	              a.EDU_TARGET ,
+	              a.EDU_TEAC_NAME inst_nm,
+	              a.EDU_NUMBER edu_garden,
+	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL THEN '섭외중'
+	               WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL THEN '완료'
+	               WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL THEN '완료'
+	            END
+	               AS INS_STATUS,
+	              <![CDATA[
+	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN ''
+						WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+						WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+						WHEN b.SCH_STATUS = 'C' THEN '신청취소'
+						WHEN b.SCH_STATUS IS NULL AND a.EDU_START_DATE <= NOW() THEN '교육완료'
+						WHEN b.SCH_STATUS = 'S' THEN '보고완료'
+					END
+	               AS SCH_STATUS
+	               ]]>            
+	      FROM EDU_SCHEDULE a,
+	          EDU_SCHEDULE_DETAIL b
+	      WHERE a.SCHEDULE_NO = b.SCHEDULE_NO
+	      ),
+      REGI_D AS 
+		    (
+     		SELECT A.*,  B.CATEGORY1_NAME				   , B.CATEGORY2_NAME,B.CATEGORY3_NAME
+			  FROM EDU_REGISTRATION A, CLASS B
+			 WHERE A.CATEGORY1_KEY = B.CATEGORY1_KEY 
+			   AND A.CATEGORY2_KEY = B.CATEGORY2_KEY 
+			   AND A.CATEGORY3_KEY = B.CATEGORY3_KEY
+			   AND A.SCH_STATUS IN ('신청완료')
+			   )
+	    SELECT count(*)
+		  FROM REGI_D
+	   	 WHERE CATEGORY3_NAME LIKE CONCAT('%', #{category3_name} ,'%')
+		   <choose>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='ALL' ">
+			</when>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='TODAY' ">
+				AND train_s_date = DATE_FORMAT(NOW(),'%x-%m-%d')
+			</when>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='TERM' ">
+		   <![CDATA[
+		     AND  train_s_date >= #{train_s_date} AND train_s_date <= #{train_e_date} 
+		    ]]>
+			</when>
+		</choose>
+	</select>
+	
+	
+	<select id="getLifeEduOffOrgList"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getLifeEduOffOrgList **/
+		WITH 
+		CLASS AS
+			(
+			SELECT A.CATEGORY1_KEY, B.CATEGORY2_KEY,C.CATEGORY3_KEY, A.CATEGORY1_NAME, 
+			  	   B.CATEGORY2_NAME,C.CATEGORY3_NAME,A.SITE
+			  FROM EDU_CLASS_CATEGORY1 AS A
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY2 AS B ON(A.CATEGORY1_KEY = B.CATEGORY1_KEY AND A.SITE = B.SITE)
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY3 AS C ON (B.CATEGORY2_KEY = C.CATEGORY2_KEY AND C.SITE = B.SITE)
+			),
+		EDU_REGISTRATION AS 
+		  (
+		  SELECT a.SCHEDULE_NO,A.edu_key, A.CATEGORY1_KEY, A.CATEGORY2_KEY,A.CATEGORY3_KEY,
+	             a.EDU_NAME,
+	             a.EDU_START_DATE AS train_s_date,
+	               CONCAT(SUBSTR(TIME(b.START_TIME),1,2),':',SUBSTR(TIME(b.START_TIME),4,2),'~',SUBSTR(TIME(b.END_TIME),1,2),':',SUBSTR(TIME(b.END_TIME),4,2)) AS EDU_DATETIME,
+	               (SELECT EDU_TIME FROM EDU_REGISTRATION WHERE EDU_NO = a.EDU_KEY) AS EDU_TIME,
+	             a.EDU_ORG_NAME coper_nm,
+	             a.EDU_TARGET ,
+	             a.EDU_TEAC_NAME inst_nm,
+	             a.EDU_NUMBER edu_garden,
+	             b.EDU_PLACE,
+	             a.REG_DT,
+	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL THEN '섭외중'
+	               WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL THEN '완료'
+	               WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL THEN '완료'
+	            END
+	               AS INS_STATUS,
+	             <![CDATA[
+	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN ''
+						WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+						WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+						WHEN b.SCH_STATUS = 'C' THEN '신청취소'
+						WHEN b.SCH_STATUS IS NULL AND a.EDU_START_DATE <= NOW() THEN '교육완료'
+						WHEN b.SCH_STATUS = 'S' THEN '보고완료'
+					END
+	               AS SCH_STATUS
+	               ]]>             
+	      FROM EDU_SCHEDULE a,
+	          EDU_SCHEDULE_DETAIL b
+	      WHERE a.SCHEDULE_NO = b.SCHEDULE_NO
+	      ),
+      REGI_D AS 
+		    (
+      SELECT  A.*,  B.CATEGORY1_NAME				   , B.CATEGORY2_NAME,B.CATEGORY3_NAME
+			  FROM EDU_REGISTRATION A, CLASS B
+			 WHERE A.CATEGORY1_KEY = B.CATEGORY1_KEY 
+			   AND A.CATEGORY2_KEY = B.CATEGORY2_KEY 
+			   AND A.CATEGORY3_KEY = B.CATEGORY3_KEY
+			   AND A.SCH_STATUS IN ('신청완료')
+			   )
+	    SELECT *
+		  FROM REGI_D
+	   	 WHERE 1=1
+	   	  <choose>
+			<when test ="searchCondition !=null and searchCondition !='' and searchCondition =='INST_NM'        and searchKeyword !=null and searchKeyword !='' ">
+			   AND  INST_NM  LIKE CONCAT('%', #{searchKeyword} ,'%')
+			</when>
+			<when test ="searchCondition !=null and searchCondition !='' and searchCondition =='CATEGORY3_NAME' and searchKeyword !=null and searchKeyword !='' ">
+			  AND  CATEGORY3_NAME LIKE CONCAT('%', #{searchKeyword} ,'%')
+			</when>
+		  </choose>
+		  <choose>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='ALL' ">
+			</when>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='TODAY' ">
+				AND TRAIN_S_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
+			</when>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='TERM' ">
+		   <![CDATA[
+		     AND  train_s_date >= #{train_s_date} AND train_s_date <= #{train_e_date} 
+		    ]]>
+			</when>
+		</choose>
+		<if test=" sort_ordr !=null and sort_ordr =='TRAIN_S_DATE'">
+		  ORDER BY TRAIN_S_DATE  DESC
+		</if>
+		<if test=" sort_ordr !=null and sort_ordr =='REG_DT'">
+		  ORDER BY REG_DT  DESC
+		 </if>
+	   	 LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+	
+	<select id="getLifeEduOffOrgListCount"		parameterType="com.easycompany.service.vo.CategoryVo"	resultType="int">
+		/** com.easycompany.mapper.EduMapper.getLifeEduOffOrgListCount **/
+		WITH 
+		CLASS AS
+			(
+			SELECT A.CATEGORY1_KEY, B.CATEGORY2_KEY,C.CATEGORY3_KEY, A.CATEGORY1_NAME, 
+			  	   B.CATEGORY2_NAME,C.CATEGORY3_NAME,A.SITE
+			  FROM EDU_CLASS_CATEGORY1 AS A
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY2 AS B ON(A.CATEGORY1_KEY = B.CATEGORY1_KEY AND A.SITE = B.SITE)
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY3 AS C ON (B.CATEGORY2_KEY = C.CATEGORY2_KEY AND C.SITE = B.SITE)
+			),
+		EDU_REGISTRATION AS 
+		  (
+		  SELECT a.SCHEDULE_NO,A.edu_key, A.CATEGORY1_KEY, A.CATEGORY2_KEY,A.CATEGORY3_KEY,
+	             a.EDU_NAME,
+	             a.EDU_START_DATE AS train_s_date,
+	               CONCAT(SUBSTR(TIME(b.START_TIME),1,2),':',SUBSTR(TIME(b.START_TIME),4,2),'~',SUBSTR(TIME(b.END_TIME),1,2),':',SUBSTR(TIME(b.END_TIME),4,2)) AS EDU_DATETIME,
+	               (SELECT EDU_TIME FROM EDU_REGISTRATION WHERE EDU_NO = a.EDU_KEY) AS EDU_TIME,
+	              a.EDU_ORG_NAME coper_nm,
+	              a.EDU_TARGET ,
+	              a.EDU_TEAC_NAME inst_nm,
+	              a.EDU_NUMBER edu_garden,
+	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL THEN '섭외중'
+	               WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL THEN '완료'
+	               WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL THEN '완료'
+	            END
+	               AS INS_STATUS,
+	              <![CDATA[
+	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN ''
+						WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+						WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+						WHEN b.SCH_STATUS = 'C' THEN '신청취소'
+						WHEN b.SCH_STATUS IS NULL AND a.EDU_START_DATE <= NOW() THEN '교육완료'
+						WHEN b.SCH_STATUS = 'S' THEN '보고완료'
+					END
+	               AS SCH_STATUS
+	               ]]>            
+	      FROM EDU_SCHEDULE a,
+	          EDU_SCHEDULE_DETAIL b
+	      WHERE a.SCHEDULE_NO = b.SCHEDULE_NO
+	      ),
+      REGI_D AS 
+		    (
+     		SELECT A.*,  B.CATEGORY1_NAME				   , B.CATEGORY2_NAME,B.CATEGORY3_NAME
+			  FROM EDU_REGISTRATION A, CLASS B
+			 WHERE A.CATEGORY1_KEY = B.CATEGORY1_KEY 
+			   AND A.CATEGORY2_KEY = B.CATEGORY2_KEY 
+			   AND A.CATEGORY3_KEY = B.CATEGORY3_KEY
+			   AND A.SCH_STATUS IN ('신청완료')
+			   )
+	    SELECT count(*)
+		  FROM REGI_D
+	   	 WHERE 1=1
+	   	  <choose>
+			<when test ="searchCondition !=null and searchCondition !='' and searchCondition =='INST_NM'        and searchKeyword !=null and searchKeyword !='' ">
+			   AND  INST_NM  LIKE CONCAT('%', #{searchKeyword} ,'%')
+			</when>
+			<when test ="searchCondition !=null and searchCondition !='' and searchCondition =='CATEGORY3_NAME' and searchKeyword !=null and searchKeyword !='' ">
+			  AND  CATEGORY3_NAME LIKE CONCAT('%', #{searchKeyword} ,'%')
+			</when>
+		  </choose>
+		   <choose>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='ALL' ">
+			</when>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='TODAY' ">
+				AND TRAIN_S_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
+			</when>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='TERM' ">
+		   <![CDATA[
+		     AND  TRAIN_S_DATE >= #{train_s_date} AND train_s_date <= #{train_e_date} 
+		    ]]>
+			</when>
+		</choose>
+	</select>
+	
+	<select id="getEduInfoOnlineMangViewList"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getEduInfoOnlineMangViewList **/
+		WITH TB_MEM AS 
+			(
+			SELECT   U.USER_NM
+				   , CASE
+					   WHEN U.USER_SEX = 'M' THEN '남자'
+					   WHEN U.USER_SEX = 'W' THEN '여자'
+					   ELSE U.USER_SEX
+				      END AS USER_SEX
+				    , FN_GET_CD_NM1('238', U.JOB_CD) JOB_CD
+				    , DATE_FORMAT(U.BIRTH_YMD,'%Y-%m-%d') AS BIRTH_YMD
+				    , C.EML_ADDR, C.MBL_TELNO, CONCAT(U.JUSO ,' ', U.JUSO_DETAIL) AS JUSO 
+				    , DATE_FORMAT(C.REG_DT,'%Y-%m-%d') AS REG_DT
+			   FROM EDU_COURSE_REGISTRATION C , EDU_REGISTRATION R , COM_USER U
+			  WHERE C.EDU_NO = R.EDU_NO
+			    AND C.USER_ID = U.USER_ID
+			    AND C.EDU_NO = #{edu_no}
+			 )
+			SELECT * 
+			  FROM TB_MEM
+	   	     WHERE USER_NM LIKE CONCAT('%', #{user_nm} ,'%')
+		  <choose>
+				<when
+					test="checkdate !=null and checkdate !='' and checkdate =='ALL' ">
+				</when>
+				<when
+					test="checkdate !=null and checkdate !='' and checkdate =='TODAY' ">
+					AND REG_DT = DATE_FORMAT(NOW(),'%Y-%m-%d') 
+				</when>
+				<when
+					test="checkdate !=null and checkdate !='' and checkdate =='TERM' ">
+			   <![CDATA[
+			     AND  REG_DT >= #{train_s_date} AND REG_DT <= #{train_e_date} 
+			    ]]>
+				</when>
+			</choose>
+	   	 LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+	
+	<select id="getEduInfoOnlineMangViewCount"		parameterType="com.easycompany.service.vo.CategoryVo"	resultType="int">
+		/** com.easycompany.mapper.EduMapper.getEduInfoOnlineMangViewCount **/
+		WITH TB_MEM AS 
+			(
+			SELECT   U.USER_NM
+				   , CASE
+					   WHEN U.USER_SEX = 'M' THEN '남자'
+					   WHEN U.USER_SEX = 'W' THEN '여자'
+					   ELSE U.USER_SEX
+				      END AS USER_SEX
+				    , FN_GET_CD_NM1('238', U.JOB_CD) JOB_CD
+				    , DATE_FORMAT(U.BIRTH_YMD,'%Y-%m-%d') AS BIRTH_YMD
+				    , C.EML_ADDR, C.MBL_TELNO, CONCAT(U.JUSO ,' ', U.JUSO_DETAIL) AS JUSO 
+				    , DATE_FORMAT(C.REG_DT,'%Y-%m-%d') AS REG_DT
+			   FROM EDU_COURSE_REGISTRATION C , EDU_REGISTRATION R , COM_USER U
+			  WHERE C.EDU_NO = R.EDU_NO
+			    AND C.USER_ID = U.USER_ID
+			    AND C.EDU_NO = #{edu_no}
+			 )
+			SELECT COUNT(*) 
+			  FROM TB_MEM
+	   	      WHERE USER_NM LIKE CONCAT('%', #{user_nm} ,'%')
+		   <choose>
+				<when
+					test="checkdate !=null and checkdate !='' and checkdate =='ALL' ">
+				</when>
+				<when
+					test="checkdate !=null and checkdate !='' and checkdate =='TODAY' ">
+					AND REG_DT = DATE_FORMAT(NOW(),'%Y-%m-%d') 
+				</when>
+				<when
+					test="checkdate !=null and checkdate !='' and checkdate =='TERM' ">
+			   <![CDATA[
+			     AND  REG_DT >= #{train_s_date} AND REG_DT <= #{train_e_date} 
+			    ]]>
+				</when>
+			</choose>
+	</select>
+	
+	<select id="getLifeEduOnLineDetail"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getLifeEduOnLineDetail **/
+		WITH 
+		CLASS AS
+			(
+			SELECT A.CATEGORY1_KEY, B.CATEGORY2_KEY,C.CATEGORY3_KEY, A.CATEGORY1_NAME, 
+			  	   B.CATEGORY2_NAME,C.CATEGORY3_NAME,A.SITE
+			  FROM EDU_CLASS_CATEGORY1 AS A
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY2 AS B ON(A.CATEGORY1_KEY = B.CATEGORY1_KEY AND A.SITE = B.SITE)
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY3 AS C ON (B.CATEGORY2_KEY = C.CATEGORY2_KEY AND C.SITE = B.SITE)
+			)
+			SELECT  A.EDU_NO, A.EDU_SITE, A.CATEGORY1_KEY, A.CATEGORY2_KEY,A.CATEGORY3_KEY, B.CATEGORY1_NAME
+				   , B.CATEGORY2_NAME,B.CATEGORY3_NAME
+ 				   , A.INST_NM, A.TRAIN_S_DATE, A.TRAIN_E_DATE, A.EDU_TARGET,A.EDU_TIME
+		           , A.EDU_GARDEN, A.EDU_STATUS,A.EDU_CONT,A.EDU_METHOD, A.EXP_USE_YN
+		           , A.COPER_NM , A.COPER_NM_AUTO, A.COPER_ID, A.COPER_CHECK,A.REG_DT
+		           , A.EDU_INTRO , A.EDU_GOALS
+			  FROM EDU_REGISTRATION A, CLASS B
+			 WHERE A.CATEGORY1_KEY = B.CATEGORY1_KEY 
+			   AND A.CATEGORY2_KEY = B.CATEGORY2_KEY 
+			   AND A.CATEGORY3_KEY = B.CATEGORY3_KEY 
+			   AND A.EXP_USE_YN ='Y'
+		  	   AND A.EDU_NO = #{edu_no}
+	</select>
+	
+	<select id="getLifeEduOffOrgDetail"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getLifeEduOffOrgDetail **/
+		WITH 
+		CLASS AS
+			(
+			SELECT A.CATEGORY1_KEY, B.CATEGORY2_KEY,C.CATEGORY3_KEY, A.CATEGORY1_NAME, 
+			  	   B.CATEGORY2_NAME,C.CATEGORY3_NAME,A.SITE
+			  FROM EDU_CLASS_CATEGORY1 AS A
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY2 AS B ON(A.CATEGORY1_KEY = B.CATEGORY1_KEY AND A.SITE = B.SITE)
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY3 AS C ON (B.CATEGORY2_KEY = C.CATEGORY2_KEY AND C.SITE = B.SITE)
+			),
+		EDU_REGISTRATION AS 
+		  (
+		  SELECT a.SCHEDULE_NO,A.edu_key, A.CATEGORY1_KEY, A.CATEGORY2_KEY,A.CATEGORY3_KEY,
+	             a.EDU_NAME,
+	             a.EDU_START_DATE AS train_s_date,
+	               CONCAT(SUBSTR(TIME(b.START_TIME),1,2),':',SUBSTR(TIME(b.START_TIME),4,2),'~',SUBSTR(TIME(b.END_TIME),1,2),':',SUBSTR(TIME(b.END_TIME),4,2)) AS EDU_DATETIME,
+	               (SELECT EDU_TIME FROM EDU_REGISTRATION WHERE EDU_NO = a.EDU_KEY) AS EDU_TIME,
+	             a.EDU_ORG_NAME coper_nm,
+	             a.EDU_TARGET ,
+	             a.EDU_TEAC_NAME inst_nm,
+	             a.EDU_NUMBER edu_garden,
+	             b.EDU_PLACE,
+	             a.REG_DT,
+	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL THEN '섭외중'
+	               WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL THEN '완료'
+	               WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL THEN '완료'
+	            END
+	               AS INS_STATUS,
+	             <![CDATA[
+	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN ''
+						WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+						WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+						WHEN b.SCH_STATUS = 'C' THEN '신청취소'
+						WHEN b.SCH_STATUS IS NULL AND a.EDU_START_DATE <= NOW() THEN '교육완료'
+						WHEN b.SCH_STATUS = 'S' THEN '보고완료'
+					END
+	               AS SCH_STATUS
+	               ]]>             
+	      FROM EDU_SCHEDULE a,
+	          EDU_SCHEDULE_DETAIL b
+	      WHERE a.SCHEDULE_NO = b.SCHEDULE_NO
+	      ),
+      REGI_D AS 
+		    (
+      SELECT  A.*,  B.CATEGORY1_NAME				   , B.CATEGORY2_NAME,B.CATEGORY3_NAME
+			  FROM EDU_REGISTRATION A, CLASS B
+			 WHERE A.CATEGORY1_KEY = B.CATEGORY1_KEY 
+			   AND A.CATEGORY2_KEY = B.CATEGORY2_KEY 
+			   AND A.CATEGORY3_KEY = B.CATEGORY3_KEY
+			   )
+	    SELECT *
+		  FROM REGI_D
+	   	 WHERE SCHEDULE_NO = #{schedule_no}
+	</select>
+	
+	<insert id="insertSchedule"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.insertSchedule **/
+		<selectKey resultType="int" keyProperty="edu_key"
+			order="BEFORE">
+			SELECT IFNULL(MAX(EDU_KEY), 0) + 1
+			FROM EDU_SCHEDULE
+		</selectKey>
+
+		INSERT
+		INTO EDU_SCHEDULE
+		( EDU_KEY
+		, CATEGORY1_KEY
+		, CATEGORY2_KEY
+		, CATEGORY3_KEY
+		, CATEGORY1_NAME
+		, CATEGORY2_NAME
+		, CATEGORY3_NAME
+		, EDU_NAME
+		, EDU_START_DATE
+		, EDU_END_DATE
+		, EDU_ORG_NAME
+		, EDU_TARGET
+		, EDU_NUMBER
+		, EDU_TEAC_NAME
+		, REG_ID
+		)
+		VALUES
+		(
+		#{edu_key}
+		, #{category1_key}
+		, #{category2_key}
+		, #{category3_key}
+		, #{category1_name}
+		, #{category2_name}
+		, #{category3_name}
+		, #{edu_name}
+		, #{edu_start_date}
+		, #{edu_end_date}
+		, #{edu_org_name}
+		, #{edu_target}
+		, #{edu_number}
+		, #{edu_teac_name}
+		, IFNULL(#{user_id},'SYSTEM')
+		)
+	</insert>
+
+	<update id="updateSchedule"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.updateSchedule **/
+		UPDATE EDU_SCHEDULE
+		SET CATEGORY1_KEY = #{category1_key}
+		, CATEGORY2_KEY = #{category2_key}
+		, CATEGORY3_KEY = #{category3_key}
+		, CATEGORY1_NAME = #{category1_name}
+		, CATEGORY2_NAME = #{category2_name}
+		, CATEGORY3_NAME = #{category3_name}
+		, EDU_NAME = #{edu_name}
+		, EDU_START_DATE = #{edu_start_date}
+		, EDU_END_DATE = #{edu_end_date}
+		, EDU_ORG_NAME = #{edu_org_name}
+		, EDU_TARGET = #{edu_target}
+		, EDU_NUMBER = #{edu_number}
+		, EDU_TEAC_NAME = #{edu_teac_name}
+		, CHG_ID = IFNULL(#{user_id},'SYSTEM')
+		, CHG_DT = NOW()
+		WHERE EDU_KEY = #{edu_key}
+	</update>
+	
+
+	<delete id="deleteSchedule"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.deleteSchedule **/
+		DELETE
+		FROM EDU_SCHEDULE
+		WHERE EDU_KEY = #{edu_key}
+	</delete>
+
+	<select id="eduInfoScheduleList"		parameterType="com.easycompany.service.vo.CategoryVo"
+		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.eduInfoScheduleList **/
+		WITH TEMP
+		AS (
+		SELECT a.CATEGORY1_KEY
+		,(SELECT b.CATEGORY1_NAME FROM EDU_CATEGORY1 b
+		WHERE b.CATEGORY1_KEY = a.CATEGORY1_KEY
+		) CATEGORY1_NAME
+		,a.CATEGORY2_KEY
+		,(SELECT b.CATEGORY2_NAME FROM EDU_CATEGORY2 b
+		WHERE b.CATEGORY1_KEY = a.CATEGORY1_KEY
+		AND b.CATEGORY2_KEY = a.CATEGORY2_KEY
+		) CATEGORY2_NAME
+		, a.CATEGORY3_KEY
+		,(SELECT b.CATEGORY3_NAME FROM EDU_CATEGORY3 b
+		WHERE b.CATEGORY1_KEY = a.CATEGORY1_KEY
+		AND b.CATEGORY2_KEY = a.CATEGORY2_KEY
+		AND b.CATEGORY3_KEY = a.CATEGORY3_KEY
+		) CATEGORY3_NAME
+		, EDU_NAME
+		, EDU_START_DATE
+		, EDU_END_DATE
+		, EDU_ORG_NAME
+		, EDU_TARGET
+		, EDU_NUMBER
+		, EDU_TEAC_NAME
+		, EDU_KEY
+		FROM EDU_SCHEDULE A
+		)
+		SELECT *
+		FROM TEMP
+		WHERE 1= 1
+		<if test=" category3_name !=null and category3_name !=''">
+			AND CATEGORY3_NAME LIKE CONCAT('%', #{category3_name} ,'%')
+		</if>
+		<choose>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='ALL' ">
+			</when>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='TODAY' ">
+				AND EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
+			</when>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='TERM' ">
+		      <![CDATA[
+		       AND  EDU_START_DATE >= #{edu_start_date} AND EDU_END_DATE <= #{edu_end_date} 
+		       ]]>
+			</when>
+		</choose>
+		ORDER BY EDU_KEY DESC
+		LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+
+
+	<select id="eduInfoScheduleCount"		parameterType="com.easycompany.service.vo.CategoryVo" resultType="int">
+		/** com.easycompany.mapper.EduMapper.eduInfoScheduleCount **/
+		SELECT COUNT(*) cnt
+		FROM EDU_SCHEDULE a
+	</select>
+	
+	<insert id="insertBasket"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.insertBasket **/
+		<selectKey resultType="int" keyProperty="basket_no"
+			order="BEFORE">
+			SELECT IFNULL(MAX(BASKET_NO), 0) + 1
+			FROM EDU_BASKET
+		</selectKey>
+
+		INSERT
+		INTO EDU_BASKET
+		( BASKET_NO
+		, EDU_NO
+		<if test=" schedule_no !=null and schedule_no  != 0">
+	    , SCHEDULE_NO
+		</if>
+		, USER_ID
+		, USER_NM
+		, REG_ID
+		)
+		VALUES
+		(
+		  #{basket_no}
+		, #{edu_no}
+		<if test=" schedule_no !=null and schedule_no  != 0">
+		, #{schedule_no}
+		</if>
+		, #{user_id}
+		, #{user_nm}
+		, IFNULL(#{user_id},'SYSTEM')
+		)
+	</insert>
+	
+	<insert id="insertCourse"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.insertCourse **/
+		<selectKey resultType="int" keyProperty="cour_no"
+			order="BEFORE">
+			SELECT IFNULL(MAX(COUR_NO), 0) + 1
+			FROM EDU_COURSE_REGISTRATION
+		</selectKey>
+
+		INSERT
+		INTO EDU_COURSE_REGISTRATION
+		( COUR_NO
+		, EDU_NO
+		<if test=" schedule_no !=null and schedule_no  != 0">
+	    , SCHEDULE_NO
+		</if>
+		, USER_ID
+		, USER_NM
+		, EML_ADDR
+		, MBL_TELNO
+		, REG_ID
+		)
+		VALUES
+		(
+		  #{cour_no}
+		, #{edu_no}
+		<if test=" schedule_no !=null and schedule_no  != 0">
+		, #{schedule_no}
+		</if>
+		, #{user_id}
+		, #{user_nm}
+		, #{eml_addr}
+		, #{mbl_telno}
+		, IFNULL(#{user_id},'SYSTEM')
+		)
+	</insert>
+	
+	<update id="updateCourseStatus"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.updateCourseStatus **/
+		UPDATE EDU_REGISTRATION
+	  	   SET EDU_STATUS = #{edu_status}
+			 , CHG_ID = IFNULL(#{user_id},'SYSTEM')
+		     , CHG_DT = NOW()
+		  WHERE EDU_NO = #{edu_no}
+	</update>
+	
+<select id="getLifeEduOrgList"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.getLifeEduOrgList **/
+		WITH 
+		CLASS AS
+			(
+			SELECT A.CATEGORY1_KEY, B.CATEGORY2_KEY,C.CATEGORY3_KEY, A.CATEGORY1_NAME, 
+			  	   B.CATEGORY2_NAME,C.CATEGORY3_NAME,A.SITE
+			  FROM EDU_CLASS_CATEGORY1 AS A
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY2 AS B ON(A.CATEGORY1_KEY = B.CATEGORY1_KEY AND A.SITE = B.SITE)
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY3 AS C ON (B.CATEGORY2_KEY = C.CATEGORY2_KEY AND C.SITE = B.SITE)
+			),
+		REGI_D AS 
+		    (
+			SELECT  A.EDU_NO, A.EDU_SITE, A.CATEGORY1_KEY, A.CATEGORY2_KEY,A.CATEGORY3_KEY, B.CATEGORY1_NAME
+				   , B.CATEGORY2_NAME,B.CATEGORY3_NAME
+ 				   , A.INST_NM, A.TRAIN_S_DATE, A.TRAIN_E_DATE, A.EDU_TARGET,A.EDU_TIME
+		           , A.EDU_GARDEN, A.EDU_STATUS,A.EDU_CONT,A.EDU_METHOD, A.EXP_USE_YN
+		           , A.COPER_NM , A.COPER_NM_AUTO, A.COPER_ID, A.COPER_CHECK,A.REG_DT
+			  FROM EDU_REGISTRATION A, CLASS B
+			 WHERE A.CATEGORY1_KEY = B.CATEGORY1_KEY 
+			   AND A.CATEGORY2_KEY = B.CATEGORY2_KEY 
+			   AND A.CATEGORY3_KEY = B.CATEGORY3_KEY 
+			   AND A.CATEGORY1_KEY = #{category1_key}
+			   AND A.CATEGORY2_KEY = #{category2_key}
+			   AND A.EXP_USE_YN ='Y'
+		  	   AND A.EDU_STATUS =#{edu_status}
+			   AND A.EDU_SITE   =#{edu_site} 			   
+	        )
+	    SELECT *
+		  FROM REGI_D
+	   	 WHERE 1=1
+	   	 <choose>
+			<when test ="searchCondition !=null and searchCondition !='' and searchCondition =='INST_NM'        and searchKeyword !=null and searchKeyword !='' ">
+			   AND  INST_NM  LIKE CONCAT('%', #{searchKeyword} ,'%')
+			</when>
+			<when test ="searchCondition !=null and searchCondition !='' and searchCondition =='CATEGORY3_NAME' and searchKeyword !=null and searchKeyword !='' ">
+			  AND  CATEGORY3_NAME LIKE CONCAT('%', #{searchKeyword} ,'%')
+			</when>
+		  </choose>
+		  <choose>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='ALL' ">
+			</when>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='TODAY' ">
+				AND TRAIN_S_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
+			</when>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='TERM' ">
+		      <![CDATA[
+		       AND  TRAIN_S_DATE >= #{train_s_date} AND TRAIN_E_DATE <= #{train_e_date} 
+		       ]]>
+			</when>
+		</choose>
+		   <if test=" sort_ordr !=null and sort_ordr =='TRAIN_S_DATE'">
+			  ORDER BY TRAIN_S_DATE  DESC
+		   </if>
+		   	<if test=" sort_ordr !=null and sort_ordr =='REG_DT'">
+			  ORDER BY REG_DT  DESC
+			 </if>
+	   	 LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+	
+	<select id="getLifeEduOrgCount"		parameterType="com.easycompany.service.vo.CategoryVo"	resultType="int">
+		/** com.easycompany.mapper.EduMapper.getLifeEduOrgCount **/
+		WITH 
+		CLASS AS
+			(
+			SELECT A.CATEGORY1_KEY, B.CATEGORY2_KEY,C.CATEGORY3_KEY, A.CATEGORY1_NAME, 
+			  	   B.CATEGORY2_NAME,C.CATEGORY3_NAME,A.SITE
+			  FROM EDU_CLASS_CATEGORY1 AS A
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY2 AS B ON(A.CATEGORY1_KEY = B.CATEGORY1_KEY AND A.SITE = B.SITE)
+			  LEFT OUTER
+			  JOIN EDU_CLASS_CATEGORY3 AS C ON (B.CATEGORY2_KEY = C.CATEGORY2_KEY AND C.SITE = B.SITE)
+			),
+		REGI_D AS 
+		    (
+			SELECT A.EDU_SITE, A.CATEGORY1_KEY, A.CATEGORY2_KEY,A.CATEGORY3_KEY, B.CATEGORY1_NAME
+				   , B.CATEGORY2_NAME,B.CATEGORY3_NAME
+ 				   , A.INST_NM, A.TRAIN_S_DATE, A.TRAIN_E_DATE, A.EDU_TARGET,A.EDU_TIME
+		           , A.EDU_GARDEN, A.EDU_STATUS,A.EDU_CONT,A.EDU_METHOD, A.EXP_USE_YN
+		           , A.COPER_NM , A.COPER_NM_AUTO, A.COPER_ID, A.COPER_CHECK,A.REG_DT
+			  FROM EDU_REGISTRATION A, CLASS B
+			 WHERE A.CATEGORY1_KEY = B.CATEGORY1_KEY 
+			   AND A.CATEGORY2_KEY = B.CATEGORY2_KEY 
+			   AND A.CATEGORY3_KEY = B.CATEGORY3_KEY 
+			   AND A.EXP_USE_YN ='Y'
+			   AND A.CATEGORY1_KEY = #{category1_key}
+			   AND A.CATEGORY2_KEY = #{category2_key}
+		  	   AND A.EDU_STATUS =#{edu_status}
+			   AND A.EDU_SITE   =#{edu_site} 
+	        )
+	    SELECT count(*)
+		  FROM REGI_D
+	   	 WHERE 1=1
+	   	  <choose>
+			<when test ="searchCondition !=null and searchCondition !='' and searchCondition =='INST_NM' and searchKeyword !=null and searchKeyword !='' ">
+			   AND  INST_NM  LIKE CONCAT('%', #{searchKeyword} ,'%')
+			</when>
+			<when test ="searchCondition !=null and searchCondition !='' and  searchCondition =='CATEGORY3_NAME' and searchKeyword !=null and searchKeyword !='' ">
+			  AND  CATEGORY3_NAME LIKE CONCAT('%', #{searchKeyword} ,'%')
+			</when>
+		  </choose>
+		  <choose>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='ALL' ">
+			</when>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='TODAY' ">
+				AND TRAIN_S_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
+			</when>
+			<when
+				test="checkdate !=null and checkdate !='' and checkdate =='TERM' ">
+		      <![CDATA[
+		       AND  TRAIN_S_DATE >= #{train_s_date} AND TRAIN_E_DATE <= #{train_e_date} 
+		       ]]>
+			</when>
+		</choose>
+	</select>
+	
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.easycompany.mapper.LoginMapper">
+	
+    
+    <select id="checkPassword" parameterType="com.easycompany.cmm.vo.LoginVo"	resultType="com.easycompany.cmm.vo.LoginVo">
+	    /**  com.easycompany.mapper.LoginMapper.checkPassword **/	 
+	    SELECT USER_ID ID
+	          ,USER_NM NAME
+	          ,PASSWORD
+	     FROM COM_USER	    
+	    WHERE USER_ID  =  #{id}
+	      AND PASSWORD =  #{shaPassword}    
+	</select>
+	
+    <select id="userLogin" parameterType="com.easycompany.cmm.vo.LoginVo"	resultType="com.easycompany.cmm.vo.LoginVo">
+	    /**  com.easycompany.mapper.LoginMapper.userLogin **/	 
+	    SELECT  USER_ID ID
+	          , USER_NM NAME
+	          , A.*
+              , (SELECT CD_NM FROM COM_CD_MNG  WHERE UP_CD_NO ='23' AND USER_GROUP_CD = CD) USER_GROUP_CD_NM
+              , (SELECT CD_NM FROM COM_CD_MNG  WHERE UP_CD_NO ='265' AND IFNULL(A.EDU_AUTH_CD,'01') = CD) EDU_AUTH_CD_NM
+              , DATE_FORMAT(SYSDATE(),'%Y-%m-%d %T') LOGIN_DT
+              , DATE_FORMAT(PASSWORD_CHG_DT,'%Y-%m-%d') PASSWORD_CHG_DT_NM
+	     FROM COM_USER	A    
+	    WHERE 1=1
+	    <if test=" user_id !=null and user_id !=''">
+	      AND USER_ID  =  #{user_id}
+	    </if>
+	    <if test=" sesion_id !=null and sesion_id !=''">
+	     AND SESION_ID =  #{sesion_id}
+	    </if>
+	         
+	</select>
+	
+    <insert id="signUpInsert" parameterType="com.easycompany.cmm.vo.LoginVo">
+		/**  com.easycompany.mapper.LoginMapper.signUpInsert **/	
+		INSERT 
+		INTO TB_MEMBER 
+		(
+		  	  ID
+		  	, PASSWORD
+		  	, SMS_YN
+		  	, ACCOUNT_YN
+		 ) 
+		VALUES 
+		(
+			  #{id}
+			, #{shaPassword}
+			, #{sms_yn}
+			, #{account_yn}
+		)	
+	</insert>
+		
+</mapper>

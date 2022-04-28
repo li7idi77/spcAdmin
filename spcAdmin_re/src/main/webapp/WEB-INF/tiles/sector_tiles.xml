@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">  
+ 
+<tiles-definitions>  
+   
+	   <!--분야별 교육신청 > 생명지킴이 강사 양성 교육 - 교육신청 -->
+	   <definition name="sector01List" extends="common-definition">  
+	       <put-attribute name="title" value="생명지킴이 강사 양성 교육 - 교육신청" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/sector/sector01List.jsp" />  
+	   </definition> 
+	   
+	   <definition name="sector01View" extends="common-definition">  
+	       <put-attribute name="title" value="생명지킴이 강사 양성 교육 - 교육상세" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/sector/sector01View.jsp" />  
+	   </definition> 
+	   
+	   <definition name="sector01Req" extends="common-definition">  
+	       <put-attribute name="title" value="생명지킴이 강사 양성 교육 - 수강신청" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/sector/sector01Req.jsp" />  
+	   </definition> 
+	   
+	    <!--분야별 교육신청 > 생명지킴이 강사 양성교육 - 교육신청 -->
+	   <definition name="sector02List" extends="common-definition">  
+	       <put-attribute name="title" value="실무자 역량 강화 교육 - 교육신청" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/sector/sector02List.jsp" />  
+	   </definition> 
+	   
+	   <definition name="sector02View" extends="common-definition">  
+	       <put-attribute name="title" value="실무자 역량 강화 교육 - 교육상세" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/sector/sector02View.jsp" />  
+	   </definition> 
+	   
+	   <definition name="sector02Req" extends="common-definition">  
+	       <put-attribute name="title" value="실무자 역량 강화 교육 - 수강신청" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/sector/sector02Req.jsp" />  
+	   </definition> 
+	   
+	    <!--분야별 교육신청 > 자살유족서비스 제공 인력교육 - 교육신청 -->
+	   <definition name="sector03List" extends="common-definition">  
+	       <put-attribute name="title" value="자살유족서비스 제공 인력교육 - 교육신청" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/sector/sector03List.jsp" />  
+	   </definition> 
+	   
+	   <definition name="sector03View" extends="common-definition">  
+	       <put-attribute name="title" value="자살유족서비스 제공 인력교육 - 교육상세" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/sector/sector03View.jsp" />  
+	   </definition> 
+	   
+	   <definition name="sector03Req" extends="common-definition">  
+	       <put-attribute name="title" value="자살유족서비스 제공 인력교육 - 수강신청" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/sector/sector03Req.jsp" />  
+	   </definition> 
+	   
+	    <!--분야별 교육신청 > 광역주도형 심리부검면담원 - 교육신청 -->
+	   <definition name="sector04List" extends="common-definition">  
+	       <put-attribute name="title" value="광역주도형 심리부검면담원 - 교육신청" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/sector/sector04List.jsp" />  
+	   </definition> 
+	   
+	   <definition name="sector04View" extends="common-definition">  
+	       <put-attribute name="title" value="광역주도형 심리부검면담원 - 교육상세" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/sector/sector04View.jsp" />  
+	   </definition> 
+	   
+	   <definition name="sector04Req" extends="common-definition">  
+	       <put-attribute name="title" value="광역주도형 심리부검면담원 - 수강신청" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/sector/sector04Req.jsp" />  
+	   </definition> 
+	  
+	   
+	    <!--분야별 교육신청 > 자살사후대응 전문가 양성교육 - 교육신청 -->
+	   <definition name="sector05List" extends="common-definition">  
+	       <put-attribute name="title" value="자살사후대응 전문가 양성교육 - 교육신청" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/sector/sector05List.jsp" />  
+	   </definition> 
+	   
+	   <definition name="sector05View" extends="common-definition">  
+	       <put-attribute name="title" value="자살사후대응 전문가 양성교육 - 교육상세" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/sector/sector05View.jsp" />  
+	   </definition> 
+	   
+	   <definition name="sector05Req" extends="common-definition">  
+	       <put-attribute name="title" value="자살사후대응 전문가 양성교육 - 수강신청" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/sector/sector05Req.jsp" />  
+	   </definition> 
+   
+  </tiles-definitions>

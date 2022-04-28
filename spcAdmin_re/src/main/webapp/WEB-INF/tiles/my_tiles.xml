@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">  
+ 
+<tiles-definitions>  
+   
+	   <!--마이페이지 > 일반 > 기본정보 -->
+	   <definition name="my01info" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 기본정보" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my01info.jsp" />  
+	   </definition> 
+	   
+	   <!--마이페이지 > 일반 > 기본정보 -->
+	   <definition name="my01cart" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 장바구니" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my01cart.jsp" />  
+	   </definition> 
+	   
+	   <!--마이페이지 > 일반 > 기본정보 -->
+	   <definition name="my01status" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 신청현황" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my01status.jsp" />  
+	   </definition> 
+	   
+	   <!--마이페이지 > 일반 > 기본정보 -->
+	   <definition name="my01edu" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 학습/교육현황" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my01edu.jsp" />  
+	   </definition> 
+	   
+	   <!--마이페이지 > 일반 > 기본정보 -->
+	   <definition name="my01warrant" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 수료증발급" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my01warrant.jsp" />  
+	   </definition> 
+	   
+	   <!--마이페이지 > 일반 > 기본정보 -->
+	   <definition name="my01mylist" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 나의 글 보기" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my01mylist.jsp" />  
+	   </definition> 
+	   
+	   <definition name="my02info" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 기본정보" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my02info.jsp" />  
+	   </definition> 
+	   
+	   <definition name="my02act" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 기본정보" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my02act.jsp" />  
+	   </definition> 
+	   
+	   <definition name="my02absence" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 기본정보" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my02absence.jsp" />  
+	   </definition> 
+	   
+	   <definition name="my02edu" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 학습/교육현황" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my02edu.jsp" />  
+	   </definition> 
+	   
+	   <definition name="my02warrant" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 수료증발급" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my02warrant.jsp" />  
+	   </definition>
+	    
+	   <definition name="my02mylist" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 나의 글 보기" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my02mylist.jsp" />  
+	   </definition> 
+   
+  		<definition name="my03info" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 기본정보" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my03info.jsp" />  
+	   </definition> 
+	   
+	   <definition name="my03cart" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 장바구니" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my03cart.jsp" />  
+	   </definition> 
+	   
+	   <definition name="my03status" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 신청현황" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my03status.jsp" />  
+	   </definition> 
+	   
+	   <definition name="my03edu" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 학습/교육현황" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my03edu.jsp" />  
+	   </definition> 
+	   
+	   <definition name="my03warrant" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 수료증발급" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my03warrant.jsp" />  
+	   </definition> 
+	   
+	   <definition name="my03mylist" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 나의 글 보기" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my03mylist.jsp" />  
+	   </definition> 
+  </tiles-definitions>

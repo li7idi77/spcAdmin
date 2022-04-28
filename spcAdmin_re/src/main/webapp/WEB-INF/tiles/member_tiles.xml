@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">  
+ 
+<tiles-definitions>  
+  
+   <!-- memberList Page -->
+   <definition name="memberList" extends="base-definition">  
+       <put-attribute name="title" value="회원리스트" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/member/memberList.jsp" />  
+   </definition>     
+   
+   <!-- memberEdit Page -->
+   <definition name="memberEdit" extends="base-definition">  
+       <put-attribute name="title" value="회원정보 수정" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/member/memberEdit.jsp" />  
+   </definition>     
+   
+   
+   
+</tiles-definitions>

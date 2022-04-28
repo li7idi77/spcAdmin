@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.easycompany.mapper.AdBoardMapper">
+
+	<select id="getBoardList" parameterType="com.easycompany.service.vo.AdBoardVo"	resultType="com.easycompany.service.vo.AdBoardVo">
+		 /**  com.easycompany.mapper.AdBoardMapper.getBoardList **/
+	    SELECT BOARD_IDX,
+	    CASE BOARD_TYPE
+	 		WHEN 01 THEN '공지'
+	 		WHEN 02 THEN '자료실'
+	 		WHEN 03 THEN 'FAQ'
+	 		WHEN 04 THEN '참여마당'
+	 		WHEN 05 THEN '강사공지'
+	 		WHEN 06 THEN '강사자료실'
+		 END AS BOARD_TYPE,
+	    TITLE, LINK_URL, FILE_ID, VIEW_CNT, CAST( DATE_FORMAT( REG_DT, '%Y-%m-%d %H:%i:%s' ) AS CHAR(19) ) AS REG_DT, REG_ID, REG_NM,
+	    (SELECT COUNT(*) FROM edu_file WHERE FILE_KEY = BOARD_IDX AND FILE_GUBUN = 'board') AS FIEL_CNT, CONTENTS
+	    <if test="board_type !=null and board_type == '02'">
+	      	, CATEGORY1_KEY, CATEGORY2_KEY, CATEGORY3_KEY, CATEGORY1_NAME, CATEGORY2_NAME, CATEGORY3_NAME, BOARD_REFER_TYPE
+	    </if>
+	      FROM edu_board
+	      <include refid="search"/>
+	     ORDER BY BOARD_IDX DESC
+	    LIMIT #{recordCountPerPage}  OFFSET  #{offset}		
+	</select>
+
+
+	<select id="getBoardCount" parameterType="com.easycompany.service.vo.AdBoardVo" resultType="int">
+    	/**  com.easycompany.mapper.AdBoardMapper.getBoardCount **/
+		 SELECT COUNT(*) cnt
+	       FROM edu_board
+	     <include refid="search"/>
+	</select>
+	
+	<select id="selectDetailBoard" parameterType="com.easycompany.service.vo.AdBoardVo" resultType="com.easycompany.service.vo.AdBoardVo">
+		/**  com.easycompany.mapper.AdBoardMapper.selectDetailBoard **/	
+		SELECT BOARD_IDX, BOARD_TYPE, TITLE, CONTENTS, LINK_URL, FILE_ID, VIEW_CNT, DATE_FORMAT( REG_DT, '%Y-%m-%d' ) REG_DT, REG_ID, REG_NM, CHG_DT, CHG_ID
+		       ,EDU_TYPE_01, EDU_TYPE_02, EDU_TYPE_03, EDU_TYPE_04, EDU_TYPE_05, EDU_TYPE_06, EDU_TYPE_07, EDU_TYPE_08, EDU_TYPE_09, EDU_TYPE_10, EDU_TYPE_11
+		<if test="board_type !=null and board_type == '02'">
+	      	, CATEGORY1_KEY, CATEGORY2_KEY, CATEGORY3_KEY, CATEGORY1_NAME, CATEGORY2_NAME, CATEGORY3_NAME, NOTICE_YN, BOARD_REFER_TYPE
+	     </if>
+	     <if test="board_type !=null and (board_type == '04' or board_type == '06')">
+		    , NOTICE_YN
+        </if>
+	      FROM edu_board
+	    <where>
+	    	BOARD_IDX = #{board_idx}
+	    	AND USE_YN = 'Y'
+	    	<if test="board_type !=null and board_type != ''">
+	      	AND BOARD_TYPE = #{board_type}
+	      </if>
+	    </where>
+	</select>
+	
+	<insert id="insertBoard" parameterType="com.easycompany.service.vo.AdBoardVo" useGeneratedKeys="true" keyProperty="board_idx">
+		/**  com.easycompany.mapper.AdBoardMapper.insertBoard **/	
+		INSERT 
+		INTO edu_board
+		(
+		  	  BOARD_TYPE
+		  	, TITLE
+		  	, CONTENTS
+		  	, REG_ID
+		  	, REG_NM
+		  	<if test="board_type !=null and board_type == '02'">
+	      	, CATEGORY1_KEY
+	      	, CATEGORY2_KEY
+	      	, CATEGORY3_KEY
+	      	, CATEGORY1_NAME
+	      	, CATEGORY2_NAME
+	      	, CATEGORY3_NAME
+	      	, NOTICE_YN
+	      	, BOARD_REFER_TYPE
+	      </if>
+	      <if test="board_type !=null and (board_type == '04' or board_type == '06')">
+	      , NOTICE_YN
+	      </if>
+	      <if test="board_type !=null and (board_type == '06')">
+	      , EDU_TYPE_01
+		  , EDU_TYPE_02
+		  , EDU_TYPE_03
+		  , EDU_TYPE_04
+		  , EDU_TYPE_05
+		  , EDU_TYPE_06
+		  , EDU_TYPE_07
+		  , EDU_TYPE_08
+		  , EDU_TYPE_09
+		  , EDU_TYPE_10
+		  , EDU_TYPE_11
+      	 </if>
+	       
+		) 
+		VALUES 
+		(
+			  #{board_type}
+			, #{title}
+			, #{contents}
+			, IFNULL(#{user_id}, 'SYSTEM')
+	        , IFNULL(#{user_nm}, '교육관리자')
+			<if test="board_type !=null and board_type == '02'">
+			, #{category1_key}
+			, #{category2_key}
+			, #{category3_key}
+			, #{category1_name}
+			, #{category2_name}
+			, #{category3_name}
+			, #{notice_yn}
+			, #{board_refer_type}
+			</if>
+			<if test="board_type !=null and (board_type == '04' or board_type == '06')">
+		    , #{notice_yn}
+	        </if>	        
+	        <if test="board_type !=null and (board_type == '06')">
+	        , #{edu_type_01}
+			, #{edu_type_02}
+			, #{edu_type_03}
+			, #{edu_type_04}
+			, #{edu_type_05}
+			, #{edu_type_06}
+			, #{edu_type_07}
+			, #{edu_type_08}
+			, #{edu_type_09}
+			, #{edu_type_10}
+			, #{edu_type_11}
+      	     </if>
+		)	
+	</insert>
+	
+	<update id="updateBoard" parameterType="com.easycompany.service.vo.AdBoardVo">
+		/**  com.easycompany.mapper.AdBoardMapper.updateBoard **/	
+		UPDATE edu_board 
+		   SET BOARD_TYPE = #{board_type}
+		      , TITLE     = #{title}
+		      , CONTENTS  = #{contents}
+		      , CHG_DT    = date_format(current_timestamp(),'%Y%m%d%H%i%s')
+		      , CHG_ID    = IFNULL(#{user_id}, 'SYSTEM')
+		      <if test="board_type !=null and board_type == '02'">
+		      	, CATEGORY1_KEY    = #{category1_key}
+		      	, CATEGORY2_KEY    = #{category2_key}
+		      	, CATEGORY3_KEY    = #{category3_key}
+		      	, CATEGORY1_NAME   = #{category1_name}
+		      	, CATEGORY2_NAME   = #{category2_name}
+		      	, CATEGORY3_NAME   = #{category3_name}
+		      	, NOTICE_YN        = #{notice_yn}
+		      	, BOARD_REFER_TYPE = #{board_refer_type}
+		     </if>
+		     <if test="board_type !=null and (board_type == '04' or board_type == '06')">
+		     	, NOTICE_YN = #{notice_yn}
+		     </if>
+		     <if test="board_type !=null and (board_type == '06')">
+		        , EDU_TYPE_01 = #{edu_type_01}
+			    , EDU_TYPE_02 = #{edu_type_02}
+			    , EDU_TYPE_03 = #{edu_type_03}
+			    , EDU_TYPE_04 = #{edu_type_04}
+			    , EDU_TYPE_05 = #{edu_type_05}
+			    , EDU_TYPE_06 = #{edu_type_06}
+			    , EDU_TYPE_07 = #{edu_type_07}
+			    , EDU_TYPE_08 = #{edu_type_08}
+			    , EDU_TYPE_09 = #{edu_type_09}
+			    , EDU_TYPE_10 = #{edu_type_10}
+			    , EDU_TYPE_11 = #{edu_type_11}
+	      	 </if>
+ 		 WHERE BOARD_IDX = #{board_idx}
+	</update>
+	
+	<update id="delBoard">
+		/**  com.easycompany.mapper.AdBoardMapper.delBoard **/	
+		UPDATE edu_board 
+		   SET CHG_DT = date_format(current_timestamp(),'%Y%m%d%H%i%s'),
+		   USE_YN = 'N'
+ 		 WHERE BOARD_IDX IN (
+				<foreach collection="boardIdxList" item="item" separator=",">
+					#{item}
+				</foreach>)
+	</update>
+                  
+	<insert id="insertFile">
+		/**  com.easycompany.mapper.AdBoardMapper.insertFile **/	
+		<selectKey resultType="int" keyProperty="file_seq" order="BEFORE">			
+			SELECT IFNULL(MAX(FILE_SEQ), 0) + 1 
+			  FROM EDU_FILE			  
+		</selectKey>		
+		INSERT 
+		INTO EDU_FILE
+		(
+		  	  FILE_GUBUN
+		  	, FILE_ID
+		  	, FILE_NAME
+		  	, FILE_FULL_PATH
+		  	, FILE_SEQ
+		  	, FILE_SIZE
+		  	, FILE_KEY
+		  	, FILE_OREDER_BY
+		) 
+		VALUES 
+		(
+			  #{file_gubun}
+			, #{file_uuid}
+			, #{file_name}
+			, #{file_full_path}
+			, #{file_seq}
+			, #{file_size}
+			, #{file_key}
+			, #{file_oreder_by}
+			
+		)	
+	</insert>
+	
+	<select id="selectFileList" parameterType="com.easycompany.service.vo.AdBoardVo" resultType="com.easycompany.service.vo.BoardVo">
+		/**  com.easycompany.mapper.AdBoardMapper.selectFileList **/	
+		SELECT FILE_GUBUN, FILE_ID, FILE_NAME, FILE_FULL_PATH, FILE_SEQ, FILE_ID, FILE_SIZE, FILE_KEY, FILE_OREDER_BY
+	      FROM edu_file
+	    <where>
+	    	FILE_KEY = #{board_idx}
+	    	AND FILE_GUBUN = 'board'
+	    </where>
+	</select>
+	
+	<select id="selectFile" parameterType="com.easycompany.service.vo.BoardVo" resultType="com.easycompany.service.vo.BoardVo">
+		/**  com.easycompany.mapper.AdBoardMapper.selectFile **/	
+		SELECT FILE_GUBUN, FILE_ID, FILE_NAME, FILE_FULL_PATH, FILE_SEQ, FILE_ID, FILE_SIZE, FILE_KEY, FILE_OREDER_BY
+	      FROM edu_file
+	    <where>
+	    	FILE_SEQ = #{file_seq}
+	    </where>
+	</select>
+	
+	<delete id="deleteBoardFile"		parameterType="com.easycompany.service.vo.BoardVo">
+	    /** com.easycompany.mapper.AdBoardMapper.deleteBoardFile **/
+		DELETE
+		  FROM EDU_FILE
+		  <where>
+		  	FILE_SEQ   = #{file_seq}
+		  </where>
+	</delete>
+	
+	<delete id="deleteBoardMapFile">
+	    /** com.easycompany.mapper.AdBoardMapper.deleteBoardFile **/
+		DELETE
+		  FROM EDU_FILE
+		  <where>
+		  	FILE_KEY IN (
+				<foreach collection="boardIdxList" item="item" separator=",">
+					#{item}
+				</foreach>)
+			AND FILE_GUBUN = 'board'
+		  </where>
+	</delete>
+	
+	<select id="delFileSelect" resultType="java.util.HashMap">
+		/**  com.easycompany.mapper.AdBoardMapper.delFileSelect **/	
+		SELECT FILE_GUBUN, FILE_ID, FILE_NAME, FILE_FULL_PATH, FILE_SEQ, FILE_ID, FILE_SIZE, FILE_KEY, FILE_OREDER_BY
+	      FROM edu_file
+	    <where>
+	    	FILE_KEY IN (
+				<foreach collection="boardIdxList" item="item" separator=",">
+					#{item}
+				</foreach>)
+			AND FILE_GUBUN = 'board'
+	    </where>
+	</select>
+		
+	<sql id="search">
+	<where>
+      		USE_YN = 'Y'
+	      <if test="searchCondition !=null and searchCondition == 'ALL'">
+	      	AND (TITLE LIKE CONCAT('%', #{searchKeyword}, '%') OR REG_ID LIKE CONCAT('%', #{searchKeyword}, '%') OR CONTENTS LIKE CONCAT('%', #{searchKeyword}, '%'))
+	      </if>
+	      <if test="searchCondition !=null and searchCondition == 'TITLE'">
+	      	AND TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+	      </if>
+	      <if test="searchCondition !=null and searchCondition == 'REG_NM'">
+	      	AND REG_ID LIKE CONCAT('%', #{searchKeyword}, '%')
+	      </if>
+	      <if test="searchCondition !=null and searchCondition == 'CONTENTS'">
+	      	AND CONTENTS LIKE CONCAT('%', #{searchKeyword}, '%')
+	      </if>
+	      <if test="searchDate !=null and searchDate == 'CHECK'">
+	      	<![CDATA[
+		       AND CAST( DATE_FORMAT( REG_DT, '%Y-%m-%d' ) AS CHAR(19)) >= #{board_start_date} AND CAST( DATE_FORMAT( REG_DT, '%Y-%m-%d' ) AS CHAR(19)) <= #{board_end_date} 
+	        ]]>
+	      </if>
+	      <if test="searchDate !=null and searchDate == 'TODAY'">
+	      	<![CDATA[
+		       AND CAST( DATE_FORMAT( REG_DT, '%Y-%m-%d' ) AS CHAR(19)) = CAST( DATE_FORMAT(NOW(),'%x-%m-%d') AS CHAR(19)) 
+	        ]]>
+	      </if>
+	      <if test="board_type !=null and board_type != ''">
+	      	AND BOARD_TYPE = #{board_type}
+	      </if>
+	      <if test="board_type !=null and board_type == '02' and board_refer_type !=null  ">
+	      	AND BOARD_REFER_TYPE = #{board_refer_type}
+	      </if>
+      </where>
+	</sql>
+	
+	<update id="updateBoardViewCount" parameterType="com.easycompany.service.vo.AdBoardVo">
+		/**  com.easycompany.mapper.AdBoardMapper.updateBoardViewCount **/	
+		UPDATE EDU_BOARD 
+		   SET VIEW_CNT = IFNULL(VIEW_CNT, 0) + 1 	    
+ 		 WHERE BOARD_IDX = #{board_idx}
+	</update>
+	
+	<select id="selectViewDetailBoard" parameterType="com.easycompany.service.vo.AdBoardVo" resultType="com.easycompany.service.vo.AdBoardVo">
+		/**  com.easycompany.mapper.AdBoardMapper.selectViewDetailBoard **/	
+		SELECT BOARD_IDX, BOARD_TYPE, TITLE, CONTENTS, LINK_URL, FILE_ID, VIEW_CNT, DATE_FORMAT( REG_DT, '%Y-%m-%d' ) REG_DT, REG_ID, REG_NM, CHG_DT, CHG_ID
+	      FROM EDU_BOARD
+	     WHERE USE_YN = 'Y' 
+	       AND BOARD_TYPE = #{board_type}
+	   	  <if test="gubun1 !=null and gubun1 == 'pre'">
+	   	   <![CDATA[
+	       AND BOARD_IDX = (SELECT MAX(BOARD_IDX) FROM EDU_BOARD WHERE BOARD_TYPE = #{board_type} AND USE_YN = 'Y' 	AND BOARD_IDX < #{board_idx})
+	       ]]>
+	      </if>
+		  <if test="gubun1 !=null and gubun1 == 'next'">
+	   	   <![CDATA[
+	       AND BOARD_IDX = (SELECT MIN(BOARD_IDX) FROM EDU_BOARD WHERE BOARD_TYPE = #{board_type}  AND USE_YN = 'Y' AND BOARD_IDX > #{board_idx})
+	       ]]>
+	      </if>
+	</select>
+	
+</mapper>

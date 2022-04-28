@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">  
+ 
+<tiles-definitions>  
+	<definition name="notice01List" extends="common-definition">  
+		<put-attribute name="title" value="공지사항" />  
+		<put-attribute name="body" value="/WEB-INF/jsp/web/board/notice01List.jsp" />  
+	</definition> 
+	
+	<definition name="notice01View" extends="common-definition">  
+       <put-attribute name="title" value="공지사항 상세보기" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/board/notice01View.jsp" />  
+   </definition>
+   
+   <definition name="notice02List" extends="common-definition">  
+       <put-attribute name="title" value="자료실" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/board/notice02List.jsp" />  
+   </definition>
+   
+   <definition name="notice02View" extends="common-definition">  
+       <put-attribute name="title" value="자료실 상세보기" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/board/notice02View.jsp" />  
+   </definition>
+   
+   <definition name="notice03List" extends="common-definition">  
+       <put-attribute name="title" value="faq" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/board/notice03List.jsp" />  
+   </definition>
+   
+   <definition name="notice03View" extends="common-definition">  
+       <put-attribute name="title" value="faq 상세보기" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/board/notice03View.jsp" />  
+   </definition>
+  
+   <definition name="noticeList" extends="base-definition">  
+       <put-attribute name="title" value="Admin 게시판" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/board/noticeList.jsp" />  
+   </definition>  
+   
+   <definition name="noticeReq" extends="base-definition">  
+       <put-attribute name="title" value="Admin 게시판" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/board/noticeReq.jsp" />  
+   </definition>
+   
+   <definition name="referenceList" extends="base-definition">  
+       <put-attribute name="title" value="자료실" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/board/referenceList.jsp" />  
+   </definition>
+   
+   <definition name="referenceReq" extends="base-definition">  
+       <put-attribute name="title" value="자료실등록" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/board/referenceReq.jsp" />  
+   </definition>
+   
+   <definition name="faqList" extends="base-definition">  
+       <put-attribute name="title" value="faq" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/board/faqList.jsp" />  
+   </definition>
+   
+   <definition name="faqReq" extends="base-definition">  
+       <put-attribute name="title" value="faq" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/board/faqReq.jsp" />  
+   </definition>
+   
+   <definition name="partiList" extends="base-definition">  
+       <put-attribute name="title" value="참여마당" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/board/partiList.jsp" />  
+   </definition>
+   
+   <definition name="partiReq" extends="base-definition">  
+       <put-attribute name="title" value="참여마당 등록" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/board/partiReq.jsp" />  
+   </definition>
+   
+   <definition name="instructList" extends="base-definition">  
+       <put-attribute name="title" value="강사 공지사항" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/board/instructList.jsp" />  
+   </definition>
+   
+   <definition name="instructReq" extends="base-definition">  
+       <put-attribute name="title" value="강사 공지 등록" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/board/instructReq.jsp" />  
+   </definition>
+   
+   <definition name="instructReferList" extends="base-definition">  
+       <put-attribute name="title" value="강사 자료실" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/board/instructReferList.jsp" />  
+   </definition>
+   
+   <definition name="instructReferReq" extends="base-definition">  
+       <put-attribute name="title" value="강사 자료실 등록" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/board/instructReferReq.jsp" />  
+   </definition>
+   
+</tiles-definitions>

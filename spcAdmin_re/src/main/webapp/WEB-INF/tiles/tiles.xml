@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">  
+ 
+<tiles-definitions>  
+  
+   <!-- admin base-definition -->
+   <definition name="base-definition"       template="/WEB-INF/jsp/tiles/layouts/defaultLayout.jsp">  
+       <put-attribute name="title" value="" />  
+       <put-attribute name="header" value="/WEB-INF/jsp/tiles/template/defaultHeader.jsp" />  
+       <put-attribute name="menu" value="/WEB-INF/jsp/tiles/template/defaultMenu.jsp" />  
+       <put-attribute name="body" value="" />  
+       <put-attribute name="footer" value="/WEB-INF/jsp/tiles/template/defaultFooter.jsp" />  
+   </definition>  
+  
+   <!-- web  main-definition -->
+   <!-- web definition -->
+   <definition name="commonmain-definition"      template="/WEB-INF/jsp/tiles/layouts/webMainLLayout.jsp">  
+       <put-attribute name="title"  value="" />  
+       <put-attribute name="header"     value="/WEB-INF/jsp/tiles/template/webDefaultHeader.jsp" />   
+       <put-attribute name="headermenu" value="/WEB-INF/jsp/tiles/template/webDefaultHeaderMenu.jsp" />   
+       <put-attribute name="menu"   value="" />  
+       <put-attribute name="body"   value="" />  
+       <put-attribute name="footer" value="/WEB-INF/jsp/tiles/template/webDefaultFooter.jsp" />  
+   </definition>   
+   
+   <!-- web definition -->
+   <definition name="common-definition"      template="/WEB-INF/jsp/tiles/layouts/webDefaultLayout.jsp">  
+       <put-attribute name="title"  value="" />  
+       <put-attribute name="header" value="/WEB-INF/jsp/tiles/template/webDefaultHeader.jsp" />   
+        <put-attribute name="headermenu" value="/WEB-INF/jsp/tiles/template/webDefaultHeaderMenu.jsp" />
+       <put-attribute name="menu"   value="/WEB-INF/jsp/tiles/template/webDefaultMenu.jsp" />  
+       <put-attribute name="body"   value="" />  
+       <put-attribute name="footer" value="/WEB-INF/jsp/tiles/template/webDefaultFooter.jsp" />  
+   </definition>  
+   
+   <!-- noHeader-definition -->
+   <definition name="noHeader-definition"      template="/WEB-INF/jsp/tiles/layouts/defaultLayout.jsp">  
+       <put-attribute name="title" value="" />  
+       <put-attribute name="header" value="" />  
+       <put-attribute name="menu" value="" />  
+       <put-attribute name="body" value="" />  
+       <put-attribute name="footer" value="" />  
+   </definition>  
+   
+   <!-- noHeader-definition -->
+   <definition name="noHeader-definition"      template="/WEB-INF/jsp/tiles/layouts/defaultLayout.jsp">  
+       <put-attribute name="title" value="" />  
+       <put-attribute name="header" value="" />  
+       <put-attribute name="menu" value="" />  
+       <put-attribute name="body" value="" />  
+       <put-attribute name="footer" value="" />  
+   </definition>  
+   
+   <!-- PopUp Page -->
+   <definition name="popUp-definition"      template="/WEB-INF/jsp/tiles/layouts/popUpLayout.jsp">  
+       <put-attribute name="title" value="" />  
+       <put-attribute name="body"  value="" /> 
+   </definition>  
+   
+   <!-- Home Page -->
+   <definition name="home" extends="base-definition">  
+       <put-attribute name="title" value="Welcome" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/home.jsp" />  
+   </definition>  
+ 
+     <!-- login Page -->
+   <definition name="login" extends="noHeader-definition">  
+       <put-attribute name="title" value="login" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/login/login.jsp" />  
+   </definition>  
+ 
+    <!-- signup Page -->
+   <definition name="signup" extends="noHeader-definition">  
+       <put-attribute name="title" value="회원가입 | 싼-톡 싼톡" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/member/signup.jsp" />  
+   </definition>  
+   
+     <!-- logout Page -->
+   <definition name="logout" extends="popUp-definition">  
+       <put-attribute name="title" value="logout" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/login/logout.jsp" />  
+   </definition>  
+   
+   
+   <!-- loginSuccess Page -->
+   <definition name="loginSuccess" extends="base-definition">  
+       <put-attribute name="title" value="login" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/loginSuccess.jsp" />  
+   </definition>  
+   
+   
+     <!-- employeelist Page -->
+   <definition name="employeelist" extends="base-definition">  
+       <put-attribute name="title" value="employeelist" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/employeelist.jsp" />  
+   </definition>  
+   
+     <!-- addemployee Page -->
+   <definition name="addemployee" extends="base-definition">  
+       <put-attribute name="title" value="addemployee" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/addemployee.jsp" />  
+   </definition>  
+   
+     <!-- changenotify Page -->
+   <definition name="changenotify" extends="base-definition">  
+       <put-attribute name="title" value="changenotify" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/changenotify.jsp" />  
+   </definition>  
+   
+   
+</tiles-definitions>

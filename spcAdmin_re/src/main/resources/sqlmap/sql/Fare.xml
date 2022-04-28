@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.easycompany.mapper.FareMapper">
+	
+	<select id="getFareList" parameterType="com.easycompany.service.vo.FareVo"	resultType="com.easycompany.service.vo.FareVo">
+	    /**  com.easycompany.mapper.FareMapper.getFareList **/
+	   SELECT FARE_SEQ
+			, USE_YN   
+			, SMS_PRICE
+			, LMS_PRICE
+			, MMS_PRICE
+		    , CAST( DATE_FORMAT( INS_DATE, '%Y-%m-%d %H:%i:%s' ) AS CHAR(19) ) AS INS_DATE
+			, CAST( DATE_FORMAT( UPD_DATE, '%Y-%m-%d %H:%i:%s' ) AS CHAR(19) ) AS UPD_DATE  
+		FROM  TB_FARE
+	  ORDER BY INS_DATE DESC
+	  LIMIT #{recordCountPerPage}  OFFSET  #{offset}
+		
+	</select>
+	
+	<select id="getFareCount" parameterType="com.easycompany.service.vo.FareVo" resultType="int">
+	    /**  com.easycompany.mapper.FareMapper.getFareCount **/
+    	SELECT count(1) getCnt
+		 FROM  TB_FARE
+	</select>
+	
+	<select id="getFareView" parameterType="com.easycompany.service.vo.FareVo"	resultType="com.easycompany.service.vo.FareVo">
+	  /**  com.easycompany.mapper.FareMapper.getFareView **/
+	  SELECT  FARE_SEQ
+			, USE_YN   
+			, SMS_PRICE
+			, LMS_PRICE
+			, MMS_PRICE
+		    , CAST( DATE_FORMAT( INS_DATE, '%Y-%m-%d %H:%i:%s' ) AS CHAR(19) ) AS INS_DATE
+			, CAST( DATE_FORMAT( UPD_DATE, '%Y-%m-%d %H:%i:%s' ) AS CHAR(19) ) AS UPD_DATE  
+	    FROM  TB_FARE
+	   WHERE  FARE_SEQ  = #{fare_seq}
+	</select>
+	
+	<update id="updateFare" parameterType="com.easycompany.service.vo.FareVo">
+		 /**  com.easycompany.mapper.FareMapper.updateFare **/
+		UPDATE TB_FARE 
+		   SET USE_YN     = #{use_yn}   			 
+			 , SMS_PRICE  = #{sms_price}
+			 , LMS_PRICE  = #{lms_price}
+			 , MMS_PRICE  = #{mms_price}
+		     , UPD_DATE   = NOW()
+ 		WHERE FARE_SEQ  = #{fare_seq}
+	</update>
+	
+	<insert id="insertFare" parameterType="com.easycompany.service.vo.FareVo">
+		 /**  com.easycompany.mapper.FareMapper.insertFare **/
+		INSERT 
+		INTO TB_FARE 
+		(
+		  	  USE_YN   
+			, SMS_PRICE
+			, LMS_PRICE
+			, MMS_PRICE
+			, INS_DATE
+
+		) 
+		VALUES 
+		(
+			  #{use_yn}
+			, #{sms_price}
+			, #{lms_price}	
+			, #{mms_price}
+			, NOW()					
+		)	
+	</insert>
+
+	<delete id="deleteFare" parameterType="com.easycompany.service.vo.FareVo">
+	   /**  com.easycompany.mapper.FareMapper.deleteFare **/
+	   DELETE 
+		 FROM TB_FARE 
+		WHERE FARE_SEQ  = #{fare_seq}
+	</delete>
+	
+	
+</mapper>

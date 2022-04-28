@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">  
+ 
+<tiles-definitions>  
+  
+   <!-- BoardList Page -->
+   <definition name="boardList" extends="base-definition">  
+       <put-attribute name="title" value="BoardList" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/board/boardList.jsp" />  
+   </definition>  
+   
+   <!-- boardWrite Page -->
+   <definition name="boardWrite" extends="base-definition">  
+       <put-attribute name="title" value="boardWrite" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/board/boardWrite.jsp" />  
+   </definition>  
+   
+   <!-- boardView Page -->
+   <definition name="boardView" extends="base-definition">  
+       <put-attribute name="title" value="boardView" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/board/boardView.jsp" />  
+   </definition>  
+   
+   <!-- boardUpdate Page -->
+   <definition name="boardUpdate" extends="base-definition">  
+       <put-attribute name="title" value="boardUpdate" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/board/boardUpdate.jsp" />  
+   </definition>
+   
+   <!-- boardReply Page -->
+   <definition name="boardReply" extends="base-definition">  
+       <put-attribute name="title" value="boardReply" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/board/boardReply.jsp" />  
+   </definition>
+   
+   
+   
+</tiles-definitions>

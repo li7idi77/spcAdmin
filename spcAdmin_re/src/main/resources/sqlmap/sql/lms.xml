@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.easycompany.mapper.LmsMapper">
+
+	<select id="contentsAllCnt" parameterType="java.util.Map"	resultType="java.util.Map">
+		<![CDATA[
+		SELECT  COUNT(*) AS ALLCNT,
+				SUM(CASE WHEN a.TRAIN_S_DATE > NOW() THEN 1 ELSE 0 END) AS STATUS1,
+				SUM(CASE WHEN a.TRAIN_S_DATE <= NOW() AND a.TRAIN_E_DATE >= NOW() THEN 1 ELSE 0 END) AS STATUS2,
+				SUM(CASE WHEN a.TRAIN_E_DATE > NOW() THEN 1 ELSE 0 END) AS STATUS3				
+	      ]]>
+	     FROM EDU_REGISTRATION a,
+			 EDU_REGISTRATION_DETAIL b
+		WHERE a.EDU_NO = b.EDU_NO
+		AND a.EDU_SITE = 'on'
+	    <if test=" category1_key !=null and category1_key != '' and searchCondition == 'CATEGORY'">
+			AND a.CATEGORY1_KEY = #{category1_key} 
+		</if>
+		<if test=" category2_key !=null and category2_key != '' and searchCondition == 'CATEGORY'">
+			AND a.CATEGORY2_KEY = #{category2_key} 
+		</if>
+		<if test=" category3_key !=null and category3_key != '' and searchCondition == 'CATEGORY'">
+			AND a.CATEGORY3_KEY = #{category3_key} 
+		</if>
+	      
+	      <if test="edu_status != null and edu_status == '1'">
+	      	<![CDATA[
+	      	AND a.TRAIN_S_DATE > NOW()
+	      	 ]]>
+	      </if>
+	      <if test="edu_status != null and edu_status == '2'">
+	      	<![CDATA[
+	      	AND a.TRAIN_S_DATE <= NOW() AND a.TRAIN_E_DATE >= NOW()
+	      	 ]]>
+	      </if>
+	      <if test="edu_status != null and edu_status == '3'">
+	      	<![CDATA[
+	      	AND a.TRAIN_E_DATE > NOW()
+	      	 ]]>
+	      </if>
+	      
+	      <if test="con_chk != null and con_chk == '1'">
+	      	AND b.FILE_ID IS NOT NULL
+	      </if>
+	      <if test="con_chk != null and con_chk == '2'">
+	      	AND b.FILE_ID IS NULL
+	      </if>
+	      <if test="searchDate !=null and searchDate != 'ALL'">
+	      	<![CDATA[
+		       AND a.TRAIN_S_DATE >= #{start_date} AND a.TRAIN_E_DATE <= #{end_date} 
+	        ]]>
+	      </if>	
+	</select>
+	
+	<select id="contentsList" parameterType="java.util.Map"	resultType="java.util.Map">
+		SELECT (SELECT CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 WHERE CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY1_NAME,
+			   (SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = a.CATEGORY2_KEY) AS CATEGORY2_NAME,
+			   (SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY) AS CATEGORY3_NAME,
+		       a.EDU_NO, b.EDU_SUB_NO,
+		       <![CDATA[
+		       CASE WHEN TRAIN_S_DATE > NOW() THEN '대기중'
+					WHEN TRAIN_S_DATE <= NOW() AND TRAIN_E_DATE >= NOW() THEN '진행중'
+		            WHEN TRAIN_E_DATE > NOW() THEN '종료'
+			   END AS EDU_STATUS,
+			    ]]>
+		       b.EDU_CURR1, b.EDU_CURR3, 
+		       DATE_FORMAT(b.REG_DT,'%x-%m-%d') AS REG_DT,
+		       CASE WHEN b.FILE_ID IS NOT NULL THEN '등록'
+					ELSE '미등록' END AS FILE_CHK,
+		       CASE WHEN b.EDU_CON_URL IS NOT NULL THEN '등록'
+					ELSE '미등록' END AS URL_CHK
+		FROM EDU_REGISTRATION a,
+			 EDU_REGISTRATION_DETAIL b
+		WHERE a.EDU_NO = b.EDU_NO
+		AND a.EDU_SITE = 'on'
+	      <if test=" category1_key !=null and category1_key != '' and searchCondition == 'CATEGORY'">
+			AND a.CATEGORY1_KEY = #{category1_key} 
+		</if>
+		<if test=" category2_key !=null and category2_key != '' and searchCondition == 'CATEGORY'">
+			AND a.CATEGORY2_KEY = #{category2_key} 
+		</if>
+		<if test=" category3_key !=null and category3_key != '' and searchCondition == 'CATEGORY'">
+			AND a.CATEGORY3_KEY = #{category3_key} 
+		</if>
+	      
+	      <if test="edu_status != null and edu_status == '1'">
+	      	<![CDATA[
+	      	AND a.TRAIN_S_DATE > NOW()
+	      	 ]]>
+	      </if>
+	      <if test="edu_status != null and edu_status == '2'">
+	      	<![CDATA[
+	      	AND a.TRAIN_S_DATE <= NOW() AND a.TRAIN_E_DATE >= NOW()
+	      	 ]]>
+	      </if>
+	      <if test="edu_status != null and edu_status == '3'">
+	      	<![CDATA[
+	      	AND a.TRAIN_E_DATE > NOW()
+	      	 ]]>
+	      </if>
+	      
+	      <if test="con_chk != null and con_chk == '1'">
+	      	AND b.FILE_ID IS NOT NULL
+	      </if>
+	      <if test="con_chk != null and con_chk == '2'">
+	      	AND b.FILE_ID IS NULL
+	      </if>
+	      <if test="searchDate !=null and searchDate != 'ALL'">
+	      	<![CDATA[
+		       AND a.TRAIN_S_DATE >= #{start_date} AND a.TRAIN_E_DATE <= #{end_date} 
+	        ]]>
+	      </if>
+	     ORDER BY EDU_SUB_NO DESC
+	    LIMIT #{recordCountPerPage}  OFFSET  #{offset}		
+	</select>
+
+
+	<select id="contentsListCnt" parameterType="java.util.Map" resultType="int">
+		 SELECT COUNT(*) cnt
+	     FROM EDU_REGISTRATION a,
+			 EDU_REGISTRATION_DETAIL b
+		WHERE a.EDU_NO = b.EDU_NO
+		AND a.EDU_SITE = 'on'
+	      <if test=" category1_key !=null and category1_key != '' and searchCondition == 'CATEGORY'">
+			AND a.CATEGORY1_KEY = #{category1_key} 
+		</if>
+		<if test=" category2_key !=null and category2_key != '' and searchCondition == 'CATEGORY'">
+			AND a.CATEGORY2_KEY = #{category2_key} 
+		</if>
+		<if test=" category3_key !=null and category3_key != '' and searchCondition == 'CATEGORY'">
+			AND a.CATEGORY3_KEY = #{category3_key} 
+		</if>
+	      
+	      <if test="edu_status != null and edu_status == '1'">
+	      	<![CDATA[
+	      	AND a.TRAIN_S_DATE > NOW()
+	      	 ]]>
+	      </if>
+	      <if test="edu_status != null and edu_status == '2'">
+	      	<![CDATA[
+	      	AND a.TRAIN_S_DATE <= NOW() AND a.TRAIN_E_DATE >= NOW()
+	      	 ]]>
+	      </if>
+	      <if test="edu_status != null and edu_status == '3'">
+	      	<![CDATA[
+	      	AND a.TRAIN_E_DATE > NOW()
+	      	 ]]>
+	      </if>
+	      
+	      <if test="con_chk != null and con_chk == '1'">
+	      	AND b.FILE_ID IS NOT NULL
+	      </if>
+	      <if test="con_chk != null and con_chk == '2'">
+	      	AND b.FILE_ID IS NULL
+	      </if>
+	      <if test="searchDate !=null and searchDate != 'ALL'">
+	      	<![CDATA[
+		       AND a.TRAIN_S_DATE >= #{start_date} AND a.TRAIN_E_DATE <= #{end_date} 
+	        ]]>
+	      </if>
+	</select>
+	
+	<select id="selectDetailLms" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT (SELECT CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 WHERE CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY1_NAME,
+			   (SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = a.CATEGORY2_KEY) AS CATEGORY2_NAME,
+			   (SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY) AS CATEGORY3_NAME,
+		       a.EDU_NO, b.EDU_SUB_NO,
+		       b.EDU_CURR1, b.EDU_CURR2, b.EDU_CURR3, 
+               b.EDU_ON_APP_TIME, b.FILE_ID, b.EDU_CON_URL
+		FROM EDU_REGISTRATION a,
+			 EDU_REGISTRATION_DETAIL b
+		WHERE a.EDU_NO = b.EDU_NO
+		AND a.EDU_SITE = 'on'
+        AND b.EDU_SUB_NO = #{edu_sub_no}
+	</select>
+	
+	<update id="updateContents" parameterType="java.util.Map">
+		UPDATE EDU_REGISTRATION_DETAIL 
+		   SET LMS_CNT = #{lms_cnt}
+	      	, FILE_ID =  #{file_id}
+	      	, EDU_CON_URL =  #{edu_con_url}
+	      	, EDU_ON_APP_TIME =  #{edu_on_app_time}
+	      	<!-- , EDU_CON_STAT = #{edu_status} -->
+ 		 WHERE EDU_SUB_NO = #{object_id}
+	</update>
+	
+	<update id="deleteContents" parameterType="java.util.Map">
+		UPDATE EDU_REGISTRATION_DETAIL 
+		   SET FILE_ID = '' , EDU_CON_URL = ''<!-- , EDU_CON_STAT = '' -->
+ 		 WHERE EDU_SUB_NO = #{object_id}
+	</update>
+	                  
+	<insert id="insertCommonFile"	parameterType="java.util.Map">
+		<selectKey resultType="int" keyProperty="file_seq"
+			order="BEFORE">
+			SELECT IFNULL(MAX(FILE_SEQ), 0) + 1
+			FROM EDU_FILE
+		</selectKey>
+		INSERT
+		INTO EDU_FILE
+		(
+		  FILE_GUBUN
+		, FILE_ID
+		, FILE_NAME
+		, FILE_FULL_PATH
+		, FILE_SEQ
+		, FILE_SIZE
+		, FILE_KEY
+		)
+		VALUES
+		(
+		  #{file_gubun}
+		, #{file_id}
+		, #{file_name}
+		, #{file_full_path}
+		, #{file_seq}
+		, #{file_size}
+		, #{object_id}
+		)
+	</insert>
+
+	<update id="updateCommonFile" parameterType="java.util.Map">
+		**/
+		UPDATE EDU_FILE
+		   SET FILE_NAME      = #{file_name}
+		     , FILE_FULL_PATH = #{file_full_path}
+		     , FILE_SIZE      = #{file_size}
+		     , FILE_ID        = #{file_uuid}
+		 WHERE FILE_GUBUN     = #{gubun2}
+		   AND FILE_ID        = #{file_id}
+		   AND FILE_KEY       = #{object_id}
+	</update>
+	
+	<select id="selectFileList" parameterType="java.util.Map" resultType="java.util.Map">
+		/**  com.easycompany.mapper.LmsMapper.selectFileList **/	
+		SELECT FILE_GUBUN, FILE_ID, FILE_NAME, FILE_FULL_PATH, FILE_SEQ, FILE_ID, FILE_SIZE, FILE_KEY, FILE_OREDER_BY
+	      FROM edu_file
+	    WHERE FILE_KEY = #{board_idx}
+	    	AND FILE_GUBUN = 'board'
+	</select>
+	
+	<select id="selectFile" parameterType="java.util.Map" resultType="java.util.Map">
+		/**  com.easycompany.mapper.LmsMapper.selectFile **/	
+		SELECT FILE_GUBUN, FILE_ID, FILE_NAME, FILE_FULL_PATH, FILE_SEQ, FILE_ID, FILE_SIZE, FILE_KEY, FILE_OREDER_BY
+	      FROM edu_file
+	    WHERE FILE_SEQ = #{file_seq}
+	</select>
+		
+	<select id="studentAllCnt" parameterType="java.util.Map"	resultType="java.util.Map">
+		SELECT COUNT(*) AS ALLCNT,
+				SUM(CASE WHEN a.COUR_STAT != 1 THEN 1 ELSE 0 END) AS STATUS1,
+				SUM(CASE WHEN a.COUR_STAT = 1 THEN 1 ELSE 0 END) AS STATUS2
+        FROM EDU_COURSE_ONLINE a
+        WHERE EDU_NO IN (SELECT EDU_NO 
+						FROM EDU_REGISTRATION 
+                        WHERE EDU_SITE = 'on'
+        			<if test=" category1_key !=null and category1_key != '' and searchCondition == 'CATEGORY'">
+						AND a.CATEGORY1_KEY = #{category1_key} 
+					</if>
+					<if test=" category2_key !=null and category2_key != '' and searchCondition == 'CATEGORY'">
+						AND a.CATEGORY2_KEY = #{category2_key} 
+					</if>
+					<if test=" category3_key !=null and category3_key != '' and searchCondition == 'CATEGORY'">
+						AND a.CATEGORY3_KEY = #{category3_key} 
+					</if>
+        				)
+	</select>
+	
+	<select id="studentList" parameterType="java.util.Map"	resultType="java.util.Map">
+		SELECT (SELECT CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 WHERE CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY1_NAME,
+			   (SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = a.CATEGORY2_KEY) AS CATEGORY2_NAME,
+			   (SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY) AS CATEGORY3_NAME,
+		       a.INST_NM, DATE_FORMAT(a.REG_DT,'%Y-%m-%d') AS REG_DT,
+               (SELECT COUNT(COUR_ON_KEY) FROM EDU_COURSE_ONLINE WHERE EDU_NO = a.EDU_NO) AS APP_CNT,
+               (SELECT COUNT(COUR_ON_KEY) FROM EDU_COURSE_ONLINE WHERE EDU_NO = a.EDU_NO AND COUR_STAT = 1) AS APP_FIN_CNT               
+		FROM EDU_REGISTRATION a
+		WHERE a.EDU_SITE = 'on'
+	      <if test=" category1_key !=null and category1_key != '' and searchCondition == 'CATEGORY'">
+			AND a.CATEGORY1_KEY = #{category1_key} 
+		</if>
+		<if test=" category2_key !=null and category2_key != '' and searchCondition == 'CATEGORY'">
+			AND a.CATEGORY2_KEY = #{category2_key} 
+		</if>
+		<if test=" category3_key !=null and category3_key != '' and searchCondition == 'CATEGORY'">
+			AND a.CATEGORY3_KEY = #{category3_key} 
+		</if>
+	    LIMIT #{recordCountPerPage}  OFFSET  #{offset}		
+	</select>
+
+
+	<select id="studentListCnt" parameterType="java.util.Map" resultType="int">
+		 SELECT COUNT(*) cnt
+	     FROM EDU_REGISTRATION a
+		WHERE a.EDU_SITE = 'on'
+	      <if test=" category1_key !=null and category1_key != '' and searchCondition == 'CATEGORY'">
+			AND a.CATEGORY1_KEY = #{category1_key} 
+		</if>
+		<if test=" category2_key !=null and category2_key != '' and searchCondition == 'CATEGORY'">
+			AND a.CATEGORY2_KEY = #{category2_key} 
+		</if>
+		<if test=" category3_key !=null and category3_key != '' and searchCondition == 'CATEGORY'">
+			AND a.CATEGORY3_KEY = #{category3_key} 
+		</if>
+	</select>
+</mapper>

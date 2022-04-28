@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">  
+ 
+<tiles-definitions>  
+  
+   <!-- List Page -->
+   <definition name="vendorList" extends="base-definition">  
+       <put-attribute name="title" value="vendor List" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/vendor/vendorList.jsp" />  
+   </definition>     
+   
+   <!-- vendorEdit Page -->
+   <definition name="vendorEdit" extends="base-definition">  
+       <put-attribute name="title" value="vendor  정보" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/vendor/vendorEdit.jsp" />  
+   </definition>     
+   
+   
+   
+</tiles-definitions>

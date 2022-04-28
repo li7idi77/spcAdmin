@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.easycompany.mapper.MainMapper">
+                  
+	<insert id="insertCommonFile" parameterType="com.easycompany.service.vo.MainVo">
+		/**  com.easycompany.mapper.MainMapper.insertCommonFile **/	
+		<selectKey resultType="int" keyProperty="file_seq" order="BEFORE">			
+			SELECT IFNULL(MAX(FILE_SEQ), 0) + 1 
+			  FROM EDU_FILE			  
+		</selectKey>		
+		INSERT 
+		INTO EDU_FILE
+		(
+		  	  FILE_GUBUN
+		  	, FILE_ID
+		  	, FILE_NAME
+		  	, FILE_FULL_PATH
+		  	, FILE_SEQ
+		  	, FILE_SIZE
+		) 
+		VALUES 
+		(
+			  #{gubun2}
+			, #{file_id}
+			, #{file_name}
+			, #{file_full_path}
+			, #{file_seq}
+			, #{file_size}
+		)	
+	</insert>
+	
+	<insert id="insertLogo" parameterType="com.easycompany.service.vo.MainVo">
+		/**  com.easycompany.mapper.MainMapper.insertLogo **/	
+		<selectKey resultType="int" keyProperty="logo_no" order="BEFORE">			
+			SELECT IFNULL(MAX(LOGO_NO), 0) + 1 
+			  FROM EDU_LOGO			  
+		</selectKey>		
+		INSERT 
+		INTO EDU_LOGO
+		(
+		  	  LOGO_NO
+		  	, REG_ID
+		  	, FILE_ID
+		) 
+		VALUES 
+		(
+			  #{logo_no}
+			, IFNULL(#{user_id},'SYSTEM')
+			, #{file_id}
+		)	
+	</insert>
+	
+	<insert id="insertImg" parameterType="com.easycompany.service.vo.MainVo">
+		/**  com.easycompany.mapper.MainMapper.insertImg **/	
+		<selectKey resultType="int" keyProperty="img_no" order="BEFORE">			
+			SELECT IFNULL(MAX(IMG_NO), 0) + 1 
+			  FROM EDU_IMG			  
+		</selectKey>		
+		INSERT 
+		INTO EDU_IMG
+		(
+		  	  IMG_NO
+		  	, IMG_NM
+		  	, IMG_POS
+		  	, LINK_URL
+		  	, REG_ID
+		  	, FILE_ID
+		) 
+		VALUES 
+		(
+			  #{img_no}
+			, #{img_nm}
+			, #{img_pos}
+			, #{link_url}
+			, IFNULL(#{user_id},'SYSTEM')
+			, #{file_id}
+		)
+	</insert>
+	
+	<insert id="insertBanner" parameterType="com.easycompany.service.vo.MainVo">
+		/**  com.easycompany.mapper.MainMapper.insertBanner **/	
+		<selectKey resultType="int" keyProperty="banner_no" order="BEFORE">			
+			SELECT IFNULL(MAX(BANNER_NO), 0) + 1 
+			  FROM EDU_BANNER			  
+		</selectKey>		
+		INSERT 
+		INTO EDU_BANNER
+		(
+		  	  BANNER_NO
+		  	, BANNER_NM
+		  	, BANNER_POS
+		  	, LINK_URL
+		  	, REG_ID
+		  	, FILE_ID
+		) 
+		VALUES 
+		(
+			  #{banner_no}
+			, #{banner_nm}
+			, #{banner_pos}
+			, #{link_url}
+			, IFNULL(#{user_id},'SYSTEM')
+			, #{file_id}
+		)	
+	</insert>
+	
+	<insert id="insertPopUp" parameterType="com.easycompany.service.vo.MainVo">
+		/**  com.easycompany.mapper.MainMapper.insertPopUp **/	
+		<selectKey resultType="int" keyProperty="popup_no" order="BEFORE">			
+			SELECT IFNULL(MAX(POPUP_NO), 0) + 1 
+			FROM EDU_POPUP			  
+		</selectKey>		
+		INSERT 
+		INTO EDU_POPUP
+		(
+		  	  POPUP_NO
+		  	, POPUP_NM
+		  	, POPUP_CN
+		  	, OTPT_XAXS_LC
+		  	, OTPT_YAXS_LC
+		  	, POPUP_AR
+		  	, POPUP_HG
+		  	, USE_YN
+		  	, REG_ID
+		) 
+		VALUES 
+		(
+			  #{popup_no}
+			, #{popup_nm}
+			, #{popup_cn}
+			, #{otpt_xaxs_lc}
+			, #{otpt_yaxs_lc}
+			, #{popup_ar}
+			, #{popup_hg}
+			, #{use_yn}
+			, IFNULL(#{user_id},'SYSTEM')
+		)	
+	</insert>
+	
+	<update id="updateLogo" parameterType="com.easycompany.service.vo.MainVo">
+		/**  com.easycompany.mapper.MainMapper.updateLogo **/	
+		UPDATE EDU_LOGO 
+		   SET FILE_ID = #{file_id}
+		      , CHG_ID  = IFNULL(#{user_id},'SYSTEM')
+		      , CHG_DT  = NOW()
+ 		 WHERE LOGO_NO = #{logo_no}
+	</update>	
+	
+	<update id="updateImg" parameterType="com.easycompany.service.vo.MainVo">
+		/**  com.easycompany.mapper.MainMapper.updateImg **/	
+		UPDATE EDU_IMG 
+		   SET  IMG_NM   = #{img_nm}
+		  	  , IMG_POS  = #{img_pos}
+		  	  , LINK_URL = #{link_url}
+		  	  <if test=" file_id !=null and file_id !=''">	
+			  , FILE_ID  = #{file_id}   
+			 </if>
+		      , CHG_ID   = IFNULL(#{user_id},'SYSTEM')
+		      , CHG_DT   = NOW()
+ 		 WHERE IMG_NO    = #{img_no}
+	</update>	
+	
+	<update id="updateBanner" parameterType="com.easycompany.service.vo.MainVo">
+		/**  com.easycompany.mapper.MainMapper.updateBanner **/	
+		UPDATE EDU_BANNER 
+		   SET  BANNER_NM  = #{banner_nm}
+		  	  , BANNER_POS = #{banner_pos}
+		  	  , LINK_URL   = #{link_url}
+		  	  <if test=" file_id !=null and file_id !=''">	
+			  , FILE_ID  = #{file_id}   
+			 </if>
+		      , CHG_ID     = IFNULL(#{user_id},'SYSTEM')
+		      , CHG_DT     = NOW()
+ 		 WHERE BANNER_NO   = #{banner_no}
+	</update>	
+	
+	<update id="updatePopUp" parameterType="com.easycompany.service.vo.MainVo">
+		/**  com.easycompany.mapper.MainMapper.updatePopUp **/	
+		UPDATE EDU_POPUP 
+		   SET  POPUP_NM    = #{popup_nm}
+		      , POPUP_CN     = #{popup_cn}
+		      , OTPT_XAXS_LC = #{otpt_xaxs_lc}
+		      , OTPT_YAXS_LC = #{otpt_yaxs_lc}
+		      , POPUP_AR     = #{popup_ar}
+		      , POPUP_HG     = #{popup_hg}
+		      , USE_YN       = #{use_yn}
+		      , CHG_ID       = IFNULL(#{user_id},'SYSTEM')
+		      , CHG_DT       = NOW()
+ 		 WHERE POPUP_NO      = #{popup_no}
+	</update>	
+	
+	<update id="updateCommonFile" parameterType="com.easycompany.service.vo.MainVo">
+		/**  com.easycompany.mapper.MainMapper.updateCommonFile **/	
+		UPDATE EDU_FILE 
+		   SET  FILE_NAME       = #{file_name}
+		      , FILE_FULL_PATH  = #{file_full_path}
+		  	  , FILE_SIZE       = #{file_size}
+		  	  , FILE_ID         = #{file_id}
+ 		 WHERE FILE_GUBUN       = #{gubun2}  
+ 		   AND FILE_SEQ         = #{file_seq}
+	</update>	
+	
+	<delete id="deleteCommonFile" parameterType="com.easycompany.service.vo.MainVo">
+		/**  com.easycompany.mapper.MainMapper.deleteCommonFile **/	
+		DELETE 
+		  FROM EDU_FILE
+ 		 WHERE FILE_GUBUN      = #{gubun2}  
+ 		   AND FILE_ID         = #{file_id}
+	</delete>
+	
+	<delete id="deleteImg" parameterType="com.easycompany.service.vo.MainVo">
+		/**  com.easycompany.mapper.MainMapper.deleteImg **/	
+		DELETE 
+		  FROM EDU_IMG
+ 		 WHERE IMG_NO       = #{img_no}  
+	</delete>
+	
+	<delete id="deleteBanner" parameterType="com.easycompany.service.vo.MainVo">
+		/**  com.easycompany.mapper.MainMapper.deleteBanner **/	
+		DELETE 
+		  FROM EDU_BANNER
+ 		 WHERE BANNER_NO       = #{banner_no}  
+	</delete>
+	
+	<delete id="deletePopUp" parameterType="com.easycompany.service.vo.MainVo">
+		/**  com.easycompany.mapper.MainMapper.deletePopUp **/	
+		DELETE 
+		  FROM EDU_POPUP
+ 		 WHERE POPUP_NO       = #{popup_no}  
+	</delete>
+		
+	<select id="getLogoDetail" parameterType="com.easycompany.service.vo.MainVo" resultType="com.easycompany.service.vo.MainVo">
+		/**  com.easycompany.mapper.MainMapper.getLogoDetail **/	
+		SELECT A.LOGO_NO, A.FILE_ID , B.FILE_NAME, B.FILE_FULL_PATH, B.FILE_SEQ,B.FILE_SIZE,B.FILE_SEQ
+	      FROM EDU_LOGO A, EDU_FILE B
+	     WHERE A.FILE_ID    = B.FILE_ID
+	     <choose>
+	      <when test="logo_no ==0">
+	           AND A.LOGO_NO =(SELECT max(logo_no) FROM EDU_LOGO)
+	      </when>
+	      <otherwise>
+	            AND A.LOGO_NO = #{logo_no}
+	  	   </otherwise>
+	    </choose>
+	       AND B.FILE_GUBUN = #{gubun2}	   
+	     LIMIT 1 OFFSET 0    	    
+	</select>
+	
+	<select id="getBannerList" parameterType="com.easycompany.service.vo.MainVo"	resultType="com.easycompany.service.vo.MainVo">
+		 /**  com.easycompany.mapper.MainMapper.getBannerList **/
+	    SELECT A.BANNER_NO, A.BANNER_NM, A.BANNER_POS, A.LINK_URL, A.REG_ID, DATE_FORMAT(A.REG_DT,'%x-%m-%d') REG_DT
+	           ,A.FILE_ID ,  (SELECT FILE_NAME FROM EDU_FILE WHERE FILE_ID = A.FILE_ID) FILE_NAME
+	      FROM EDU_BANNER A 
+	      WHERE 1= 1
+	     <choose>
+		  <when test ="searchCondition !=null and searchCondition !='' and searchCondition =='BANNER_NM' and searchKeyword !=null and searchKeyword !='' ">
+		       AND  A.BANNER_NM  LIKE CONCAT('%', #{searchKeyword} ,'%')
+		  </when>
+	     </choose>
+	     ORDER BY A.BANNER_NO 
+	    LIMIT #{recordCountPerPage}  OFFSET  #{offset}		
+	</select>	
+	
+	<select id="getBannerCount" parameterType="com.easycompany.service.vo.MainVo" resultType="int">
+    	/**  com.easycompany.mapper.MainMapper.getBannerCount **/
+		 SELECT COUNT(*) cnt
+	       FROM EDU_BANNER 
+	      WHERE 1= 1
+	     <choose>
+		  <when test ="searchCondition !=null and searchCondition !='' and searchCondition =='BANNER_NM' and searchKeyword !=null and searchKeyword !='' ">
+		       AND  BANNER_NM  LIKE CONCAT('%', #{searchKeyword} ,'%')
+		  </when>
+	     </choose>
+	</select>
+	
+	<select id="getPopUpList" parameterType="com.easycompany.service.vo.MainVo"	resultType="com.easycompany.service.vo.MainVo">
+		 /**  com.easycompany.mapper.MainMapper.getPopUpList **/
+	    SELECT POPUP_NO, POPUP_NM, POPUP_CN, OTPT_XAXS_LC, OTPT_YAXS_LC, POPUP_AR, POPUP_HG, USE_YN
+		  FROM EDU_POPUP
+	     ORDER BY POPUP_NO DESC 
+	    LIMIT #{recordCountPerPage}  OFFSET  #{offset}		
+	</select>	
+	
+	<select id="getPopUpCount" parameterType="com.easycompany.service.vo.MainVo" resultType="int">
+    	/**  com.easycompany.mapper.MainMapper.getPopUpCount **/
+		 SELECT COUNT(*) cnt
+	       FROM EDU_POPUP 
+	</select>
+	
+	<select id="getImgist" parameterType="com.easycompany.service.vo.MainVo"	resultType="com.easycompany.service.vo.MainVo">
+		 /**  com.easycompany.mapper.MainMapper.getImgist **/
+	    SELECT A.IMG_NO, A.IMG_NM, A.IMG_POS, A.LINK_URL, A.REG_ID, DATE_FORMAT(A.REG_DT,'%x-%m-%d') REG_DT,
+               A.FILE_ID ,  (SELECT FILE_NAME FROM EDU_FILE WHERE FILE_ID = A.FILE_ID) FILE_NAME
+	      FROM EDU_IMG A
+	     WHERE 1= 1
+	     <choose>
+		  <when test ="searchCondition !=null and searchCondition !='' and searchCondition =='IMG_NM' and searchKeyword !=null and searchKeyword !='' ">
+		       AND  A.IMG_NM  LIKE CONCAT('%', #{searchKeyword} ,'%')
+		  </when>
+	     </choose>
+	     ORDER BY A.IMG_NO 
+	    LIMIT #{recordCountPerPage}  OFFSET  #{offset}		
+	</select>	
+	
+	<select id="getImgCount" parameterType="com.easycompany.service.vo.MainVo" resultType="int">
+    	/**  com.easycompany.mapper.MainMapper.getImgCount **/
+		 SELECT COUNT(*) cnt
+	       FROM EDU_IMG 
+	      WHERE 1= 1
+	     <choose>
+		  <when test ="searchCondition !=null and searchCondition !='' and searchCondition =='IMG_NM' and searchKeyword !=null and searchKeyword !='' ">
+		       AND  IMG_NM  LIKE CONCAT('%', #{searchKeyword} ,'%')
+		  </when>
+	     </choose>
+	</select>
+	
+	<select id="getImgDetail" parameterType="com.easycompany.service.vo.MainVo" resultType="com.easycompany.service.vo.MainVo">
+		/**  com.easycompany.mapper.MainMapper.getImgDetail **/	
+		SELECT A.IMG_NO, A.IMG_NM,A.IMG_POS,A.LINK_URL, A.FILE_ID , B.FILE_NAME, B.FILE_FULL_PATH, B.FILE_SEQ,B.FILE_SIZE,B.FILE_SEQ
+	      FROM EDU_IMG A, EDU_FILE B
+	     WHERE A.FILE_ID    = B.FILE_ID
+	       AND A.IMG_NO     = #{img_no}
+	  	   AND B.FILE_GUBUN = #{gubun2}	   
+	     LIMIT 1 OFFSET 0    	    
+	</select>
+	
+	<select id="getBannerDetail" parameterType="com.easycompany.service.vo.MainVo" resultType="com.easycompany.service.vo.MainVo">
+		/**  com.easycompany.mapper.MainMapper.getBannerDetail  **/	
+		SELECT A.BANNER_NO, A.BANNER_NM,A.BANNER_POS,A.LINK_URL, A.FILE_ID , B.FILE_NAME, B.FILE_FULL_PATH, B.FILE_SEQ,B.FILE_SIZE,B.FILE_SEQ
+	      FROM EDU_BANNER A, EDU_FILE B
+	     WHERE A.FILE_ID    = B.FILE_ID
+	       AND A.BANNER_NO  = #{banner_no}
+	  	   AND B.FILE_GUBUN = #{gubun2}	   
+	     LIMIT 1 OFFSET 0    	    
+	</select>
+	
+	<select id="getPopUpDetail" parameterType="com.easycompany.service.vo.MainVo" resultType="com.easycompany.service.vo.MainVo">
+		/**  com.easycompany.mapper.MainMapper.getPopUpDetail  **/	
+		SELECT POPUP_NO, POPUP_NM, POPUP_CN, OTPT_XAXS_LC, OTPT_YAXS_LC, POPUP_AR, POPUP_HG, USE_YN
+	      FROM EDU_POPUP
+	     WHERE POPUP_NO  = #{popup_no}
+	</select>
+	
+	
+</mapper>

@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.easycompany.mapper.OrgMapper">
+	<select id="getOrgList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT  a.EDU_NO,
+				(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY) AS CATEGORY3_NAME,
+		        a.COPER_NM_AUTO,
+		        a.EDU_TARGET,
+		        a.EDU_TIME,
+		        a.EDU_GARDEN,
+		        IFNULL((SELECT SCHEDULE_NO FROM EDU_SCHEDULE WHERE EDU_KEY = a.EDU_NO AND REG_ID = #{UserAccount.user_id}),a.EDU_STATUS) AS EDU_STATUS
+		FROM EDU_REGISTRATION a
+		WHERE EDU_SITE = 'off'
+		AND CATEGORY1_KEY = '7'
+		AND CATEGORY2_KEY = '14'
+		AND EXP_USE_YN = 'Y'
+		<choose>                                                        
+			<when test="searchType !=null and searchType !='' and searchType =='coper' ">
+				AND COPER_NM_AUTO LIKE CONCAT('%', #{searchText}, '%')
+			</when>
+			<when test="searchType !=null and searchType !='' and searchType =='edu' ">
+				AND CATEGORY3_KEY IN (SELECT CATEGORY3_KEY FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_NAME LIKE CONCAT('%', #{searchText}, '%'))
+			</when>
+		</choose>
+		
+		LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+
+	<select id="getOrgListCnt" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(*) 
+		 FROM EDU_REGISTRATION a
+		WHERE EDU_SITE = 'off'
+		AND CATEGORY1_KEY = '7'
+		AND CATEGORY2_KEY = '14'
+		AND EXP_USE_YN = 'Y'
+		<choose>
+			<when test="searchType !=null and searchType !='' and searchType =='coper' ">
+				AND COPER_NM_AUTO LIKE CONCAT('%', #{searchText}, '%')
+			</when>
+			<when test="searchType !=null and searchType !='' and searchType =='edu' ">
+				AND CATEGORY3_KEY IN (SELECT CATEGORY3_KEY FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_NAME LIKE CONCAT('%', #{searchText}, '%'))
+			</when>
+		</choose>
+	</select>
+	
+	<select id="getOrgView" parameterType="java.util.Map" resultType="java.util.Map">
+	SELECT  ER.EDU_NO, CU.AREA_CD, CONCAT(CU.JUSO,CU.JUSO_DETAIL) AS ADDR ,IFNULL(ER.COPER_NM,ER.COPER_NM_AUTO) AS COPER_NM,
+			(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = ER.CATEGORY3_KEY) AS CATEGORY3, ER.CATEGORY3_KEY,
+			ER.EDU_TIME, ER.EDU_GARDEN, ER.EDU_TARGET,
+			ER.EDU_TARGET, ER.EDU_STATUS
+		FROM EDU_REGISTRATION ER,
+			 COM_USER CU
+        WHERE 1=1
+        AND ER.EDU_SITE = 'off'
+		AND ER.CATEGORY1_KEY = '7'
+		AND ER.CATEGORY2_KEY = '14'
+		AND ER.EXP_USE_YN = 'Y'
+        AND ER.COPER_ID = CU.USER_ID
+        AND EDU_NO = ${edu_no}
+	</select>																																																																																																																																																																																																																																																																																																																																																																																																
+	
+	<select id="getInsSearch" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT a.INSTRUCTOR_IDX,
+			  (SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = b.AREA_CD) AS AREA_NM,
+			  b.USER_NM,
+			  b.USER_ID,
+              b.COPER_NM
+		 FROM EDU_INSTRUCTOR a,
+			  COM_USER b
+		WHERE 1=1
+        AND a.COM_USER_ID = b.USER_ID
+        AND a.STATUS = 1
+        AND a.USE_YN = 'Y'
+        <if test="area_nm !=null and area_nm != ''">
+	      	AND b.AREA_CD = ${area_nm}
+	      </if>
+	      <if test="ins_nm !=null and ins_nm != ''">
+	      	AND b.USER_NM LIKE CONCAT('%', #{ins_nm}, '%')
+	      </if>
+	      <if test="coper_nm !=null and coper_nm != ''">
+	      	AND b.COPER_NM LIKE CONCAT('%', #{coper_nm}, '%')
+	      </if>
+	</select>
+	
+	<insert id="orgSave" parameterType="java.util.Map">	
+		INSERT INTO EDU_SCHEDULE(
+		  	  CATEGORY1_KEY
+		  	, CATEGORY2_KEY
+		  	, CATEGORY3_KEY
+		  	, EDU_NAME
+		  	, EDU_START_DATE
+		  	, EDU_ORG_NAME
+		  	, EDU_TARGET
+		  	, EDU_NUMBER
+		  	, EDU_TEAC_NAME
+		  	, EDU_TEAC_ID
+		  	, EDU_KEY
+		  	, REG_DT
+		  	, REG_ID
+		) VALUES (
+			  #{category1_key}
+			, #{category2_key}
+			, #{category3_key}
+			, #{edu_nm}
+			, #{edu_date}
+			, #{coper_nm}
+			, #{edu_target}
+			, #{edu_garden}
+			, IFNULL(#{user_nm},#{ins_input})
+			, #{user_id}
+			, #{edu_no}
+			, DATE_FORMAT(NOW(),'%x-%m-%d')
+			, #{UserAccount.user_id}
+		)	
+	</insert>
+	
+	<select id="orgSaveSelectNo" parameterType="java.util.Map" resultType="java.util.Map">
+	SELECT  SCHEDULE_NO
+		FROM EDU_SCHEDULE
+		 WHERE 1=1
+		AND EDU_KEY = ${edu_no}
+		AND REG_DT = DATE_FORMAT(NOW(),'%x-%m-%d')
+        AND REG_ID = #{UserAccount.user_id}
+	</select>
+	
+	<insert id="orgSaveDtl" parameterType="java.util.Map">	
+		INSERT INTO EDU_SCHEDULE_DETAIL(
+		  	  SCHEDULE_NO
+		  	, COPER_AREA_CD
+		  	, COPER_ADDR
+		  	, USER_NM
+		  	, USER_TELNO
+		  	, USER_EML
+		  	, INS_TYPE
+		  	, START_TIME
+		  	, END_TIME
+		  	, EDU_PLACE
+		  	, REG_DT
+		  	, REG_ID
+		) VALUES (
+			  #{schedule_no}
+			, #{area_cd}
+			, #{coper_addr}
+			, #{app_user_nm}
+			, #{app_tel}
+			, CONCAT(#{app_email1},'@',#{app_email2})
+			, #{ins_type}
+			, CONCAT(#{start_hour},':',#{start_min})
+			, CONCAT(#{end_hour},':',#{end_min})
+			, #{edu_place}
+			,DATE_FORMAT(NOW(),'%x-%m-%d')
+			, #{UserAccount.user_id} 
+		)	
+	</insert>
+	                                                                                                                                              
+	<select id="getOrgStatList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT a.SCHEDULE_NO,
+			   a.EDU_NAME,
+			   a.EDU_START_DATE AS EDU_DATE,
+               CONCAT(SUBSTR(TIME(b.START_TIME),1,2),':',SUBSTR(TIME(b.START_TIME),4,2),'~',SUBSTR(TIME(b.END_TIME),1,2),':',SUBSTR(TIME(b.END_TIME),4,2)) AS EDU_DATETIME,
+               (SELECT EDU_TIME FROM EDU_REGISTRATION WHERE EDU_NO = a.EDU_KEY) AS EDU_TIME,
+               a.EDU_ORG_NAME,
+               a.EDU_TARGET,
+               a.EDU_TEAC_NAME,
+               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL THEN '섭외중'
+					WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL THEN '완료'
+					WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL THEN '완료'
+				END
+               AS INS_STATUS,
+               <![CDATA[
+               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN ''
+					WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+					WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+					WHEN b.SCH_STATUS = 'C' THEN '신청취소'
+					WHEN b.SCH_STATUS IS NULL AND a.EDU_START_DATE <= NOW() THEN '교육완료'
+					WHEN b.SCH_STATUS = 'S' THEN '보고완료'
+				END
+               AS SCH_STATUS
+               ]]>
+		FROM EDU_SCHEDULE a,
+			 EDU_SCHEDULE_DETAIL b
+		WHERE a.SCHEDULE_NO = b.SCHEDULE_NO
+		LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+
+	<select id="getOrgStatListCnt" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(*) 
+		FROM EDU_SCHEDULE a,
+			 EDU_SCHEDULE_DETAIL b
+		WHERE a.SCHEDULE_NO = b.SCHEDULE_NO
+	</select>
+		
+	<select id="getInsSelectList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT a.SCHEDULE_NO,b.USER_ID,b.USER_NM, 
+				CASE WHEN b.USER_SEX = 'M' THEN '남' ELSE '여' END AS USER_SEX,
+			   (SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = b.AREA_CD) AS AREA_NM, 
+			   b.INSTRUCTOR_COPER_NM
+        FROM EDU_SCHEDULE_DETAIL a,
+			 COM_USER b
+        WHERE a.SCHEDULE_NO = #{sch_no}
+        AND b.USER_ID IN (SELECT INS_USER FROM EDU_SCHEDULE_APP WHERE SCHEDULE_NO = #{sch_no})
+	</select>
+	
+	<update id="updateInsData" parameterType="java.util.Map">	
+		UPDATE EDU_SCHEDULE
+		SET	EDU_TEAC_NAME = #{user_nm},
+			EDU_TEAC_ID = #{user_id}
+		WHERE SCHEDULE_NO = #{schedule_no} 		
+	</update>
+	
+	<update id="updateInsDtlData" parameterType="java.util.Map">	
+		UPDATE EDU_SCHEDULE_DETAIL
+		SET	INS_STATUS = 'Y'
+		WHERE SCHEDULE_NO = #{schedule_no} 		
+	</update>
+	
+	<update id="updateInsAppData" parameterType="java.util.Map">	
+		UPDATE EDU_SCHEDULE_APP
+		SET	INS_CONFIRM = 'Y'
+		WHERE SCHEDULE_NO = #{schedule_no} 		
+		AND INS_USER = #{user_id}
+	</update>
+	
+	<update id="updateAppCancel" parameterType="java.util.Map">	
+		UPDATE EDU_SCHEDULE_DETAIL
+		SET	CANCEL_DATE = DATE_FORMAT(NOW(),'%x-%m-%d'),
+			CANCEL_REASON = #{cancel_reason}, 
+			CANCEL_USER = #{cancel_user},
+			CANCEL_TEL = #{cancel_tel},
+			CANCEL_REMARK = #{cancel_remark},
+			SCH_STATUS = 'C'
+		WHERE SCHEDULE_NO = #{schedule_no} 		
+	</update>
+	
+	<select id="getOrgReport" parameterType="java.util.Map" resultType="java.util.Map">
+	SELECT a.SCHEDULE_NO,
+			a.EDU_ORG_NAME,
+	        b.COPER_ADDR,
+	        b.USER_NM,
+	        b.USER_TELNO,
+	        b.USER_EML,
+	        a.EDU_TEAC_NAME,
+	        a.EDU_START_DATE,
+	        a.EDU_NAME,
+	        a.EDU_TARGET,
+	        (SELECT COUNT(*) FROM EDU_COURSE_REGISTRATION WHERE EDU_NO = a.EDU_KEY) AS EDU_NUMBER2,
+	        a.EDU_NUMBER,
+	        b.EDU_PLACE,
+	        a.EDU_KEY
+		FROM EDU_SCHEDULE a,
+			 EDU_SCHEDULE_DETAIL b
+		WHERE a.SCHEDULE_NO = b.SCHEDULE_NO
+        AND a.SCHEDULE_NO = ${sch_no}
+	</select>
+	
+	<select id="getEduAttList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT  a.USER_ID,
+				a.USER_NM,
+				CASE WHEN b.USER_SEX = 'M' THEN '남자' ELSE '여자' END AS USER_SEX,
+                FN_GET_CD_NM1('238', b.JOB_CD) JOB_CD,
+                DATE_FORMAT(b.BIRTH_YMD,'%Y-%m-%d') AS BIRTH_YMD,
+                b.EML_ADDR, 
+                b.MBL_TELNO, 
+                CONCAT(b.JUSO ,' ', b.JUSO_DETAIL) AS JUSO
+        FROM EDU_COURSE_REGISTRATION a,
+			 COM_USER b
+		WHERE a.USER_ID = b.USER_ID
+		AND a.USE_YN IS NULL
+        AND a.EDU_NO = (SELECT EDU_KEY FROM EDU_SCHEDULE WHERE SCHEDULE_NO = ${sch_no})
+	</select>
+	
+	<update id="courUserDel" parameterType="java.util.Map">	
+		UPDATE EDU_COURSE_REGISTRATION
+		SET	USE_YN = 'N'
+		WHERE USER_ID IN (
+			<foreach collection="userList" item="item" separator=",">
+				#{item}
+			</foreach>
+		) 
+	</update>
+	
+	<update id="courUserAtt" parameterType="java.util.Map">	
+		UPDATE EDU_COURSE_REGISTRATION
+		SET	COUR_STAT = '1'
+		WHERE USER_ID IN (
+			<foreach collection="userList" item="item" separator=",">
+				#{item}
+			</foreach>
+		) 
+	</update>
+	
+	<update id="scheduleStatUpdate" parameterType="java.util.Map">	
+		UPDATE EDU_SCHEDULE_DETAIL
+		SET	SCH_STATUS = 'S'
+		WHERE SCHEDULE_NO = #{sch_no} 		
+	</update>
+	
+</mapper>

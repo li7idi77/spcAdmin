@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">  
+ 
+<tiles-definitions>  
+   
+   <definition name="orgPopSearch" extends="popUp-definition">  
+       <put-attribute name="title" value="기관명 검색" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/popup/orgPopSearch.jsp" />  
+   </definition>  
+  
+   <definition name="mainPop" extends="popUp-definition">  
+       <put-attribute name="title" value="팝업 공지" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/popup/mainPopup.jsp" />  
+   </definition> 
+   
+   <definition name="popWarrantNumberReq" extends="popUp-definition">  
+       <put-attribute name="title" value="수료증 등록" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/popup/warrantNumberReq.jsp" /> 
+   </definition> 
+   
+   <definition name="popWarrantNumberView" extends="popUp-definition">  
+       <put-attribute name="title" value="수료증 보기" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/popup/warrantNumberView.jsp" />  
+   </definition> 
+   
+   <definition name="popWarrantNumberMod" extends="popUp-definition">  
+       <put-attribute name="title" value="수료증 수정" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/popup/warrantNumberMod.jsp" />  
+   </definition> 
+   
+   <definition name="popInsSearch" extends="popUp-definition">  
+       <put-attribute name="title" value="강사 선택" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/popup/insSearch.jsp" />  
+   </definition>
+   
+   <definition name="popInsSelect" extends="popUp-definition">  
+       <put-attribute name="title" value="강사 선택" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/popup/insSelect.jsp" />  
+   </definition>
+   
+   <definition name="popAppCancel" extends="popUp-definition">  
+       <put-attribute name="title" value="교육신청취소" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/popup/appCancel.jsp" />  
+   </definition>
+   
+      
+   <!--마이페이지 > 나의 강의실 -->
+   <definition name="popMyClass" extends="popUp-definition">  
+       <put-attribute name="title" value="나의 강의실" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/popup/myClass.jsp" />  
+   </definition>
+   
+   <definition name="popMyClassDetail" extends="popUp-definition">  
+       <put-attribute name="title" value="나의 강의실 상세" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/popup/myClassDetail.jsp" />  
+   </definition>
+   
+   <!--마이페이지 > 영상시청 -->
+   <definition name="popMyPlayer" extends="popUp-definition">  
+       <put-attribute name="title" value="영상시청" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/popup/myPlayer.jsp" />  
+   </definition>
+   
+   <!--마이페이지 > 수료증발급 -->
+   <definition name="popMyWarrant" extends="popUp-definition">  
+       <put-attribute name="title" value="수료증발급" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/popup/myWarrant.jsp" />  
+   </definition>
+   
+   <definition name="popMyWarrantNum" extends="popUp-definition">  
+       <put-attribute name="title" value="수료증발급" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/popup/myWarrantNum.jsp" />  
+   </definition>
+</tiles-definitions>

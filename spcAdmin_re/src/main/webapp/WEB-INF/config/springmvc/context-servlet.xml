@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+				http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+				http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd
+				http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+	<context:component-scan base-package="com.easycompany">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+	</context:component-scan>
+	
+	<mvc:annotation-driven/>
+       
+    <!-- 관리자 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/edu/**" />
+			<mvc:mapping path="/main/**" />
+			<mvc:mapping path="/adBoard/**" />
+			<mvc:mapping path="/warrant/**" />
+			<mvc:mapping path="/lms/**" />			
+			<mvc:mapping path="/inst/**" />			
+			<mvc:exclude-mapping path="/login/**" />						
+			<bean class="com.easycompany.cmm.interceptor.AuthenticInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	<!-- 홈페이지 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/user/**"/>
+            <mvc:exclude-mapping path="/login/**" />
+            <mvc:exclude-mapping path="/adBoard/setEditImgUpLoad.do" />
+            <bean class="com.easycompany.cmm.interceptor.WebAuthenticInterceptor" />
+        </mvc:interceptor>
+   </mvc:interceptors>
+    
+
+	
+
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="defaultErrorView" value="cmmn/genneralException" />
+		<property name="exceptionMappings">
+			<props>
+				<prop key="egovframework.rte.fdl.cmmn.exception.EgovBizException">cmmn/egovBizException</prop>
+				<prop key="org.springframework.dao.DataAccessException">cmmn/egovBizException</prop>
+				<prop key="org.springframework.transaction.TransactionException">cmmn/egovBizException</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- Message Source-->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource" 
+		p:basename="messages" />
+	
+
+	<!-- For Pagination Tag -->	 
+	<bean id="imageRenderer" class="com.easycompany.cmm.tag.ImagePaginationRenderer"/>
+	
+	<bean id="paginationManager" class="egovframework.rte.ptl.mvc.tags.ui.pagination.DefaultPaginationManager">
+		<property name="rendererType">
+			<map>
+				<entry key="image" value-ref="imageRenderer"/>
+			</map>
+		</property>
+	</bean>
+	
+	
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="0"/>
+
+	
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/jsp/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+		 	  
+	
+
+	<!-- TilesViewResolver 빈 등록 -->
+	<beans:bean id="tilesViewResolver" class="org.springframework.web.servlet.view.tiles3.TilesViewResolver">
+        <beans:property name="order" value="1"/>
+    </beans:bean>
+
+    <beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+        <beans:property name="definitions">
+            <beans:list>
+                 <beans:value>/WEB-INF/tiles/**/*tiles.xml</beans:value>
+            </beans:list>
+        </beans:property>
+    </beans:bean>
+    
+	<!-- MappingJacksonJsonView 빈 등록 -->
+	<bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+		<property name="contentType" value="text/html;charset=UTF-8"/>
+	</bean>
+	
+	 <!-- jobScheduler start -->
+    <context:component-scan base-package="com.easycompany.cmm.scheduler" />
+	<task:scheduler id="jobScheduler" pool-size="10" />
+	<task:annotation-driven scheduler="jobScheduler" />
+    <!-- jobScheduler End -->
+    
+    	
+     <!-- address excel down  -->
+    <bean id="addressExcelView"          class="com.easycompany.cmm.excel.EgovExcel" />
+	<bean id="addressPOIExcelView"       class="com.easycompany.cmm.excel.EgovPOIExcel" />
+	<bean id="schduleExcelView"          class="com.easycompany.cmm.excel.EgovEduSchduleExcel" />
+	<bean id="onLineEducationExcelView"  class="com.easycompany.cmm.excel.EgovoOLineEducationExcel" />
+	
+	
+</beans>

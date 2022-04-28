@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">  
+ 
+<tiles-definitions>  
+   
+   <!-- 사용자 페이지 -->
+   <!-- web main Page -->
+   <definition name="webMain" extends="commonmain-definition">  
+       <put-attribute name="title" value="생명존중희망재단 " /> 
+       <put-attribute name="body" value="/WEB-INF/jsp/web/main/webMain.jsp" /> 
+   </definition> 
+   
+   <!--개요 > 생명지킴이 -->
+   <definition name="summaryList01" extends="common-definition">  
+       <put-attribute name="title" value="생명지킴이" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/summary/summaryList01.jsp" />  
+   </definition> 
+   
+   <!--개요 > 생명지킴이 교육 강사 -->
+   <definition name="summaryList02" extends="common-definition">  
+       <put-attribute name="title" value="생명지킴이 교육 강사" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/summary/summaryList02.jsp" />  
+   </definition> 
+   
+   <!--개요 > 자살 유족 서비스 전문가 -->
+   <definition name="summaryList03" extends="common-definition">  
+       <put-attribute name="title" value="자살 유족 서비스 전문가" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/summary/summaryList03.jsp" />  
+   </definition> 
+   
+   <!--개요 > 심리부검 주면담원 -->
+   <definition name="summaryList04" extends="common-definition">  
+       <put-attribute name="title" value="심리부검 주면담원" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/summary/summaryList04.jsp" />  
+   </definition> 
+   
+   <!--개요 > 자살 사후대응 전문가 -->
+   <definition name="summaryList05" extends="common-definition">  
+       <put-attribute name="title" value="자살 사후대응 전문가" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/summary/summaryList05.jsp" />  
+   </definition> 
+   
+      <!--교육안내  > 생명지킴이 교육 -->
+   <definition name="info01" extends="common-definition">  
+       <put-attribute name="title" value="생명지킴이 교육" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/info/info01.jsp" />  
+   </definition> 
+   
+   <!--교육안내 > 생명지킴이 강사양성 교육 -->
+   <definition name="info02" extends="common-definition">  
+       <put-attribute name="title" value="생명지킴이 강사양성 교육" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/info/info02.jsp" />  
+   </definition> 
+   
+   <!--교육안내 > 실무자 역량 강화 교육 -->
+   <definition name="info03" extends="common-definition">  
+       <put-attribute name="title" value="실무자 역량 강화 교육" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/info/info03.jsp" />  
+   </definition> 
+   
+   <!--교육안내 > 자살 유족 서비스제공 인력교육 -->
+   <definition name="info04" extends="common-definition">  
+       <put-attribute name="title" value="자살 유족 서비스제공 인력교육" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/info/info04.jsp" />  
+   </definition> 
+   
+   <!--교육안내 > 광역주도형 심리부검면담원 양성교육 -->
+   <definition name="info05" extends="common-definition">  
+       <put-attribute name="title" value="광역주도형 심리부검면담원 양성교육" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/info/info05.jsp" />  
+   </definition> 
+   
+    <!--교육안내 > 자살사후대응 전문가 양성교육 -->
+   <definition name="info06" extends="common-definition">  
+       <put-attribute name="title" value="자살사후대응 전문가 양성교육" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/info/info06.jsp" />  
+   </definition> 
+
+    <!--생명지킴이 교육신청 > 교육신청  > 온라인교육 -->
+   <definition name="lifeEduOnLineList" extends="common-definition">  
+       <put-attribute name="title" value="생명지킴이 교육신청" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/edu/life/lifeEduOnLineList.jsp" />  
+   </definition> 
+   
+    <!--생명지킴이 교육신청 > 교육신청  > 온라인교육 -->
+   <definition name="lifeEduOnLineInfo" extends="common-definition">  
+       <put-attribute name="title" value="생명지킴이 교육신청" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/edu/life/lifeEduOnLineInfo.jsp" />  
+   </definition> 
+   
+    <!--생명지킴이 교육신청 > 교육신청  > 온라인교육 -->
+   <definition name="lifeEduOnLineReg" extends="common-definition">  
+       <put-attribute name="title" value="생명지킴이 교육신청" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/edu/life/lifeEduOnLineReg.jsp" />  
+   </definition> 
+   
+    <!--생명지킴이 교육신청 > 교육신청  > 기관 생명 지킴이 교육 -->
+   <definition name="lifeEduOrgList01" extends="common-definition">  
+       <put-attribute name="title" value="기관 생명 지킴이 교육" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/edu/life/lifeEduOrgList01.jsp" />  
+   </definition>
+   
+    <!--생명지킴이 교육신청 > 교육신청  > 기관 생명 지킴이 교육 -->
+   <definition name="lifeEduOrgList02" extends="common-definition">  
+       <put-attribute name="title" value="기관 생명 지킴이 교육" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/edu/life/lifeEduOrgList02.jsp" />  
+   </definition>
+   
+   <!--생명지킴이 교육신청 > 교육신청  > 기관 생명 지킴이 교육 -->
+   <definition name="lifeEduOrgInfo" extends="common-definition">  
+       <put-attribute name="title" value="기관 생명 지킴이 교육" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/edu/life/lifeEduOrgInfo.jsp" />  
+   </definition> 
+   
+    <!--생명지킴이 교육신청 > 교육신청  > 기관 생명 지킴이 교육 -->
+   <definition name="lifeEduOrgReg" extends="common-definition">  
+       <put-attribute name="title" value="기관 생명 지킴이 교육" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/edu/life/lifeEduOrgReg.jsp" />  
+   </definition> 
+   
+    <!--생명지킴이 교육신청 > 교육신청  > 기관 생명 지킴이 교육 -->
+   <definition name="lifeEduSch" extends="common-definition">  
+       <put-attribute name="title" value="기관 생명 지킴이 교육" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/edu/life/lifeEduSch.jsp" />  
+   </definition>
+   
+    <!--생명지킴이 교육신청 > 교육신청  > 생명지킴이 활동 수기 -->
+   <definition name="lifeEduBoardList" extends="common-definition">  
+       <put-attribute name="title" value="생명지킴이 활동 수기" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/edu/life/lifeEduBoardList.jsp" />  
+   </definition>
+   
+   
+    <!--생명지킴이 교육신청 > 교육신청  > 생명지킴이 활동 글 작성/ 수정 -->
+   <definition name="lifeEduBoardView" extends="common-definition">  
+       <put-attribute name="title" value="생명지킴이 활동 수기" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/edu/life/lifeEduBoardView.jsp" />  
+   </definition>
+   
+   <!--생명지킴이 교육신청 > 교육신청  > 생명지킴이 활동 글 작성/ 수정 -->
+   <definition name="lifeEduBoardReq" extends="common-definition">  
+       <put-attribute name="title" value="생명지킴이 활동 수기" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/edu/life/lifeEduBoardReq.jsp" />  
+   </definition>
+   
+</tiles-definitions>

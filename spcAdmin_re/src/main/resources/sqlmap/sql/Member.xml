@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.easycompany.mapper.MemberMapper">
+	
+	<select id="getMemberList" parameterType="com.easycompany.cmm.vo.DefaultVO"	resultType="com.easycompany.cmm.vo.LoginVo">
+		 /**  com.easycompany.mapper.MemberMapper.getMemberList **/
+	    SELECT ID
+			 , PASSWORD 
+			 , SMS_YN 
+			 , ACCOUNT_YN 
+			 , DEL_YN 
+			 , SMS_PRICE
+			 , LMS_PRICE
+			 , MMS_PRICE
+			 , CAST( DATE_FORMAT( INS_DATE, '%Y-%m-%d %H:%i:%s' ) AS CHAR(19) ) AS INS_DATE
+			 , CAST( DATE_FORMAT( UPD_DATE, '%Y-%m-%d %H:%i:%s' ) AS CHAR(19) ) AS UPD_DATE  
+		FROM  TB_MEMBER A
+	  <choose>
+		<when test ="searchCondition !=null and searchCondition !='' and searchCondition =='id' and searchKeyword !=null and searchKeyword !='' ">
+		   WHERE  ID  LIKE CONCAT('%', #{searchKeyword} ,'%')
+		</when>
+	  </choose>
+	  ORDER BY INS_DATE DESC
+	  LIMIT #{recordCountPerPage}  OFFSET  #{offset}
+		
+	</select>
+	
+	<select id="getMemberCount" parameterType="com.easycompany.cmm.vo.DefaultVO" resultType="int">
+	    /**  com.easycompany.mapper.MemberMapper.getMemberCount **/
+    	SELECT count(1) getCnt
+		 FROM  TB_MEMBER
+	  <choose>
+		<when test ="searchCondition !=null and searchCondition !='' and searchCondition =='id' and searchKeyword !=null and searchKeyword !='' ">
+		   WHERE  ID  LIKE CONCAT('%', #{searchKeyword} ,'%')
+		</when>
+	  </choose>
+	</select>
+	
+	<select id="getMemberView" parameterType="com.easycompany.cmm.vo.LoginVo"	resultType="com.easycompany.cmm.vo.LoginVo">
+		 /**  com.easycompany.mapper.MemberMapper.getMemberView **/
+	    SELECT ID
+			 , PASSWORD 
+			 , SMS_YN 
+			 , ACCOUNT_YN 
+			 , DEL_YN 
+			 , SMS_PRICE
+			 , LMS_PRICE
+			 , MMS_PRICE
+			 , CAST( DATE_FORMAT( INS_DATE, '%Y-%m-%d %H:%i:%s' ) AS CHAR(19) ) AS INS_DATE
+			 , CAST( DATE_FORMAT( UPD_DATE, '%Y-%m-%d %H:%i:%s' ) AS CHAR(19) ) AS UPD_DATE  
+		FROM  TB_MEMBER A
+	   WHERE  ID  = #{id}
+	</select>
+	
+	<update id="updateMember" parameterType="com.easycompany.cmm.vo.LoginVo">
+		/**  com.easycompany.mapper.MemberMapper.updateMember **/
+		UPDATE TB_MEMBER 
+		   SET UPD_DATE    = NOW()			 
+			 <if test=" sms_price !=null and sms_price !=''">	
+			  , SMS_PRICE  = #{sms_price}   
+			 </if>
+			 <if test=" lms_price !=null and lms_price !=''">	
+			  , LMS_PRICE  = #{lms_price}
+			 </if>
+			 <if test=" mms_price !=null and mms_price !=''">	
+			  , MMS_PRICE  = #{mms_price} 
+			 </if>
+			 <if test=" shaPassword !=null and shaPassword !=''">	
+			  , PASSWORD =  #{shaPassword}     
+			 </if>		      
+ 		WHERE ID  = #{id}	
+	</update>
+	
+</mapper>

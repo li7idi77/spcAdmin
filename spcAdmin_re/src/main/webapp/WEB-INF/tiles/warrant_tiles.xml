@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">  
+ 
+<tiles-definitions>  
+  
+   <definition name="warrantGeneralDefault" extends="base-definition">  
+       <put-attribute name="title" value="일반수료증" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/warrant/warrantGeneralDefault.jsp" />  
+   </definition>
+   
+   <definition name="warrantOnlineList" extends="base-definition">  
+       <put-attribute name="title" value="온라인등록" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/warrant/warrantOnlineList.jsp" />  
+   </definition>
+   
+   <definition name="warrantOnlineReq" extends="base-definition">  
+       <put-attribute name="title" value="온라인등록" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/warrant/warrantOnlineReq.jsp" />  
+   </definition>
+   
+   <definition name="warrantOfflineList" extends="base-definition">  
+       <put-attribute name="title" value="오프라인등록" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/warrant/warrantOfflineList.jsp" />  
+   </definition>
+   
+   <definition name="warrantOfflineReq" extends="base-definition">  
+       <put-attribute name="title" value="오프라인등록" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/warrant/warrantOfflineReq.jsp" />  
+   </definition>
+   
+   <definition name="warrantOrgList" extends="base-definition">  
+       <put-attribute name="title" value="기관등록" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/warrant/warrantOrgList.jsp" />  
+   </definition>
+   
+   <definition name="warrantOrgReq" extends="base-definition">  
+       <put-attribute name="title" value="기관등록" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/warrant/warrantOrgReq.jsp" />  
+   </definition>
+      
+   <definition name="warrantNumber" extends="base-definition">  
+       <put-attribute name="title" value="번호수료증" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/warrant/warrantNumber.jsp" />  
+   </definition>   
+      
+   <definition name="warrantNumberReqList" extends="base-definition">  
+       <put-attribute name="title" value="번호수료증 등록" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/warrant/warrantNumberReqList.jsp" />  
+   </definition>
+   
+   <definition name="warrantNumberModList" extends="base-definition">  
+       <put-attribute name="title" value="번호수료증 목록/수정" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/warrant/warrantNumberModList.jsp" />  
+   </definition>
+</tiles-definitions>

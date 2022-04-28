@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.easycompany.mapper.WarrantMapper">
+
+	<select id="warrantOnlineList" parameterType="java.util.Map"	resultType="java.util.Map">
+		 /**  com.easycompany.mapper.WarrantMapper.warrantOnlineList **/
+	    SELECT a.LICENSE_IDX, (SELECT CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 WHERE CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY1_NAME
+				, (SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = a.CATEGORY2_KEY) AS CATEGORY2_NAME
+			    , (SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY) AS CATEGORY3_NAME
+			    ,CAST( DATE_FORMAT( REG_DT, '%Y-%m-%d' ) AS CHAR(19) ) AS REG_DT, REG_ID, 
+			    CASE WHEN LICENSE_STATUS = 0 THEN '활성' WHEN LICENSE_STATUS = 1 THEN '비활성' END AS LICENSE_STATUS
+				      FROM edu_license a
+	      WHERE 1=1
+	      AND USE_YN = 'Y'
+	      <if test="license_type !=null and license_type != ''">
+	      	AND LICENSE_TYPE = #{license_type}
+	      </if>
+	      <if test="category1_key != '' and category1_key != null">
+				AND CATEGORY1_KEY = #{category1_key}
+			</if>
+			<if test="category2_key != '' and category2_key != null">
+				AND CATEGORY2_KEY = #{category2_key}
+			</if>
+			<if test="category3_key != '' and category3_key != null">
+				AND CATEGORY3_KEY = #{category3_key}
+			</if>
+	     ORDER BY LICENSE_IDX DESC
+	    LIMIT #{recordCountPerPage}  OFFSET  #{offset}
+	</select>
+
+
+	<select id="warrantOnlineListCnt" parameterType="java.util.Map" resultType="int">
+    	/**  com.easycompany.mapper.WarrantMapper.warrantOnlineListCnt **/
+		 SELECT COUNT(*) cnt
+	       FROM edu_license
+	      WHERE 1=1 
+	      AND USE_YN = 'Y'
+	      <if test="license_type !=null and license_type != ''">
+	      	AND LICENSE_TYPE = #{license_type}
+	      </if>
+	      <if test="category1_key != '' and category1_key != null">
+				AND CATEGORY1_KEY = #{category1_key}
+			</if>
+			<if test="category2_key != '' and category2_key != null">
+				AND CATEGORY2_KEY = #{category2_key}
+			</if>
+			<if test="category3_key != '' and category3_key != null">
+				AND CATEGORY3_KEY = #{category3_key}
+			</if>
+	</select>
+	
+	<select id="selectDetailOnline" parameterType="java.util.Map" resultType="java.util.Map">
+		/**  com.easycompany.mapper.WarrantMapper.selectDetailOnline **/	
+		SELECT LICENSE_IDX, CATEGORY1_KEY, CATEGORY2_KEY, CATEGORY3_KEY, CATEGORY1_NAME, CATEGORY2_NAME, CATEGORY3_NAME,
+	    	CAST( DATE_FORMAT( REG_DT, '%Y-%m-%d %H:%i:%s' ) AS CHAR(19) ) AS REG_DT, REG_ID, LICENSE_STATUS
+	      FROM edu_license
+	    <where>
+	    	LICENSE_IDX = #{license_idx}
+	    	AND USE_YN = 'Y'
+	    	<if test="license_type !=null and license_type != ''">
+	      	AND LICENSE_TYPE = #{license_type}
+	      </if>
+	    </where>
+	</select>
+	
+	<insert id="warrantSave" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="license_idx">
+		/**  com.easycompany.mapper.WarrantMapper.warrantSave **/	
+		INSERT 
+		INTO edu_license
+		(
+	      	 CATEGORY1_KEY
+	      	, CATEGORY2_KEY
+	      	, CATEGORY3_KEY
+	      	, REG_ID
+	      	, LICENSE_STATUS
+	      	, LICENSE_TYPE
+	      	<if test="edu_edate !=null and edu_edate != ''">
+	      	, EDU_EDATE
+	      	</if>
+		) 
+		VALUES 
+		(
+			 #{category1_key}
+			, #{category2_key}
+			, #{category3_key}
+			, IFNULL(#{reg_id},'SYSTEM')
+			, #{license_status}
+			, #{license_type}
+			<if test="edu_edate !=null and edu_edate != ''">
+	      	, #{edu_edate}
+	      	</if>
+		)	
+	</insert>
+	
+	<update id="warrantUpdate" parameterType="java.util.Map">
+		/**  com.easycompany.mapper.WarrantMapper.warrantUpdate **/	
+		UPDATE edu_license 
+		   SET 
+	      	 CATEGORY1_KEY =  #{category1_key}
+	      	, CATEGORY2_KEY =  #{category2_key}
+	      	, CATEGORY3_KEY =  #{category3_key}
+	      	, LICENSE_STATUS = #{license_status}
+	      	, CHG_DT = date_format(current_timestamp(),'%Y%m%d%H%i%s')
+		    , CHG_ID = IFNULL(#{chg_id},'SYSTEM')
+		    , REG_ID = IFNULL(#{reg_id},'SYSTEM')
+ 		 WHERE LICENSE_IDX = #{license_idx}
+	</update>
+	
+	<update id="warrantDel">
+		/**  com.easycompany.mapper.WarrantMapper.warrantDel **/	
+		UPDATE edu_license 
+		   SET CHG_DT = date_format(current_timestamp(),'%Y%m%d%H%i%s'),
+		   USE_YN = 'N'
+ 		 WHERE LICENSE_IDX IN (
+				<foreach collection="boardIdxList" item="item" separator=",">
+					#{item}
+				</foreach>)
+	</update>
+                  
+	<insert id="insertLmsFile" parameterType="java.util.HashMap">
+		/**  com.easycompany.mapper.WarrantMapper.insertLmsFile **/	
+		<selectKey resultType="int" keyProperty="file_seq" order="BEFORE">			
+			SELECT IFNULL(MAX(FILE_SEQ), 0) + 1 
+			  FROM EDU_FILE			  
+		</selectKey>		
+		INSERT 
+		INTO EDU_FILE
+		(
+		  	  FILE_GUBUN
+		  	, FILE_ID
+		  	, FILE_NAME
+		  	, FILE_FULL_PATH
+		  	, FILE_SEQ
+		  	, FILE_SIZE
+		  	, FILE_KEY
+		  	, FILE_OREDER_BY
+		) 
+		VALUES 
+		(
+			  #{file_gubun}
+			, #{file_uuid}
+			, #{file_name}
+			, #{file_full_path}
+			, #{file_seq}
+			, #{file_size}
+			, #{file_key}
+			, #{file_oreder_by}
+			
+		)	
+	</insert>
+	
+	<select id="selectFileList" parameterType="java.util.Map" resultType="java.util.Map">
+		/**  com.easycompany.mapper.WarrantMapper.selectFileList **/	
+		SELECT FILE_GUBUN, FILE_ID, FILE_NAME, FILE_FULL_PATH, FILE_SEQ, FILE_ID, FILE_SIZE, FILE_KEY, FILE_OREDER_BY
+	      FROM edu_file
+	    <where>
+	    	FILE_KEY = #{board_idx}
+	    	AND FILE_GUBUN = 'board'
+	    </where>
+	</select>
+	
+	<select id="selectFile" parameterType="java.util.Map" resultType="java.util.Map">
+		/**  com.easycompany.mapper.WarrantMapper.selectFile **/	
+		SELECT FILE_GUBUN, FILE_ID, FILE_NAME, FILE_FULL_PATH, FILE_SEQ, FILE_ID, FILE_SIZE, FILE_KEY, FILE_OREDER_BY
+	      FROM edu_file
+	    <where>
+	    	FILE_SEQ = #{file_seq}
+	    </where>
+	</select>
+	
+	<delete id="deleteBoardFile"		parameterType="java.util.Map">
+	    /** com.easycompany.mapper.WarrantMapper.deleteBoardFile **/
+		DELETE
+		  FROM EDU_FILE
+		  <where>
+		  	FILE_SEQ   = #{file_seq}
+		  </where>
+	</delete>
+	
+	<delete id="deleteBoardMapFile">
+	    /** com.easycompany.mapper.WarrantMapper.deleteBoardFile **/
+		DELETE
+		  FROM EDU_FILE
+		  <where>
+		  	FILE_KEY IN (
+				<foreach collection="boardIdxList" item="item" separator=",">
+					#{item}
+				</foreach>)
+			AND FILE_GUBUN = 'board'
+		  </where>
+	</delete>
+	
+	<select id="delFileSelect" resultType="java.util.HashMap">
+		/**  com.easycompany.mapper.WarrantMapper.delFileSelect **/	
+		SELECT FILE_GUBUN, FILE_ID, FILE_NAME, FILE_FULL_PATH, FILE_SEQ, FILE_ID, FILE_SIZE, FILE_KEY, FILE_OREDER_BY
+	      FROM edu_file
+	    <where>
+	    	FILE_KEY IN (
+				<foreach collection="boardIdxList" item="item" separator=",">
+					#{item}
+				</foreach>)
+			AND FILE_GUBUN = 'board'
+	    </where>
+	</select>
+		
+	<sql id="search">
+	<where>
+      		USE_YN = 'Y'
+	      <if test="searchCondition !=null and searchCondition == 'ALL'">
+	      	AND (TITLE LIKE CONCAT('%', #{searchKeyword}, '%') OR REG_ID LIKE CONCAT('%', #{searchKeyword}, '%') OR CONTENTS LIKE CONCAT('%', #{searchKeyword}, '%'))
+	      </if>
+	      <if test="searchCondition !=null and searchCondition == 'TITLE'">
+	      	AND TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+	      </if>
+	      <if test="searchCondition !=null and searchCondition == 'REG_NM'">
+	      	AND REG_ID LIKE CONCAT('%', #{searchKeyword}, '%')
+	      </if>
+	      <if test="searchCondition !=null and searchCondition == 'CONTENTS'">
+	      	AND CONTENTS LIKE CONCAT('%', #{searchKeyword}, '%')
+	      </if>
+	      
+	      <!-- <if test="searchDate !=null and searchDate != 'ALL'">
+	      	<![CDATA[
+		       AND CAST( DATE_FORMAT( REG_DT, '%Y-%m-%d' ) AS CHAR(19)) >= #{start_date} AND CAST( DATE_FORMAT( REG_DT, '%Y-%m-%d' ) AS CHAR(19)) <= #{end_date} 
+	        ]]>
+	      </if>
+	      <if test="edu_status !=null and edu_status != 'ALL'">
+	      	AND EDU_STATUS = #{edu_status}
+	      </if> -->
+      </where>
+	</sql>
+	
+	<select id="warrantNumberReqList" parameterType="java.util.Map"	resultType="java.util.Map">
+	    SELECT a.COUR_NO, a.EDU_NO, a.USER_NM, a.USER_ID
+					,(SELECT COPER_NM FROM COM_USER WHERE USER_ID = a.USER_ID) AS COPER_NM
+                    ,(SELECT MBL_TELNO FROM COM_USER WHERE USER_ID = a.USER_ID) AS MBL_TELNO
+					,(SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY3_KEY = b.CATEGORY3_KEY) AS CATEGORY2_NAME
+                    ,(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY1_KEY = b.CATEGORY1_KEY AND CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY3_KEY = b.CATEGORY3_KEY) AS EDU_NAME
+                    ,(SELECT LICENSE_IDX FROM EDU_USER_LICENSE WHERE USER_ID = a.USER_ID AND EDU_NO = a.EDU_NO) AS ADD_CHK
+                    ,(SELECT REG_DT FROM EDU_USER_LICENSE WHERE USER_ID = a.USER_ID AND EDU_NO = a.EDU_NO) AS ADD_DT
+				 FROM EDU_COURSE_REGISTRATION a,
+					  EDU_REGISTRATION b
+				WHERE a.EDU_NO = b.EDU_NO
+		      <if test="license_type !=null and license_type != ''">
+		      	AND b.EDU_SITE = #{license_type}
+		      </if>
+		      <if test="category1_key != '' and category1_key != null">
+				AND b.CATEGORY1_KEY = #{category1_key}
+			  </if>
+				<if test="category2_key != '' and category2_key != null">
+					AND b.CATEGORY2_KEY = #{category2_key}
+				</if>
+				<if test="category3_key != '' and category3_key != null">
+					AND b.CATEGORY3_KEY = #{category3_key}
+				</if>
+			<choose>
+				<when test ="searchType !=null and searchType !='' and searchType =='name'">
+				  AND a.USER_NM LIKE CONCAT('%', #{searchText} ,'%')
+				</when>
+				<when test ="searchType !=null and searchType !='' and  searchType =='id'">
+				  AND a.USER_ID LIKE CONCAT('%', #{searchText} ,'%')
+				</when>
+			  </choose>
+			<if test="searchDate !=null and searchDate != 'ALL'">
+		      	<![CDATA[
+			       AND CAST( DATE_FORMAT( REG_DT, '%Y-%m-%d' ) AS CHAR(19)) >= #{start_date} AND CAST( DATE_FORMAT( REG_DT, '%Y-%m-%d' ) AS CHAR(19)) <= #{end_date} 
+		        ]]>
+		      </if>
+	     ORDER BY COUR_NO DESC
+	    LIMIT #{recordCountPerPage}  OFFSET  #{offset}
+	</select>
+
+
+	<select id="warrantNumberReqListCnt" parameterType="java.util.Map" resultType="int">
+		 SELECT COUNT(*) cnt
+	       	    FROM EDU_COURSE_REGISTRATION a,
+					  EDU_REGISTRATION b
+				WHERE a.EDU_NO = b.EDU_NO
+		      <if test="license_type !=null and license_type != ''">
+		      	AND b.EDU_SITE = #{license_type}
+		      </if>
+		      <if test="category1_key != '' and category1_key != null">
+				AND b.CATEGORY1_KEY = #{category1_key}
+			  </if>
+				<if test="category2_key != '' and category2_key != null">
+					AND b.CATEGORY2_KEY = #{category2_key}
+				</if>
+				<if test="category3_key != '' and category3_key != null">
+					AND b.CATEGORY3_KEY = #{category3_key}
+				</if>
+			<choose>
+				<when test ="searchType !=null and searchType !='' and searchType =='name'">
+				  AND a.USER_NM LIKE CONCAT('%', #{searchText} ,'%')
+				</when>
+				<when test ="searchType !=null and searchType !='' and  searchType =='id'">
+				  AND a.USER_ID LIKE CONCAT('%', #{searchText} ,'%')
+				</when>
+			  </choose>
+	</select>
+	
+	<select id="warrantNumberDetail" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT EDU_NO, (CASE EDU_SITE WHEN 'on' THEN 'A' WHEN 'off' THEN 'B' END) AS LICENSE_TYPE
+			   , CATEGORY1_KEY, CATEGORY2_KEY, CATEGORY3_KEY,
+		       (select USER_ID from EDU_COURSE_REGISTRATION WHERE COUR_NO = #{cour_no}) AS USER_ID
+		FROM EDU_REGISTRATION
+		WHERE 1=1
+		AND EDU_NO IN (select EDU_NO from EDU_COURSE_REGISTRATION WHERE COUR_NO = #{cour_no})
+	</select>
+	
+	<insert id="warrantNumberSave" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="license_idx">
+		INSERT 
+		INTO edu_user_license
+		(
+	      	USER_ID
+	      	, EDU_NO
+	      	, COUR_NO
+	      	, LICENSE_NUMBER
+	      	, LICENSE_FIELD
+	      	, CATEGORY1_KEY
+	      	, CATEGORY2_KEY
+	      	, CATEGORY3_KEY
+	      	, LICENSE_STATUS
+	      	, LICENSE_TYPE
+	      	, USE_YN
+	      	, REG_DT
+	      	, REG_ID
+		) 
+		VALUES 
+		(
+			#{USER_ID}
+			, #{EDU_NO}
+			, #{cour_no}
+			, #{license_number}
+			, #{license_field}
+			, #{CATEGORY1_KEY}
+			, #{CATEGORY2_KEY}
+			, #{CATEGORY3_KEY}
+			, 1
+			, #{LICENSE_TYPE}
+			, 'Y'
+			, DATE_FORMAT(NOW(),'%x-%m-%d')
+		    , #{AdminAccount.user_id}
+		)	
+	</insert>
+	
+	<update id="warrantNumberUpdate" parameterType="java.util.Map">
+		UPDATE edu_user_license 
+		   SET 
+	      	 CATEGORY1_KEY =  #{category1_key}
+	      	, CATEGORY2_KEY =  #{category2_key}
+	      	, CATEGORY3_KEY =  #{category3_key}
+	      	, LICENSE_STATUS = #{license_status}
+	      	, CHG_DT = date_format(current_timestamp(),'%Y%m%d%H%i%s')
+		    , CHG_ID = IFNULL(#{chg_id},'SYSTEM')
+ 		 WHERE LICENSE_IDX = #{license_idx}
+	</update>
+	
+	<update id="warrantNumberDel">
+		UPDATE edu_user_license 
+		   SET CHG_DT = date_format(current_timestamp(),'%Y%m%d%H%i%s'),
+		   USE_YN = 'N'
+ 		 WHERE LICENSE_IDX IN (
+				<foreach collection="boardIdxList" item="item" separator=",">
+					#{item}
+				</foreach>)
+	</update>
+</mapper>
