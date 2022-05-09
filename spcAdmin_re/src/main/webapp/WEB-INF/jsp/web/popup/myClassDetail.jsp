@@ -16,6 +16,11 @@
  $(document).ready(function(){		
 	 	
  });
+ 
+ function pop(){
+	 alert("준비중 입니다.");
+ }
+ 
  function openWindowPop(url, name){
 	    var options = 'top=10, left=10, width=1200px, height=600px, status=no, menubar=no, toolbar=no, resizable=no';
 	    window.open(url, name, options);
@@ -35,7 +40,7 @@
                     <!---- info-group end ---->
 
                     <div class="right-cont">
-                        <button class="sm-btn white-btn">강의실 홈</button>
+                        <button class="sm-btn white-btn" onClick="location.href='${pageContext.request.contextPath}/my/popMyClass.do'">강의실 홈</button>
                     </div>
                 </div>
                 
@@ -47,7 +52,7 @@
 
                     <h3 class="h3-tit">
                         <span>${result.CATEGORY3_NAME}</span>
-                        <button class="sm-btn navy-btn">퀴즈풀기</button>
+                        <button class="sm-btn navy-btn" onClick="pop();">퀴즈풀기</button>
                     </h3>
                     
                     <ul class="summary-cont">
@@ -117,7 +122,7 @@
                                     <td><a class="link">다운로드</a></td>
                                     <td><span>${list.EDU_CURR3}</span>분</td>
                                     <td><span>${list.COUR_TIME}</span>분</td>
-                                    <td>${list.EDU_CON_STAT}</td>
+                                    <td>${list.COUR_STAT}</td>
                                     <td><button class="sm-btn white-btn" onClick="javascript:openWindowPop('<c:url value='/my/popMyPlayer.do'/>?edu_sub_no=${list.EDU_SUB_NO}&cour_no=${cour_no}','popup2');">바로가기</button></td>
                                 </tr>
                             </c:forEach>

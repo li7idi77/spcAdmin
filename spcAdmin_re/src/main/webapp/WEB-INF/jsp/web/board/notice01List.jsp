@@ -63,6 +63,7 @@
  function fn_egov_link_page(pageNo){
 	 var frm = document.commonForm;
 	 $("#pageIndex").val(pageNo); 
+	 frm.action = "<c:url value='/user/notice01List.do'/>";
    	 frm.submit();
  }
 </script>
@@ -174,7 +175,7 @@
                                     </c:forEach>
 						             <c:if test="${empty resultList }">
 							             <tr>
-							             	<td colspan='6'/>Data 없습니다.</td>
+							             	<td colspan='5'/>Data 없습니다.</td>
 							             </tr>
 						          	 </c:if>
                                 </tbody>

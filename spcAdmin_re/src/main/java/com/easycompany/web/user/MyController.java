@@ -1,6 +1,7 @@
 package com.easycompany.web.user;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +70,8 @@ public class MyController
 	  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
 	  paramMap.put("offset",offset);
 	    	  
-	  paramMap.put("category1_key", "1");//일반:1,강사:3,실무자:2
+	  String[] cate1List = {"1","4"};
+	  paramMap.put("category1_key_arr", cate1List);
 	  paramMap.put("sqlName", "getCartList");
 	  List<Map<String, Object>> list = myService.getSelectList(paramMap);
 	  model.addAttribute("resultList", list);
@@ -138,8 +140,16 @@ public class MyController
 	  
 	  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
 	  paramMap.put("offset",offset);
-	  paramMap.put("site", "on");
-	  paramMap.put("category1_key", "1");
+	  if(!paramMap.containsKey("site")) {
+		  paramMap.put("site", "on");
+		  paramMap.put("category1_key", "1");
+	  }else {
+		  if(paramMap.get("site").toString().equals("on")) {
+			  paramMap.put("category1_key", "1");
+		  }else {
+			  paramMap.put("category1_key", "4");
+		  }
+	  }
 	  paramMap.put("sqlName", "getCategoryList2");
 	  List<Map<String, Object>> category2list = sectorService.getSelectList(paramMap);
 	  model.addAttribute("category2list", category2list);
@@ -218,10 +228,21 @@ public class MyController
 	  paginationInfo.setRecordCountPerPage(Integer.parseInt(paramMap.get("recordCountPerPage").toString()));
 	  paginationInfo.setPageSize(Integer.parseInt(paramMap.get("pageSize").toString()));
 	  
+	  if(!paramMap.containsKey("site")) {
+		  paramMap.put("site", "on");
+	  }
+	  
 	  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
 	  paramMap.put("offset",offset);
 	    	  
-	  paramMap.put("category1_key", "1");
+	  if(paramMap.get("site").equals("on")) {
+		  paramMap.put("category1_key", "1");
+	  }else if(paramMap.get("site").equals("off")){
+		  paramMap.put("category1_key", "4");
+	  }else {
+		  paramMap.put("category1_key", "7");
+	  }
+	  
 	  paramMap.put("sqlName", "getCategoryList2");
 	  List<Map<String, Object>> category2list = sectorService.getSelectList(paramMap);
 	  model.addAttribute("category2list", category2list);
@@ -376,7 +397,7 @@ public class MyController
 	      
 	      paramMap.put("sqlName", "onclassFinishCheck");
 	      Map<String, Object> cntMap = myService.getSelectData(paramMap);
-	      if(cntMap.get("ALLCNT") == cntMap.get("CNT")) {
+	      if(cntMap.get("ALLCNT").toString().equals(cntMap.get("CNT").toString())) {
 	    	  paramMap.put("sqlName", "onclassFinish");	
 		      resultCnt = myService.updateData(paramMap);
 	      }
@@ -550,11 +571,20 @@ public class MyController
 	  paginationInfo.setCurrentPageNo(Integer.parseInt(paramMap.get("pageIndex").toString()));
 	  paginationInfo.setRecordCountPerPage(Integer.parseInt(paramMap.get("recordCountPerPage").toString()));
 	  paginationInfo.setPageSize(Integer.parseInt(paramMap.get("pageSize").toString()));
+	  if(!paramMap.containsKey("site")) {
+		  paramMap.put("site", "on");
+	  }
 	  
 	  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
 	  paramMap.put("offset",offset);
 	    	  
-	  paramMap.put("category1_key", "3");
+	  if(paramMap.get("site").equals("on")) {
+		  paramMap.put("category1_key", "3");
+	  }else if(paramMap.get("site").equals("off")){
+		  paramMap.put("category1_key", "8");
+	  }else {
+		  paramMap.put("category1_key", "7");
+	  }
 	  paramMap.put("sqlName", "getCategoryList2");
 	  List<Map<String, Object>> category2list = sectorService.getSelectList(paramMap);
 	  model.addAttribute("category2list", category2list);
@@ -633,7 +663,8 @@ public class MyController
 	  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
 	  paramMap.put("offset",offset);
 	    	  
-	  paramMap.put("category1_key", "2");//일반:1,강사:3,실무자:2
+	  String[] cate1List = {"2","5"};
+	  paramMap.put("category1_key_arr", cate1List);
 	  paramMap.put("sqlName", "getCartList");
 	  List<Map<String, Object>> list = myService.getSelectList(paramMap);
 	  model.addAttribute("resultList", list);
@@ -666,9 +697,16 @@ public class MyController
 	  
 	  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
 	  paramMap.put("offset",offset);
-	    
-	  paramMap.put("site", "on");
-	  paramMap.put("category1_key", "2");
+	  if(!paramMap.containsKey("site")) {
+		  paramMap.put("site", "on");
+		  paramMap.put("category1_key", "2");
+	  }else {
+		  if(paramMap.get("site").toString().equals("on")) {
+			  paramMap.put("category1_key", "2");
+		  }else {
+			  paramMap.put("category1_key", "5");
+		  }
+	  }
 	  paramMap.put("sqlName", "getCategoryList2");
 	  List<Map<String, Object>> category2list = sectorService.getSelectList(paramMap);
 	  model.addAttribute("category2list", category2list);
@@ -749,11 +787,20 @@ public class MyController
 	  paginationInfo.setCurrentPageNo(Integer.parseInt(paramMap.get("pageIndex").toString()));
 	  paginationInfo.setRecordCountPerPage(Integer.parseInt(paramMap.get("recordCountPerPage").toString()));
 	  paginationInfo.setPageSize(Integer.parseInt(paramMap.get("pageSize").toString()));
+	  if(!paramMap.containsKey("site")) {
+		  paramMap.put("site", "on");
+	  }
 	  
 	  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
 	  paramMap.put("offset",offset);
 	    	  
-	  paramMap.put("category1_key", "2");
+	  if(paramMap.get("site").equals("on")) {
+		  paramMap.put("category1_key", "2");
+	  }else if(paramMap.get("site").equals("off")){
+		  paramMap.put("category1_key", "5");
+	  }else {
+		  paramMap.put("category1_key", "7");
+	  }
 	  paramMap.put("sqlName", "getCategoryList2");
 	  List<Map<String, Object>> category2list = sectorService.getSelectList(paramMap);
 	  model.addAttribute("category2list", category2list);

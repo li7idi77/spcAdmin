@@ -37,7 +37,7 @@
  function fn_save(){
 	 var formData = new FormData($('#commonForm')[0]);
 		if(confirm("휴직 신청을 하시겠습니까?")){
-				
+			formData.append("file1",    $("input[name=file1]")[0]);		
 			$.ajax({	
 				data       : formData,
 			    url		   : "<c:url value='/user/instructor04Save.do'/>",
@@ -60,7 +60,7 @@
 			
 			if(result == "SUCCESS"){				
 				alert("성공하였습니다.");				
-				fn_load('R');				 
+				location.reload();			 
 			} else if(result == "EXIST"){				
 				alert("이미 등록 되었습니다.");	
 				return false;
@@ -70,12 +70,12 @@
 			}
 		}
 	}
-
-	function fn_load(str) {
-		var frm = document.commonForm;
-		frm.action = "<c:url value='/user/instructor04absence.do'/>";    
-		frm.submit();
-	 }
+ function fn_egov_link_page(pageNo){
+	 var frm = document.commonForm;
+	 $("#pageIndex").val(pageNo); 
+ 	 frm.action = "<c:url value='/user/instructor04absence.do'/>";
+   	 frm.submit();
+ }
 </script>
      <!-- container  begin -->
                 <div id="container">
@@ -94,9 +94,11 @@
                     </div>
 
                     <div class="contents-wrap">
-                        <form  id="commonForm" name="commonForm"  method="post"  action="">
+                        <form  id="commonForm" name="commonForm"  method="post"  action="" enctype="Multipart/form-data">
 		    			<input type="hidden" id="pageIndex"  name="pageIndex" value=1 />
 		    			<input type="hidden" id="user_id"  name="user_id" value="${UserAccount.user_id}" />
+		    			<input type="hidden" id="file_seq" name="file_seq" class="input-box" value=0/>
+						<input type="hidden" id="file_gubun"  name="file_gubun" value="insLeave"/>
                         <div class="comp">
                             <div class="table-wrap">
                                 <table class="detail-tb">
@@ -165,11 +167,7 @@
                                             <th>신청서 첨부</th>
                                             <td>
                                                 <div class="upload-box">
-                                                    <input type="file" />
-                                                    <button class="sm-btn black-btn">삭제</button>
-                                                    <label>
-                                                        파일명: <span>2021년 강사 교육 안내</span>
-                                                    </label>
+                                                    <input type="file" id="file1" name="file1"/>
                                                     <p class="point">파일크기 200MB 이하</p>
                                                 </div>
                                             </td>

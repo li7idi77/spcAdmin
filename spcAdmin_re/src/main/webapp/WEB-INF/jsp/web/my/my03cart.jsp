@@ -91,7 +91,7 @@
 	function fn_egov_link_page(pageNo){
 		 var frm = document.commonForm;
 		 $("#pageIndex").val(pageNo); 
-	 	 frm.action = "<c:url value='/my/my01cart.do'/>";
+	 	 frm.action = "<c:url value='/my/my03cart.do'/>";
 	   	 frm.submit();
 	 }
 </script>

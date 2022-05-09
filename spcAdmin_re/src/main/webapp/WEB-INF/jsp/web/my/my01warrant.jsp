@@ -41,6 +41,13 @@
 	 });
  });
   
+ function fn_move(str) {
+	  	var frm = document.commonForm;
+		$("#site").val(str);  
+	   	frm.action = "<c:url value='/my/my01warrant.do'/>";
+	  	frm.submit();
+ }
+ 
  function fn_clear(){
 	 $("#searchDate").eq(0).prop("checked",true);
 	 $("#searchCondition").eq(0).prop("checked",true);
@@ -79,9 +86,21 @@
                         <!---- tab-cont begin ---->
                         <div class="tab-cont">
                             <ul>
-                                <li class="on"><a href="">온라인</a></li>
-                                <li><a href="">오프라인</a></li>
-                                <li><a href="">기관</a></li>
+                                <c:if test="${site eq 'on'}">
+                                <li class="on">온라인</li>
+                                <li><a onClick="fn_move('off')">오프라인</a></li>
+                                <li><a onClick="fn_move('org')">기관</a></li>
+                                </c:if>
+                                <c:if test="${site eq 'off'}">
+                                <li><a onClick="fn_move('on')">온라인</a></li>
+                                <li class="on">오프라인</li>
+                                <li><a onClick="fn_move('org')">기관</a></li>
+                                </c:if>
+                                <c:if test="${site eq 'org'}">
+                                <li><a onClick="fn_move('on')">온라인</a></li>
+                                <li><a onClick="fn_move('off')">오프라인</a></li>
+                                <li class="on">기관</li>
+                                </c:if>
                             </ul>
                         </div>
                         <!---- tab-cont end ---->
@@ -90,6 +109,7 @@
                         <!---- search-wrap begin ---->
                         <form  id="commonForm" name="commonForm"  method="post"  action="">
 		    			<input type="hidden" id="pageIndex"  name="pageIndex" value=1 />
+		    			<input type="hidden" id="site" name="site" class="input-box" value="${site}"  />
                         <div class="search-wrap">
                             <div class="search-cont">
                                 <label>기간 :</label>

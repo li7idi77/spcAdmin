@@ -44,7 +44,7 @@
                             <ul class="summary-cont">
                                 <li>
                                     <label>소속기관 :</label>
-                                    <span>${result.COPER_NM}</span>
+                                    <span>${result.INSTRUCTOR_COPER_NM}</span>
                                 </li>
                                 <li>
                                     <label>지역 :</label>

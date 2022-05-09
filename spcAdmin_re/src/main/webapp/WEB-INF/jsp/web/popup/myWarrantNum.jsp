@@ -80,10 +80,10 @@
     <h1 class="warrant-tit">수료증</h1>
 
 	<div class="warrant-cont">
-        <p class="title">분야 : <span>${result.CATEGORY3_NAME}</span></p>
+        <p class="title">분야 : <span>${result.LICENSE_FIELD}</span></p>
         <p class="title mb10">소속 :<span>${result.COPER_NM}</span></p>
         <p class="name">이름 : <span>${result.USER_NM}</span></p>
-        <p class="des">귀하는 한국생명존중희망재단에서 실시한<br/>전문가 양성과정 (<span>${result.CATEGORY3_NAME}</span>) 교육을<br/>수료하였기에 이 증서를 수여합니다.</p>
+        <p class="des">귀하는 한국생명존중희망재단에서 실시한<br/>전문가 양성과정 (<span>${result.LICENSE_FIELD}</span>) 교육을<br/>수료하였기에 이 증서를 수여합니다.</p>
         <p class="date mb0"><span>${result.DATE2}</span></p>
     </div>
 

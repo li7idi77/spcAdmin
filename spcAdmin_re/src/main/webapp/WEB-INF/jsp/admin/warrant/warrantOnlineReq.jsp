@@ -136,7 +136,7 @@ $(document).ready(function() {
 			type	: "POST",	
 			success: function(data, opt, inx){
 			var option = '';
-			option += '<option value="0">선택 하세요</opton>'; //선택
+			option += '<option value="">선택 하세요</opton>'; //선택
 			$.each(data, function(i, ret){
 				option += '<option value="'+ret.CATEGORY3_KEY+'">'+ret.CATEGORY3_NAME+'</option>';		
 			});

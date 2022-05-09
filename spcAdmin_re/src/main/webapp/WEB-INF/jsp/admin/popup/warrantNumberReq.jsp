@@ -30,7 +30,7 @@
                             <th>교육번호</th>
                             <td>
                                 <input type="text" id="license_number" name="license_number" class="input-box" placeholder="">
-                                <p class="point">* 네자리 번호를 입력하세요. (ex. 0854)</p>
+                                <p class="point">* 다섯자리 번호를 입력하세요. (ex. 02854)</p>
                             </td>
                         </tr>
                         <tr>

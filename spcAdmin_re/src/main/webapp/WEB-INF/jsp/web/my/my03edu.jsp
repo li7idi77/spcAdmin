@@ -58,7 +58,7 @@
 				type	: "POST",	
 				success: function(data, opt, inx){
 				var option = '';
-				option += '<option value="0">선택 하세요</opton>'; //선택
+				option += '<option value="">선택 하세요</opton>'; //선택
 				$.each(data, function(i, ret){
 					option += '<option value="'+ret.CATEGORY3_KEY+'">'+ret.CATEGORY3_NAME+'</option>';		
 				});
@@ -121,7 +121,7 @@
 	function fn_move(str) {
 	  	var frm = document.commonForm;
 		$("#site").val(str);  
-	   	frm.action = "<c:url value='/my/my01edu.do'/>";
+	   	frm.action = "<c:url value='/my/my03edu.do'/>";
 	  	frm.submit();
     }
 	
@@ -132,7 +132,7 @@
 	function fn_egov_link_page(pageNo){
 		 var frm = document.commonForm;
 		 $("#pageIndex").val(pageNo); 
-	 	 frm.action = "<c:url value='/my/my01edu.do'/>";
+	 	 frm.action = "<c:url value='/my/my03edu.do'/>";
 	   	 frm.submit();
 	 }
 </script>
@@ -201,9 +201,16 @@
 
                             <div class="search-cont">
                                 <label>교육분류 :</label>
+                                <c:if test="${site eq 'on'}">
                                 <select class="select mr30"  id="category1_key" name="category1_key">
-										<option value='1' >일반</option>
+										<option value='2' >실무자</option>
 								</select>
+								</c:if>
+								<c:if test="${site eq 'off'}">
+                                <select class="select mr30"  id="category1_key" name="category1_key">
+										<option value='5' >실무자</option>
+								</select>
+								</c:if>
 					            <select class="select"  id="category2_key" name="category2_key">
 					            	<option value='' >선택 하세요</option>
 									<c:forEach var="result" items="${category2list}" varStatus="status">

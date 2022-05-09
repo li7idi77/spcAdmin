@@ -13,6 +13,7 @@
 
 <div class="search-wrap">
 	<form id="commonForm" name="commonForm" target="_self" action="/lms/contentsList.do" method="post" onsubmit="">
+    <input type="hidden" id="pageIndex"  name="pageIndex" value=1 />
     <input type="hidden" id="edu_sub_no"   name="edu_sub_no"  value="${edu_sub_no}"/>
     <input type="hidden" id="gubun1"      name="gubun1"     value='I'   />
 	    <div class="search-cont search-sub">
@@ -224,7 +225,7 @@ $(document).ready(function(){
 				type	: "POST",	
 				success: function(data, opt, inx){
 				var option = '';
-				option += '<option value="0">선택 하세요</opton>'; //선택
+				option += '<option value="">선택 하세요</opton>'; //선택
 				$.each(data, function(i, ret){
 					option += '<option value="'+ret.CATEGORY2_KEY+'">'+ret.CATEGORY2_NAME+'</option>';		
 				});
@@ -253,7 +254,7 @@ $(document).ready(function(){
 				type	: "POST",	
 				success: function(data, opt, inx){
 				var option = '';
-				option += '<option value="0">선택 하세요</opton>'; //선택
+				option += '<option value="">선택 하세요</opton>'; //선택
 				$.each(data, function(i, ret){
 					option += '<option value="'+ret.CATEGORY3_KEY+'">'+ret.CATEGORY3_NAME+'</option>';		
 				});

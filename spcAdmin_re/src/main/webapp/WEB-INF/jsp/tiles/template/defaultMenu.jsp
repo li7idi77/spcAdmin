@@ -14,16 +14,16 @@ model.addAttribute("path", request.getServletPath());
     <li <c:if test="${fn:contains(path, '/main/logo') || fn:contains(path, '/main/img')  || fn:contains(path, '/main/banner') || fn:contains(path, '/main/popup') }">  class="on" </c:if> >
         <a href="#">메인화면</a>
         <ul class="depth02-menu">
-            <li <c:if test="${fn:contains(path, '/main/logo')}">   class="active" </c:if> ><a href="<c:url value='/main/logoList.do' />">  로고        </a></li>
+            <li <c:if test="${fn:contains(path, '/main/logo')}">   class="active" </c:if> ><a href="<c:url value='/main/logoList.do' />">로고        </a></li>
             <li <c:if test="${fn:contains(path, '/main/img')}">    class="active" </c:if> ><a href="<c:url value='/main/imgList.do'    />">메인이미지 </a></li>
-            <li <c:if test="${fn:contains(path, '/main/banner')}"> class="active" </c:if> ><a href="<c:url value='/main/bannerList.do' />">배너관리    </a></li>
-            <li <c:if test="${fn:contains(path, '/main/popup')}">  class="active" </c:if> ><a href="<c:url value='/main/popupList.do' />"> 팝업창 관리 </a></li>
+            <%-- <li <c:if test="${fn:contains(path, '/main/banner')}"> class="active" </c:if> ><a href="<c:url value='/main/bannerList.do' />">배너관리    </a></li> --%>
+            <li <c:if test="${fn:contains(path, '/main/popup')}">  class="active" </c:if> ><a href="<c:url value='/main/popupList.do' />">팝업창 관리 </a></li>
         </ul>
     </li> 
     <li <c:if test="${fn:contains(path, '/edu/eduInfoReg') || fn:contains(path, '/edu/eduInfoSchedule') }">  class="on" </c:if> >
         <a href="#">교육안내</a>
         <ul class="depth02-menu">
-            <li <c:if test="${fn:contains(path, '/edu/eduInfoReg')}">        class="active" </c:if> > <a href="<c:url value='/edu/eduInfoRegList.do' />">     교육안내 등록</a></li>
+            <li <c:if test="${fn:contains(path, '/edu/eduInfoReg')}">        class="active" </c:if> > <a href="<c:url value='/edu/eduInfoRegList.do' />" onClick="alert('임의로 수정할 수 없습니다.\n개발회사에 문의 바랍니다.');">교육안내 등록</a></li>
             <li <c:if test="${fn:contains(path, '/edu/eduInfoSchedule')}">   class="active" </c:if> > <a href="<c:url value='/edu/eduInfoScheduleList.do' />">교육일정      </a></li>
         </ul>
     </li>
@@ -47,7 +47,7 @@ model.addAttribute("path", request.getServletPath());
         <ul class="depth02-menu">
             <li <c:if test="${fn:contains(path, '/edu/eduStatus')}">   class="active" </c:if>><a href="<c:url value='/edu/eduStatustList.do'/>">교육신청 현황</a></li>
             <li <c:if test="${fn:contains(path, '/edu/eduTitle')}">    class="active" </c:if>><a href="<c:url value='/edu/eduTitleList.do'/>">교육명 별 신청자  </a></li>
-            <li <c:if test="${fn:contains(path, '/edu/eduReport')}">   class="active" </c:if>><a href="<c:url value='/edu/eduReportList.do'/>"> 교육결과 보고</a></li>
+            <li <c:if test="${fn:contains(path, '/edu/eduReport')}">   class="active" </c:if>><a href="<c:url value='/edu/eduReportList.do'/>">교육결과 보고</a></li>
         </ul>
     </li>
     <li <c:if test="${fn:contains(path, '/inst/instructorAdm')}">   class="on" </c:if> >

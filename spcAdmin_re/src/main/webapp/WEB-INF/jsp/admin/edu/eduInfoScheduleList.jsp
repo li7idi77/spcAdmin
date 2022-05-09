@@ -254,7 +254,7 @@
 
            <div class="btn-cont mb20">
                <button type="button" class="mid-btn black-btn"  onClick="fn_excel();">엑셀다운</button>
-               <button type="button" class="mid-btn blue-btn"   onClick="fn_load('1');">등록</button>
+               <!-- <button type="button" class="mid-btn blue-btn"   onClick="fn_load('1');">등록</button> -->
                <button type="button" class="mid-btn white-btn btnOneApr">선택삭제</button>
            </div>
            

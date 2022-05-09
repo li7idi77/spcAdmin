@@ -9,19 +9,27 @@
 			 EDU_REGISTRATION b
 		WHERE 1=1
 		AND a.EDU_NO = b.EDU_NO
-		AND b.CATEGORY1_KEY = #{category1_key}
+		AND b.CATEGORY1_KEY IN (
+			<foreach collection="category1_key_arr" item="item" separator=",">
+				#{item}
+			</foreach>
+		)
 		AND a.USER_ID = #{UserAccount.user_id}
 		ORDER BY BASKET_NO DESC
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
-
+ 
 	<select id="getCartListCnt" parameterType="java.util.Map" resultType="int">
 		SELECT COUNT(*) 
 		 FROM EDU_BASKET a, 
 			 EDU_REGISTRATION b
 		WHERE 1=1
 		AND a.EDU_NO = b.EDU_NO
-		AND b.CATEGORY1_KEY = #{category1_key}
+		AND b.CATEGORY1_KEY IN (
+			<foreach collection="category1_key_arr" item="item" separator=",">
+				#{item}
+			</foreach>
+		)
 		AND a.USER_ID = #{UserAccount.user_id}
 	</select>
 	
@@ -124,6 +132,7 @@
 				 EDU_REGISTRATION b
 			WHERE a.EDU_NO = b.EDU_NO
 			AND a.USER_ID = #{UserAccount.user_id}
+			AND b.EDU_SITE = #{site}
 			<![CDATA[
 			AND TRAIN_S_DATE <= NOW() 
 	        ]]>
@@ -257,6 +266,7 @@
 		FROM EDU_COURSE_REGISTRATION a, 
 			 EDU_REGISTRATION b
 		WHERE a.EDU_NO = b.EDU_NO
+        AND b.CATEGORY1_KEY IN ('1','2','3')
 		AND a.USER_ID = #{UserAccount.user_id}
 		<![CDATA[
 		AND TRAIN_S_DATE <= NOW() 
@@ -267,12 +277,12 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.REG_DT = NOW()
+				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = NOW()
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  a.REG_DT >= #{start_date} AND a.REG_DT <= #{end_date} 
+		       AND  DATE_FORMAT(a.REG_DT,'%Y-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -296,6 +306,7 @@
 		FROM EDU_COURSE_REGISTRATION a, 
 			 EDU_REGISTRATION b
 		WHERE a.EDU_NO = b.EDU_NO
+        AND b.CATEGORY1_KEY IN ('1','2','3')
 		AND a.USER_ID = #{UserAccount.user_id}
 		<![CDATA[
 		AND TRAIN_S_DATE <= NOW() 
@@ -306,12 +317,12 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND REG_DT = NOW()
+				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = NOW()
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  REG_DT >= #{start_date} AND REG_DT <= #{end_date} 
+		       AND  DATE_FORMAT(a.REG_DT,'%Y-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -320,7 +331,7 @@
 		</if>
 		ORDER BY COUR_NO DESC
 	</select>
-	
+	  
 	<select id="getCourInfo" parameterType="java.util.Map" resultType="java.util.Map">
 	SELECT  (SELECT CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 WHERE CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY1_NAME,
 				(SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = b.CATEGORY2_KEY) AS CATEGORY2_NAME,
@@ -348,7 +359,7 @@
                 b.EDU_ON_APP_TIME,
                 (SELECT IFNULL(TIME_FORMAT(SEC_TO_TIME(SUM(COUR_TIME)), '%H시간 %i분 %s초'),0) FROM EDU_COURSE_ONLINE WHERE EDU_NO = b.EDU_NO AND COUR_NO = #{cour_no} AND USER_ID = #{UserAccount.user_id}) AS COUR_TIME,
                 b.EDU_CON_URL,
-                (SELECT (CASE WHEN COUR_STAT = '1' THEN '완료' ELSE '미완료' END) FROM EDU_COURSE_ONLINE WHERE EDU_SUB_NO = b.EDU_SUB_NO) AS COUR_STAT
+                (SELECT (CASE WHEN COUR_STAT = '1' THEN '완료' ELSE '미완료' END) FROM EDU_COURSE_ONLINE WHERE EDU_SUB_NO = b.EDU_SUB_NO AND COUR_NO = #{cour_no}) AS COUR_STAT
         FROM EDU_REGISTRATION_DETAIL b
 		WHERE b.EDU_NO = #{edu_no}
 	</select>
@@ -378,7 +389,9 @@
 	<select id="onclassFinishCheck" parameterType="java.util.Map" resultType="java.util.Map">
 	SELECT (SELECT COUNT(*) from EDU_REGISTRATION_DETAIL WHERE EDU_NO = a.EDU_NO) AS ALLCNT,
 				SUM(CASE WHEN COUR_STAT = '1' THEN 1 ELSE 0 END) AS CNT
-        FROM EDU_COURSE_ONLINE a WHERE a.USER_ID = #{UserAccount.user_id}
+        FROM EDU_COURSE_ONLINE a 
+        WHERE a.USER_ID = #{UserAccount.user_id}
+        AND a.COUR_NO = #{cour_no}
 	</select>
 	
 	<update id="onclassFinish" parameterType="java.util.Map">	
@@ -506,6 +519,7 @@
                   WHEN b.CATEGORY2_KEY = '6' OR b.CATEGORY2_KEY = '12' THEN '번호'
                   ELSE '일반' END AS LICENSE_GUBUN
 			,(SELECT LICENSE_IDX FROM EDU_USER_LICENSE WHERE COUR_NO = a.COUR_NO) AS LICENSE_CHK   
+			,(SELECT LICENSE_FIELD FROM EDU_USER_LICENSE WHERE COUR_NO = a.COUR_NO) AS LICENSE_FIELD
 		FROM EDU_COURSE_REGISTRATION a,
 			 EDU_REGISTRATION b
 		 WHERE 1=1

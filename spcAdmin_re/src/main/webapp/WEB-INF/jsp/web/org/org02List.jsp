@@ -61,7 +61,6 @@
                         <div class="search-wrap">
 
                             <div class="search-cont">
-                                <label>교육명 :</label>
                                 <select class="select" id="searchType" name="searchType">
                                     <option value="coper" <c:if test="${searchType == 'coper'}">selected</c:if>>기관명</option>
                                     <option value="edu" <c:if test="${searchType == 'edu'}">selected</c:if>>교육명</option>

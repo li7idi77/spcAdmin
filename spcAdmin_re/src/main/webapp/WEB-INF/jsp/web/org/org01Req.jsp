@@ -43,7 +43,7 @@
  
  function insSelect(str){
 	var param = str.split(",");
-	$("#user_id").val(param[2]);
+	$("#user_id").val(param[3]);
 	$("#user_nm").val(param[2]);
 	$("#area_nm").val(param[1]);
 	$("#instructor_idx").val(param[0]);
@@ -219,7 +219,7 @@
                                                         <input type="text" id="user_nm" name="user_nm" class="input-box" readonly/>
                                                         <input type="hidden" id="instructor_idx" name="instructor_idx"/>
                                                         <input type="hidden" id="user_id" name="user_id"/>
-                                                        <button type="button" class="sm-btn navy-btn" onClick="javascript:openWindowPop('<c:url value='/user/popInsSearch.do'/>','popup');" class="sm-btn white-btn">검색</button>
+                                                        <button type="button" class="sm-btn navy-btn" onClick="javascript:openWindowPop('<c:url value='/user/popInsSearch.do'/>?edu_no=${edu_no}','popup');" class="sm-btn white-btn">검색</button>
                                                     </div>
                                                     
                                                     <div class="radio-cont">

@@ -45,7 +45,7 @@
 	</select>
 	
 	<select id="getOrgView" parameterType="java.util.Map" resultType="java.util.Map">
-	SELECT  ER.EDU_NO, CU.AREA_CD, CONCAT(CU.JUSO,CU.JUSO_DETAIL) AS ADDR ,IFNULL(ER.COPER_NM,ER.COPER_NM_AUTO) AS COPER_NM,
+	SELECT  ER.EDU_NO, CU.AREA_CD, CONCAT(CU.JUSO,CU.JUSO_DETAIL) AS ADDR ,IFNULL(ER.COPER_NM_AUTO,ER.COPER_NM) AS COPER_NM,
 			(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = ER.CATEGORY3_KEY) AS CATEGORY3, ER.CATEGORY3_KEY,
 			ER.EDU_TIME, ER.EDU_GARDEN, ER.EDU_TARGET,
 			ER.EDU_TARGET, ER.EDU_STATUS
@@ -72,6 +72,14 @@
         AND a.COM_USER_ID = b.USER_ID
         AND a.STATUS = 1
         AND a.USE_YN = 'Y'
+        AND a.COM_USER_ID IN (SELECT f.USER_ID
+							 FROM 	com_user_eduinfo f,
+									(SELECT (SELECT CD_NO 
+											 FROM EDU_CLASS_CATEGORY3 
+                                             WHERE CATEGORY3_KEY = d.CATEGORY3_KEY) AS CD 
+                                     FROM EDU_REGISTRATION d 
+                                     WHERE d.EDU_NO = ${edu_no}) g
+							 WHERE f.EDU_CD = g.CD)
         <if test="area_nm !=null and area_nm != ''">
 	      	AND b.AREA_CD = ${area_nm}
 	      </if>

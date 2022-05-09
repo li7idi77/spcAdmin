@@ -34,7 +34,7 @@ public class InstructorServiceImpl extends EgovAbstractServiceImpl implements In
 	public int insertData(Map<String, Object> paramMap) throws Exception {
 		return instructorMapper.insertData(paramMap);
 	}
-	
+		
 	public int updateData(Map<String, Object> paramMap) throws Exception {
 		return instructorMapper.updateData(paramMap);
 	}

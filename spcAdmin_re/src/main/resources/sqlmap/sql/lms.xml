@@ -167,7 +167,8 @@
 			   (SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY) AS CATEGORY3_NAME,
 		       a.EDU_NO, b.EDU_SUB_NO,
 		       b.EDU_CURR1, b.EDU_CURR2, b.EDU_CURR3, 
-               b.EDU_ON_APP_TIME, b.FILE_ID, b.EDU_CON_URL
+               b.EDU_ON_APP_TIME, b.EDU_CON_URL,
+               b.FILE_ID,(SELECT FILE_NAME FROM EDU_FILE WHERE FILE_ID = b.FILE_ID) AS FILE_NAME
 		FROM EDU_REGISTRATION a,
 			 EDU_REGISTRATION_DETAIL b
 		WHERE a.EDU_NO = b.EDU_NO
@@ -186,7 +187,7 @@
 	
 	<update id="deleteContents" parameterType="java.util.Map">
 		UPDATE EDU_REGISTRATION_DETAIL 
-		   SET FILE_ID = '' , EDU_CON_URL = ''<!-- , EDU_CON_STAT = '' -->
+		   SET FILE_ID = ''
  		 WHERE EDU_SUB_NO = #{object_id}
 	</update>
 	                  

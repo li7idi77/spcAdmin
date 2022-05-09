@@ -271,7 +271,7 @@
 	      	AND TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
 	      </if>
 	      <if test="searchCondition !=null and searchCondition == 'REG_NM'">
-	      	AND REG_ID LIKE CONCAT('%', #{searchKeyword}, '%')
+	      	AND REG_NM LIKE CONCAT('%', #{searchKeyword}, '%')
 	      </if>
 	      <if test="searchCondition !=null and searchCondition == 'CONTENTS'">
 	      	AND CONTENTS LIKE CONCAT('%', #{searchKeyword}, '%')

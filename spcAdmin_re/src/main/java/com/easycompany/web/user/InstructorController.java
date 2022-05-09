@@ -1,5 +1,6 @@
 package com.easycompany.web.user;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List; 
 import java.util.Map;
@@ -13,10 +14,13 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.easycompany.cmm.util.EgovFileScrty;
+import com.easycompany.cmm.util.FileUtil;
 import com.easycompany.cmm.vo.DefaultVO;
 import com.easycompany.service.InstructorService;
+import com.easycompany.service.LmsService;
 import com.easycompany.service.SectorService;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
@@ -29,6 +33,9 @@ public class InstructorController
 
   @Autowired
   private InstructorService instructorService;
+  
+  @Autowired
+  private LmsService lmsService;
   
   @Autowired
   private SectorService sectorService;
@@ -279,14 +286,25 @@ public class InstructorController
   
   @RequestMapping({"/instructor04Save.do"})
   @ResponseBody
-  public Map<String, Object> instructor04Save(HttpServletRequest request, @RequestParam Map<String, Object> paramMap) throws Exception {
+  public Map<String, Object> instructor04Save(HttpServletRequest request, @RequestParam Map<String, Object> paramMap, @RequestParam("file1") MultipartFile file1) throws Exception {
 	    int resultCnt = 0;
 	    Map<String, Object> result = new HashMap<String, Object>();
 	    try {
 	      paramMap.put("UserAccount", request.getSession().getAttribute("UserAccount"));
 
-	      paramMap.put("sqlName", "instructor04Save");	
+		  String fileAddpath  = this.filePath + File.separator + paramMap.get("file_gubun");
+		  Map<String, Object> fileSave = null;
+		  
+		  paramMap.put("sqlName", "instructor04Save");	
 	      resultCnt = instructorService.insertData(paramMap); 
+	      
+		    if (file1 != null) {
+		    	if(file1.getSize() > 0) {
+		    		paramMap.put("object_id", paramMap.get("INSTRUCTOR_LEAVE_IDX")); 
+		    		fileSave = FileUtil.uploadFile(file1, fileAddpath, request); 
+			    	resultCnt = this.lmsService.insertCommonFile(paramMap, fileSave, 1);
+		    	}
+	    	}     
 	      
 	      if(resultCnt > 0) {
 	    	  result.put("result", "SUCCESS");

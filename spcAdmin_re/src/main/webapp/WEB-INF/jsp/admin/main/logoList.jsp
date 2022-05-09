@@ -119,7 +119,7 @@
 									        </c:if>
 						                     
 						            </c:if>
-                                 <p class="point">업로드 이미지 사이즈 : 1920px * 520px</p>
+                                 <p class="point">업로드 이미지 사이즈 : 1200px * 500px</p>
                              </td>
                          </tr>
                      </tbody>

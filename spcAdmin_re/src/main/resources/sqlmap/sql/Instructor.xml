@@ -305,7 +305,7 @@
 	    </if>
 	</select>
 	
-	<insert id="instructor04Save" parameterType="java.util.Map">	
+	<insert id="instructor04Save" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="instructor_leave_idx">	
 		INSERT INTO EDU_INSTRUCTOR_LEAVE 
 		(INSTRUCTOR_IDX, REASON, S_DATE, E_DATE, REG_DT, REG_ID)
 		SELECT  a.INSTRUCTOR_IDX, 
@@ -406,63 +406,155 @@
 	<!-- 관리자 -->
 	
 	<select id="getInstructorAllCnt" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT COUNT(b.USER_ID) AS ALL_CNT
-			  ,COUNT(CASE b.INS_STATUS WHEN '1' THEN 1 END) AS CNT1
-			  ,COUNT(CASE b.INS_STATUS WHEN '2' THEN 1 END) AS CNT2
-			  ,COUNT(CASE b.INS_STATUS WHEN '3' THEN 1 END) AS CNT3
+		SELECT COUNT(tb.USER_ID) AS ALL_CNT
+			  ,COUNT(CASE tb.STATUS WHEN '1' THEN 1 END) AS CNT1
+			  ,COUNT(CASE tb.STATUS WHEN '2' THEN 1 END) AS CNT2
+			  ,COUNT(CASE tb.STATUS WHEN '3' THEN 1 END) AS CNT3
         FROM (
-        SELECT  USER_ID
-			   ,(SELECT STATUS FROM EDU_INSTRUCTOR WHERE COM_USER_ID = a.USER_ID) AS INS_STATUS
-		FROM COM_USER a
-		where 1=1
-		AND a.EDU_AUTH_CD IN ('03','04')
-		<if test=" category3_key !=null and category3_key !=0 and category_chk == 'ALL'">
-			AND a.USER_ID IN (SELECT DISTINCT USER_ID FROM COM_USER_EDUINFO WHERE EDU_CD = #{category3_key})
+        SELECT  a.USER_ID,b.STATUS
+		FROM EDU_INSTRUCTOR b,
+				 COM_USER a
+			where 1=1
+	        AND b.COM_USER_ID = a.USER_ID
+			AND a.EDU_AUTH_CD IN ('03','04')
+		<choose>
+			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
+				AND a.LICENSE_DT = NOW()
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
+		      <![CDATA[
+		       AND  a.LICENSE_DT >= #{start_date} AND a.LICENSE_DT <= #{end_date} 
+		       ]]>
+			</when>
+		</choose>
+		<if test=" org_type !=null and org_type !='' and org_type != 'ALL'">
+			AND a.INSTRUCTOR_COPER_NM LIKE CONCAT('%',#{ins_nm},'%')
 		</if>
-        ) b
+		<if test=" area_nm !=null and area_nm !=''">
+			AND a.AREA_CD IN (SELECT CD FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD_NM LIKE CONCAT('%',#{area_nm},'%'))
+		</if>
+		<if test=" ins_nm !=null and ins_nm !=''">
+			AND a.USER_NM LIKE CONCAT('%',#{ins_nm},'%')
+		</if>
+		<if test=" status_type !=null and status_type !='' and status_type != 'ALL'">
+			AND b.STATUS = #{status_type}
+		</if>
+		<if test=" class_type !=null and class_type !='' and class_type != 'ALL'">
+			AND b.CLASS = #{class_type}
+		</if>
+		<if test=" category3_key !=null and category3_key !='' and category_chk != 'ALL'">
+			AND a.USER_ID IN (SELECT DISTINCT USER_ID FROM COM_USER_EDUINFO WHERE CAST(EDU_CD AS unsigned) = #{category3_key})
+		</if>
+        ) tb
 	</select>
 	
 	<select id="getInstructorList" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT a.* 
-			   ,(SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = a.AREA_CD) AS AREA_NM
-			   ,CASE
-					   WHEN a.USER_SEX = 'M' THEN '남자'
-					   WHEN a.USER_SEX = 'W' THEN '여자'
-					   ELSE a.USER_SEX
-				      END AS USER_SEX_NM
-			   ,(SELECT CASE WHEN STATUS = '1' THEN '활동' 
-						 WHEN STATUS = '2' THEN '상실' 
-	                     WHEN STATUS = '3' THEN '휴직' 
-					END
-				 FROM EDU_INSTRUCTOR WHERE COM_USER_ID = a.USER_ID) AS INS_STATUS
-			   ,(SELECT CASE WHEN CLASS = '1' THEN '일반' 
-							 WHEN CLASS = '2' THEN '실무자' 
-		                     WHEN CLASS = '3' THEN '기관' 
-		                     WHEN CLASS = '4' THEN '기업' 
-						END
-				 FROM EDU_INSTRUCTOR WHERE COM_USER_ID = a.USER_ID) AS INS_CLASS
-			   ,(SELECT COUNT(*) FROM EDU_SCHEDULE WHERE EDU_TEAC_ID = a.USER_ID AND DATE_FORMAT(EDU_START_DATE,'%x') = DATE_FORMAT(NOW(),'%x')) AS EDU_COUNT
-			   ,(SELECT COUNT(*) FROM EDU_SCHEDULE WHERE EDU_TEAC_ID = a.USER_ID) AS EDU_ALL_COUNT
-			   ,(SELECT REG_DT FROM EDU_INSTRUCTOR WHERE COM_USER_ID = a.USER_ID) AS LICENSE_DT   
-               ,CASE WHEN (SELECT INS_OFF_STATUS FROM EDU_INSTRUCTOR WHERE COM_USER_ID = a.USER_ID) = '1' THEN '완료' ELSE '미완료' END AS INS_OFF_STATUS
-               ,CASE WHEN (SELECT COUNT(*) FROM EDU_COURSE_REGISTRATION WHERE USER_ID = a.USER_ID AND EDU_NO IN (SELECT EDU_NO FROM EDU_REGISTRATION WHERE CATEGORY1_KEY = '3' AND CATEGORY2_KEY = '7')) > 0 THEN '완료'
-					ELSE '미완료' END AS ON_CHK
-		FROM COM_USER a
-		where 1=1
-		AND a.EDU_AUTH_CD IN ('03','04')
-		<if test=" category3_key !=null and category3_key !=0 and category_chk == 'ALL'">
-			AND a.USER_ID IN (SELECT DISTINCT USER_ID FROM COM_USER_EDUINFO WHERE EDU_CD = #{category3_key})
+		SELECT CASE WHEN b.STATUS = '1' THEN '활동' 
+			   WHEN b.STATUS = '2' THEN '상실' 
+		       WHEN b.STATUS = '3' THEN '휴직' 
+			END AS INS_STATUS,
+	       a.USER_ID,
+	       CASE WHEN b.CLASS = '1' THEN '일반' 
+			   WHEN b.CLASS = '2' THEN '실무자' 
+			   WHEN b.CLASS = '3' THEN '기관' 
+			   WHEN b.CLASS = '4' THEN '기업' 
+		   END AS INS_CLASS,
+		   CASE
+			   WHEN a.USER_SEX = 'M' THEN '남자'
+			   WHEN a.USER_SEX = 'W' THEN '여자'
+			   ELSE a.USER_SEX
+			  END AS USER_SEX_NM,	
+		   a.EML_ADDR, a.MBL_TELNO, a.INSTRUCTOR_COPER_NM,    
+	       (SELECT COUNT(*) FROM EDU_SCHEDULE WHERE EDU_TEAC_ID = a.USER_ID AND DATE_FORMAT(EDU_START_DATE,'%x') = DATE_FORMAT(NOW(),'%x')) AS EDU_COUNT,
+		   (SELECT COUNT(*) FROM EDU_SCHEDULE WHERE EDU_TEAC_ID = a.USER_ID) AS EDU_ALL_COUNT,
+		   (SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = a.AREA_CD) AS AREA_NM,
+		   b.REG_DT AS LICENSE_DT, b.INS_OFF_STATUS, 
+		   IFNULL(b.INS_ON_STATUS,
+	       CASE WHEN (SELECT COUNT(*) FROM EDU_COURSE_REGISTRATION WHERE USER_ID = a.USER_ID AND EDU_NO IN (SELECT EDU_NO FROM EDU_REGISTRATION WHERE CATEGORY1_KEY = '3' AND CATEGORY2_KEY = '7')) > 0 THEN '1'
+				ELSE '0' END) AS INS_ON_STATUS,
+		   b.INSTRUCTOR_IDX
+			FROM EDU_INSTRUCTOR b,
+				 COM_USER a
+			where 1=1
+	        AND b.COM_USER_ID = a.USER_ID
+			AND a.EDU_AUTH_CD IN ('03','04')
+		<choose>
+			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
+				AND a.LICENSE_DT = NOW()
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
+		      <![CDATA[
+		       AND  a.LICENSE_DT >= #{start_date} AND a.LICENSE_DT <= #{end_date} 
+		       ]]>
+			</when>
+		</choose>
+		<if test=" org_type !=null and org_type !='' and org_type != 'ALL'">
+			AND a.INSTRUCTOR_COPER_NM LIKE CONCAT('%',#{ins_nm},'%')
+		</if>
+		<if test=" area_nm !=null and area_nm !=''">
+			AND a.AREA_CD IN (SELECT CD FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD_NM LIKE CONCAT('%',#{area_nm},'%'))
+		</if>
+		<if test=" ins_nm !=null and ins_nm !=''">
+			AND a.USER_NM LIKE CONCAT('%',#{ins_nm},'%')
+		</if>
+		<if test=" status_type !=null and status_type !='' and status_type != 'ALL'">
+			AND b.STATUS = #{status_type}
+		</if>
+		<if test=" class_type !=null and class_type !='' and class_type != 'ALL'">
+			AND b.CLASS = #{class_type}
+		</if>
+		<if test=" category3_key !=null and category3_key !='' and category_chk != 'ALL'">
+			AND a.USER_ID IN (SELECT DISTINCT USER_ID FROM COM_USER_EDUINFO WHERE CAST(EDU_CD AS unsigned) = #{category3_key})
 		</if>
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 
 	<select id="getInstructorListCnt" parameterType="java.util.Map" resultType="int">
 		SELECT COUNT(*) 
-		FROM COM_USER a
-		where 1=1
-		AND a.EDU_AUTH_CD IN ('03','04')
-		<if test=" category3_key !=null and category3_key !=0 and category_chk == 'ALL'">
-			AND a.USER_ID IN (SELECT DISTINCT USER_ID FROM COM_USER_EDUINFO WHERE EDU_CD = #{category3_key})
+		FROM EDU_INSTRUCTOR b,
+				 COM_USER a
+			where 1=1
+	        AND b.COM_USER_ID = a.USER_ID
+			AND a.EDU_AUTH_CD IN ('03','04')
+		<choose>
+			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
+				AND a.LICENSE_DT = NOW()
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
+		      <![CDATA[
+		       AND  a.LICENSE_DT >= #{start_date} AND a.LICENSE_DT <= #{end_date} 
+		       ]]>
+			</when>
+		</choose>
+		<if test=" org_type !=null and org_type !='' and org_type != 'ALL'">
+			AND a.INSTRUCTOR_COPER_NM LIKE CONCAT('%',#{ins_nm},'%')
+		</if>
+		<if test=" area_nm !=null and area_nm !=''">
+			AND a.AREA_CD IN (SELECT CD FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD_NM LIKE CONCAT('%',#{area_nm},'%'))
+		</if>
+		<if test=" ins_nm !=null and ins_nm !=''">
+			AND a.USER_NM LIKE CONCAT('%',#{ins_nm},'%')
+		</if>
+		<if test=" status_type !=null and status_type !='' and status_type != 'ALL'">
+			AND b.STATUS = #{status_type}
+		</if>
+		<if test=" class_type !=null and class_type !='' and class_type != 'ALL'">
+			AND b.CLASS = #{class_type}
+		</if>
+		<if test=" category3_key !=null and category3_key !='' and category_chk != 'ALL'">
+			AND a.USER_ID IN (SELECT DISTINCT USER_ID FROM COM_USER_EDUINFO WHERE CAST(EDU_CD AS unsigned) = #{category3_key})
 		</if>
 	</select>
 	
@@ -470,78 +562,82 @@
 		SELECT CD, CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '${code}'
 	</select>
 	
-	<select id="getInstructorView" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT a.*
-		FROM COM_USER a
-		WHERE a.USER_ID = #{user_id}
+	<select id="getInstructorView" parameterType="java.util.Map" resultType="java.util.Map">	
+		SELECT (SELECT COUNT(*) FROM EDU_INSTRUCTOR_LEAVE WHERE INSTRUCTOR_IDX = b.INSTRUCTOR_IDX AND STATUS = 1) AS LEAVE_CNT,
+			   (SELECT S_DATE FROM EDU_INSTRUCTOR_LEAVE WHERE INSTRUCTOR_IDX = b.INSTRUCTOR_IDX AND STATUS = 1 ORDER BY E_DATE DESC LIMIT 0,1) AS LEAVE_SDATE,
+			   (SELECT E_DATE FROM EDU_INSTRUCTOR_LEAVE WHERE INSTRUCTOR_IDX = b.INSTRUCTOR_IDX AND STATUS = 1 ORDER BY E_DATE DESC LIMIT 0,1) AS LEAVE_EDATE,
+			   (SELECT FILE_NAME FROM EDU_FILE WHERE FILE_GUBUN = 'insLeave' AND FILE_KEY = (SELECT INSTRUCTOR_LEAVE_IDX FROM EDU_INSTRUCTOR_LEAVE WHERE INSTRUCTOR_IDX = b.INSTRUCTOR_IDX AND STATUS = 1 ORDER BY E_DATE DESC LIMIT 0,1)) AS LEAVE_FILE_NAME,
+			   (SELECT FILE_ID FROM EDU_FILE WHERE FILE_GUBUN = 'insLeave' AND FILE_KEY = (SELECT INSTRUCTOR_LEAVE_IDX FROM EDU_INSTRUCTOR_LEAVE WHERE INSTRUCTOR_IDX = b.INSTRUCTOR_IDX AND STATUS = 1 ORDER BY E_DATE DESC LIMIT 0,1)) AS LEAVE_FILE_ID,
+			   (SELECT CONCAT('교육 제',DATE_FORMAT(NOW(),'%y'),'-',LICENSE_NUMBER,'호') FROM EDU_USER_LICENSE WHERE CATEGORY1_KEY = '3' AND CATEGORY2_KEY = '7' AND USER_ID = a.USER_ID) AS LICENSE_NUMBER,
+               (SELECT REG_DT FROM EDU_USER_LICENSE WHERE CATEGORY1_KEY = '3' AND CATEGORY2_KEY = '7' AND USER_ID = a.USER_ID) AS LICENSE_DATE,
+               (SELECT COUNT(*) FROM EDU_SCHEDULE WHERE EDU_TEAC_ID = a.USER_ID) AS EDU_ALLCNT,
+               (SELECT COUNT(CASE WHEN DATE_FORMAT(EDU_START_DATE,'%x') = DATE_FORMAT(NOW(),'%x') THEN 1 END) FROM EDU_SCHEDULE WHERE EDU_TEAC_ID = a.USER_ID) AS EDU_NOWCNT,
+               b.INS_OFF_STATUS, b.INS_ON_STATUS, b.STATUS AS INS_STATUS, b.CLASS AS INS_CLASS,
+               (SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = a.AREA_CD) AS AREA_NM,
+			       a.*, CASE
+					   WHEN a.USER_SEX = 'M' THEN '남자'
+					   WHEN a.USER_SEX = 'W' THEN '여자'
+					   ELSE a.USER_SEX
+				      END AS USER_SEX_NM,
+			   b.INSTRUCTOR_IDX
+		FROM EDU_INSTRUCTOR b,
+			 COM_USER a
+			WHERE 1=1
+	        AND b.COM_USER_ID = a.USER_ID
+	        AND a.USER_ID = #{user_id}
+			AND a.EDU_AUTH_CD IN ('03','04')
 	</select>
-	
-	<update id="updateUserData" parameterType="java.util.Map">	
-		UPDATE COM_USER
-		SET	USER_NM = #{user_nm}, 	
-		<if test="password != null and password != ''">
-			PASSWORD = #{shaPassword}, 	
-		</if>
-			TELNO = #{telno},
-			MBL_TELNO = #{mbl_telno},
-			FAXNO = #{faxno},
-			EML_ADDR = CONCAT(#{eml_addr1},'@',#{eml_addr2}),
-			USER_SEX = #{user_sex},
-			AREA_CD = #{area_cd},
-			COPER_NM = #{coper_nm}
-		WHERE USER_ID = #{user_id} 		
+		
+	<select id="getInsAuthList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT  b.CATEGORY3_NAME, DATE_FORMAT(a.REG_DT,'%x-%m-%d') AS EDU_FDATE,
+					IFNULL(a.AUTH_SDATE,DATE_FORMAT(a.REG_DT,'%x-%m-%d')) AS AUTH_SDATE, 
+                    IFNULL(a.AUTH_EDATE,CONCAT(DATE_FORMAT(a.REG_DT,'%x')+1,'-12-31')) AS AUTH_EDATE,
+                    a.EDU_CD
+            FROM COM_USER_EDUINFO a,
+				 EDU_CLASS_CATEGORY3 b
+			WHERE a.EDU_CD = b.CD_NO
+            AND a.USER_ID = #{user_id}
+            ORDER BY EDU_CD ASC
+	</select>	
+		
+	<update id="updateInstructorAuthData" parameterType="java.util.Map">
+		UPDATE COM_USER_EDUINFO
+		   SET  AUTH_SDATE = #{auth_sdate},
+		   		AUTH_EDATE = #{auth_edate}
+ 		 WHERE USER_ID = #{user_id}
+ 		 AND EDU_CD = #{edu_cd}
+	</update>
+		
+	<update id="updateInstructorData" parameterType="java.util.Map">	
+		 UPDATE EDU_INSTRUCTOR
+		   SET  STATUS = #{status},
+		   		CLASS = #{class},
+		   		INS_OFF_STATUS = #{ins_off_stat},
+		   		INS_ON_STATUS = #{ins_on_stat}
+ 		 WHERE COM_USER_ID = #{user_id}
 	</update>
 	
-	<insert id="updateInstructorData" parameterType="java.util.Map">	
-		 INSERT INTO
-      		EDU_INSTRUCTOR (
-	         COM_USER_ID,
-	         STATUS,
-	         CLASS,
-	         REG_DT,
-	         REG_ID,
-	         USE_YN
-		      )
-		   VALUES (
-		      #{user_id},
-		      #{status},
-		      #{class},
-		      DATE_FORMAT(NOW(),'%x-%m-%d'),
-		      #{UserAccount.user_id},
-		      'Y'
-		   )
-		   ON
-		      DUPLICATE KEY
-		   UPDATE
-		      STATUS = #{status},
-		      CLASS = #{class}    
-	</insert>
-	
 	<select id="getMyEduInfo" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT b.COPER_NM,
+		SELECT a.COM_USER_ID,b.INSTRUCTOR_COPER_NM,
 				(SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = b.AREA_CD) AS AREA_NM,
 				b.MBL_TELNO,
-				c.LICENSE_NUMBER,
-				b.REG_DT,
+				(SELECT CONCAT('교육 제',DATE_FORMAT(NOW(),'%y'),'-',LICENSE_NUMBER,'호') FROM EDU_USER_LICENSE WHERE CATEGORY1_KEY = '1' AND CATEGORY1_KEY = '2' AND USER_ID = a.COM_USER_ID) AS LICENSE_NUMBER,
+                b.REG_DT,
 				CASE WHEN a.STATUS = '1' THEN '활동강사'
 					 WHEN a.STATUS = '2' THEN '상실강사'
 					 WHEN a.STATUS = '3' THEN '휴직강사'
 				END AS STATUS
 		FROM EDU_INSTRUCTOR a,
-			 COM_USER b,
-		     EDU_USER_LICENSE c
+			 COM_USER b
 		WHERE a.COM_USER_ID = b.USER_ID
-		AND a.COM_USER_ID = c.USER_ID
-		AND c.CATEGORY1_KEY = '1'
-		AND c.CATEGORY2_KEY = '2'
 		AND a.COM_USER_ID = #{UserAccount.user_id}
 	</select>
 	
 	<select id="getMyEduAuthList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT  a.CATEGORY3_NAME,
 				b.EDU_CD,
-		        b.AUTH_SDATE,
-		        b.AUTH_EDATE
+		        IFNULL(b.AUTH_SDATE,DATE_FORMAT(b.REG_DT,'%x-%m-%d')) AS AUTH_SDATE, 
+                IFNULL(b.AUTH_EDATE,CONCAT(DATE_FORMAT(b.REG_DT,'%x')+1,'-12-31')) AS AUTH_EDATE
 		FROM (SELECT * 
 			FROM EDU_CLASS_CATEGORY3
 		    WHERE CATEGORY1_KEY = '7' 
@@ -554,14 +650,303 @@
 		ORDER BY CAST(a.CD_NO AS unsigned)
 	</select>
 	
-	<select id="getlectureCount" parameterType="java.util.Map" resultType="java.util.Map">
-	SELECT SUM(CNT),SUM(CNT2), SUM(ALLCNT) FROM ( 
-        select (CASE WHEN DATE_FORMAT(EDU_START_DATE,'%d') = DATE_FORMAT('2022-04-20','%d') THEN 1  ELSE 0 END) AS CNT,
-				(CASE WHEN DATE_FORMAT(EDU_START_DATE,'%x') = DATE_FORMAT(NOW(),'%x') THEN 1  ELSE 0 END) AS CNT2,
-                1 AS ALLCNT
-		from EDU_SCHEDULE 
-        WHERE 1=1)
-        AND EDU_TEAC_ID = 'lms-test01'
-        <!-- 카운트확인 -->
-    </select>
+	<select id="getInsEduList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT CASE WHEN c.STATUS = '1' THEN '활동' 
+					WHEN c.STATUS = '2' THEN '상실' 
+					WHEN c.STATUS = '3' THEN '휴직' 
+				END AS STATUS,
+				CASE WHEN c.CLASS = '1' THEN '일반' 
+				   WHEN c.CLASS = '2' THEN '실무자' 
+				   WHEN c.CLASS = '3' THEN '기관' 
+				   WHEN c.CLASS = '4' THEN '기업' 
+			   END AS CLASS,
+				d.USER_ID, d.USER_NM, d.EML_ADDR, d.MBL_TELNO, a.EDU_ORG_NAME,
+		        CASE WHEN d.USER_SEX = 'M' THEN '남' ELSE '여' END AS USER_SEX,
+		        (SELECT CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 WHERE CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY1_NAME,
+		        (SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = a.CATEGORY2_KEY) AS CATEGORY2_NAME,
+		        (SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY) AS CATEGORY3_NAME,
+		        a.EDU_TARGET, a.EDU_NUMBER, e.EDU_PLACE, a.SCHEDULE_NO, a.EDU_START_DATE,
+		        (SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = e.COPER_AREA_CD) AS AREA_NM
+		FROM EDU_SCHEDULE a,
+			 EDU_REGISTRATION b,
+		     EDU_INSTRUCTOR c,
+		     COM_USER d,
+		     EDU_SCHEDULE_DETAIL e
+		WHERE a.EDU_KEY = b.EDU_NO
+		AND a.EDU_TEAC_ID = c.COM_USER_ID
+		AND c.COM_USER_ID = d.USER_ID
+		AND a.SCHEDULE_NO = e.SCHEDULE_NO
+		AND a.EDU_TEAC_ID IS NOT NULL
+		<choose>
+			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
+				AND a.EDU_START_DATE = NOW()
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
+		      <![CDATA[
+		       AND  a.EDU_START_DATE >= #{start_date} AND a.EDU_START_DATE <= #{end_date} 
+		       ]]>
+			</when>
+		</choose>
+		<if test=" org_type !=null and org_type !='' and org_type != 'ALL'">
+			AND a.EDU_ORG_NAME LIKE CONCAT('%',#{org_nm},'%')
+		</if>
+		<if test=" area_nm !=null and area_nm !=''">
+			AND e.COPER_AREA_CD IN (SELECT CD FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD_NM LIKE CONCAT('%',#{area_nm},'%'))
+		</if>
+		<if test=" ins_nm !=null and ins_nm !=''">
+			AND d.USER_NM LIKE CONCAT('%',#{ins_nm},'%')
+		</if>
+		<if test=" stat_type !=null and stat_type !='' and stat_type != 'ALL'">
+			AND b.STATUS = #{stat_type}
+		</if>
+		<if test=" ins_type !=null and ins_type !='' and ins_type != 'ALL'">
+			AND b.CLASS = #{ins_type}
+		</if>
+		<if test=" category2_key !=null and category2_key !='' and category_chk != 'ALL'">
+			AND a.CATEGORY2_KEY =  #{category2_key}
+		</if>
+		<if test=" category3_key !=null and category3_key !='' and category_chk != 'ALL'">
+			AND a.CATEGORY3_KEY =  #{category3_key}
+		</if>
+		LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+
+	<select id="getInsEduListCnt" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(*) 
+		FROM EDU_SCHEDULE a,
+			 EDU_REGISTRATION b,
+		     EDU_INSTRUCTOR c,
+		     COM_USER d,
+		     EDU_SCHEDULE_DETAIL e
+		WHERE a.EDU_KEY = b.EDU_NO
+		AND a.EDU_TEAC_ID = c.COM_USER_ID
+		AND c.COM_USER_ID = d.USER_ID
+		AND a.SCHEDULE_NO = e.SCHEDULE_NO
+		AND a.EDU_TEAC_ID IS NOT NULL
+		<choose>
+			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
+				AND a.EDU_START_DATE = NOW()
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
+		      <![CDATA[
+		       AND  a.EDU_START_DATE >= #{start_date} AND a.EDU_START_DATE <= #{end_date} 
+		       ]]>
+			</when>
+		</choose>
+		<if test=" org_type !=null and org_type !='' and org_type != 'ALL'">
+			AND a.EDU_ORG_NAME LIKE CONCAT('%',#{org_nm},'%')
+		</if>
+		<if test=" area_nm !=null and area_nm !=''">
+			AND e.COPER_AREA_CD IN (SELECT CD FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD_NM LIKE CONCAT('%',#{area_nm},'%'))
+		</if>
+		<if test=" ins_nm !=null and ins_nm !=''">
+			AND d.USER_NM LIKE CONCAT('%',#{ins_nm},'%')
+		</if>
+		<if test=" stat_type !=null and stat_type !='' and stat_type != 'ALL'">
+			AND b.STATUS = #{stat_type}
+		</if>
+		<if test=" ins_type !=null and ins_type !='' and ins_type != 'ALL'">
+			AND b.CLASS = #{ins_type}
+		</if>
+		<if test=" category2_key !=null and category2_key !='' and category_chk != 'ALL'">
+			AND a.CATEGORY2_KEY =  #{category2_key}
+		</if>
+		<if test=" category3_key !=null and category3_key !='' and category_chk != 'ALL'">
+			AND a.CATEGORY3_KEY =  #{category3_key}
+		</if>
+	</select>
+	
+	<select id="getInsAppList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT  a.EDU_ORG_NAME,
+		        (SELECT CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 WHERE CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY1_NAME,
+		        (SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = a.CATEGORY2_KEY) AS CATEGORY2_NAME,
+		        (SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY) AS CATEGORY3_NAME,
+		        a.EDU_TARGET, a.EDU_NUMBER, a.SCHEDULE_NO, a.REG_DT, CASE WHEN SCH_VIEW = '2' THEN '미노출' ELSE '노출' END AS SCH_VIEW,
+		        (SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = e.COPER_AREA_CD) AS AREA_NM,
+		        CASE WHEN e.INS_TYPE = 'recruit' AND e.INS_STATUS IS NULL THEN '섭외중'
+					WHEN e.INS_TYPE = 'recruit' AND e.INS_STATUS IS NOT NULL THEN '완료'
+					WHEN e.INS_TYPE = 'select' AND e.INS_STATUS IS NULL THEN '완료'
+				END
+               AS INS_STATUS
+		FROM EDU_SCHEDULE a,
+			 EDU_REGISTRATION b,
+		     EDU_SCHEDULE_DETAIL e
+		WHERE a.EDU_KEY = b.EDU_NO
+		AND a.SCHEDULE_NO = e.SCHEDULE_NO
+		<choose>
+			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
+				AND a.REG_DT = NOW()
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
+		      <![CDATA[
+		       AND  a.REG_DT >= #{start_date} AND a.REG_DT <= #{end_date} 
+		       ]]>
+			</when>
+		</choose>
+		<if test=" org_type !=null and org_type !='' and org_type != 'ALL'">
+			AND a.EDU_ORG_NAME LIKE CONCAT('%',#{org_nm},'%')
+		</if>
+		<if test=" area_nm !=null and area_nm !=''">
+			AND e.COPER_AREA_CD IN (SELECT CD FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD_NM LIKE CONCAT('%',#{area_nm},'%'))
+		</if>
+		<if test=" category2_key !=null and category2_key !='' and category_chk != 'ALL'">
+			AND a.CATEGORY2_KEY =  #{category2_key}
+		</if>
+		<if test=" category3_key !=null and category3_key !='' and category_chk != 'ALL'">
+			AND a.CATEGORY3_KEY =  #{category3_key}
+		</if>
+		LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+
+	<select id="getInsAppListCnt" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(*) 
+		FROM EDU_SCHEDULE a,
+			 EDU_REGISTRATION b,
+		     EDU_SCHEDULE_DETAIL e
+		WHERE a.EDU_KEY = b.EDU_NO
+		AND a.SCHEDULE_NO = e.SCHEDULE_NO
+		<choose>
+			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
+				AND a.REG_DT = NOW()
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
+		      <![CDATA[
+		       AND  a.REG_DT >= #{start_date} AND a.REG_DT <= #{end_date} 
+		       ]]>
+			</when>
+		</choose>
+		<if test=" org_type !=null and org_type !='' and org_type != 'ALL'">
+			AND a.EDU_ORG_NAME LIKE CONCAT('%',#{org_nm},'%')
+		</if>
+		<if test=" area_nm !=null and area_nm !=''">
+			AND e.COPER_AREA_CD IN (SELECT CD FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD_NM LIKE CONCAT('%',#{area_nm},'%'))
+		</if>
+		<if test=" category2_key !=null and category2_key !='' and category_chk != 'ALL'">
+			AND a.CATEGORY2_KEY =  #{category2_key}
+		</if>
+		<if test=" category3_key !=null and category3_key !='' and category_chk != 'ALL'">
+			AND a.CATEGORY3_KEY =  #{category3_key}
+		</if>
+	</select>
+	
+	<update id="instructorAdm03Edit" parameterType="java.util.Map">
+		UPDATE EDU_SCHEDULE_DETAIL 
+		   SET SCH_VIEW = #{gubun}
+ 		 WHERE SCHEDULE_NO = #{sch_no}
+	</update>
+	
+    <select id="getInsLeaveList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT * FROM (
+			SELECT c.USER_NM, c.USER_ID,
+				   (SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = c.AREA_CD) AS AREA_NM, 
+			       (SELECT LICENSE_NUMBER FROM EDU_USER_LICENSE WHERE CATEGORY1_KEY = '3' AND CATEGORY2_KEY = '7' AND USER_ID = c.USER_ID) AS LICENSE_NUMBER,
+			       c.INSTRUCTOR_COPER_NM,
+			       CASE WHEN a.REASON = '1' THEN '출산 및 육아' 
+					   WHEN a.REASON = '2' THEN '병가' 
+					   WHEN a.REASON = '3' THEN '해외연수' 
+					   WHEN a.REASON = '4' THEN '기타' END AS REASON,
+			       c.JUSO, c.MBL_TELNO, c.EML_ADDR, 
+			       (SELECT FILE_NAME FROM EDU_FILE WHERE FILE_GUBUN = 'insLeave' AND FILE_KEY = a.INSTRUCTOR_LEAVE_IDX) AS FILE_NAME,
+			       (SELECT FILE_ID FROM EDU_FILE WHERE FILE_GUBUN = 'insLeave' AND FILE_KEY = a.INSTRUCTOR_LEAVE_IDX) AS FILE_ID,
+			       CASE WHEN a.STATUS = '1' THEN '승인'
+						ELSE '미승인' END AS INS_STATUS,
+					a.INSTRUCTOR_LEAVE_IDX
+			FROM EDU_INSTRUCTOR_LEAVE a,
+				 EDU_INSTRUCTOR b,
+			     COM_USER c
+			WHERE a.INSTRUCTOR_IDX = b.INSTRUCTOR_IDX
+			AND b.COM_USER_ID = c.USER_ID
+			<if test="reason !=null and reason !='' and reason !='ALL' ">
+				AND a.REASON = #{reason}
+			</if>
+			<choose>
+			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
+			</when>
+			<when test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
+				 
+				<![CDATA[ AND a.S_DATE <= NOW() AND a.E_DATE >= NOW() ]]>
+			</when>
+			<when test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
+		      <![CDATA[ AND  a.S_DATE >= #{start_date} AND a.E_DATE <= #{end_date} ]]>
+			</when>
+		</choose>
+		) tb
+		WHERE 1=1
+		<if test="ins_type !=null and ins_type !='' and ins_type !='ALL' ">
+			AND tb.USER_NM LIKE CONCAT('%',#{ins_nm},'%')
+		</if>
+		<if test="area_nm !=null and area_nm !=''">
+			AND tb.AREA_NM LIKE CONCAT('%',#{area_nm},'%')
+		</if>
+		
+		LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+
+	<select id="getInsLeaveListCnt" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(*) 
+		FROM (
+			SELECT c.USER_NM, c.USER_ID,
+				   (SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = c.AREA_CD) AS AREA_NM, 
+			       (SELECT LICENSE_NUMBER FROM EDU_USER_LICENSE WHERE CATEGORY1_KEY = '3' AND CATEGORY2_KEY = '7' AND USER_ID = c.USER_ID) AS LICENSE_NUMBER,
+			       c.INSTRUCTOR_COPER_NM,
+			       CASE WHEN a.REASON = '1' THEN '출산 및 육아' 
+					   WHEN a.REASON = '2' THEN '병가' 
+					   WHEN a.REASON = '3' THEN '해외연수' 
+					   WHEN a.REASON = '4' THEN '기타' END AS REASON,
+			       c.JUSO, c.MBL_TELNO, c.EML_ADDR, 
+			       (SELECT FILE_NAME FROM EDU_FILE WHERE FILE_GUBUN = 'insLeave' AND FILE_KEY = a.INSTRUCTOR_LEAVE_IDX) AS FILE_NAME,
+			       (SELECT FILE_ID FROM EDU_FILE WHERE FILE_GUBUN = 'insLeave' AND FILE_KEY = a.INSTRUCTOR_LEAVE_IDX) AS FILE_ID,
+			       CASE WHEN a.STATUS = '1' THEN '승인'
+						ELSE '미승인' END AS INS_STATUS,
+					a.INSTRUCTOR_LEAVE_IDX
+			FROM EDU_INSTRUCTOR_LEAVE a,
+				 EDU_INSTRUCTOR b,
+			     COM_USER c
+			WHERE a.INSTRUCTOR_IDX = b.INSTRUCTOR_IDX
+			AND b.COM_USER_ID = c.USER_ID
+			<if test="reason !=null and reason !='' and reason !='ALL' ">
+				AND a.REASON = #{reason}
+			</if>
+			<choose>
+			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
+			</when>
+			<when test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
+				 
+				<![CDATA[ AND a.S_DATE <= NOW() AND a.E_DATE >= NOW() ]]>
+			</when>
+			<when test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
+		      <![CDATA[ AND  a.S_DATE >= #{start_date} AND a.E_DATE <= #{end_date} ]]>
+			</when>
+		</choose>
+		) tb
+		WHERE 1=1
+		<if test="ins_type !=null and ins_type !='' and ins_type !='ALL' ">
+			AND tb.USER_NM LIKE CONCAT('%',#{ins_nm},'%')
+		</if>
+		<if test="area_nm !=null and area_nm !=''">
+			AND tb.AREA_NM LIKE CONCAT('%',#{area_nm},'%')
+		</if>
+	</select>
+	
+	<update id="instructorAdm04App" parameterType="java.util.Map">
+		UPDATE EDU_INSTRUCTOR_LEAVE 
+		   SET STATUS = 1
+ 		 WHERE INSTRUCTOR_LEAVE_IDX = #{idx}
+	</update>
 </mapper>

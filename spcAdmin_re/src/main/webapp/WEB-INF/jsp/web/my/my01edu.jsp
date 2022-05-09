@@ -58,7 +58,7 @@
 				type	: "POST",	
 				success: function(data, opt, inx){
 				var option = '';
-				option += '<option value="0">선택 하세요</opton>'; //선택
+				option += '<option value="">선택 하세요</opton>'; //선택
 				$.each(data, function(i, ret){
 					option += '<option value="'+ret.CATEGORY3_KEY+'">'+ret.CATEGORY3_NAME+'</option>';		
 				});
@@ -201,9 +201,16 @@
 
                             <div class="search-cont">
                                 <label>교육분류 :</label>
+                                <c:if test="${site eq 'on'}">
                                 <select class="select mr30"  id="category1_key" name="category1_key">
 										<option value='1' >일반</option>
 								</select>
+								</c:if>
+								<c:if test="${site eq 'off'}">
+                                <select class="select mr30"  id="category1_key" name="category1_key">
+										<option value='4' >일반</option>
+								</select>
+								</c:if>
 					            <select class="select"  id="category2_key" name="category2_key">
 					            	<option value='' >선택 하세요</option>
 									<c:forEach var="result" items="${category2list}" varStatus="status">

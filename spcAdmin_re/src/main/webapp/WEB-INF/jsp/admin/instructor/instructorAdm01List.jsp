@@ -77,7 +77,7 @@
 				type	: "POST",	
 				success: function(data, opt, inx){
 				var option = '';
-				option += '<option value="0">선택 하세요</opton>'; //선택
+				option += '<option value="">선택 하세요</opton>'; //선택
 				$.each(data, function(i, ret){
 					option += '<option value="'+ret.CATEGORY3_KEY+'">'+ret.CATEGORY3_NAME+'</option>';		
 				});
@@ -121,11 +121,11 @@
         <h3 class="h3-tit">강사 자격범위</h3>
 
         <div class="radio-cont">
-            <input type="radio" class="radio-box" id="category_chk" name="category_chk" value="ALL" checked>
+            <input type="radio" class="radio-box" id="category_chk" name="category_chk" value="ALL" <c:if test="${category_chk == 'ALL' || (empty category_chk)}">checked </c:if>>
             <label for="">전체</label>
         </div>
         <div class="radio-cont">
-            <input type="radio" class="radio-box" id="category_chk" name="category_chk" value="CHECK">
+            <input type="radio" class="radio-box" id="category_chk" name="category_chk" value="CHECK" <c:if test="${category_chk =='CHECK'}">checked </c:if>>
             
             <select class="select mr30"  id="category1_key" name="category1_key">
             	<option value='' >선택 하세요</option>
@@ -155,12 +155,12 @@
         <h3 class="h3-tit">기관명</h3>
 
         <div class="radio-cont">
-            <input type="radio" class="radio-box" id="org_all" name="org_all" value="ALL" checked>
+            <input type="radio" class="radio-box" id="org_type" name="org_type" value="ALL" <c:if test="${org_type == 'ALL' || (empty org_type)}">checked </c:if>>
             <label for="">전체</label>
         </div>
         <div class="radio-cont">
-            <input type="radio" class="radio-box" id="org_keyin" name="org_keyin" value="CHECK">
-            <input type="text" class="input-box" placeholder="직접입력"/>
+            <input type="radio" class="radio-box" id="org_type" name="org_type" value="CHECK" <c:if test="${org_type =='CHECK'}">checked </c:if>>
+            <input type="text" id="org_nm" name="org_nm" class="input-box" placeholder="직접입력" value="${org_nm}"/>
         </div>
     </div>
 
@@ -168,7 +168,7 @@
         <h3 class="h3-tit">지역</h3>
 
         <div class="radio-cont">
-            <input type="text" id="area_keyin" name="area_keyin" class="input-box" placeholder="직접입력"/>
+            <input type="text" id="area_nm" name="area_nm" class="input-box" placeholder="직접입력" value="${area_nm}"/>
         </div>
     </div>
 
@@ -176,7 +176,7 @@
         <h3 class="h3-tit">강사명</h3>
         
         <div class="radio-cont">
-            <input type="text" class="input-box" placeholder="직접입력"/>
+            <input type="text" id="ins_nm" name="ins_nm" value="${ins_nm}" class="input-box" placeholder="직접입력"/>
         </div>
     </div>
 
@@ -184,22 +184,22 @@
         <h3 class="h3-tit">강사상태</h3>
         
         <div class="radio-cont">
-            <input type="radio" class="radio-box" id="" name="" value="" checked>
+            <input type="radio" class="radio-box" id="status_type" name="status_type" value="ALL" <c:if test="${status_type == 'ALL' || (empty status_type)}">checked </c:if>>
             <label for="">전체</label>
         </div>
 
         <div class="radio-cont">
-            <input type="radio" class="radio-box" id="" name="" value="">
+            <input type="radio" class="radio-box" id="status_type" name="status_type" value="1" <c:if test="${status_type =='1'}">checked </c:if>>
             <label for="">활동</label>
         </div>
 
         <div class="radio-cont">
-            <input type="radio" class="radio-box" id="" name="" value="">
+            <input type="radio" class="radio-box" id="status_type" name="status_type" value="2" <c:if test="${status_type =='2'}">checked </c:if>>
             <label for="">상실(일반)</label>
         </div>
 
         <div class="radio-cont">
-            <input type="radio" class="radio-box" id="" name="" value="">
+            <input type="radio" class="radio-box" id="status_type" name="status_type" value="3" <c:if test="${status_type =='3'}">checked </c:if>>
             <label for="">휴직</label>
         </div>
     </div>
@@ -208,40 +208,40 @@
         <h3 class="h3-tit">강사분류</h3>
 
         <div class="radio-cont">
-            <input type="radio" class="radio-box" id="" name="" value="" checked>
+            <input type="radio" class="radio-box" id="class_type" name="class_type" value="ALL" <c:if test="${class_type == 'ALL' || (empty class_type)}">checked </c:if>>
             <label for="">전체</label>
         </div>
         <div class="radio-cont">
-            <input type="radio" class="radio-box" id="" name="" value="">
+            <input type="radio" class="radio-box" id="class_type" name="class_type" value="1" <c:if test="${class_type =='1'}">checked </c:if>>
             <label for="">일반강사</label>
         </div>
         <div class="radio-cont">
-            <input type="radio" class="radio-box" id="" name="" value="">
+            <input type="radio" class="radio-box" id="class_type" name="class_type" value="2" <c:if test="${class_type =='2'}">checked </c:if>>
             <label for="">실무자</label>
         </div>
         <div class="radio-cont">
-            <input type="radio" class="radio-box" id="" name="" value="">
+            <input type="radio" class="radio-box" id="class_type" name="class_type" value="3" <c:if test="${class_type =='3'}">checked </c:if>>
             <label for="">공공기간(학교, 군, 경찰, 도시철도 등)</label>
         </div>
         <div class="radio-cont">
-            <input type="radio" class="radio-box" id="" name="" value="">
+            <input type="radio" class="radio-box" id="class_type" name="class_type" value="4" <c:if test="${class_type =='4'}">checked </c:if>>
             <label for="">기업(삼성,현대. sk 등)</label>
         </div>
     </div>
 
     <div class="search-cont">
         <div class="radio-cont">
-            <input type="radio" class="radio-box" id="dateAll" name="radioGroupDate" value="" checked>
+            <input type="radio" class="radio-box" id="searchDate" name="searchDate" value="ALL" <c:if test="${searchDate == 'ALL' || (empty searchDate)}">checked </c:if>>
             <label for="dateAll">전체</label>
         </div>
           
         <div class="radio-cont">
-            <input type="radio" class="radio-box" id="dateToday" name="radioGroupDate" value="">
+            <input type="radio" class="radio-box" id="searchDate" name="searchDate" value="TODAY" <c:if test="${searchDate == 'TODAY'}">checked </c:if>>
             <label for="dateToday">오늘</label>
         </div>
         
         <div class="radio-cont mr10">
-            <input type="radio" class="radio-box" id="dateTerm" name="radioGroupDate" value="">
+            <input type="radio" class="radio-box" id="searchDate" name="searchDate" value="CHECK" <c:if test="${searchDate == 'CHECK'}">checked </c:if>>
             <label for="dateTerm">기간선택</label>
         </div>
         <div class="picker-wrap">
@@ -251,7 +251,7 @@
         </div>
         
         <button class="search-btn">검색</button>
-        <button class="search-btn white-btn ml20">초기화</button>
+        <button class="search-btn white-btn ml20" onClick="fn_clear();">초기화</button>
     </div>
 	</form>
 </div>
@@ -265,7 +265,7 @@
     </dl>
 
     <button class="mid-btn black-btn">엑셀다운</button>
-    <button class="mid-btn white-btn">선택삭제</button>
+    <button class="mid-btn white-btn">선택삭제</button>삭제가능?
 </div>
 
 <div class="table-wrap scroll-wrap">
@@ -322,14 +322,14 @@
                 <td>${result.MBL_TELNO}</td>
                 <td>${result.EDU_COUNT}</td>
                 <td>${result.EDU_ALL_COUNT}</td>
-                <td>${result.AREA_NM}</td>
-                <td>${result.COPER_NM}</td>
+                <td>${result.AREA_NM}</td> 
+                <td>${result.INSTRUCTOR_COPER_NM}</td>
                 <td>${result.LICENSE_DT}</td>
-                <td><c:if test="${result.INS_OFF_STATUS == '완료'}"><span class="blue-txt">완료</span></c:if>
-                	<c:if test="${result.INS_OFF_STATUS == '미완료'}"><span class="red-txt">미완료</span></c:if>
+                <td><c:if test="${result.INS_OFF_STATUS == '1'}"><span class="blue-txt">완료</span></c:if>
+                	<c:if test="${result.INS_OFF_STATUS != '1'}"><span class="red-txt">미완료</span></c:if>
                 </td>
-                <td><c:if test="${result.ON_CHK == '완료'}"><span class="blue-txt">완료</span></c:if>
-                	<c:if test="${result.ON_CHK == '미완료'}"><span class="red-txt">미완료</span></c:if>
+                <td><c:if test="${result.INS_ON_STATUS == '1'}"><span class="blue-txt">완료</span></c:if>
+                	<c:if test="${result.INS_ON_STATUS != '1'}"><span class="red-txt">미완료</span></c:if>
                 </td>
                 <td><button class="sm-btn blue-btn" onClick="fn_detail('${result.USER_ID}');">수정</button></td>
             </tr>

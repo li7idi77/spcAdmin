@@ -47,12 +47,12 @@ $(document).ready(function(){
                     <a href="${pageContext.request.contextPath}/user/lifeEduOrgList02.do" class="more-btn white-btn">더보기 +</a>
                     <ul class="main-list">
                     	<c:forEach var="result" items="${lifeEduOffOrgList}" varStatus="status">
-                        <li>
+                        <li onClick="location.href='${pageContext.request.contextPath}/user/lifeEduOrgReg.do?edu_no=${result.edu_key}&schedule_no=${result.schedule_no}'">
                             <p class="sm-tit tag">${result.coper_nm}</p>
                             <h2 class="h3-tit">${result.category3_name}</h2>                            
                             <div class="flex-colum">
                                 <div class="left-cont">
-                                    <button class="mid-btn orange-btn"> <a href="${pageContext.request.contextPath}/user/lifeEduOrgList02.do">수강신청</a></button>
+                                    <button class="mid-btn orange-btn"> <a href="${pageContext.request.contextPath}/user/lifeEduOrgReg.do?edu_no=${result.edu_key}&schedule_no=${result.schedule_no}">수강신청</a></button>
                                 </div>
                                 <div class="right-cont">                                    
                                     <span class="sm-ico"><img src="${pageContext.request.contextPath}/user/images/common/ico_pc.png" alt="pc강의"/></span>
@@ -91,7 +91,7 @@ $(document).ready(function(){
                     <a href="${pageContext.request.contextPath}/user/notice01List.do" class="more-btn white-btn">더보기 +</a>
                     <ul class="main-list">
                         <c:forEach var="result" items="${notiList}" varStatus="status">
-                        <li>
+                        <li onClick="location.href='${pageContext.request.contextPath}/user/notice01View.do?board_idx=${result.board_idx}'">
                             <h2 class="h3-tit">${result.title}</h2>
                             <p class="date">${fn:substring(result.reg_dt,0,10)}</p>
                             <p class="txt">${result.contents}</p>

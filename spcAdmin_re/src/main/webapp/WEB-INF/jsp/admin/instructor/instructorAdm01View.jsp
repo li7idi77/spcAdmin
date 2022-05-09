@@ -11,7 +11,7 @@
 
  <script type="text/javaScript" language="javascript" defer="defer">
  $(document).ready(function(){		
-	 $("#start_date, #end_date").datepicker({
+	 $("#start_date, #end_date, .sdate, .edate").datepicker({
 		  	dateFormat: 'yy-mm-dd' //달력 날짜 형태
 	       ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
      ,showMonthAfterYear:true // 월- 년 순서가아닌 년도 - 월 순서
@@ -31,19 +31,31 @@
 	});
  });
   
- function email_chg(){
-	 $("#eml_addr2").val("");
-	 if($("#eml_sel").val() != ""){
-		 $("#eml_addr2").val($("#eml_sel").val());
-	 }
- }
- 
- function fn_clearBtn(){
-	 $("#category3_key").val("");
-	 $("#site").val("");
-	 $("#searchDate").eq(0).prop("checked",true);
-	 $("#searchCondition").eq(0).prop("checked",true);
-	 $("[type='text']").val("");
+ function auth_edit(idx,edu_cd){
+	 if(confirm("수정 하시겠습니까?")){
+		 var formData = new FormData($('#commonForm')[0]);
+		 formData.append("auth_sdate",$("#auth_sdate"+idx).val());
+		 formData.append("auth_edate",$("#auth_edate"+idx).val());
+		 formData.append("edu_cd",edu_cd);
+		 
+			$.ajax({	
+				data       : formData,
+			    url		   : "<c:url value='/inst/instructorAdm01AuthSave.do'/>",
+			    dataType   : "JSON",
+		        processData: false, 
+		        contentType: false,
+				type	   : "POST",	
+		        success    : function(obj) {
+		        	if(result == "SUCCESS"){				
+						alert("저장 하였습니다.");					 
+					}else {				
+						alert("저장 실패 했습니다.");	
+						return false;
+					}				
+		        },	       
+		        error 	: function(xhr, status, error) {} 		        
+		    });
+		}
  }
  
  function fn_save(){
@@ -90,6 +102,7 @@ function fn_goList(){
                 <div class="table-wrap">
                    
 		    		<input type="hidden" id="user_id" name="user_id" value="${result.USER_ID}">	
+		    		<input type="hidden" id="instructor_idx" name="instructor_idx" value="${result.INSTRUCTOR_IDX}">	
                     <h2 class="h2-tit">회원정보</h2>
 
                     <table class="detail-tb">
@@ -105,64 +118,27 @@ function fn_goList(){
                             </tr>
                             <tr>
                                 <th>이름</th>
-                                <td><input type="text" id="user_nm" name="user_nm" class="input-box lg-width" value="${result.USER_NM}"/></td>
-                            </tr>
-                            <tr>
-                                <th>비밀번호</th>
-                                <td>
-                                    <input type="text" id="password" name="password" class="input-box lg-width" value=""/>
-                                    <span class="point">변경 할 경우에만 입력하세요.</span>
-                                </td>
+                                <td>${result.USER_NM}</td>
                             </tr>
                             <tr>
                                 <th>전화번호</th>
-                                <td>
-                                    <input type="text" id="telno" name="telno" class="input-box lg-width" placeholder="- 없이 입력해주세요" value="${result.TELNO}"/>
-                                </td>
+                                <td>${result.TELNO}</td>
                             </tr>
                             <tr>
                                 <th>휴대폰</th>
-                                <td>
-                                    <input type="text" id="mbl_telno" name="mbl_telno" class="input-box lg-width" placeholder="- 없이 입력해주세요" value="${result.MBL_TELNO}"/>
-                                </td>
+                                <td>${result.MBL_TELNO}</td>
                             </tr>
                             <tr>
                                 <th>팩스번호</th>
-                                <td>
-                                    <input type="text" id="faxno" name="faxno" class="input-box lg-width" placeholder="- 없이 입력해주세요" value="${result.FAXNO}"/>
-                                </td>
+                                <td>${result.FAXNO}</td>
                             </tr>
                             <tr>
                                 <th>이메일</th>
-                                <td>
-                                    <div class="tb-cont">
-                                    	<c:set var="email" value="${fn:split(result.EML_ADDR, '@')}" />
-                                        <input type="text" id="eml_addr1" name="eml_addr1" class="input-box" value="${email[0]}"/>
-                                        <span>@</span>
-                                        <input type="text" id="eml_addr2" name="eml_addr2" class="input-box" value="${email[1]}"/>
-                                        <select class="select" id="eml_sel" name="eml_sel" onchange="email_chg();">
-                                            <option>직접입력</option>
-                                            <option value="naver.com">naver.com</option>
-                                            <option value="gmail.com">gmail.com</option>
-                                        </select>
-                                    </div>
-                                </td>
+                                <td>${result.EML_ADDR}</td>
                             </tr>
                             <tr>
                                 <th>성별</th>
-                                <td>
-                                    <div class="tb-cont">
-                                        <div class="radio-cont">
-                                            <input type="radio" class="radio-box" id="user_sex" name="user_sex" value="M" <c:if test="${result.USER_SEX == 'M'}">checked</c:if>>
-                                            <label>남자</label>
-                                        </div>
-                                          
-                                        <div class="radio-cont">
-                                            <input type="radio" class="radio-box" id="user_sex" name="user_sex" value="W" <c:if test="${result.USER_SEX == 'W'}">checked</c:if>>
-                                            <label>여자</label>
-                                        </div>
-                                    </div>
-                                </td>
+                                <td>${result.USER_SEX_NM}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -228,37 +204,35 @@ function fn_goList(){
                             </tr>
                             <tr>
                                 <th>지역</th>
-                                <td>
-                                    <select id="area_cd" name="area_cd" class="select">
+                                <td>${result.AREA_NM}
+                                    <%-- <select id="area_cd" name="area_cd" class="select">
                                         <c:forEach var="code" items="${codeList}" varStatus="status">
 											<option value='${code.CD}' <c:if test="${result.AREA_CD == code.CD}">selected</c:if>>${code.CD_NM}</option>
 										</c:forEach>
-                                    </select>
+                                    </select> --%>
                                 </td>
                                 <th>기관명</th>
-                                <td>
-                                    <input type="text" id="coper_nm" name="coper_nm" class="input-box" value="${result.COPER_NM}"/>
+                                <td>${result.INSTRUCTOR_COPER_NM}
+                                    <!-- <input type="text" id="coper_nm" name="coper_nm" class="input-box" value=""/> -->
                                 </td>
                             </tr>
                             <tr>
                                 <th>휴직이력</th><!-- 휴직이력 및 기간 DB구조상 수정불가 -->
                                 <td>
-                                    <input type="text" class="input-box" value="" readOnly/>
+                                    <input type="text" class="input-box" value="${result.LEAVE_CNT}" readOnly/>
                                 </td>
                                 <th>신청서 보기</th>
                                 <td> 
-                                    <a class="link block">신청서1</a>
-                                    <a class="link block">신청서2</a>
-                                    <a class="link block">신청서3</a>
+                                    <a class="link block">${result.LEAVE_FILE_NAME}</a><!-- LEAVE_FILE_ID -->
                                 </td>
                             </tr>
                             <tr>
                                 <th>휴직기간</th>
                                 <td colspan="3">
                                     <div class="picker-wrap">
-                                        <input type="text" id="datepickerFrom02" class="input-box" readOnly/>
+                                        <input type="text" id="datepickerFrom02" class="input-box" value="${result.LEAVE_SDATE}" readOnly/>
                                         <span class="next-ico">-</span>
-                                        <input type="text" id="datepickerTo02" class="input-box" readOnly/>
+                                        <input type="text" id="datepickerTo02" class="input-box" value="${result.LEAVE_EDATE}" readOnly/>
                                     </div>
                                 </td>
                             </tr>
@@ -280,34 +254,34 @@ function fn_goList(){
                         <tbody>
                             <tr>
                                 <th>수료증번호</th>
-                                <td>교육 제21 – 0000호</td>
+                                <td>${result.LICENSE_NUMBER}</td>
                                 <th>최종 수료일</th>
                                 <td>
                                     <div class="picker-wrap">
-                                        <input type="text" id="datepickerDefault" class="input-box"/>
+                                        ${result.LICENSE_DATE}
                                     </div>
                                 </td>
                             </tr>
                             <tr>
                                 <th>교육횟수 (해당 년도)</th>
-                                <td>32</td>
+                                <td>${result.EDU_NOWCNT}</td>
                                 <th>교육 누적횟수</th>
-                                <td>82</td>
+                                <td>${result.EDU_ALLCNT}</td>
                             </tr>
                             <tr>
                                 <th>오프라인 2회 교육</th>
                                 <td colspan="3">
                                     <div class="tb-cont">
                                         <div class="radio-cont">
-                                            <input type="radio" class="radio-box" id="" name="" value="" checked>
+                                            <input type="radio" class="radio-box" id="ins_off_stat" name="ins_off_stat" value="1" <c:if test="${result.INS_OFF_STATUS == '1'}">checked</c:if>>
                                             <label>완료</label>
                                         </div>
                                         <div class="radio-cont">
-                                            <input type="radio" class="radio-box" id="" name="" value="">
+                                            <input type="radio" class="radio-box" id="ins_off_stat" name="ins_off_stat" value="2" <c:if test="${result.INS_OFF_STATUS == '2' || (empty result.INS_OFF_STATUS)}">checked</c:if>>
                                             <label>미완료</label>
                                         </div>
                                         <div class="radio-cont">
-                                            <input type="radio" class="radio-box" id="" name="" value="">
+                                            <input type="radio" class="radio-box" id="ins_off_stat" name="ins_off_stat" value="3" <c:if test="${result.INS_OFF_STATUS == '3'}">checked</c:if>>
                                             <label>해당년도 수료 시 체크 ( 오프/온라인 교육 모두 완료 시 1년 자격연장 )</label>
                                         </div>
                                     </div>
@@ -318,15 +292,15 @@ function fn_goList(){
                                 <td colspan="3">
                                     <div class="tb-cont">
                                         <div class="radio-cont">
-                                            <input type="radio" class="radio-box" id="" name="" value="" checked>
+                                            <input type="radio" class="radio-box" id="ins_on_stat" name="ins_on_stat" value="1" <c:if test="${result.INS_ON_STATUS == '1'}">checked</c:if>>
                                             <label>완료</label>
                                         </div>
                                         <div class="radio-cont">
-                                            <input type="radio" class="radio-box" id="" name="" value="">
+                                            <input type="radio" class="radio-box" id="ins_on_stat" name="ins_on_stat" value="2" <c:if test="${result.INS_ON_STATUS == '2' || (empty result.INS_ON_STATUS)}">checked</c:if>>
                                             <label>미완료</label>
                                         </div>
                                         <div class="radio-cont">
-                                            <input type="radio" class="radio-box" id="" name="" value="">
+                                            <input type="radio" class="radio-box" id="ins_on_stat" name="ins_on_stat" value="3" <c:if test="${result.INS_ON_STATUS == '3'}">checked</c:if>>
                                             <label>해당년도 수료 시 체크 ( 오프/온라인 교육 모두 완료 시 1년 자격연장 )</label>
                                         </div>
                                     </div>
@@ -359,55 +333,23 @@ function fn_goList(){
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td rowspan="4" class="no-border-b"></td>
-                                <td class="tl">보고듣고말하기 2.0 기본형</td>
-                                <td><input type="text" class="input-box" value="" readonly/></td>
+                        	<c:forEach var="auth" items="${authList}" varStatus="status">
+							<tr>
+								<c:if test="${status.first}">
+									<td rowspan="${fn:length(authList)}" class="no-border-b">&nbsp;</td>
+								</c:if>
+                                <td class="tl">${auth.CATEGORY3_NAME}</td>
+                                <td><input type="text" class="input-box" value="${auth.EDU_FDATE}" readonly/></td>
                                 <td>
                                     <div class="picker-wrap">
-                                        <input type="text" id="datepickerFrom" class="input-box"/>
+                                        <input type="text" id="auth_sdate${status.index}" name="auth_sdate" value="${auth.AUTH_SDATE}" class="input-box sdate"/>
                                         <span class="next-ico">-</span>
-                                        <input type="text" id="datepickerTo" class="input-box"/>
+                                        <input type="text" id="auth_edate${status.index}" name="auth_edate" value="${auth.AUTH_EDATE}" class="input-box edate"/>
                                     </div>
                                 </td>
-                                <td><button class="sm-btn blue-btn">수정</button></td>
+                                <td><button type="button" class="sm-btn blue-btn" onClick="auth_edit('${status.index}','${auth.EDU_CD}')">수정</button></td>
                             </tr>
-                            <tr>
-                                <td class="tl">보고듣고말하기 2.0 중학생</td>
-                                <td><input type="text" class="input-box" value="" readonly/></td>
-                                <td>
-                                    <div class="picker-wrap">
-                                        <input type="text" id="datepickerFrom" class="input-box"/>
-                                        <span class="next-ico">-</span>
-                                        <input type="text" id="datepickerTo" class="input-box"/>
-                                    </div>
-                                </td>
-                                <td><button class="sm-btn blue-btn">수정</button></td>
-                            </tr>
-                            <tr>
-                                <td class="tl">이어줌인 직장인</td>
-                                <td><input type="text" class="input-box" value="" readonly/></td>
-                                <td>
-                                    <div class="picker-wrap">
-                                        <input type="text" id="datepickerFrom" class="input-box"/>
-                                        <span class="next-ico">-</span>
-                                        <input type="text" id="datepickerTo" class="input-box"/>
-                                    </div>
-                                </td>
-                                <td><button class="sm-btn blue-btn">수정</button></td>
-                            </tr>
-                            <tr>
-                                <td class="tl">이어줌인 노인</td>
-                                <td><input type="text" class="input-box" value="" readonly/></td>
-                                <td>
-                                    <div class="picker-wrap">
-                                        <input type="text" id="datepickerFrom" class="input-box"/>
-                                        <span class="next-ico">-</span>
-                                        <input type="text" id="datepickerTo" class="input-box"/>
-                                    </div>
-                                </td>
-                                <td><button class="sm-btn blue-btn">수정</button></td>
-                            </tr>
+							</c:forEach>
                         </tbody>
                     </table><!------   // 20211223  수정  ------>
                 </div>
