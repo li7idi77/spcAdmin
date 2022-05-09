@@ -258,7 +258,7 @@ public class FileUtil {
 	public static Map<String, Object> uploadFile (MultipartFile file, String filePath, HttpServletRequest request) {
 		 
 		 Map<String, Object> map = new HashMap<String, Object>();
-		  
+		   
 		 try {
 			 //파일이 저장될 path 설정 
 		
