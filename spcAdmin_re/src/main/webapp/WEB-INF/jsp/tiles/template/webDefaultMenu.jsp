@@ -194,7 +194,7 @@
 	                    	<li <c:if test="${fn:contains(path, '/my/my04eduResult') }">    class="active" </c:if>> <a href="${pageContext.request.contextPath}/my/my04eduResult.do">교육 결과 보고서 제출/수료증</a></li>
 	                    	<li <c:if test="${fn:contains(path, '/my/my04mylist') }">    class="active" </c:if>> <a href="${pageContext.request.contextPath}/my/my03mylist.do">나의 글 보기</a></li>
                         </ul>
-	                 </li>
+	                 </li> 
 		      </ul>
 	      </div>
      </c:if>
