@@ -98,4 +98,34 @@
 	       <put-attribute name="title" value="마이페이지 - 나의 글 보기" />  
 	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my03mylist.jsp" />  
 	   </definition> 
+	   
+	   <definition name="my04info" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 기본정보" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my04info.jsp" />  
+	   </definition> 
+	   
+	   <definition name="my04app" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 교육신청 내역" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my04app.jsp" />  
+	   </definition> 
+	   
+	   <definition name="my04insSel" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 강사 미선택 현황" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my04insSel.jsp" />  
+	   </definition> 
+	   
+	   <definition name="my04eduApp" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 교육명 별 신청자" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my04eduApp.jsp" />  
+	   </definition> 
+	   
+	   <definition name="my04eduResult" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 교육 결과 보고서 제출/수료증" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my04eduResult.jsp" />  
+	   </definition> 
+	   
+	   <definition name="my04mylist" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 나의 글 보기" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my04mylist.jsp" />  
+	   </definition> 
   </tiles-definitions>
