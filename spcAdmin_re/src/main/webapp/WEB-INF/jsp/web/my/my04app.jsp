@@ -229,14 +229,18 @@
                                     <tbody>
                                     <c:forEach var="result" items="${resultList}" varStatus="status">
                                         <tr>
-                                            <td>3</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td class="tl">보고 듣고 말하기 2.0 청소년</td>
-                                            <td>성인</td>
-                                            <td>2021.12.15</td>
-                                            <td>대회의실</td>
-                                            <td><button class="sm-btn white-btn">취소</button></td>
+                                            <td>${status.index + 1}</td>
+                                            <td>${result.CATEGORY1_NAME}</td>
+                                            <td>${result.CATEGORY2_NAME}</td>
+                                            <td class="tl">${result.CATEGORY3_NAME}</td>
+                                            <td>${result.EDU_TARGET}</td>
+                                            <td>${result.EDU_START_DATE}</td>
+                                            <td>${result.EDU_PLACE}</td>
+                                            <td>
+                                            <c:if test="${result.CANCEL_YN == 'Y'}">
+                                            	<button  class="sm-btn white-btn" onClick="fn_delete('${result.SCHEDULE_NO}');">취소</button>
+                                            </c:if>
+                                            </td>
                                         </tr>
                                     </c:forEach>
                                     <c:if test="${empty resultList }">

@@ -879,13 +879,17 @@ public class MyController
 	  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
 	  paramMap.put("offset",offset);
 	    	  
-	  String[] cate1List = {"1","4"};
-	  paramMap.put("category1_key_arr", cate1List);
-	  paramMap.put("sqlName", "getCartList");
+	  paramMap.put("category1_key", "7");
+	  
+	  paramMap.put("sqlName", "getCategoryList2");
+	  List<Map<String, Object>> category2list = sectorService.getSelectList(paramMap);
+	  model.addAttribute("category2list", category2list);
+	  
+	  paramMap.put("sqlName", "getOrgEduList");
 	  List<Map<String, Object>> list = myService.getSelectList(paramMap);
 	  model.addAttribute("resultList", list);
 	  
-	  paramMap.put("sqlName", "getCartListCnt");
+	  paramMap.put("sqlName", "getOrgEduListCnt");
 	  int totCnt = myService.getSelectListCnt(paramMap);
 	  model.addAttribute("totCnt", totCnt);
 	  paginationInfo.setTotalRecordCount(totCnt);
