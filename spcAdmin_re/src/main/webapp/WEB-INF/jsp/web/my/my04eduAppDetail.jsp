@@ -48,10 +48,12 @@
 	 $("[type='text']").val("");
  }
  
-	function fn_detail(idx){
-		document.location = "<c:url value='/my/my04eduAppDetail.do'/>?sch_no="+idx;
-	 }	
-	
+ function sortSelect(){
+	 var frm = document.commonForm;
+ 	 frm.action = "<c:url value='/my/my04eduAppDetail.do'/>";
+   	 frm.submit();
+ }
+ 
 	function openWindowPop(url, name){
 	    var options = 'top=10, left=10, width=1200px, height=800px, status=no, menubar=no, toolbar=no, resizable=no';
 	    window.open(url, name, options);
@@ -59,7 +61,7 @@
 	function fn_egov_link_page(pageNo){
 		 var frm = document.commonForm;
 		 $("#pageIndex").val(pageNo); 
-	 	 frm.action = "<c:url value='/my/my04eduApp.do'/>";
+	 	 frm.action = "<c:url value='/my/my04eduAppDetail.do'/>";
 	   	 frm.submit();
 	 }
 </script>
@@ -109,10 +111,17 @@
                                     <input type="text" id="end_date" name="end_date" class="input-box" readonly value="${end_date}"/>
                                 </div>
                             </div>
-
-                            <div class="search-cont">
-                                <label>교육명 :</label>
-                                <input type="text" id="edu_nm" name="edu_nm" class="input-box lg-width" value="${edu_nm}" placeholder="직접입력"/>
+							
+							<div class="search-cont">
+                                <label>이름 :</label>
+                                <!-- <div class="radio-cont">
+                                    <input type="radio" class="radio-box" id="" name="" value="" checked>
+                                    <label for="">전체</label>
+                                </div> -->
+                                <div class="radio-cont">
+                                    <!-- <input type="radio" class="radio-box" id="" name="" value=""> -->
+                                    <input type="text" class="input-box lg-width" id="user_nm" name="user_nm" placeholder="직접입력"/>
+                                </div>
                             </div>
 
                             <div class="btn-cont">
@@ -120,48 +129,61 @@
                                 <button class="lg-btn navy-btn" onClick="fn_clear();">초기화</button>
                             </div>
                         </div>
+                        
+                        <div class="btn-cont mb20">
+                            <select class="select" id="sortType" name="sortType" onChange="sortSelect();">
+                                <option value="date" <c:if test="${sortType == 'date'}">selected</c:if>>신청일순</option>
+                                <option value="name" <c:if test="${sortType == 'name'}">selected</c:if>>이름순(가나다)</option>
+                            </select>
+                        </div>
                         </form>
                         <!---- search-wrap end ---->
-
+                        
                         <div class="comp mt0">
                             <div class="table-wrap">
                                 <table class="list-tb">
-                                    <caption>교육명, 교육대상, 교육일시, 교육장소, 교육시간, 신청자 정보가 있는 테이블</caption>
+                                    <caption>이름, 성별, 직업, 생년월일, 이메일, 연락처, 주소, 신청일 정보가 있는 테이블</caption>
                                     <colgroup>
-                                        <col width="7%"/>
-                                        <col width="*"/>
+                                        <col width="6%"/>
                                         <col width="10%"/>
+                                        <col width="6%"/>
+                                        <col width="10%"/>
+                                        <col width="12%"/>
                                         <col width="15%"/>
                                         <col width="14%"/>
-                                        <col width="10%"/>
-                                        <col width="10%"/>
+                                        <col width="*"/>
+                                        <col width="11%"/>
                                     </colgroup>
                                     <thead>
                                         <tr>
                                             <th>No.</th>
-                                            <th>교육명</th>
-                                            <th>교육대상</th>
-                                            <th>교육일시</th>
-                                            <th>교육장소</th>
-                                            <th>교육시간</th>
-                                            <th>신청자</th>
+                                            <th>이름</th>
+                                            <th>성별</th>
+                                            <th>직업</th>
+                                            <th>생년월일</th>
+                                            <th>이메일</th>
+                                            <th>연락처</th>
+                                            <th>주소</th>
+                                            <th>신청일</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     <c:forEach var="result" items="${resultList}" varStatus="status">
                                         <tr>
                                             <td>${status.index + 1}</td>
-                                            <td class="tl">${result.EDU_NAME}</td>
-                                            <td>${result.EDU_TARGET}</td>
-                                            <td><span>${result.EDU_START_DATE}</span><!-- <span>14:00:00</span> --></td>
-                                            <td>${result.EDU_PLACE}</td>
-                                            <td><span>${result.EDU_TIME}</span>분</td>
-                                            <td><a class="link" onClick="fn_detail('${result.SCHEDULE_NO}');">${result.APP_CNT}</a>명</td>
+                                            <td>${result.USER_NM}</td>
+                                            <td>${result.USER_SEX}</td>
+                                            <td>${result.JOB_CD}</td>
+                                            <td>${result.BIRTH_YMD}</td>
+                                            <td>${result.EML_ADDR}</td>
+                                            <td>${result.MBL_TELNO}</td>
+                                            <td class="tl">${result.JUSO} ${result.JUSO_DETAIL}</td>
+                                            <td>${result.REG_DT}</td>
                                         </tr>
                                     </c:forEach>
                                     <c:if test="${empty resultList }">
 							             <tr>
-							                 <td colspan='7'/>Data 없습니다.</td>
+							                 <td colspan='9'/>Data 없습니다.</td>
 							             </tr>
 							        </c:if>
                                     </tbody>

@@ -96,6 +96,11 @@
 	  	frm.submit();
     }
 	
+	function openWindowPop(url, name){
+	    var options = 'top=10, left=10, width=700px, height=600px, status=no, menubar=no, toolbar=no, resizable=no';
+	    window.open(url, name, options);
+	}	
+	
 	 function fn_egov_link_page(pageNo){
 		 var frm = document.commonForm;
 		 $("#pageIndex").val(pageNo); 
@@ -210,7 +215,9 @@
                                             <td>${result.EDU_TARGET}</td>
                                             <td><span class="block">${result.EDU_TEAC_NM}</span><span class="block">${result.EDU_TEAC_ID}</span></td>
                                             <td><span>  <c:if test="${result.INS_STATUS == '1'}">완료</c:if>
-                                            			<c:if test="${result.INS_STATUS != '1'}">섭외중</c:if>
+                                            			<c:if test="${result.INS_STATUS != '1'}">
+                                            			<button type="button" class="sm-btn navy-btn" onClick="javascript:openWindowPop('<c:url value='/user/popInsSelect.do'/>?sch_no=${result.SCHEDULE_NO}','popup');">섭외중</button>
+                                            			</c:if>
                                             	</span></td>
                                         </tr>
                                     </c:forEach>
