@@ -902,6 +902,31 @@ public class MyController
 	  return "my04app";
   }
   
+  @RequestMapping(value = "/my04appCancel.do")
+	@ResponseBody
+	public Map<String, Object> my04appCancel(HttpServletRequest request, @RequestParam Map<String, Object> paramMap) throws Exception {
+		int resultCnt = 0;
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
+		    
+		    paramMap.put("sqlName", "my04appDelete");	
+		    resultCnt = myService.deleteData(paramMap);
+		    
+		    paramMap.put("sqlName", "my04appDeleteDtl");	
+		    resultCnt = myService.deleteData(paramMap);
+		    
+		    if(resultCnt > 0) {
+		        result.put("result", "SUCCESS");
+		    }else {
+		        result.put("result", "FAIL");	 
+		    }
+		} catch (Exception e) {
+		    result.put("result", "FAIL");
+		}
+		return result;
+	}
+  
   @RequestMapping({"/my04insSel.do"})
   public String my04insSel(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model, HttpServletRequest request) throws Exception{
 	  paramMap.put("pageSize", 10);
@@ -920,20 +945,12 @@ public class MyController
 	  
 	  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
 	  paramMap.put("offset",offset);
-	  paramMap.put("category1_key", "1");
-	  paramMap.put("sqlName", "getEduAllCnt");
-	  Map<String, Object> allCount = myService.getSelectData(paramMap);
-	  model.addAttribute("allCount", allCount);
 	  
-	  paramMap.put("sqlName", "getCategoryList2");
-	  List<Map<String, Object>> category2list = sectorService.getSelectList(paramMap);
-	  model.addAttribute("category2list", category2list);
-	  
-	  paramMap.put("sqlName", "getEduList");
+	  paramMap.put("sqlName", "geInsSelList");
 	  List<Map<String, Object>> list = myService.getSelectList(paramMap);
 	  model.addAttribute("resultList", list);
 	  
-	  paramMap.put("sqlName", "getEduListCnt");
+	  paramMap.put("sqlName", "geInsSelListCnt");
 	  int totCnt = myService.getSelectListCnt(paramMap);
 	  model.addAttribute("totCnt", totCnt);
 	  paginationInfo.setTotalRecordCount(totCnt);

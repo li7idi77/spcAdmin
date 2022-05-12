@@ -200,16 +200,18 @@
                                     <tbody>
                                     <c:forEach var="result" items="${resultList}" varStatus="status">
                                         <tr>
-                                            <td>3</td>
-                                            <td class="tl">보고 듣고 말하기 2.0 청소년</td>
-                                            <td>2021.09.12</td>
-                                            <td><span>120</span>분</td>
-                                            <td>서울</td>
-                                            <td>종로시 보건소</td>
-                                            <td>이진우</td>
-                                            <td>성인</td>
-                                            <td><span class="block">이보람</span><span class="block">fgfdfdgfdgg</span></td>
-                                            <td><span>완료</span></td>
+                                            <td>${status.index + 1}</td>
+                                            <td class="tl">${result.EDU_NAME}</td>
+                                            <td>${result.EDU_START_DATE}</td>
+                                            <td><span>${result.EDU_TIME}</span>분</td>
+                                            <td>${result.AREA_NM}</td>
+                                            <td>${result.EDU_ORG_NAME}</td>
+                                            <td>${result.USER_NM}</td>
+                                            <td>${result.EDU_TARGET}</td>
+                                            <td><span class="block">${result.EDU_TEAC_NM}</span><span class="block">${result.EDU_TEAC_ID}</span></td>
+                                            <td><span>  <c:if test="${result.INS_STATUS == '1'}">완료</c:if>
+                                            			<c:if test="${result.INS_STATUS != '1'}">섭외중</c:if>
+                                            	</span></td>
                                         </tr>
                                     </c:forEach>
                                     <c:if test="${empty resultList }">

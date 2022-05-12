@@ -70,59 +70,54 @@
 		 }); 
  });
  
+ function fn_edit(idx) {
+		var formData = new FormData($('#commonForm')[0]);
+		var msg = "정말로 취소 하시겠습니까?";
+		
+			
+			var yn = confirm(msg);	
+			if(yn){
+				$.ajax({	
+					data     : formData,
+				    url		 : "<c:url value='/my/my04appCancel.do'/>?sch_no="+idx,
+			        dataType : "JSON",
+					type	 : "POST",
+					processData: false, 
+			        contentType: false,
+			        success  : function(obj) {
+			        	commonCallBack(obj);				
+			        },	       
+			        error 	: function(xhr, status, error) {} 		        
+			    });  
+			}
+	}
+
+ function commonCallBack(obj){
+		if(obj != null){		
+			
+			var result = obj.result;
+			
+			if(result == "SUCCESS"){				
+				alert("저장 하였습니다.");				
+				location.reload();				 
+			}else {				
+				alert("저장 실패 했습니다.");	
+				return false;
+			}
+		}
+	}	
  function fn_clear(){
 	 $("#searchDate").eq(0).prop("checked",true);
 	 $("#searchCondition").eq(0).prop("checked",true);
 	 $("[type='text']").val("");
  }
-  
- function fn_delete(idx) {
-		var idxArray = new Array();
-
-		idxArray.push(idx);
-		if(confirm('삭제 처리하시겠습니까?')) {
-			setDel(idxArray);
-		}
-	}
-
-	var btnDel = function() {
-		var idxArray = new Array();
-
-		$("input[name=checkNo]:checked").each(function() {
-			idxArray.push($(this).val());
-		});
-		if(idxArray.length < 1){
-			alert("선택한 내역이 없습니다.");
-			return false;
-		}
-		if(confirm('삭제 처리하시겠습니까?')) {
-			setDel(idxArray);
-		}
-	};
-
-	var setDel = function(idxArray){
-	    $.ajax({
-	        url: "<c:url value='/my/my04app.do'/>",
-	        type: "POST",
-	        data: { "basket_no" : idxArray },
-	        success: function(data) {
-	        	if(data == 'SUCCESS'){
-	        		alert("처리 완료하였습니다.");
-	        		location.reload();
-	        	}
-	        },
-	        error: function(data) {
-	        	console.log(JSON.stringify(data));
-	        	alert("처리중 오류가 발생했습니다.");
-	        }
-	    });
-	};
-	function fn_egov_link_page(pageNo){
-		 var frm = document.commonForm;
-		 $("#pageIndex").val(pageNo); 
-	 	 frm.action = "<c:url value='/my/my04app.do'/>";
-	   	 frm.submit();
-	 }
+ 
+function fn_egov_link_page(pageNo){
+	 var frm = document.commonForm;
+	 $("#pageIndex").val(pageNo); 
+ 	 frm.action = "<c:url value='/my/my04app.do'/>";
+   	 frm.submit();
+ }
 </script>
      <!-- container  begin -->
             <div id="container">
@@ -238,7 +233,7 @@
                                             <td>${result.EDU_PLACE}</td>
                                             <td>
                                             <c:if test="${result.CANCEL_YN == 'Y'}">
-                                            	<button  class="sm-btn white-btn" onClick="fn_delete('${result.SCHEDULE_NO}');">취소</button>
+                                            	<button  class="sm-btn white-btn" onClick="fn_edit('${result.SCHEDULE_NO}');">취소</button>
                                             </c:if>
                                             </td>
                                         </tr>

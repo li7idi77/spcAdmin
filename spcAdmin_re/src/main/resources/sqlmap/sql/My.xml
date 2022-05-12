@@ -938,4 +938,85 @@
 			</when>
 		</choose>
 	</select>
+	
+	<delete id="my04appDelete" parameterType="java.util.Map">	
+		DELETE FROM EDU_SCHEDULE
+		WHERE SCHEDULE_NO = #{sch_no}
+	</delete>
+	
+	<delete id="my04appDeleteDtl" parameterType="java.util.Map">	
+		DELETE FROM EDU_SCHEDULE_DETAIL
+		WHERE SCHEDULE_NO = #{sch_no}
+	</delete>
+	
+	<select id="geInsSelList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT a.SCHEDULE_NO,
+			   a.EDU_NAME,
+		       a.EDU_START_DATE,
+		       (SELECT EDU_TIME FROM EDU_REGISTRATION WHERE EDU_NO = a.EDU_KEY) AS EDU_TIME,
+               a.EDU_ORG_NAME,
+               (SELECT USER_NM FROM COM_USER WHERE USER_ID = a.REG_ID) AS USER_NM,
+               (SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = b.COPER_AREA_CD) AS AREA_NM,
+		       a.EDU_TARGET,
+		       CASE WHEN a.EDU_TEAC_ID IS NOT NULL THEN (SELECT USER_NM FROM COM_USER WHERE USER_ID = a.EDU_TEAC_ID)
+					WHEN a.EDU_TEAC_ID IS NULL THEN a.EDU_TEAC_NAME END AS EDU_TEAC_NM,
+			   a.EDU_TEAC_ID,
+		       CASE WHEN b.INS_STATUS IS NOT NULL THEN '1'
+					ELSE '2' END AS INS_STATUS
+		FROM EDU_SCHEDULE a,
+			 EDU_SCHEDULE_DETAIL b
+             
+		WHERE 1=1
+		AND a.SCHEDULE_NO = b.SCHEDULE_NO
+		AND a.REG_ID = #{UserAccount.user_id}
+		AND a.CATEGORY1_KEY = '7'
+        AND b.INS_TYPE = 'recruit'
+        <if test="edu_nm != '' and edu_nm != null">
+			AND a.EDU_NAME LIKE CONCAT('%',#{edu_nm},'%')
+		</if>
+		<choose>
+			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
+				AND a.EDU_START_DATE = NOW()
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
+		      <![CDATA[
+		       AND  a.EDU_START_DATE >= #{start_date} AND a.EDU_START_DATE <= #{end_date} 
+		       ]]>
+			</when>
+		</choose>
+		LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+	
+	<select id="geInsSelListCnt" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(*) 
+		FROM EDU_SCHEDULE a,
+			 EDU_SCHEDULE_DETAIL b
+             
+		WHERE 1=1
+		AND a.SCHEDULE_NO = b.SCHEDULE_NO
+		AND a.REG_ID = #{UserAccount.user_id}
+		AND a.CATEGORY1_KEY = '7'
+        AND b.INS_TYPE = 'recruit'
+        <if test="edu_nm != '' and edu_nm != null">
+			AND a.EDU_NAME LIKE CONCAT('%',#{edu_nm},'%')
+		</if>
+		<choose>
+			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
+				AND a.EDU_START_DATE = NOW()
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
+		      <![CDATA[
+		       AND  a.EDU_START_DATE >= #{start_date} AND a.EDU_START_DATE <= #{end_date} 
+		       ]]>
+			</when>
+		</choose>
+	</select>
 </mapper>
