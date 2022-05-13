@@ -202,7 +202,7 @@
                 </div>
                 <div class="btn-cont">
                     <button type="submit" onClick="fn_search()" class="lg-btn orange-btn">검색</button>
-                    <button type="reset"  class="lg-btn navy-btn">초기화</button>
+                    <button type="reset"  class="lg-btn navy-btn" onClick="fn_clear();">초기화</button>
                 </div>
          </div>
       

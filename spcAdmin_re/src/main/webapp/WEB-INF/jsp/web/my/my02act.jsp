@@ -34,12 +34,6 @@
   	});
  });
  
- function fn_clear(){
-	 $("#searchDate").eq(0).prop("checked",true);
-	 $("#searchCondition").eq(0).prop("checked",true);
-	 $("[type='text']").val("");
- }
- 
  function cancel(){
 	alert("온라인 상에서 변경이 불가합니다. 관리자에게 문의 바랍니다.");	 
  } 

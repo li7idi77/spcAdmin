@@ -41,12 +41,6 @@
  	 });
  });
  
- function fn_clear(){
-	 $("#searchDate").eq(0).prop("checked",true);
-	 $("#searchCondition").eq(0).prop("checked",true);
-	 $("[type='text']").val("");
- }
- 
  function fn_cancel(idx){
 	 if(confirm("정말로 취소하시겠습니까?")){
 		 $.ajax({

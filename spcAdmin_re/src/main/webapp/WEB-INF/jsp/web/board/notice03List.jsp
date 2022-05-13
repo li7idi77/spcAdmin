@@ -34,12 +34,6 @@
 	});
  });
   
- function fn_clearBtn(){
-	 $("#searchDate").eq(0).prop("checked",true);
-	 $("#searchCondition").eq(0).prop("checked",true);
-	 $("[type='text']").val("");
- }
- 
  function fn_detail(edu_no){
 	document.location = "<c:url value='/user/sectorView.do'/>"+"?edu_no="+edu_no+"&idx="+$('#idx').val();
  }	
@@ -117,7 +111,7 @@
 
                             <div class="btn-cont">
                                 <button class="lg-btn orange-btn">검색</button>
-                                <button class="lg-btn navy-btn">초기화</button>
+                                <button class="lg-btn navy-btn" onClick="fn_clear();">초기화</button>
                             </div>
                         </div>
                         <!---- search-wrap end ---->

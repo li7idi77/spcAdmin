@@ -49,7 +49,7 @@
         </select>
 
         <button class="search-btn">검색</button>
-        <button class="search-btn white-btn ml20" onclick="fn_clearBtn();">초기화</button>
+        <button class="search-btn white-btn ml20" onClick="fn_clear();">초기화</button>
     </div>
     </form>
 
@@ -178,10 +178,6 @@
 		     });
 		 }); 
  });
- 
- function fn_clearBtn(){
-	 $("#category3_key").val("");
- }
  
 function fn_edit(key1) {
  	var frm = document.listForm;

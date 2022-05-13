@@ -59,7 +59,7 @@
         <input type="text" id="searchText" name="searchText" class="input-box lg-width" placeholder="이름">
         
         <button class="search-btn">검색</button>
-        <button class="search-btn white-btn ml20" onclick="fn_clearBtn();">초기화</button>
+        <button class="search-btn white-btn ml20" onClick="fn_clear();">초기화</button>
     </div>
     </form>
 
@@ -185,12 +185,6 @@
 		     });
 		 }); 
  });
- 
- function fn_clearBtn(){
-	 $("#searchDate").eq(0).prop("checked",true);
-	 $("#searchCondition").eq(0).prop("checked",true);
-	 $("[type='text']").val("");
- }
  
 function fn_delete(idx) {
 	var idxArray = new Array();

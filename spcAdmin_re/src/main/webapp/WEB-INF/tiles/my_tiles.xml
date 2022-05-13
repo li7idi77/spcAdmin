@@ -129,6 +129,11 @@
 	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my04eduResult.jsp" />  
 	   </definition> 
 	   
+	   <definition name="my04eduResultDetail" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 교육 결과 보고서 제출/수료증" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my04eduResultDetail.jsp" />  
+	   </definition>
+	   
 	   <definition name="my04mylist" extends="common-definition">  
 	       <put-attribute name="title" value="마이페이지 - 나의 글 보기" />  
 	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my04mylist.jsp" />  

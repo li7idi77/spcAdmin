@@ -102,7 +102,7 @@
 	        </div>
 	        
 	        <button type="submit" class="search-btn">검색</button>
-	        <button class="search-btn white-btn ml20">초기화</button>
+	        <button class="search-btn white-btn ml20" onClick="fn_clear();">초기화</button>
 	    </div>
     </form>
 
@@ -265,10 +265,6 @@ $(document).ready(function(){
 		     });
 		 });
 });
-
-function fn_clear(){
-	 $("[type='text']").val("");
-}
 
 function fn_egov_link_page(pageNo){
 	 var frm = document.commonForm;

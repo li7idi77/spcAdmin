@@ -48,11 +48,14 @@
 	  	frm.submit();
  }
  
- function fn_clear(){
-	 $("#searchDate").eq(0).prop("checked",true);
-	 $("#searchCondition").eq(0).prop("checked",true);
-	 $("[type='text']").val("");
- }
+ function fn_detail(sch_no){
+		document.location = "<c:url value='/user/org02Report.do'/>"+"?sch_no="+sch_no;
+	 }	
+ 
+ function fn_detail2(sch_no){
+		document.location = "<c:url value='/my/my04eduResultDetail.do'/>?sch_no="+sch_no;
+	 }	
+ 
  function openWindowPop(url, name){
 	    var options = 'top=10, left=10, width=810px, height=1200px, status=no, menubar=no, toolbar=no, resizable=no';
 	    window.open(url, name, options);
@@ -60,7 +63,7 @@
  function fn_egov_link_page(pageNo){
 	 var frm = document.commonForm;
 	 $("#pageIndex").val(pageNo); 
- 	 frm.action = "<c:url value='/my/my01warrant.do'/>";
+ 	 frm.action = "<c:url value='/my/my04eduResult.do'/>";
    	 frm.submit();
  }
 </script>
@@ -150,13 +153,20 @@
                                     <tbody>
                                     <c:forEach var="result" items="${resultList}" varStatus="status">
                                         <tr>
-                                            <td>3</td>
-                                            <td class="tl">보고 듣고 말하기 2.0 청소년</td>
-                                            <td>성인</td>
-                                            <td><span>2021.09.12</span><span>14:00:00</span></td>
-                                            <td>보건소 대회의실</td>
-                                            <td><span>120</span>분</td>
-                                            <td><a class="link">결과보고<br/>미완료</a></td>
+                                            <td>${status.index + 1}</td>
+                                            <td class="tl">${result.EDU_NAME}</td>
+                                            <td>${result.EDU_TARGET}</td>
+                                            <td><span>${result.EDU_START_DATE}</span></td>
+                                            <td>${result.EDU_PLACE}</td>
+                                            <td><span>${result.EDU_TIME}</span>분</td>
+                                            <td>
+                                            <c:if test="${result.SCH_STATUS == '미완료'}">
+                                            	<a class="link" onClick="fn_detail('${result.SCHEDULE_NO}');">결과보고<br/>미완료</a>
+                                            </c:if>
+                                            <c:if test="${result.SCH_STATUS != '미완료'}">
+                                            	<a class="link" onClick="fn_detail2('${result.SCHEDULE_NO}');">바로가기</a>
+                                            </c:if>
+                                            </td>
                                         </tr>
                                     </c:forEach>
                                     <c:if test="${empty resultList }">

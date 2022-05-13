@@ -70,13 +70,6 @@
 		 }); 
  });
   
- function fn_clearBtn(){
-	 $("#category3_key").val("");
-	 $("#site").val("");
-	 $("#searchDate").eq(0).prop("checked",true);
-	 $("#searchCondition").eq(0).prop("checked",true);
-	 $("[type='text']").val("");
- }
  
  function fn_detail(id){
 	document.location = "<c:url value='/inst/instructorAdm01View.do'/>?user_id="+id;
@@ -139,7 +132,7 @@
         </div>
         
         <button class="search-btn">검색</button>
-        <button class="search-btn white-btn ml20" onClick="fn_clearBtn();">초기화</button>
+        <button class="search-btn white-btn ml20" onClick="fn_clear();">초기화</button>
     </div>
 </form>
 </div>

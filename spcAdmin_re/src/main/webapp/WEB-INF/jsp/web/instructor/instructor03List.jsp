@@ -34,10 +34,6 @@
 	});
  });
  
- function fn_clear(){
-	 $("[type='text']").val("");
- }
- 
  function fn_save(sch_no,edu_no){
 	 var formData = new FormData(); 
 	 formData.append("app_user",   $("#user_id").val());

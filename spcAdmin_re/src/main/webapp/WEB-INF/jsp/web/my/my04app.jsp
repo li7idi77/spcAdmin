@@ -106,11 +106,6 @@
 			}
 		}
 	}	
- function fn_clear(){
-	 $("#searchDate").eq(0).prop("checked",true);
-	 $("#searchCondition").eq(0).prop("checked",true);
-	 $("[type='text']").val("");
- }
  
 function fn_egov_link_page(pageNo){
 	 var frm = document.commonForm;
@@ -150,7 +145,7 @@ function fn_egov_link_page(pageNo){
                                 </div>
                                   
                                 <div class="radio-cont">
-                                    <input type="radio" class="radio-box" id="searchDate" name="searchDate" value="TODAY">
+                                    <input type="radio" class="radio-box" id="searchDate" name="searchDate" value="TODAY" <c:if test="${searchDate == 'TODAY'}">checked </c:if>>
                                     <label for="dateToday">오늘</label>
                                 </div>
                                 
@@ -186,7 +181,7 @@ function fn_egov_link_page(pageNo){
 
                             <div class="btn-cont">
                                 <button class="lg-btn orange-btn">검색</button>
-                                <button class="lg-btn navy-btn" onClick="fn_clear();">초기화</button>
+                                <button type="button" class="lg-btn navy-btn" onClick="fn_clear();">초기화</button>
                             </div>
                         </div>
                         </form>

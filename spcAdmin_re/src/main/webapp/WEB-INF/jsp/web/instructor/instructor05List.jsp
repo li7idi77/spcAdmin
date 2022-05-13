@@ -34,12 +34,6 @@
 	});
  });
  
- function fn_clear(){
-	 $("#searchDate").eq(0).prop("checked",true);
-	 $("#searchCondition").eq(0).prop("checked",true);
-	 $("[type='text']").val("");
- }
- 
  function fn_save(idx){
 	 if(confirm("교육을 신청 하시겠습니까?")){
 		 $.ajax({

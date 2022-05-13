@@ -26,7 +26,7 @@
     <input type="hidden" id="category2" name="category2" value="${category2_key}">
     <input type="hidden" id="category3" name="category3" value="${category3_key}">
     <input type="hidden" id="LICENSE_IDX"   name="LICENSE_IDX"  value="${warrantVo.LICENSE_IDX}"/>
-    <input type="hidden" id="license_type"   name="license_type"  value="A"/>
+    <input type="hidden" id="license_type"   name="license_type"  value="B"/>
     <div class="search-cont">
         <select class="select mr30"  id="category1_key" name="category1_key">
         	<option value=''>선택 하세요</option>
@@ -50,7 +50,7 @@
         </select>
 
         <button class="search-btn">검색</button>
-        <button class="search-btn white-btn ml20" onclick="fn_clearBtn();">초기화</button>
+        <button class="search-btn white-btn ml20" onClick="fn_clear();">초기화</button>
     </div>
     </form>
 
@@ -182,14 +182,14 @@
 		     });
 		 });
  });
- 
-function fn_edit(key1) {
- 	var frm = document.listForm;
- 	$("#license_idx").val(key1);
-  	frm.action = "<c:url value='/warrant/warrantOfflineReq.do'/>?actFlag=U";
- 	frm.submit();
-}
 
+ function fn_edit(key1) {
+	 	var frm = document.listForm;
+	 	$("#license_idx").val(key1);
+	  	frm.action = "<c:url value='/warrant/warrantOfflineReq.do'/>?actFlag=U";
+	 	frm.submit();
+	}
+ 
 function fn_delete(idx) {
 	var idxArray = new Array();
 

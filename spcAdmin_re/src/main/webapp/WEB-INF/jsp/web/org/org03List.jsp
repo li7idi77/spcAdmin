@@ -16,12 +16,6 @@
  $(document).ready(function(){		
 	 	
  });
-  
- function fn_clearBtn(){
-	 $("#searchDate").eq(0).prop("checked",true);
-	 $("#searchCondition").eq(0).prop("checked",true);
-	 $("[type='text']").val("");
- }
  
  function fn_egov_link_page(pageNo){
 	 var frm = document.commonForm;
@@ -67,7 +61,7 @@
 
                             <div class="btn-cont">
                                 <button class="lg-btn orange-btn">검색</button>
-                                <button class="lg-btn navy-btn" onClick="fn_clearBtn();">초기화</button>
+                                <button class="lg-btn navy-btn" onClick="fn_clear();">초기화</button>
                             </div>
                         </div>
                         </form>

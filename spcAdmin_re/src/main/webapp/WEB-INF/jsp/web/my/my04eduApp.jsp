@@ -42,11 +42,6 @@
 	 
  });
  
- function fn_clear(){
-	 $("#searchDate").eq(0).prop("checked",true);
-	 $("#searchCondition").eq(0).prop("checked",true);
-	 $("[type='text']").val("");
- }
  
 	function fn_detail(idx){
 		document.location = "<c:url value='/my/my04eduAppDetail.do'/>?sch_no="+idx;

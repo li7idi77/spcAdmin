@@ -33,12 +33,6 @@
      ,maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)  
 	});
  });
-  
- function fn_clearBtn(){
-	 $("#searchDate").eq(0).prop("checked",true);
-	 $("#searchCondition").eq(0).prop("checked",true);
-	 $("[type='text']").val("");
- }
  
  function fn_detail(edu_no){
 	document.location = "<c:url value='/user/sectorView.do'/>"+"?edu_no="+edu_no+"&idx="+$('#idx').val();
@@ -110,7 +104,7 @@
 
                             <div class="btn-cont">
                                 <button class="lg-btn orange-btn">검색</button>
-                                <button type="button" class="lg-btn navy-btn" onclick="fn_clearBtn();">초기화</button>
+                                <button type="button" class="lg-btn navy-btn" onClick="fn_clear();">초기화</button>
                             </div>
                         </div>
                         </form>
