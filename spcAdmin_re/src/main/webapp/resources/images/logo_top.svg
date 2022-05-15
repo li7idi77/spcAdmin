@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="191px" height="35px" viewBox="0 0 191 35" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>gnb_상단메뉴</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="문자-보내기" transform="translate(-22.000000, -22.000000)">
+            <g id="gnb_상단메뉴" transform="translate(22.000000, 20.000000)">
+                <g id="logo_싼톡-copy" transform="translate(4.000000, 4.000000)">
+                    <text id="싼--톡" font-family="S-CoreDream-7ExtraBold, S-Core Dream" font-size="30" font-weight="600" fill="#323232">
+                        <tspan x="-1.83615385" y="27.1785714">싼- 톡</tspan>
+                    </text>
+                    <text id="사실은-별로-안-싼-" font-family="S-CoreDream-4Regular, S-Core Dream" font-size="12" font-weight="300" letter-spacing="-0.75" fill="#4A4A4A">
+                        <tspan x="93.1538462" y="19.7142857">사실은 별로 안 싼-</tspan>
+                    </text>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

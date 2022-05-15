@@ -76,12 +76,12 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND REG_DT = NOW()
+				AND a.REG_DT = NOW()
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  REG_DT >= #{start_date} AND REG_DT <= #{end_date} 
+		       AND  a.REG_DT >= #{start_date} AND a.REG_DT <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -110,12 +110,12 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND REG_DT = NOW()
+				AND b.REG_DT = NOW()
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  REG_DT >= #{start_date} AND REG_DT <= #{end_date} 
+		       AND  b.REG_DT >= #{start_date} AND b.REG_DT <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -150,12 +150,12 @@
 				</when>
 				<when
 					test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-					AND REG_DT = NOW()
+					AND b.REG_DT = NOW()
 				</when>
 				<when
 					test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 			      <![CDATA[
-			       AND  REG_DT >= #{start_date} AND REG_DT <= #{end_date} 
+			       AND  b.REG_DT >= #{start_date} AND b.REG_DT <= #{end_date} 
 			       ]]>
 				</when>
 			</choose>
@@ -1106,12 +1106,12 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.EDU_START_DATE = NOW()
+				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = NOW()
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  a.EDU_START_DATE >= #{start_date} AND a.EDU_START_DATE <= #{end_date} 
+		       AND  DATE_FORMAT(a.REG_DT,'%Y-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -1141,12 +1141,12 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.EDU_START_DATE = NOW()
+				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = NOW()
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  a.EDU_START_DATE >= #{start_date} AND a.EDU_START_DATE <= #{end_date} 
+		       AND  DATE_FORMAT(a.REG_DT,'%Y-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>

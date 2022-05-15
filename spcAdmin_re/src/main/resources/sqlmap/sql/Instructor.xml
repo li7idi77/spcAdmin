@@ -95,6 +95,7 @@
                CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL THEN '섭외중'
 					WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL THEN '완료'
 					WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL THEN '완료'
+					WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL THEN '완료'
 				END
                AS INS_STATUS,
                b.SCH_STATUS,
@@ -180,6 +181,7 @@
                CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL THEN '섭외중'
 					WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL THEN '완료'
 					WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL THEN '완료'
+					WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL THEN '완료'
 				END
                AS INS_STATUS,
                b.SCH_STATUS,

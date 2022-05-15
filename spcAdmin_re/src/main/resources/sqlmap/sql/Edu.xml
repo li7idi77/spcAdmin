@@ -1583,12 +1583,14 @@
 	               WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL THEN '섭외중'
 	               WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL THEN '완료'
 	               WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL THEN '완료'
+	               WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL THEN '완료'
 	            END
 	               AS INS_STATUS,
 	             <![CDATA[
 	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN ''
 						WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
 						WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+						WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
 						WHEN b.SCH_STATUS = 'C' THEN '신청취소'
 						WHEN b.SCH_STATUS IS NULL AND a.EDU_START_DATE <= NOW() THEN '교육완료'
 						WHEN b.SCH_STATUS = 'S' THEN '보고완료'
@@ -1657,12 +1659,14 @@
 	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL THEN '섭외중'
 	               WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL THEN '완료'
 	               WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL THEN '완료'
+	               WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL THEN '완료'
 	            END
 	               AS INS_STATUS,
 	              <![CDATA[
 	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN ''
 						WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
 						WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+						WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
 						WHEN b.SCH_STATUS = 'C' THEN '신청취소'
 						WHEN b.SCH_STATUS IS NULL AND a.EDU_START_DATE <= NOW() THEN '교육완료'
 						WHEN b.SCH_STATUS = 'S' THEN '보고완료'
@@ -1732,12 +1736,14 @@
 	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL THEN '섭외중'
 	               WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL THEN '완료'
 	               WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL THEN '완료'
+	               WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL THEN '완료'
 	            END
 	               AS INS_STATUS,
 	             <![CDATA[
 	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN ''
 						WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
 						WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+						WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
 						WHEN b.SCH_STATUS = 'C' THEN '신청취소'
 						WHEN b.SCH_STATUS IS NULL AND a.EDU_START_DATE <= NOW() THEN '교육완료'
 						WHEN b.SCH_STATUS = 'S' THEN '보고완료'
@@ -1819,12 +1825,14 @@
 	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL THEN '섭외중'
 	               WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL THEN '완료'
 	               WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL THEN '완료'
+	               WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL THEN '완료'
 	            END
 	               AS INS_STATUS,
 	              <![CDATA[
 	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN ''
 						WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
 						WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+						WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
 						WHEN b.SCH_STATUS = 'C' THEN '신청취소'
 						WHEN b.SCH_STATUS IS NULL AND a.EDU_START_DATE <= NOW() THEN '교육완료'
 						WHEN b.SCH_STATUS = 'S' THEN '보고완료'
@@ -2007,12 +2015,14 @@
 	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL THEN '섭외중'
 	               WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL THEN '완료'
 	               WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL THEN '완료'
+	               WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL THEN '완료'
 	            END
 	               AS INS_STATUS,
 	             <![CDATA[
 	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN ''
 						WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
 						WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+						WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
 						WHEN b.SCH_STATUS = 'C' THEN '신청취소'
 						WHEN b.SCH_STATUS IS NULL AND a.EDU_START_DATE <= NOW() THEN '교육완료'
 						WHEN b.SCH_STATUS = 'S' THEN '보고완료'

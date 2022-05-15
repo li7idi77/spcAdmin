@@ -55,7 +55,9 @@
 
 
 .lg-width{width: 350px !important;}
+.mid-width{width: 250px !important;}
 .sm-width{width: 150px !important;}
+.xsm-width{width: 100px !important;}
 .full-width{width: 100% !important;}
 
 .w768{width: 768px !important;}

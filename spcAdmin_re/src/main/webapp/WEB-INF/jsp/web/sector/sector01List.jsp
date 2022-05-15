@@ -112,14 +112,14 @@
                         <div class="search-wrap">
                             <div class="search-cont">
                                 <label>분류 :</label>
-                                <select class="select mr30"  id="category1_key" name="category1_key">
+                                <select class="select mr30 xsm-width"  id="category1_key" name="category1_key">
 			                    	<c:forEach var="result" items="${category1list}" varStatus="status">
 			                    		<c:if test="${category1_key == result.CATEGORY1_KEY}">
 			                    			<option value='${result.CATEGORY1_KEY}' selected>${result.CATEGORY1_NAME}</option>
 			                    		</c:if>
 			                        </c:forEach>
 			                    </select>
-                                <select class="select"  id="category2_key" name="category2_key">
+                                <select class="select mid-width"  id="category2_key" name="category2_key">
 			                    	<c:forEach var="result" items="${category2list}" varStatus="status">
 			                    		<c:if test="${category2_key == result.CATEGORY2_KEY}">
 			                    			<option value='${result.CATEGORY2_KEY}' selected>${result.CATEGORY2_NAME}</option>
@@ -132,7 +132,7 @@
 			                    		<option value='${result.CATEGORY3_KEY}' >${result.CATEGORY3_NAME}</option>
 			                        </c:forEach>
                                 </select>
-                                <select class="select" id="site" name="site">
+                                <select class="select xsm-width" id="site" name="site">
                                     <option value="on" <c:if test="${site == 'on'}">selected</c:if>>온라인</option>
                                     <option value="off" <c:if test="${site == 'off'}">selected</c:if>>오프라인</option>
                                 </select>

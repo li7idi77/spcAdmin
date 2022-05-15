@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>ico_error</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="회원가입" transform="translate(-531.000000, -681.000000)" fill="#E5484F" fill-rule="nonzero">
+            <g id="alerts-alt-1" transform="translate(531.000000, 681.000000)">
+                <path d="M8,10.4 C7.5581722,10.4 7.2,10.0418278 7.2,9.6 L7.2,4 C7.2,3.5581722 7.5581722,3.2 8,3.2 C8.4418278,3.2 8.8,3.5581722 8.8,4 L8.8,9.6 C8.8,10.0418278 8.4418278,10.4 8,10.4 Z" id="Path"></path>
+                <circle id="Oval" cx="8" cy="12" r="1"></circle>
+                <path d="M8,16 C3.581722,16 1.77635684e-15,12.418278 1.77635684e-15,8 C1.77635684e-15,3.581722 3.581722,1.77635684e-15 8,1.77635684e-15 C12.418278,1.77635684e-15 16,3.581722 16,8 C16,12.418278 12.418278,16 8,16 Z M8,1.6 C4.4653776,1.6 1.6,4.4653776 1.6,8 C1.6,11.5346224 4.4653776,14.4 8,14.4 C11.5346224,14.4 14.4,11.5346224 14.4,8 C14.4,6.30261447 13.7257162,4.67474942 12.5254834,3.4745166 C11.3252506,2.27428378 9.69738553,1.6 8,1.6 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

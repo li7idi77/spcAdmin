@@ -1,0 +1,355 @@
+@charset "UTF-8";
+
+/* 메인 슬라이더 */
+#mainSliderArea {
+	padding-top: 57px;
+	padding-bottom: 107px;
+}
+.box_slider {
+	display: inline-block;
+	float: left;
+}
+.box_slider_item a {
+	display: block;
+}
+
+.box_slider.type_01 {
+	margin-right: 30px;
+}
+.box_slider.type_01 .box_slider_item {
+	width: 290px;
+	height: 239px;
+}
+.box_slider.type_01 .box_slider_item.top {
+	margin-bottom: 30px;
+}
+
+.box_slider.type_02 {
+	margin-right: 30px;
+}
+
+
+#mainSliderArea .bx-wrapper .bx-controls-direction a {
+	width: 50px;
+	height: 50px;
+    transform: translateY(-50%);
+}
+#mainSliderArea .bx-wrapper .bx-prev {
+    left: 0;
+    background: url(../images/main/icon_left.png) no-repeat;
+}
+#mainSliderArea .bx-wrapper .bx-next {
+    right: 0;
+    background: url(../images/main/icon_right.png) no-repeat;
+}
+#mainSliderArea .bx-wrapper .bx-pager {
+	position: absolute;
+	width: 100%;
+	margin-top: 20px;
+}
+
+/* 섹션 제목 숨김 */
+#mainSliderArea h2,
+#mainStockArea h2 {
+	position: relative;
+	width: 0;
+	height: 0;
+	text-indent: -9999px;
+}
+
+/* 주가 영역 */
+#mainStockArea {
+	padding-bottom: 88px;
+}
+.box_stock::after {
+	content: "";
+	display: block;
+	clear: both;
+}
+.box_stock_item {
+	float: left;
+	display: inline-block;
+	width: 230px;
+	margin-right: 50px;
+	padding-left: 25px;
+	box-sizing: border-box;
+}
+.box_stock_item {
+	position: relative;
+	padding-top: 33px;
+	font-size: 24px;
+	font-weight: 400;
+	color: #222;
+}
+.box_stock_item b {
+	position: absolute;
+	top: 0;
+	left: 25px;
+	font-size: 18px;
+	font-weight: 200;
+	color: #222;
+}
+.box_stock_item span {
+	position: absolute;
+	top: 0;
+	right: 0;
+	font-size: 18px;
+	font-weight: 200;
+}
+.box_stock_item span.txt_up {
+	color: #d02a2a;
+}
+.box_stock_item span.txt_down {
+	color: #2a49d0;
+}
+#mainStockArea .bx-wrapper .bx-controls-direction a {
+	width: 44px;
+	height: 20px;
+	box-sizing: border-box;
+	border: 1px solid #666;
+    transform: translateY(-50%);
+}
+#mainStockArea .bx-wrapper .bx-prev {
+	left: auto;
+    right: 0;
+    top: auto;
+    bottom: 20px;
+    border-bottom: none;
+    background: url(../images/main/icon_up.png) no-repeat center;
+}
+#mainStockArea .bx-wrapper .bx-controls-direction a.bx-prev {
+	border-bottom: none;
+}
+#mainStockArea .bx-wrapper .bx-next {
+	left: auto;
+    right: 0;
+    top: auto;
+    bottom: 0;
+    background: url(../images/main/icon_down.png) no-repeat center;
+}
+#mainStockArea .bx-wrapper .bx-pager {
+	position: absolute;
+	width: 100%;
+	margin-top: 20px;
+}
+
+/* 고객센터 */
+#mainServiceArea {
+	margin-bottom: 50px;
+}
+#mainServiceArea .container::after {
+	content: "";
+	display: block;
+	clear: both;
+}
+.tit_aside {
+	float: left;
+	width: 245px;
+	margin-right: 30px;
+	padding-left: 20px;
+	padding-top: 30px;
+	border-top: 4px solid;
+	box-sizing: border-box;
+}
+.tit_aside.color_orange {
+	border-color: #ff6600;
+}
+.tit_aside.color_blue {
+	border-color: #5b8af5;
+}
+.tit_aside h2 {
+	margin-bottom: 30px;
+	font-size: 35px;
+	font-weight: 400;
+	color: #222;
+}
+.tit_aside p {
+	margin-bottom: 50px;
+	font-size: 16px;
+	font-weight: 200;
+	color: #222;
+}
+.tit_aside a {
+	text-decoration: underline;
+	font-size: 14px;
+	font-weight: 200;
+	color: #444;
+}
+
+.cont_aside {
+	float: left;
+	width: 895px;
+}
+.wrap_tab_link {
+	clear: both;
+}
+.tab_link {
+	float: left;
+	width: 127.8px;
+	height: 68px;
+	border: none;
+	border-top: 4px solid #ccc;
+	outline: 0;
+	background: #fff;
+	text-align: center;
+	font-size: 18px;
+	font-weight: 400;
+	color: #222;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+.tab_link:hover,
+.tab_link.active {
+	border-color: #ff6600;
+	background: #f9f9f9;
+	color: #555;
+	transition: all 0.2s;
+}
+
+.wrap_tab_content {
+	clear: both;
+}
+.tab_content {
+	display: none;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	background: #f9f9f9;
+}
+
+.tbl_service {
+	width: 895px;
+}
+.tbl_service caption {
+	position: absolute;
+	width: 0;
+	height: 0;
+	text-indent: -9999px;
+}
+.tbl_service th,
+.tbl_service td {
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+.tbl_service th {
+	width: 133px;
+	margin-right: 28px;
+	box-sizing: border-box;
+	text-align: center;
+	font-size: 18px;
+	font-weight: 200;
+	color: #ff6600;
+}
+.tbl_service td.td_title {
+	box-sizing: border-box;
+	font-size: 18px;
+	font-weight: 200;
+	color: #222;
+}
+.tbl_service td.td_date {
+	width: 106px;
+	margin-left: 28px;
+	box-sizing: border-box;
+	text-align: center;
+	font-size: 18px;
+	font-weight: 200;
+	color: #222;
+}
+
+/* 전문가 */
+#mainExpertArea {
+	margin-top: 50px;
+	padding-top: 30px;
+	padding-bottom: 10px;
+	background: #f7f7f7;
+}
+#mainExpertArea .container::after {
+	content: "";
+	display: block;
+	clear: both;
+}
+.card_expert {
+	float: left;
+	width: 285px;
+	height: 355px;
+	margin-bottom: 20px;
+	margin-right: 20px;
+	padding-bottom: 15px;
+	box-sizing: border-box;
+	background: #fff;
+	transition: box-shadow 0.2s;
+}
+.card_expert:hover {
+	box-shadow: 2px -1px 5px 3px rgba(0, 0, 0, 0.03);
+	transition: box-shadow 0.2s;
+}
+.card_expert:nth-child(3n) {
+	margin-right: 0;
+}
+.link_expert {
+	display: block;
+	position: relative;
+	padding: 50px 50px 0;
+	box-sizing: border-box;
+}
+.img_expert {
+	width: 150px;
+	height: 150px;
+	overflow: hidden;
+	margin-bottom: 7px;
+	margin-left: auto;
+	margin-right: auto;
+	border-radius: 150px;
+}
+.txt_expert_name {
+	margin-bottom: 3px;
+	font-size: 16px;
+	font-weight: 200;
+	color: #222;
+}
+.txt_expert_desc {
+	margin-bottom: 40px;
+	font-size: 16px;
+	font-weight: 200;
+	color: #555;
+}
+.txt_live {
+	position: absolute;
+	right: 30px;
+	top: 15px;
+	font-size: 14px;
+	font-weight: 200;
+	letter-spacing: -0.4px;
+	color: #ff6600;
+}
+.wrap_expert_sns {
+	padding-bottom: 15px;
+	text-align: center;
+}
+.wrap_expert_sns a {
+	display: inline-block;
+	width: 35px;
+	height: 35px;
+	margin-left: 3px;
+	margin-right: 3px;
+	border-radius: 35px;
+}
+.icon_kakao {
+	background: #fae100 url(../images/main/icon_kakaotalk.png) no-repeat center;
+}
+.icon_telegram {
+	background: #31a8df url(../images/main/icon_telegram.png) no-repeat center;
+}
+.icon_video {
+	background: #fff url(../images/main/icon_youtube.png) no-repeat center;
+}
+.icon_discord {
+	background: #7289d9 url(../images/main/icon_discord.png) no-repeat center;
+}
+
+/* 버튼 있는 경우 */
+.card_expert.has_btn .link_expert {
+	padding-top: 30px;
+}
+.card_expert.has_btn .txt_expert_desc {
+	margin-bottom: 20px;
+}

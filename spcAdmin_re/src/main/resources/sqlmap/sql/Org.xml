@@ -45,7 +45,7 @@
 	</select>
 	
 	<select id="getOrgView" parameterType="java.util.Map" resultType="java.util.Map">
-	SELECT  ER.EDU_NO, CU.AREA_CD, CONCAT(CU.JUSO,CU.JUSO_DETAIL) AS ADDR ,IFNULL(ER.COPER_NM_AUTO,ER.COPER_NM) AS COPER_NM,
+	SELECT  ER.EDU_NO, CU.AREA_CD, CONCAT(CU.JUSO,CU.JUSO_DETAIL) AS ADDR ,IFNULL(ER.COPER_NM,ER.COPER_NM_AUTO) AS COPER_NM,
 			(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = ER.CATEGORY3_KEY) AS CATEGORY3, ER.CATEGORY3_KEY,
 			ER.EDU_TIME, ER.EDU_GARDEN, ER.EDU_TARGET,
 			ER.EDU_TARGET, ER.EDU_STATUS
@@ -174,12 +174,14 @@
                CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL THEN '섭외중'
 					WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL THEN '완료'
 					WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL THEN '완료'
+					WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL THEN '완료'
 				END
                AS INS_STATUS,
                <![CDATA[
                CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN ''
 					WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
 					WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+					WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
 					WHEN b.SCH_STATUS = 'C' THEN '신청취소'
 					WHEN b.SCH_STATUS IS NULL AND a.EDU_START_DATE <= NOW() THEN '교육완료'
 					WHEN b.SCH_STATUS = 'S' THEN '보고완료'
@@ -189,6 +191,7 @@
 		FROM EDU_SCHEDULE a,
 			 EDU_SCHEDULE_DETAIL b
 		WHERE a.SCHEDULE_NO = b.SCHEDULE_NO
+		AND a.REG_ID = #{UserAccount.user_id}
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 
@@ -197,6 +200,7 @@
 		FROM EDU_SCHEDULE a,
 			 EDU_SCHEDULE_DETAIL b
 		WHERE a.SCHEDULE_NO = b.SCHEDULE_NO
+		AND a.REG_ID = #{UserAccount.user_id}
 	</select>
 		
 	<select id="getInsSelectList" parameterType="java.util.Map" resultType="java.util.Map">

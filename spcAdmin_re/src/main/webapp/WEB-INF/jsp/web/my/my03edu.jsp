@@ -39,7 +39,35 @@
  			this.checked = isChecked;
  	    });
  	 });
-	 
+	 $('#category1_key').change(function(){
+	 		var val  = $(this).val();
+
+			if( val ==""){
+				return;
+			}
+			
+			$("#category2_key").val("");
+			$("#category3_key").val("");
+			
+			 $.ajax({	
+			    url     : "<c:url value='/user/category2list.do'/>",
+			    data    : $("#commonForm").serialize(),
+		        dataType: "JSON",
+		        cache   : false,
+				async   : true,
+				type	: "POST",	
+				success: function(data, opt, inx){
+				var option = '';
+				option += '<option value="">선택 하세요</opton>'; //선택
+				$.each(data, function(i, ret){
+					option += '<option value="'+ret.CATEGORY2_KEY+'">'+ret.CATEGORY2_NAME+'</option>';		
+				});
+				$('select[name=category2_key]').html(option);						
+	     },	       
+		        error 	: function(xhr, status, error) {}
+		        
+		     });
+		 });
 	 $('#category2_key').change(function(){
 			var val  = $(this).val();
 
@@ -202,19 +230,20 @@
 								</c:if>
 								<c:if test="${site eq 'off'}">
                                 <select class="select mr30"  id="category1_key" name="category1_key">
-										<option value='5' >실무자</option>
+										<option value='5' <c:if test="${category1_key == '5'}">selected</c:if>>실무자</option>
+										<option value='7' <c:if test="${category1_key == '7'}">selected</c:if>>기관</option>
 								</select>
 								</c:if>
 					            <select class="select"  id="category2_key" name="category2_key">
 					            	<option value='' >선택 하세요</option>
 									<c:forEach var="result" items="${category2list}" varStatus="status">
-										<option value='${result.CATEGORY2_KEY}' >${result.CATEGORY2_NAME}</option>
+										<option value='${result.CATEGORY2_KEY}' <c:if test="${category2_key == result.CATEGORY2_KEY}">selected</c:if>>${result.CATEGORY2_NAME}</option>
 									</c:forEach>
 					            </select>
 					            <select class="select lg-width"  id="category3_key" name="category3_key">
 					            	<option value='' >선택 하세요</option>
 									<c:forEach var="result" items="${category3list}" varStatus="status">
-										<option value='${result.CATEGORY3_KEY}' >${result.CATEGORY3_NAME}</option>
+										<option value='${result.CATEGORY3_KEY}' <c:if test="${category3_key == result.CATEGORY3_KEY}">selected</c:if>>${result.CATEGORY3_NAME}</option>
 									</c:forEach>
 					            </select>
                             </div>
