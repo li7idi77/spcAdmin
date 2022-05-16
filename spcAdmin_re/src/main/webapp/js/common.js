@@ -425,6 +425,22 @@ function btn_top() {
 	return false;
 };
 
+function fn_clear(){
+	var radio_name = [];
+	var radio = $("input[type='radio']");
+	$.each(radio, function(key, value){
+		radio_name.push($(value).attr("name"));
+	})
+	radio_name = $.unique(radio_name.sort()).sort();
+	for(var i=0;i<radio_name.length;i++){
+		$('input[name="' + radio_name[i] + '"]').removeAttr('checked');
+		//체크되어있는 항목 모두 해제
+		$('input[name="' + radio_name[i] + '"]')[0].checked = true;
+		//name에서 첫번쨰 요소만 선택
+	}
+	 $("[type='text']").val("");
+	 $("select").val("");
+ }
 
 //페이징 세팅
 function setWebPaging(data) {
