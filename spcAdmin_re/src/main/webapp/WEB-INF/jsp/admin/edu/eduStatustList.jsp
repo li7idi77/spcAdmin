@@ -177,16 +177,6 @@
  
            <form  id="commonForm" name="commonForm"  method="post"  >
 			<input type="hidden" id="pageIndex"      name="pageIndex"      class="input-box" value=1 />
-			<input type="hidden" id="category1_name" name="category1_name" class="input-box" value="${categoryVo.category1_name}" />
-			<input type="hidden" id="category1_key"  name="category1_key"  class="input-box" value="${categoryVo.category1_key}"  />
-			<input type="hidden" id="category2_name" name="category2_name" class="input-box" value="${categoryVo.category2_name}" />
-			<input type="hidden" id="category2_key"  name="category2_key"  class="input-box" value="${categoryVo.category2_key}"  />
-			<input type="hidden" id="category3_name" name="category3_name" class="input-box" value="${categoryVo.category3_key}"  />
-			<input type="hidden" id="category3_key"  name="category3_key"  class="input-box" value="${categoryVo.category3_key}"  />
-			<input type="hidden" id="gubun1"         name="gubun1"         class="input-box" value=''/>
-			<input type="hidden" id="gubun2"         name="gubun2"         class="input-box" value=''/>
-			<input type="hidden" id="site"           name="site"           class="input-box" value="${categoryVo.site}"  />
-			
          	<h1 class="h1-tit">교육 신청 현황</h1>
 
 
@@ -316,7 +306,7 @@
              <table class="list-tb">
                  <caption>선택, 교육명, 교육일, 교육시간, 지역, 기관명, 교육개설 신청자, 교육대상, 교육장소, 교육인원, 강사(ID), 강사섭외 유무, 진행현황, 취소사유, 수정 정보가 있는 테이블</caption>
                  <colgroup>
-                     <col width="3%"/>
+                     <%-- <col width="3%"/> --%>
                      <col width="4%"/>
                      <col width="8%"/>
                      <col width="6%"/>
@@ -335,7 +325,7 @@
                  </colgroup>
                  <thead>
                      <tr>
-                         <th><input type="checkbox" class="check-box"/></th>
+                         <!-- <th><input type="checkbox" class="check-box"/></th> -->
                          <th>No.</th>
                          <th>교육명</th>
                          <th>교육일</th>
@@ -354,84 +344,43 @@
                      </tr>
                  </thead>
                  <tbody>
+                 <c:forEach var="result" items="${resultList}" varStatus="status">
                      <tr>
-                         <td><input type="checkbox" class="check-box"/></td>
-                         <td>1</td>
-                         <td class="tl">교육명</td>
-                         <td>2021.10.05</td>
-                         <td>120</td>
-                         <td>서울</td>
-                         <td></td>
-                         <td>이진운</td>
-                         <td>교사</td>
-                         <td>회의실</td>
-                         <td><span>89</span>/<span>100</span></td>
-                         <td><span class="block">이보람</span><span  class="block">fgfdfdgfdgg</span></td>
-                         <td><span>완료</span></td>
-                         <td><span class="blue-txt">신청완료</span></td>
-                         <td></td>
-                         <td><button class="sm-btn blue-btn">수정</button></tr>td>
-                     </tr>
-                     <tr>
-                         <td><input type="checkbox" class="check-box"/></td>
-                         <td>2</td>
-                         <td class="tl">교육명</td>
-                         <td>2021.10.05</td>
-                         <td>120</td>
-                         <td>서울</td>
-                         <td></td>
-                         <td>이진운</td>
-                         <td>교사</td>
-                         <td>회의실</td>
-                         <td><span>89</span>/<span>100</span></td>
-                         <td><span class="block">이보람</span><span  class="block">fgfdfdgfdgg</span></td>
-                         <td><span>완료</span></td>
-                         <td><span class="red-txt">신청취소</span></td>
-                         <td><button class="sm-btn white-btn">보기</td>
+                         <!-- <td><input type="checkbox" class="check-box"/></td> -->
+                         <td>${status.index + 1}</td>
+                         <td class="tl">${result.EDU_NAME}</td>
+                         <td>${result.EDU_DATE}</td>
+                         <td>${result.EDU_TIME}</td>
+                         <td>${result.AREA_NM}</td>
+                         <td>${result.EDU_ORG_NAME}</td>
+                         <td>${result.USER_NM}</td>
+                         <td>${result.EDU_TARGET}</td>
+                         <td>${result.EDU_PLACE}</td>
+                         <td><span>${result.EDU_NUMBER}</span></td>
+                         <td><span class="block">${result.EDU_TEAC_NAME}</span><span  class="block">${result.EDU_TEAC_ID}</span></td>
+                         <td><c:if test="${result.INS_STATUS == '완료'}"><span>완료</span></c:if>
+                         	 <c:if test="${result.INS_STATUS != '완료'}"><span class="link">섭외중</span></c:if>
+                         </td>
+                         <td><c:if test="${result.SCH_STATUS == '신청완료'}"><span class="blue-txt">신청완료</span></c:if>
+	                         <c:if test="${result.SCH_STATUS == '신청취소'}"><span class="red-txt">신청취소</span></c:if>
+	                         <c:if test="${result.SCH_STATUS == '교육완료'}"><span class="green-txt">교육완료(결과보고)</span></c:if>
+	                         <c:if test="${result.SCH_STATUS == '보고완료'}"><span class="gray-txt">보고완료</span></c:if>
+                         </td>
+                         <td><c:if test="${result.CANCEL_REASON != null}"><button class="sm-btn white-btn">보기</button></c:if></td>
                          <td><button class="sm-btn blue-btn">수정</button></td>
                      </tr>
-                     <tr> 
-                         <td><input type="checkbox" class="check-box"/></td>
-                         <td>3</td>
-                         <td class="tl">교육명</td>
-                         <td>2021.10.05</td>
-                         <td>120</td>
-                         <td>서울</td>
-                         <td></td>
-                         <td>이진운</td>
-                         <td>교사</td>
-                         <td>회의실</td>
-                         <td><span>89</span>/<span>100</span></td>
-                         <td><span class="block">이보람</span><span  class="block">fgfdfdgfdgg</span></td>
-                         <td><span>완료</span></td>
-                         <td><span class="green-txt">교육완료(결과보고)</span></td>
-                         <td></td>
-                         <td><button class="sm-btn blue-btn">수정</button></td>
-                     </tr>
-                     <tr>
-                         <td><input type="checkbox" class="check-box"/></td>
-                         <td>4</td>
-                         <td class="tl">교육명</td>
-                         <td>2021.10.05</td>
-                         <td>120</td>
-                         <td>서울</td>
-                         <td></td>
-                         <td>이진운</td>
-                         <td>교사</td>
-                         <td>회의실</td>
-                         <td><span>89</span>/<span>100</span></td>
-                         <td><span class="block">이보람</span><span  class="block">fgfdfdgfdgg</span></td>
-                         <td><span class="link">섭외중</span></td>
-                         <td><span class="gray-txt">보고완료</span></td>
-                         <td></td>
-                         <td><button class="sm-btn blue-btn">수정</button></td>
-                     </tr>
+                 </c:forEach>
+                 <c:if test="${empty resultList }">
+		             <tr>
+		                 <td colspan='15'/>Data 없습니다.</td>
+		             </tr>
+		        </c:if>
                  </tbody>
              </table>
          </div>
 
           <div class="page-wrap">
-              <ul class="paging">
-    		<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
-  	  		</ul>
-          </div>
+		     <ul class="paging">
+		         <ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
+		     </ul>
+		</div>
