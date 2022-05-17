@@ -319,7 +319,25 @@
 			  ,COUNT(CASE tb.SCH_STATUS WHEN '3' THEN 1 END) AS CNT3
 			  ,COUNT(CASE tb.SCH_STATUS WHEN '4' THEN 1 END) AS CNT4
         FROM( 
-        SELECT 
+        SELECT a.SCHEDULE_NO,
+			   a.EDU_NAME,
+			   a.EDU_START_DATE AS EDU_DATE,
+               (SELECT EDU_TIME FROM EDU_REGISTRATION WHERE EDU_NO = a.EDU_KEY) AS EDU_TIME,
+               (SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = b.COPER_AREA_CD) AS AREA_NM,
+               a.EDU_ORG_NAME,
+               (SELECT USER_NM FROM COM_USER WHERE USER_ID = a.REG_ID) AS USER_NM,
+               a.EDU_TARGET,
+               b.EDU_PLACE,
+               a.EDU_NUMBER,
+               a.EDU_TEAC_NAME,
+               a.EDU_TEAC_ID,
+               b.CANCEL_REASON,
+               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL THEN '섭외중'
+					WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL THEN '완료'
+					WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL THEN '완료'
+					WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL THEN '완료'
+				END
+               AS INS_STATUS,
                <![CDATA[
                CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '0'
 					WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '1'
@@ -594,5 +612,15 @@
 		       ]]>
 			</when>
 		</choose>
+	</select>
+	
+	<select id="getCancelData" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT  CANCEL_DATE,
+				CANCEL_REASON,
+				CANCEL_USER,
+				CANCEL_TEL,
+				CANCEL_REMARK
+		FROM EDU_SCHEDULE_DETAIL
+		WHERE SCHEDULE_NO = #{sch_no} 
 	</select>
 </mapper>

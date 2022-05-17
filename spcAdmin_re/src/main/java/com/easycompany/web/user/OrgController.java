@@ -227,9 +227,11 @@ public class OrgController
   public String popAppCancel(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model ,HttpServletRequest request)  throws Exception {
 	  paramMap.put("UserAccount", request.getSession().getAttribute("UserAccount"));
 	  	  
-	  paramMap.put("sqlName", "getInsSelectList");
-	  List<Map<String, Object>> list = orgService.getSelectList(paramMap);
-	  model.addAttribute("resultList", list);
+	  if(paramMap.containsKey("chk")) {
+		  paramMap.put("sqlName", "getCancelData");	
+		  Map<String, Object> result = orgService.getSelectData(paramMap);
+		  model.addAttribute("result", result);
+	  }
 			  
 	  model.addAttribute("path", request.getServletPath());
 	  model.addAllAttributes(paramMap);

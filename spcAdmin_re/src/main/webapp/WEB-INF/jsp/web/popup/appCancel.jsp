@@ -68,7 +68,8 @@ function commonCallBack(obj){
                         <col width="*"/>
                     </colgroup>
                     <tbody>
-                        <tr>
+                    <c:if test="${chk == null}">
+                    	<tr>
                             <th>취소날짜</th>
                             <td>${currentDate}</td>
                         </tr>
@@ -88,15 +89,40 @@ function commonCallBack(obj){
                             <th>비고</th>
                             <td><textarea id="cancel_remark" name="cancel_remark" class="editor"></textarea></td>
                         </tr>
+                    </c:if>
+                    <c:if test="${chk != null}">
+                    	<tr>
+                            <th>취소날짜</th>
+                            <td>${result.CANCEL_DATE}</td>
+                        </tr>
+                        <tr>
+                            <th>취소사유</th>
+                            <td>${result.CANCEL_REASON}</td>
+                        </tr>
+                        <tr>
+                            <th>취소요청자</th>
+                            <td>${result.CANCEL_USER}</td>
+                        </tr>
+                        <tr>
+                            <th>취소요청자 연락처</th>
+                            <td>${result.CANCEL_TEL}</td>
+                        </tr>
+                        <tr>
+                            <th>비고</th>
+                            <td>${result.CANCEL_REMARK}</td>
+                        </tr>
+                    </c:if>
+                        
                         
                     </tbody>
                 </table>
                 </form>
             </div>
 		</div>
-		
+		<c:if test="${chk == null}">
         <div class="pop-footer">
             <button class="mid-btn navy-btn" onClick="fn_save();">확인</button>
             <button class="mid-btn white-btn" onClick="self.close();">취소</button>
         </div>
+        </c:if>
     </div>
