@@ -59,6 +59,10 @@ public class AdminOrgController
 	  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
 	  paramMap.put("offset",offset);
 	  
+	  paramMap.put("sqlName", "getAdOrgStatAllCnt");
+	  Map<String, Object> allCount = orgService.getSelectData(paramMap);
+	  model.addAttribute("allCount", allCount);
+	  
 	  paramMap.put("sqlName", "getAdOrgStatList");
 	  List<Map<String, Object>> list = orgService.getSelectList(paramMap);
 	  model.addAttribute("resultList", list);
@@ -156,19 +160,37 @@ public class AdminOrgController
 	    return result;
   }
   
-  @RequestMapping({"/org02Report.do"})
-  public String org02Report(@RequestParam Map<String, Object> paramMap, ModelMap model ,HttpServletRequest request) throws Exception {
-	  paramMap.put("sqlName", "getAdminOrgReport");	
-	  Map<String, Object> result = orgService.getSelectData(paramMap);
-	  model.addAttribute("result", result);	
+  @RequestMapping({"/eduTitleList.do"})
+  public String eduTitleList(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model, HttpServletRequest request) throws Exception{
+	  paramMap.put("pageSize", 10);
+	  paramMap.put("recordCountPerPage", 10);
+	  paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
+	  if(!paramMap.containsKey("pageIndex")) {
+		  paramMap.put("pageIndex", 1);
+	  }
+	  PaginationInfo paginationInfo = new PaginationInfo();
+	  paginationInfo.setCurrentPageNo(Integer.parseInt(paramMap.get("pageIndex").toString()));
+	  paginationInfo.setRecordCountPerPage(Integer.parseInt(paramMap.get("recordCountPerPage").toString()));
+	  paginationInfo.setPageSize(Integer.parseInt(paramMap.get("pageSize").toString()));
 	  
-	  paramMap.put("sqlName", "getEduAttList");
+	  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
+	  paramMap.put("offset",offset);
+	  
+	  paramMap.put("sqlName", "getAdOrgAppList");
 	  List<Map<String, Object>> list = orgService.getSelectList(paramMap);
 	  model.addAttribute("resultList", list);
 	  
+	  paramMap.put("sqlName", "getAdOrgAppListCnt");
+	  int totCnt = orgService.getSelectListCnt(paramMap);
+	  model.addAttribute("totCnt", totCnt);
+	  paginationInfo.setTotalRecordCount(totCnt);
+	  
+	  model.addAttribute("sessionId", request.getSession().getAttribute("AdminAccount"));
+	  model.addAttribute("paginationInfo", paginationInfo);
 	  model.addAttribute("path", request.getServletPath());
 	  model.addAllAttributes(paramMap);
-	  return "org02Report";
+	  
+	  return "eduTitleList";
   }
   
   @RequestMapping({"/courUserDel.do"})
@@ -214,8 +236,8 @@ public class AdminOrgController
 	}
   
   
-  @RequestMapping({"/org03List.do"})
-  public String org03List(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model, HttpServletRequest request) throws Exception{
+  @RequestMapping({"/eduReportList.do"})
+  public String eduReportList(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model, HttpServletRequest request) throws Exception{
 	  paramMap.put("pageSize", 10);
 	  paramMap.put("recordCountPerPage", 10);
 	  paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
@@ -244,6 +266,6 @@ public class AdminOrgController
 	  model.addAttribute("path", request.getServletPath());
 	  model.addAllAttributes(paramMap);
 	  
-	  return "org03List";
+	  return "eduReportList";
   }
 }

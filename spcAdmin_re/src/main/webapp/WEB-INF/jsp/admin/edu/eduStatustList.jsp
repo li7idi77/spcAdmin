@@ -8,171 +8,7 @@
 <script type="text/javascript" src="<c:url value='/resources/common/jquery.js'/>"></script>
 
  <script type="text/javaScript" language="javascript" defer="defer">
- <!--
-    
-     function fn_load(gubun2) {
-    	var frm = document.commonForm;
-    	
-    	if(gubun2=='category4'){
-    		frm.action = "<c:url value='/edu/eduInfoClassList.do'/>"; 
-    	}    	
-    	if(gubun2 !='category4'){
-    		frm.action = "<c:url value='/edu/eduInfoClassCate.do'/>"; 
-    	}
-    	if(gubun2=='category4'){
-    		$("#gubun2").val("categoryClass");
-    	} 
-    	if(gubun2=='category5'){
-    		$("#gubun2").val('category4');  
-    	} 
-    	if(gubun2=='category6'){
-    		$("#gubun2").val('category5');  
-    	} 
-
-    	frm.submit();
-     }
  
- 	function fn_move(str) {
-	  	var frm = document.commonForm;
-	  	$("#gubun1").val("R"); 
-		$("#site").val(str);  
-	   	frm.action = "<c:url value='/edu/eduInfoClassCate.do'/>";
-	  	frm.submit();
-    }
-     
- 	function goOkPage(){	
-		var frm = document.commonForm;
-		frm.action = "<c:url value='/edu/eduInfoClassCate.do'/>";  
-		frm.submit();
-	}
-	
-     
-    function fn_save(key1,key2, gubun2){
-    		
- 		var categoryName = $("#categoryName").val(); 		
-
- 		if (categoryName == ""){			
- 			alert("Category 이름을 입력해주세요.");
- 			$("#categoryName").focus();
- 			return;
- 		}		
- 		
- 		$("#gubun1").val("I"); 
- 		$("#gubun2").val(gubun2); 
- 		$("#category1_key").val(key1); 
- 		$("#category2_key").val(key2);
- 	 	
- 		var yn = confirm("카테고리를 등록 하시겠습니까?");		
- 		if(yn){
- 				
- 			$.ajax({	
- 				data     : $("#commonForm").serialize(),
- 			    url		 : "<c:url value='/edu/eduInfoClassCateSave.do'/>", 
- 		        dataType : "JSON",
- 		        cache    : false,
- 		        async    : false,
- 				type	 : "POST",	
- 		        success  : function(obj) {
- 		        	commonCallBack(obj);				
- 		        },	       
- 		        error 	: function(xhr, status, error) {} 		        
- 		    });
- 		}
- 	}	
- 	/* pagination 페이지 링크 function */
-    function fn_egov_link_page(pageNo){
-    	var frm = document.commonForm;
-    	$("#pageIndex").val(pageNo); 
-    	frm.action = "<c:url value='/edu/eduInfoClassCate.do'/>";
-       	frm.submit();
-    }
- 	
-    function fn_edit(key1,key2,key3, name1,name2,idx,gubun1,gubun2){
- 		
- 		var categoryName = $("input[name=categoryname]:eq(" + idx + ")").val() ;
- 		
- 		if (categoryName == ""){			
- 			alert("Category 이름을 입력해주세요.");
- 			return;
- 		}		
- 
- 		$("#category1_key").val(key1); 
- 		$("#category2_key").val(key2); 
- 		$("#category3_key").val(key3); 
- 
- 		
- 		if(gubun2=='category4'){
- 			$("#category1_name").val(categoryName); 
- 		}else if(gubun2=='category5'){
- 			$("#category1_name").val(name1);
- 			$("#category2_name").val(categoryName); 
- 		}else if(gubun2=='category6'){
- 			$("#category1_name").val(name1);
- 			$("#category2_name").val(name2); 
- 			$("#category3_name").val(categoryName); 
- 		}
- 
- 		$("#gubun1").val(gubun1); 
- 		$("#gubun2").val(gubun2); 
- 		
- 		var msg = (gubun1=='E' ? "카테고리를 수정 하시겠습니까?" : "정말로 삭제 하시겠습니까?");
- 		var yn = confirm(msg);		
- 		if(yn){
- 				
- 			$.ajax({	
- 				data     : $("#commonForm").serialize(),
- 			    url		 : "<c:url value='/edu/eduInfoClassCateSave.do'/>",
- 		        dataType : "JSON",
- 		        cache    : false,
- 		        async    : false,
- 				type	 : "POST",	
- 		        success  : function(obj) {
- 		        	commonCallBack(obj);				
- 		        },	       
- 		        error 	: function(xhr, status, error) {} 		        
- 		    });
- 		}
-  	}	
-    
-    function fn_regt(key1,key2,key3,name1,name2, idx,gubun1,gubun2){	
-		var frm = document.commonForm;
-		
-		var categoryName = $("input[name=categoryname]:eq(" + idx + ")").val() ;
-		
-		$("#category1_key").val(key1); 
-		$("#category2_key").val(key2);
-		$("#category3_key").val(key3);
-		
-		$("#category1_name").val(name1);
-		$("#category2_name").val(name2);
- 		$("#category3_name").val(categoryName);
- 		$("#gubun1").val(gubun1); 
- 		$("#gubun2").val(gubun2);  
- 		
- 		frm.action = "<c:url value='/edu/eduInfoClassCate.do'/>";
- 		
-		frm.submit();
-	}
-    
- 	function commonCallBack(obj){
- 	
- 		if(obj != null){		
- 			
- 			var result = obj.result;
- 			
- 			if(result == "SUCCESS"){				
- 				alert("성공하였습니다.");				
- 				goOkPage();				 
- 			} else if(result == "EXIST"){				
- 				alert("이미 등록 되었습니다.");	
- 				return false;
- 			}else {				
- 				alert("등록이 실패 했습니다.");	
- 				return false;
- 			}
- 		}
- 	}	
-     //-->
  </script>
  
            <form  id="commonForm" name="commonForm"  method="post"  >
@@ -184,28 +20,28 @@
              
              <div class="search-cont">
                  <div class="radio-cont">
-                     <input type="radio" class="radio-box" id="" name="" value="" checked>
+                     <input type="radio" class="radio-box" id="status_type" name="status_type" value="ALL" <c:if test="${status_type == 'ALL' || (empty status_type)}">checked </c:if>>
                      <label for="">전체</label>
                  </div>
                  
                  <div class="radio-cont mr10">
-                     <input type="radio" class="radio-box" id="" name="" value="">
+                     <input type="radio" class="radio-box" id="status_type" name="status_type" value="1" <c:if test="${status_type == '1'}">checked </c:if>>
                      <label for="">신청완료</label>
                  </div>
 
                  <div class="radio-cont">
-                     <input type="radio" class="radio-box" id="" name="" value="">
+                     <input type="radio" class="radio-box" id="status_type" name="status_type" value="2" <c:if test="${status_type == '2'}">checked </c:if>>
                      <label for="">신청취소</label>
                  </div>
                  
                  
                  <div class="radio-cont">
-                     <input type="radio" class="radio-box" id="" name="" value="">
+                     <input type="radio" class="radio-box" id="status_type" name="status_type" value="3" <c:if test="${status_type == '3'}">checked </c:if>>
                      <label for="">교육완료/결과보고</label>
                  </div>
                  
                  <div class="radio-cont">
-                     <input type="radio" class="radio-box" id="" name="" value="">
+                     <input type="radio" class="radio-box" id="status_type" name="status_type" value="4" <c:if test="${status_type == '4'}">checked </c:if>>
                      <label for="">보고완료</label>
                  </div>
              </div>
@@ -214,12 +50,7 @@
                  <h3 class="h3-tit">기관명</h3>
 
                  <div class="radio-cont">
-                     <input type="radio" class="radio-box" id="" name="" value="" checked>
-                     <label for="">전체</label>
-                 </div>
-                 <div class="radio-cont">
-                     <input type="radio" class="radio-box" id="" name="" value="">
-                     <input type="text" class="input-box" placeholder="직접입력"/>
+                     <input type="text" id="org_nm" name="org_nm" class="input-box" value="${org_nm}" placeholder="직접입력"/>
                  </div>
              </div>
 
@@ -227,25 +58,15 @@
                  <h3 class="h3-tit">강사명</h3>
 
                  <div class="radio-cont">
-                     <input type="radio" class="radio-box" id="" name="" value="" checked>
-                     <label for="">전체</label>
-                 </div>
-                 <div class="radio-cont">
-                     <input type="radio" class="radio-box" id="" name="" value="">
-                     <input type="text" class="input-box" placeholder="직접입력"/>
+                     <input type="text" id="ins_nm" name="ins_nm" class="input-box" value="${ins_nm}" placeholder="직접입력"/>
                  </div>
              </div>
 
              <div class="search-cont search-sub">
                  <h3 class="h3-tit">교육명</h3>
-
+                 
                  <div class="radio-cont">
-                     <input type="radio" class="radio-box" id="" name="" value="" checked>
-                     <label for="">전체</label>
-                 </div>
-                 <div class="radio-cont">
-                     <input type="radio" class="radio-box" id="" name="" value="">
-                     <input type="text" class="input-box" placeholder="직접입력"/>
+                     <input type="text" id="edu_nm" name="edu_nm" class="input-box" value="${edu_nm}" placeholder="직접입력"/>
                  </div>
              </div>
 
@@ -253,34 +74,29 @@
                  <h3 class="h3-tit">지역</h3>
 
                  <div class="radio-cont">
-                     <input type="radio" class="radio-box" id="" name="" value="" checked>
-                     <label for="">전체</label>
-                 </div>
-                 <div class="radio-cont">
-                     <input type="radio" class="radio-box" id="" name="" value="">
-                     <input type="text" class="input-box" placeholder="직접입력"/>
+                     <input type="text" id="area_nm" name="area_nm" class="input-box" value="${area_nm}" placeholder="직접입력"/>
                  </div>
              </div>
 
              <div class="search-cont">
                  <div class="radio-cont">
-                     <input type="radio" class="radio-box" id="dateAll" name="radioGroupDate" value="" checked>
+                     <input type="radio" class="radio-box" id="searchDate" name="searchDate" value="ALL" <c:if test="${searchDate == 'ALL' || (empty searchDate)}">checked </c:if>>
                      <label for="dateAll">전체</label>
                  </div>
                    
                  <div class="radio-cont">
-                     <input type="radio" class="radio-box" id="dateToday" name="radioGroupDate" value="">
+                     <input type="radio" class="radio-box" id="searchDate" name="searchDate" value="TODAY" <c:if test="${searchDate == 'TODAY'}">checked </c:if>>
                      <label for="dateToday">오늘</label>
                  </div>
                  
                  <div class="radio-cont mr10">
-                     <input type="radio" class="radio-box" id="dateTerm" name="radioGroupDate" value="">
+                     <input type="radio" class="radio-box" id="searchDate" name="searchDate" value="CHECK" <c:if test="${searchDate == 'CHECK'}">checked </c:if>>
                      <label for="dateTerm">기간선택</label>
                  </div>
                  <div class="picker-wrap">
-                     <input type="text" id="datepickerFrom" class="input-box"/>
+                     <input type="text" id="start_date" name="start_date" class="input-box" readonly value="${start_date}"/>
                      <span class="next-ico">-</span>
-                     <input type="text" id="datepickerTo" class="input-box"/>
+                     <input type="text" id="end_date" name="end_date" class="input-box" readonly value="${end_date}"/>
                  </div>
                  
                  <button class="search-btn">검색</button>
@@ -288,18 +104,20 @@
              </div>
              
          </div>
+         </form>
          
          <div class="btn-cont mb20">
              <dl class="count-txt">
-                 <dt>전체 <span>115</span></dt>
-                 <dt class="blue-txt">신청완료 <span>115</span></dt>
-                 <dt class="red-txt">신청취소 <span>115</span></dt>
-                 <dt class="green-txt">교육완료(결과보고) <span>115</span></dt>
-                 <dt class="gray-txt">보고완료 <span>115</span></dt>
+                 <dt>전체 <span>${allCount.ALL_CNT}</span></dt>
+                 <dt>신청중 <span>${allCount.CNT0}</span></dt>
+                 <dt class="blue-txt">신청완료 <span>${allCount.CNT1}</span></dt>
+                 <dt class="red-txt">신청취소 <span>${allCount.CNT2}</span></dt>
+                 <dt class="green-txt">교육완료(결과보고) <span>${allCount.CNT3}</span></dt>
+                 <dt class="gray-txt">보고완료 <span>${allCount.CNT4}</span></dt>
              </dl>
 
              <button class="mid-btn black-btn">엑셀다운</button>
-             <button class="mid-btn white-btn">선택삭제</button>
+             <!-- <button class="mid-btn white-btn">선택삭제</button> -->
          </div>
          
          <div class="table-wrap scroll-wrap">
