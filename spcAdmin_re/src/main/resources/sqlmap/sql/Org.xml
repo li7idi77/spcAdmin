@@ -623,4 +623,33 @@
 		FROM EDU_SCHEDULE_DETAIL
 		WHERE SCHEDULE_NO = #{sch_no} 
 	</select>
+	
+	<select id="getEduStatView" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT  b.COPER_AREA_CD,
+				a.EDU_ORG_NAME,
+				b.COPER_ADDR,
+				b.USER_NM,
+		        b.USER_TELNO,
+		        b.USER_EML,
+		        a.EDU_TEAC_NAME,
+		        a.EDU_TEAC_ID,
+		        b.INS_TYPE,
+		        a.EDU_NAME,
+		        a.EDU_TARGET,
+		        a.EDU_START_DATE,
+		        b.START_TIME,
+		        b.END_TIME,
+		        a.EDU_NUMBER,
+		        (SELECT COUNT(*) FROM EDU_COURSE_REGISTRATION WHERE SCHEDULE_NO = a.SCHEDULE_NO) AS APP_COUNT,
+		        b.EDU_PLACE,
+		        b.CANCEL_DATE,
+		        b.CANCEL_REASON,
+		        b.CANCEL_USER,
+		        b.CANCEL_TEL,
+		        b.CANCEL_REMARK        
+		FROM EDU_SCHEDULE a,
+			 EDU_SCHEDULE_DETAIL b
+		WHERE a.SCHEDULE_NO = b.SCHEDULE_NO
+		AND a.SCHEDULE_NO = #{sch_no} 
+	</select>
 </mapper>

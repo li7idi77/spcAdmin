@@ -208,7 +208,7 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                        </tr>
+                                        </tr> 
                                         <tr>
                                             <th>강사선택</th>
                                             <td>

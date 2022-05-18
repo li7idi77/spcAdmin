@@ -110,6 +110,12 @@
        <put-attribute name="body"  value="/WEB-INF/jsp/admin/edu/eduStatustList.jsp" />  
    </definition> 
    
+   <!-- admin > 기관(결과보고) > 교육신청 현황   -->
+   <definition name="eduStatustMod" extends="base-definition">  
+       <put-attribute name="title" value="교육신청 현황" />  
+       <put-attribute name="body"  value="/WEB-INF/jsp/admin/edu/eduStatustMod.jsp" />  
+   </definition> 
+   
    <!-- admin > 기관(결과보고) > 교육명 별 신청자   -->
    <definition name="eduTitleList" extends="base-definition">  
        <put-attribute name="title" value="교육명 별 신청자" />  

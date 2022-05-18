@@ -80,6 +80,25 @@ public class AdminOrgController
 	  return "eduStatustList";
   }
   
+  @RequestMapping({"/eduStatustMod.do"})
+  public String eduStatustMod(@RequestParam Map<String, Object> paramMap, ModelMap model ,HttpServletRequest request) throws Exception {
+	  paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));  
+	  	   
+	  paramMap.put("sqlName", "getCodeList");
+	  paramMap.put("code","32");
+	  List<Map<String, Object>> codeList = instructorService.getSelectList(paramMap);
+	  model.addAttribute("codeList", codeList);
+		
+	  paramMap.put("sqlName", "getEduStatView");	
+	  Map<String, Object> result = orgService.getSelectData(paramMap);
+	  
+	  model.addAttribute("result", result);
+	  model.addAttribute("sessionId", request.getSession().getAttribute("AdminAccount"));
+	  model.addAttribute("path", request.getServletPath());
+	  model.addAllAttributes(paramMap);
+	  return "eduStatustMod";
+  }
+  
   @RequestMapping({"/popInsSelect.do"})
   public String popInsSelect(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model ,HttpServletRequest request)  throws Exception {
 	  paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));

@@ -31,7 +31,7 @@
  function fn_egov_link_page(pageNo){
 	 var frm = document.commonForm;
 	 $("#pageIndex").val(pageNo); 
- 	 frm.action = "<c:url value='/inst/instructorAdm03List.do'/>";
+ 	 frm.action = "<c:url value='/org/eduStatustList.do'/>";
    	 frm.submit();
  }
 function openWindowPop(url, name){
@@ -215,7 +215,7 @@ function openWindowPop(url, name){
 	                         <c:if test="${result.SCH_STATUS == '보고완료'}"><span class="gray-txt">보고완료</span></c:if>
                          </td>
                          <td><c:if test="${result.CANCEL_REASON != null}"><button type="button" class="sm-btn white-btn"  onClick="javascript:openWindowPop('<c:url value='/user/popAppCancel.do'/>?chk=view&sch_no=${result.SCHEDULE_NO}','popup');">보기</button></c:if></td>
-                         <td><button class="sm-btn blue-btn">수정</button></td>
+                         <td><button class="sm-btn blue-btn" onClick="location.href='<c:url value='/org/eduStatustMod.do' />?sch_no=${result.SCHEDULE_NO}">수정</button></td>
                      </tr>
                  </c:forEach>
                  <c:if test="${empty resultList }">
