@@ -214,8 +214,8 @@ function openWindowPop(url, name){
 	                         <c:if test="${result.SCH_STATUS == '교육완료'}"><span class="green-txt">교육완료(결과보고)</span></c:if>
 	                         <c:if test="${result.SCH_STATUS == '보고완료'}"><span class="gray-txt">보고완료</span></c:if>
                          </td>
-                         <td><c:if test="${result.CANCEL_REASON != null}"><button type="button" class="sm-btn white-btn"  onClick="javascript:openWindowPop('<c:url value='/user/popAppCancel.do'/>?chk=view&sch_no=${result.SCHEDULE_NO}','popup');">보기</button></c:if></td>
-                         <td><button class="sm-btn blue-btn" onClick="location.href='<c:url value='/org/eduStatustMod.do' />?sch_no=${result.SCHEDULE_NO}">수정</button></td>
+                         <td><c:if test="${result.CANCEL_REASON != null && result.CANCEL_REASON != ''}"><button type="button" class="sm-btn white-btn"  onClick="javascript:openWindowPop('<c:url value='/user/popAppCancel.do'/>?chk=view&sch_no=${result.SCHEDULE_NO}','popup');">보기</button></c:if></td>
+                         <td><c:if test="${result.SCH_STATUS == '신청완료' || result.SCH_STATUS == '신청취소' || result.SCH_STATUS == ''}"><button type="button" class="sm-btn blue-btn" onClick="javascript:location.href='<c:url value='/org/eduStatustMod.do'/>?sch_no=${result.SCHEDULE_NO}'">수정</button></c:if></td>
                      </tr>
                  </c:forEach>
                  <c:if test="${empty resultList }">

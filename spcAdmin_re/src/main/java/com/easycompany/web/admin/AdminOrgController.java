@@ -99,72 +99,17 @@ public class AdminOrgController
 	  return "eduStatustMod";
   }
   
-  @RequestMapping({"/popInsSelect.do"})
-  public String popInsSelect(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model ,HttpServletRequest request)  throws Exception {
-	  paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
-	  
-	  paramMap.put("sqlName", "getInsSelectList");
-	  List<Map<String, Object>> list = orgService.getSelectList(paramMap);
-	  model.addAttribute("resultList", list);
-			  
-	  model.addAttribute("path", request.getServletPath());
-	  model.addAllAttributes(paramMap);
-	
-	  return "popInsSelect";
-  }
-  
-  @RequestMapping({"/updateInsData.do"})
+  @RequestMapping({"/orgSave.do"})
   @ResponseBody
-  public Map<String, Object> updateInsData(@RequestParam Map<String, Object> paramMap, HttpServletRequest request) throws Exception {
+  public Map<String, Object> orgSave(HttpServletRequest request, @RequestParam Map<String, Object> paramMap) throws Exception {
 	    int resultCnt = 0;
 	    Map<String, Object> result = new HashMap<String, Object>();
 	    try {
 	      paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
-
-	      paramMap.put("sqlName", "updateInsData");	
+	      paramMap.put("sqlName", "orgUpdate");	
 	      resultCnt = orgService.updateData(paramMap);
 	      
-	      paramMap.put("sqlName", "updateInsDtlData");	
-	      resultCnt += orgService.updateData(paramMap);
-	      
-	      paramMap.put("sqlName", "updateInsAppData");	
-	      resultCnt += orgService.updateData(paramMap);
-	      
-	      if(resultCnt > 0) {
-	    	  result.put("result", "SUCCESS");
-	      }else {
-	    	  result.put("result", "FAIL");	 
-	      }
-	    } catch (Exception e) {
-	      result.put("result", "FAIL");
-	    }
-	
-	    return result;
-  }
-  
-  @RequestMapping({"/popAppCancel.do"})
-  public String popAppCancel(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model ,HttpServletRequest request)  throws Exception {
-	  paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
-	  	  
-	  paramMap.put("sqlName", "getInsSelectList");
-	  List<Map<String, Object>> list = orgService.getSelectList(paramMap);
-	  model.addAttribute("resultList", list);
-			  
-	  model.addAttribute("path", request.getServletPath());
-	  model.addAllAttributes(paramMap);
-	
-	  return "popAppCancel";
-  }
-  
-  @RequestMapping({"/saveAppCancel.do"})
-  @ResponseBody
-  public Map<String, Object> saveAppCancel(@RequestParam Map<String, Object> paramMap, HttpServletRequest request) throws Exception {
-	    int resultCnt = 0;
-	    Map<String, Object> result = new HashMap<String, Object>();
-	    try {
-	      paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
-
-	      paramMap.put("sqlName", "updateAppCancel");	
+	      paramMap.put("sqlName", "orgUpdateDtl");	
 	      resultCnt = orgService.updateData(paramMap);
 	      
 	      if(resultCnt > 0) {
@@ -178,7 +123,7 @@ public class AdminOrgController
 	
 	    return result;
   }
-  
+    
   @RequestMapping({"/eduTitleList.do"})
   public String eduTitleList(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model, HttpServletRequest request) throws Exception{
 	  paramMap.put("pageSize", 10);

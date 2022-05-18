@@ -1,15 +1,17 @@
-
-<%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>  
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <%@ taglib prefix="ui"     uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <script type="text/javascript" src="<c:url value='/resources/common/jquery.js'/>"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 
- <script type="text/javaScript" language="javascript" defer="defer">
+ <script type="text/javaScript">
  $(document).ready(function(){		
-	 $("#start_date).datepicker({
+	 $("#start_date,#cancel_date").datepicker({
 		  	dateFormat: 'yy-mm-dd' //달력 날짜 형태
 	       ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
         ,showMonthAfterYear:true // 월- 년 순서가아닌 년도 - 월 순서
@@ -28,21 +30,87 @@
         ,maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)  
   	});
  });
- function fn_egov_link_page(pageNo){
-	 var frm = document.commonForm;
-	 $("#pageIndex").val(pageNo); 
- 	 frm.action = "<c:url value='/inst/instructorAdm03List.do'/>";
-   	 frm.submit();
+ 
+ function insSelect(str){
+	var param = str.split(",");
+	$("#user_id").val(param[3]);
+	$("#user_nm").val(param[2]);
  }
-function openWindowPop(url, name){
-    var options = 'top=10, left=10, width=700px, height=600px, status=no, menubar=no, toolbar=no, resizable=no';
-    window.open(url, name, options);
+ 
+ function fn_save(){
+	 	if ($("#app_user_nm").val() == ""){			
+			alert("신청자를 입력하세요.");
+			$("#app_user_nm").focus();
+			return;
+		}
+	 	if ($("#app_tel").val() == ""){			
+			alert("연락처를 입력하세요.");
+			$("#app_tel").focus();
+			return;
+		}
+	   if ($("#app_email").val() == ""){			
+			alert("이메일을 입력하세요.");
+			$("#app_email").focus();
+			return;
+		}	
+	   if ($("#start_date").val() == ""){			
+			alert("교육일정을 입력하세요.");
+			$("#start_date").focus();
+			return;
+		}
+	   if ($("#edu_number").val() == ""){			
+			alert("교육인원을 입력하세요.");
+			$("#edu_number").focus();
+			return;
+		}
+	   if ($("#edu_time").val() == ""){			
+			alert("교육시간을 입력하세요.");
+			$("#edu_time").focus();
+			return;
+		}
+		if(confirm("교육 신청을 하시겠습니까?")){
+			$.ajax({	
+				data       : $("#commonForm").serialize(),
+			    url		   : "<c:url value='/org/orgSave.do'/>",
+			    dataType   : "JSON",
+		        processData: false, 
+		        cache    : false,
+				type	   : "POST",	
+		        success    : function(obj) {
+		        	commonCallBack(obj);				
+		        },	       
+		        error 	: function(xhr, status, error) {} 		        
+		    });
+		}
 }	
+function commonCallBack(obj){
+		if(obj != null){		
+			
+			var result = obj.result;
+			
+			if(result == "SUCCESS"){				
+				alert("성공하였습니다.");				
+				fn_goList();				 
+			}else {				
+				alert("등록이 실패 했습니다.");	
+				return false;
+			}
+		}
+	}	
+
+function openWindowPop(url, name){
+	    var options = 'top=10, left=10, width=700px, height=600px, status=no, menubar=no, toolbar=no, resizable=no';
+	    window.open(url, name, options);
+	}	
+
+	function fn_goList(){
+		document.location = "<c:url value='/org/eduStatustList.do'/>";
+	 }	
 
  </script>
  
            <form  id="commonForm" name="commonForm"  method="post"  >
-               <input type="hidden" id="schedule_no" name="schedule_no" value="${schedule_no}">
+               <input type="text" id="schedule_no" name="schedule_no" value="${sch_no}">
          	<h1 class="h1-tit">교육 신청 현황 수정</h1>
 
 
@@ -103,13 +171,13 @@ function openWindowPop(url, name){
                                             <input type="radio" class="radio-box" id="ins_type" name="ins_type" value="select" <c:if test="${result.INS_TYPE =='select'}">checked </c:if>>
                                             <input type="text" id="user_nm" name="user_nm" class="input-box" readonly  <c:if test="${result.INS_TYPE =='select'}">value="${result.EDU_TEAC_NAME}"</c:if>/>
                                             <input type="hidden" id="user_id" name="user_id" <c:if test="${result.INS_TYPE =='select'}">value="${result.EDU_TEAC_ID}"</c:if>/>
-                                            <button class="sm-btn blue-btn">검색</button>
+                                            <button type="button" onClick="javascript:openWindowPop('<c:url value='/user/popInsSearch.do'/>?edu_no=${result.EDU_KEY}','popup');" class="sm-btn blue-btn">검색</button>
                                         </div>
                                           
                                         <div class="radio-cont">
                                             <input type="radio" class="radio-box" id="ins_type" name="ins_type" value="input" <c:if test="${result.INS_TYPE =='input'}">checked </c:if>>
                                             <label for="">직접입력</label>
-                                            <input type="text" class="input-box" <c:if test="${result.INS_TYPE =='input'}">value="${result.EDU_TEAC_NAME}"</c:if>/>
+                                            <input type="text" id="ins_input" name="ins_input" class="input-box" <c:if test="${result.INS_TYPE =='input'}">value="${result.EDU_TEAC_NAME}"</c:if>/>
                                         </div>
 
                                         <div class="radio-cont">
@@ -123,7 +191,7 @@ function openWindowPop(url, name){
                             <tr>
                                 <th>교육명</th>
                                 <td>
-                                    <input type="text" class="input-box" id="edu_nm" name="edu_nm" value="${result.EDU_NAME}"/>
+                                    <input type="text" class="input-box" id="edu_nm" name="edu_nm" value="${result.EDU_NAME}" readOnly/>
                                 </td>
                             </tr>
                             <tr>
@@ -137,7 +205,7 @@ function openWindowPop(url, name){
                                 <td>
                                     <div class="tb-cont">
                                         <div class="picker-wrap">
-                                            <input type="text" id="datepickerDefault" id="start_date" name="start_date" class="input-box" value="${result.EDU_START_DATE}"/>
+                                            <input type="text" id="start_date" name="start_date" class="input-box" value="${result.EDU_START_DATE}"/>
                                         </div>
                                         <div class="time-cont">
                                         	<c:set var="start_time" value="${fn:split(result.START_TIME,':')}" />
@@ -149,7 +217,7 @@ function openWindowPop(url, name){
                                             <span>시</span>
                                             <select class="select" id="start_min" name="start_min">
                                             <c:forEach var="i"  begin="0" end="60">
-										        <option value="${i}" <c:if test="${start_time[0] == i}">selected</c:if>>${i>9?i:'0'}${i>9?'':i}</option>
+										        <option value="${i}" <c:if test="${start_time[1] == i}">selected</c:if>>${i>9?i:'0'}${i>9?'':i}</option>
 										    </c:forEach>
                                             </select>
                                             <span>분</span>
@@ -183,14 +251,14 @@ function openWindowPop(url, name){
                             <tr>
                                 <th>교육인원</th>
                                 <td>
-                                    <input type="text" class="input-box" value=""/>
+                                    <input type="text" id="edu_number" name="edu_number" class="input-box" value="${result.EDU_NUMBER}"/>
                                     <span>명</span>
                                 </td>
                             </tr>
                             <tr>
                                 <th>교육 신청인원</th>
                                 <td>
-                                    <input type="text" class="input-box" value=""/>
+                                    <input type="text" class="input-box" value="${result.APP_COUNT}" readOnly/>
                                     <span>명</span>
                                     <span class="point">* 실제 교육인원입니다.</span>
                                 </td>
@@ -198,7 +266,7 @@ function openWindowPop(url, name){
                             <tr>
                                 <th>교육장소</th>
                                 <td>
-                                    <input type="text" class="input-box" value=""/>
+                                    <input type="text" id="edu_place" name="edu_place" class="input-box" value="${result.EDU_PLACE}"/>
                                 </td>
                             </tr>
                         </tbody>
@@ -219,29 +287,29 @@ function openWindowPop(url, name){
                                 <tr>
                                     <th>취소사유</th>
                                     <td>
-                                        <textarea class="editor"></textarea>
+                                        <textarea id="cancel_reason" name="cancel_reason" class="editor">${result.CANCEL_REASON}</textarea>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>취소날짜</th>
                                     <td>
                                         <div class="picker-wrap">
-                                            <input type="text" id="datepickerDefault02" class="input-box"/>
+                                            <input type="text" id="cancel_date" name="cancel_date" class="input-box" value="${result.CANCEL_DATE}"/>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>취소요청자</th>
-                                    <td><input type="text" class="input-box" value=""/></td>
+                                    <td><input type="text" id="cancel_user" name="cancel_user" class="input-box" value="${result.CANCEL_USER}"/></td>
                                 </tr>
                                 <tr>
                                     <th>취소요청자 연락처</th>
-                                    <td><input type="text" class="input-box" value=""/></td>
+                                    <td><input type="text" id="cancel_tel" name="cancel_tel" class="input-box" value="${result.CANCEL_TEL}"/></td>
                                 </tr>
                                 <tr>
                                     <th>비고</th>
                                     <td>
-                                        <textarea class="editor"></textarea>
+                                        <textarea id="cancel_remark" name="cancel_remark" class="editor">${result.CANCEL_REMARK}</textarea>
                                     </td>
                                 </tr>
                         </tbody>
@@ -249,7 +317,7 @@ function openWindowPop(url, name){
                 </div>
 
                 <div class="btn-cont">
-                    <button class="mid-btn blue-btn">저장하기</button>
-                    <button class="mid-btn white-btn">취소</button>
+                    <button type="button" class="mid-btn blue-btn" onClick="fn_save();">저장하기</button>
+                    <button type="button" class="mid-btn white-btn" onClick="javascript:history.back();">취소</button>
                 </div>
          </form>

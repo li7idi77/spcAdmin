@@ -625,7 +625,8 @@
 	</select>
 	
 	<select id="getEduStatView" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT  b.COPER_AREA_CD,
+		SELECT  a.EDU_KEY,
+				b.COPER_AREA_CD,
 				a.EDU_ORG_NAME,
 				b.COPER_ADDR,
 				b.USER_NM,
@@ -652,4 +653,34 @@
 		WHERE a.SCHEDULE_NO = b.SCHEDULE_NO
 		AND a.SCHEDULE_NO = #{sch_no} 
 	</select>
+	
+	<update id="orgUpdate" parameterType="java.util.Map">	
+		UPDATE EDU_SCHEDULE
+		SET   EDU_START_DATE = #{start_date}
+		  	, EDU_ORG_NAME = #{coper_nm}
+		  	, EDU_TARGET = #{edu_target}
+		  	, EDU_NUMBER = #{edu_number}
+		  	, EDU_TEAC_NAME = IFNULL(#{user_nm},#{ins_input})
+		  	, EDU_TEAC_ID = #{user_id}
+		WHERE SCHEDULE_NO = #{schedule_no} 
+	</update>
+		
+	<update id="orgUpdateDtl" parameterType="java.util.Map">	
+		UPDATE EDU_SCHEDULE_DETAIL
+		SET    COPER_AREA_CD = #{area_cd}
+		  	 , COPER_ADDR = #{coper_addr}
+		  	 , USER_NM = #{app_user_nm}
+		  	 , USER_TELNO = #{app_tel}
+		  	 , USER_EML = #{app_email}
+		  	 , INS_TYPE = #{ins_type}
+		  	 , START_TIME = CONCAT(#{start_hour},':',#{start_min})
+		  	 , END_TIME = CONCAT(#{end_hour},':',#{end_min})
+		  	 , EDU_PLACE = #{edu_place}
+		  	 , CANCEL_REASON = #{cancel_reason}
+		  	 , CANCEL_DATE = #{cancel_date}
+		  	 , CANCEL_USER = #{cancel_user}
+		  	 , CANCEL_TEL = #{cancel_tel}
+		  	 , CANCEL_REMARK = #{cancel_remark}
+		WHERE SCHEDULE_NO = #{schedule_no} 
+	</update>
 </mapper>
