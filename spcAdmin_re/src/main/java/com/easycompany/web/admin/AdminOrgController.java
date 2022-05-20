@@ -140,11 +140,11 @@ public class AdminOrgController
 	  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
 	  paramMap.put("offset",offset);
 	  
-	  paramMap.put("sqlName", "getAdOrgAppList");
+	  paramMap.put("sqlName", "geEduAppList");
 	  List<Map<String, Object>> list = orgService.getSelectList(paramMap);
 	  model.addAttribute("resultList", list);
 	  
-	  paramMap.put("sqlName", "getAdOrgAppListCnt");
+	  paramMap.put("sqlName", "geEduAppListCnt");
 	  int totCnt = orgService.getSelectListCnt(paramMap);
 	  model.addAttribute("totCnt", totCnt);
 	  paginationInfo.setTotalRecordCount(totCnt);
@@ -157,24 +157,38 @@ public class AdminOrgController
 	  return "eduTitleList";
   }
   
-  @RequestMapping({"/courUserDel.do"})
-  @ResponseBody
-  public String courUserDel(HttpServletRequest request, @RequestParam(value="userArr[]") List<String> userList, @RequestParam Map<String, Object> paramMap) throws Exception {
-		int resultCnt = 0;
-		String result = "";
-		try {
-			paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
-			paramMap.put("userList", userList); 
-			paramMap.put("sqlName", "courUserDel"); 
-			resultCnt = orgService.updateData(paramMap);
-		    result = (resultCnt > 0 ? "SUCCESS" : "FAIL");
-		    
-		} catch (Exception e) {
-			result = "FAIL";
-		}
-		
-		return result;
-	}
+  @RequestMapping({"/eduTitleDetail.do"})
+  public String eduTitleDetail(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model, HttpServletRequest request) throws Exception{
+	  paramMap.put("pageSize", 10);
+	  paramMap.put("recordCountPerPage", 10);
+	  paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
+	  if(!paramMap.containsKey("pageIndex")) {
+		  paramMap.put("pageIndex", 1);
+	  }
+	  PaginationInfo paginationInfo = new PaginationInfo();
+	  paginationInfo.setCurrentPageNo(Integer.parseInt(paramMap.get("pageIndex").toString()));
+	  paginationInfo.setRecordCountPerPage(Integer.parseInt(paramMap.get("recordCountPerPage").toString()));
+	  paginationInfo.setPageSize(Integer.parseInt(paramMap.get("pageSize").toString()));
+	  
+	  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
+	  paramMap.put("offset",offset);
+	  
+	  paramMap.put("sqlName", "geEduAppUserList");
+	  List<Map<String, Object>> list = orgService.getSelectList(paramMap);
+	  model.addAttribute("resultList", list);
+	  
+	  paramMap.put("sqlName", "geEduAppUserListCnt");
+	  int totCnt = orgService.getSelectListCnt(paramMap);
+	  model.addAttribute("totCnt", totCnt);
+	  paginationInfo.setTotalRecordCount(totCnt);
+	  
+	  model.addAttribute("sessionId", request.getSession().getAttribute("AdminAccount"));
+	  model.addAttribute("paginationInfo", paginationInfo);
+	  model.addAttribute("path", request.getServletPath());
+	  model.addAllAttributes(paramMap);
+	  
+	  return "eduTitleDetail";
+  }
   
   @RequestMapping({"/courUserAtt.do"})
   @ResponseBody

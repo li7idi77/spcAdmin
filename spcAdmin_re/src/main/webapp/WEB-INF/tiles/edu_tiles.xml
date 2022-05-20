@@ -117,6 +117,11 @@
    </definition> 
    
    <!-- admin > 기관(결과보고) > 교육명 별 신청자   -->
+   <definition name="eduTitleDetail" extends="base-definition">  
+       <put-attribute name="title" value="교육명 별 신청자" />  
+       <put-attribute name="body"  value="/WEB-INF/jsp/admin/edu/eduTitleDetail.jsp" />  
+   </definition>
+   
    <definition name="eduTitleList" extends="base-definition">  
        <put-attribute name="title" value="교육명 별 신청자" />  
        <put-attribute name="body"  value="/WEB-INF/jsp/admin/edu/eduTitleList.jsp" />  
