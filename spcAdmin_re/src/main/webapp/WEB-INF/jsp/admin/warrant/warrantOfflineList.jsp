@@ -50,7 +50,7 @@
         </select>
 
         <button class="search-btn">검색</button>
-        <button class="search-btn white-btn ml20" onClick="fn_clear();">초기화</button>
+        <button type="button" class="search-btn white-btn ml20" onClick="fn_clear();">초기화</button>
     </div>
     </form>
 

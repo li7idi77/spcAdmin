@@ -140,7 +140,7 @@
                             
                             <div class="btn-cont">
                                 <button class="lg-btn orange-btn" id="searchBtn" name="searchBtn" onclick="">검색</button>
-                                <button class="lg-btn navy-btn" id="clearBtn" name="clearBtn" onClick="fn_clear();">초기화</button>
+                                <button type="button" class="lg-btn navy-btn" id="clearBtn" name="clearBtn" onClick="fn_clear();">초기화</button>
                             </div>
                         </div>
                         

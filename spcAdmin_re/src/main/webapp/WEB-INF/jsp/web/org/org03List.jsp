@@ -61,7 +61,7 @@
 
                             <div class="btn-cont">
                                 <button class="lg-btn orange-btn">검색</button>
-                                <button class="lg-btn navy-btn" onClick="fn_clear();">초기화</button>
+                                <button type="button" class="lg-btn navy-btn" onClick="fn_clear();">초기화</button>
                             </div>
                         </div>
                         </form>
@@ -113,7 +113,6 @@
                                             <td>${result.EDU_ORG_NAME}</td>
                                             <td>${result.EDU_TARGET}</td>
                                             <td>${result.EDU_TEAC_NAME}</td>
-                                            <td><span <c:if test="${result.INS_STATUS == '섭외중'}">style="cursor:pointer;" onClick="javascript:openWindowPop('<c:url value='/user/popInsSelect.do'/>?sch_no=${result.SCHEDULE_NO}','popup');"</c:if>>${result.INS_STATUS}</span></td>
                                             <td>
                                                 <span class="block" >${result.SCH_STATUS}</span>
                                                 <c:if test="${result.SCH_STATUS == '교육완료'}">

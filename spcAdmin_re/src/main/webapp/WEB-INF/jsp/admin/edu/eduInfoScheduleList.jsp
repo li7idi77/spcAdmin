@@ -247,7 +247,8 @@
                        <input type="text" id="edu_end_date"   name="edu_end_date"   readonly class="input-box" value="${categoryVo.edu_end_date}"/>
                    </div>
                    <input type="text" class="input-box" id="category3_name" name="category3_name" value="${categoryVo.category3_name}" placeholder="교육명"/>
-                   <button  type="button" class="search-btn" onClick="fn_search();">검색</button>
+                   <button  type="button" class="search-btn" onClick="fn_search();">검색</button>&nbsp;&nbsp;
+            <button type="button" class="search-btn white-btn" onClick="fn_clear();">초기화</button>    
                </div>
            </div>
            </form>

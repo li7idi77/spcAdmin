@@ -72,7 +72,7 @@
 	         </div>
 	         
 	         <button type="submit" class="search-btn">검색</button>
-	         <button type="reset"  class="search-btn white-btn ml20">초기화</button>
+	         <button type="button"  class="search-btn white-btn ml20">초기화</button>
 	     </div>
      </form>
 

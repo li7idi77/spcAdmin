@@ -318,7 +318,7 @@
 
            <div class="btn-cont mb20">
            	<button  type="button" class="search-btn" onClick="fn_search();">검색</button>
-            <button type="reset" class="search-btn white-btn" onClick="fn_clear();">초기화</button>
+            <button type="button" class="search-btn white-btn" onClick="fn_clear();">초기화</button>
             <button type="button" class="mid-btn black-btn "  onClick="fn_excel();">엑셀다운</button>
            </div>
            </form>

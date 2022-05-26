@@ -133,4 +133,13 @@
        <put-attribute name="body"  value="/WEB-INF/jsp/admin/edu/eduReportList.jsp" />  
    </definition> 
    
+   <definition name="eduReportView" extends="base-definition">  
+       <put-attribute name="title" value="교육신청 현황" />  
+       <put-attribute name="body"  value="/WEB-INF/jsp/admin/edu/eduReportView.jsp" />  
+   </definition> 
+   
+   <definition name="eduReportMod" extends="base-definition">  
+       <put-attribute name="title" value="교육신청 현황" />  
+       <put-attribute name="body"  value="/WEB-INF/jsp/admin/edu/eduReportMod.jsp" />  
+   </definition> 
   </tiles-definitions>

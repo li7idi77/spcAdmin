@@ -274,7 +274,8 @@
                 DATE_FORMAT(b.BIRTH_YMD,'%Y-%m-%d') AS BIRTH_YMD,
                 b.EML_ADDR, 
                 b.MBL_TELNO, 
-                CONCAT(b.JUSO ,' ', b.JUSO_DETAIL) AS JUSO
+                CONCAT(b.JUSO ,' ', b.JUSO_DETAIL) AS JUSO,
+                CASE WHEN a.COUR_STAT = '1' THEN '참석' ELSE '미참석' END AS COUR_STAT
         FROM EDU_COURSE_REGISTRATION a,
 			 COM_USER b
 		WHERE a.USER_ID = b.USER_ID
@@ -579,7 +580,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
-		      <![CDATA[
+		      <![CDATA[  
 		       AND  a.EDU_START_DATE >= #{start_date} AND a.EDU_START_DATE <= #{end_date} 
 		       ]]>
 			</when>
@@ -811,6 +812,170 @@
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
 		       AND  DATE_FORMAT(a.REG_DT,'%Y-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') <= #{end_date} 
+		       ]]>
+			</when>
+		</choose>
+	</select>
+	
+	<select id="getReportAllCnt" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT COUNT(*) AS ALL_CNT
+			   ,COUNT(CASE WHEN b.SCH_STATUS IS NULL THEN 1 END) AS CNT0
+			   ,COUNT(CASE WHEN b.SCH_STATUS = 'S' THEN 1 END) AS CNT1
+		FROM EDU_SCHEDULE a,
+			 EDU_SCHEDULE_DETAIL b
+		WHERE 1=1
+		AND a.SCHEDULE_NO = b.SCHEDULE_NO
+		AND a.CATEGORY1_KEY = '7'
+		       <![CDATA[ 
+        AND a.EDU_START_DATE <= NOW()
+         ]]>
+        AND (b.SCH_STATUS = 'S' OR b.SCH_STATUS IS NULL)
+        <if test="org_nm != '' and org_nm != null">
+			AND a.EDU_ORG_NAME LIKE CONCAT('%',#{org_nm},'%')
+		</if>
+		<if test="ins_nm != '' and ins_nm != null">
+			AND a.EDU_TEAC_NAME LIKE CONCAT('%',#{ins_nm},'%')
+		</if>
+		<if test="edu_nm != '' and edu_nm != null">
+			AND a.EDU_NAME LIKE CONCAT('%',#{edu_nm},'%')
+		</if>
+        <if test="area_nm != '' and area_nm != null">
+			AND b.COPER_AREA_CD IN (SELECT CD FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD_NM LIKE CONCAT('%',#{area_nm},'%'))
+		</if>
+		<choose>
+			<when test="status_type !=null and status_type !='' and searchDate =='ALL' ">
+			</when>
+			<when test="status_type !=null and status_type !='' and searchDate =='F' ">
+				AND b.SCH_STATUS IS NULL
+			</when>
+			<when test="status_type !=null and status_type !='' and searchDate =='S' ">
+		        AND b.SCH_STATUS = 'S'
+			</when>
+		</choose>
+		<choose>
+			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
+				AND a.EDU_START_DATE = NOW()
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
+		      <![CDATA[
+		       AND  a.EDU_START_DATE >= #{start_date} AND a.EDU_START_DATE <= #{end_date} 
+		       ]]>
+			</when>
+		</choose>
+	</select>
+	
+	<select id="getReportList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT a.SCHEDULE_NO,
+			   a.EDU_NAME,
+		       a.EDU_START_DATE,
+               (SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = b.COPER_AREA_CD) AS AREA_NM,
+               a.EDU_ORG_NAME,
+               a.EDU_TARGET,
+               b.EDU_PLACE,
+               (SELECT COUNT(*) FROM EDU_COURSE_REGISTRATION WHERE SCHEDULE_NO = a.SCHEDULE_NO) AS APP_CNT,
+               a.EDU_NUMBER AS EDU_CNT,
+		       a.EDU_TEAC_NAME,
+		       a.EDU_TEAC_ID,
+		       <![CDATA[ 
+		       CASE WHEN b.SCH_STATUS IS NULL AND a.EDU_START_DATE <= NOW() THEN '교육완료'
+					WHEN b.SCH_STATUS = 'S' THEN '보고완료'
+				END
+               AS SCH_STATUS
+		FROM EDU_SCHEDULE a,
+			 EDU_SCHEDULE_DETAIL b
+		WHERE 1=1
+		AND a.SCHEDULE_NO = b.SCHEDULE_NO
+		AND a.CATEGORY1_KEY = '7'
+        AND a.EDU_START_DATE <= NOW()
+         ]]>
+        AND (b.SCH_STATUS = 'S' OR b.SCH_STATUS IS NULL)
+        <if test="org_nm != '' and org_nm != null">
+			AND a.EDU_ORG_NAME LIKE CONCAT('%',#{org_nm},'%')
+		</if>
+		<if test="ins_nm != '' and ins_nm != null">
+			AND a.EDU_TEAC_NAME LIKE CONCAT('%',#{ins_nm},'%')
+		</if>
+		<if test="edu_nm != '' and edu_nm != null">
+			AND a.EDU_NAME LIKE CONCAT('%',#{edu_nm},'%')
+		</if>
+        <if test="area_nm != '' and area_nm != null">
+			AND b.COPER_AREA_CD IN (SELECT CD FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD_NM LIKE CONCAT('%',#{area_nm},'%'))
+		</if>
+		<choose>
+			<when test="status_type !=null and status_type !='' and searchDate =='ALL' ">
+			</when>
+			<when test="status_type !=null and status_type !='' and searchDate =='F' ">
+				AND b.SCH_STATUS IS NULL
+			</when>
+			<when test="status_type !=null and status_type !='' and searchDate =='S' ">
+		        AND b.SCH_STATUS = 'S'
+			</when>
+		</choose>
+		<choose>
+			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
+				AND a.EDU_START_DATE = NOW()
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
+		      <![CDATA[
+		       AND  a.EDU_START_DATE >= #{start_date} AND a.EDU_START_DATE <= #{end_date} 
+		       ]]>
+			</when>
+		</choose>
+		LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+	
+	<select id="getReportListCnt" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(*) 
+		FROM EDU_SCHEDULE a,
+			 EDU_SCHEDULE_DETAIL b
+		WHERE 1=1
+		AND a.SCHEDULE_NO = b.SCHEDULE_NO
+		AND a.CATEGORY1_KEY = '7'
+		<![CDATA[ 
+        AND a.EDU_START_DATE <= NOW()
+         ]]>
+        AND (b.SCH_STATUS = 'S' OR b.SCH_STATUS IS NULL)
+        <if test="org_nm != '' and org_nm != null">
+			AND a.EDU_ORG_NAME LIKE CONCAT('%',#{org_nm},'%')
+		</if>
+		<if test="ins_nm != '' and ins_nm != null">
+			AND a.EDU_TEAC_NAME LIKE CONCAT('%',#{ins_nm},'%')
+		</if>
+		<if test="edu_nm != '' and edu_nm != null">
+			AND a.EDU_NAME LIKE CONCAT('%',#{edu_nm},'%')
+		</if>
+        <if test="area_nm != '' and area_nm != null">
+			AND b.COPER_AREA_CD IN (SELECT CD FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD_NM LIKE CONCAT('%',#{area_nm},'%'))
+		</if>
+		<choose>
+			<when test="status_type !=null and status_type !='' and searchDate =='ALL' ">
+			</when>
+			<when test="status_type !=null and status_type !='' and searchDate =='F' ">
+				AND b.SCH_STATUS IS NULL
+			</when>
+			<when test="status_type !=null and status_type !='' and searchDate =='S' ">
+		        AND b.SCH_STATUS = 'S'
+			</when>
+		</choose>
+		<choose>
+			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
+				AND a.EDU_START_DATE = NOW()
+			</when>
+			<when
+				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
+		      <![CDATA[
+		       AND  a.EDU_START_DATE >= #{start_date} AND a.EDU_START_DATE <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>

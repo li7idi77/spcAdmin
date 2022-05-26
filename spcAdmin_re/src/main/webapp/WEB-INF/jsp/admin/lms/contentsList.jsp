@@ -12,7 +12,7 @@
 <h1 class="h1-tit">콘텐츠/교육자료 등록</h1>
 
 <div class="search-wrap">
-	<form id="commonForm" name="commonForm" target="_self" action="/lms/contentsList.do" method="post" onsubmit="">
+	<form id="commonForm" name="commonForm" target="_self" method="post" onsubmit="">
     <input type="hidden" id="pageIndex"  name="pageIndex" value=1 />
     <input type="hidden" id="edu_sub_no"   name="edu_sub_no"  value="${edu_sub_no}"/>
     <input type="hidden" id="gubun1"      name="gubun1"     value='I'   />
@@ -102,7 +102,7 @@
 	        </div>
 	        
 	        <button type="submit" class="search-btn">검색</button>
-	        <button class="search-btn white-btn ml20" onClick="fn_clear();">초기화</button>
+	        <button type="button" class="search-btn white-btn ml20" onClick="fn_clear();">초기화</button>
 	    </div>
     </form>
 
@@ -269,7 +269,7 @@ $(document).ready(function(){
 function fn_egov_link_page(pageNo){
 	 var frm = document.commonForm;
 	 $("#pageIndex").val(pageNo); 
-	 frm.action = "<c:url value='/adm/contentsList.do'/>";
+	 frm.action = "<c:url value='/lms/contentsList.do'/>";
   	 frm.submit();
 }
  

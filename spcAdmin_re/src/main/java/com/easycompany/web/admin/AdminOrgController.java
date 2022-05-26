@@ -230,11 +230,15 @@ public class AdminOrgController
 	  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
 	  paramMap.put("offset",offset);
 	  
-	  paramMap.put("sqlName", "getAdminOrgStatList");
+	  paramMap.put("sqlName", "getReportAllCnt");
+	  Map<String, Object> allCount = orgService.getSelectData(paramMap);
+	  model.addAttribute("allCount", allCount);
+	  
+	  paramMap.put("sqlName", "getReportList");
 	  List<Map<String, Object>> list = orgService.getSelectList(paramMap);
 	  model.addAttribute("resultList", list);
 	  
-	  paramMap.put("sqlName", "getAdminOrgStatListCnt");
+	  paramMap.put("sqlName", "getReportListCnt");
 	  int totCnt = orgService.getSelectListCnt(paramMap);
 	  model.addAttribute("totCnt", totCnt);
 	  paginationInfo.setTotalRecordCount(totCnt);
@@ -245,5 +249,35 @@ public class AdminOrgController
 	  model.addAllAttributes(paramMap);
 	  
 	  return "eduReportList";
+  }
+  
+  @RequestMapping({"/eduReportView.do"})
+  public String eduReportView(@RequestParam Map<String, Object> paramMap, ModelMap model ,HttpServletRequest request) throws Exception {
+	  paramMap.put("sqlName", "getOrgReport");	
+	  Map<String, Object> result = orgService.getSelectData(paramMap);
+	  model.addAttribute("result", result);	
+	  
+	  paramMap.put("sqlName", "getEduAttList");
+	  List<Map<String, Object>> list = orgService.getSelectList(paramMap);
+	  model.addAttribute("resultList", list);
+	  
+	  model.addAttribute("path", request.getServletPath());
+	  model.addAllAttributes(paramMap);
+	  return "eduReportView";
+  }
+  
+  @RequestMapping({"/eduReportMod.do"})
+  public String eduReportMod(@RequestParam Map<String, Object> paramMap, ModelMap model ,HttpServletRequest request) throws Exception {
+	  paramMap.put("sqlName", "getOrgReport");	
+	  Map<String, Object> result = orgService.getSelectData(paramMap);
+	  model.addAttribute("result", result);	
+	  
+	  paramMap.put("sqlName", "getEduAttList");
+	  List<Map<String, Object>> list = orgService.getSelectList(paramMap);
+	  model.addAttribute("resultList", list);
+	  
+	  model.addAttribute("path", request.getServletPath());
+	  model.addAllAttributes(paramMap);
+	  return "eduReportMod";
   }
 }

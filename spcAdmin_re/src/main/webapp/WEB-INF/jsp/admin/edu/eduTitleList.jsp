@@ -73,27 +73,27 @@
 
                  <div class="search-cont">
                      <div class="radio-cont">
-                                    <input type="radio" class="radio-box" id="searchDate" name="searchDate" value="ALL" <c:if test="${searchDate == 'ALL' || (empty searchDate)}">checked </c:if>>
-                                    <label for="dateAll">전체</label>
-                                </div>
-                                  
-                                <div class="radio-cont">
-                                    <input type="radio" class="radio-box" id="searchDate" name="searchDate" value="TODAY" <c:if test="${searchDate == 'TODAY'}">checked </c:if>>
-                                    <label for="dateToday">오늘</label>
-                                </div>
-                                
-                                <div class="radio-cont mr10">
-                                    <input type="radio" class="radio-box" id="searchDate" name="searchDate" value="CHECK" <c:if test="${searchDate == 'CHECK'}">checked </c:if>>
-                                    <label for="dateTerm">기간선택</label>
-                                </div>
-                                <div class="picker-wrap">
-                                    <input type="text" id="start_date" name="start_date" class="input-box" readonly value="${start_date}"/>
-                                    <span class="next-ico">-</span>
-                                    <input type="text" id="end_date" name="end_date" class="input-box" readonly value="${end_date}"/>
-                                </div>
+                         <input type="radio" class="radio-box" id="searchDate" name="searchDate" value="ALL" <c:if test="${searchDate == 'ALL' || (empty searchDate)}">checked </c:if>>
+                         <label for="dateAll">전체</label>
+                     </div>
+                       
+                     <div class="radio-cont">
+                         <input type="radio" class="radio-box" id="searchDate" name="searchDate" value="TODAY" <c:if test="${searchDate == 'TODAY'}">checked </c:if>>
+                         <label for="dateToday">오늘</label>
+                     </div>
+                     
+                     <div class="radio-cont mr10">
+                         <input type="radio" class="radio-box" id="searchDate" name="searchDate" value="CHECK" <c:if test="${searchDate == 'CHECK'}">checked </c:if>>
+                         <label for="dateTerm">기간선택</label>
+                     </div>
+                     <div class="picker-wrap">
+                         <input type="text" id="start_date" name="start_date" class="input-box" readonly value="${start_date}"/>
+                         <span class="next-ico">-</span>
+                         <input type="text" id="end_date" name="end_date" class="input-box" readonly value="${end_date}"/>
+                     </div>
                      
                      <button class="search-btn">검색</button>
-                     <button class="search-btn white-btn ml20" onClick="fn_clear();">초기화</button>
+                     <button type="button" class="search-btn white-btn ml20" onClick="fn_clear();">초기화</button>
                  </div>
 
              </div>

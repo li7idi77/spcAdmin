@@ -82,7 +82,7 @@
 
                <div class="btn-cont">
                    <button  type="submit" class="lg-btn orange-btn">검색</button>
-                   <button  type="reset"  class="lg-btn navy-btn" onClick="fn_clear();">초기화</button>
+                   <button  type="button"  class="lg-btn navy-btn" onClick="fn_clear();">초기화</button>
                </div>
                </form>
            </div>

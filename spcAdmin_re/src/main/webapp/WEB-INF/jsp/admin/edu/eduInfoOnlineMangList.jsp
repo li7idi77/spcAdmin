@@ -308,14 +308,15 @@
                        <span class="next-ico">-</span>
                        <input type="text" id="train_e_date"   name="train_e_date"   readonly class="input-box" value="${categoryVo.train_e_date}"/>
                    </div>
-                   <input type="text" class="input-box" id="category3_name1" name="category3_name1" value="${categoryVo.category3_name1}" size="12" placeholder="교육명"/>                   
+                   <input type="text" class="input-box" id="category3_name1" name="category3_name1" value="${categoryVo.category3_name1}" size="12" placeholder="교육명"/>             
+                   <button  type="button" class="search-btn" onClick="fn_search();">검색</button>&nbsp;&nbsp;
+            <button type="button" class="search-btn white-btn" onClick="fn_clear();">초기화</button>       
                </div>
            </div>
            
 
            <div class="btn-cont mb20">
-           	<button  type="button" class="search-btn" onClick="fn_search();">검색</button>
-            <button type="reset" class="search-btn white-btn" onClick="fn_clear();">초기화</button>
+           	
             <button type="button" class="mid-btn black-btn "  onClick="fn_excel();">엑셀다운</button>
            </div>
            </form>

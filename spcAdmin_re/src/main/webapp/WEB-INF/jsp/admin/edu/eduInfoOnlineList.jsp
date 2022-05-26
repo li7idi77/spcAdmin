@@ -438,7 +438,8 @@
                        <input type="text" id="train_e_date"   name="train_e_date"   readonly class="input-box" value="${categoryVo.train_e_date}"/>
                    </div>
                    <input type="text" class="input-box" id="inst_nm" name="inst_nm" value="${categoryVo.inst_nm}" placeholder="강사명"/>
-                   <button  type="button" class="search-btn" onClick="fn_search();">검색</button>
+                   <button  type="button" class="search-btn" onClick="fn_search();">검색</button>&nbsp;&nbsp;
+            <button type="button" class="search-btn white-btn" onClick="fn_clear();">초기화</button>     
                </div>
            </div>
            </form>
