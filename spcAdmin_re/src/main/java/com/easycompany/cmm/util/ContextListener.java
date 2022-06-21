@@ -35,7 +35,7 @@ public class ContextListener implements ServletContextListener{
             SSH_SESSION.setPassword("todaudwhswnd12!@");
             SSH_SESSION.setConfig(config);
             SSH_SESSION.connect();
-            SSH_SESSION.setPortForwardingL(3366, "127.0.0.1", 3306);
+            SSH_SESSION.setPortForwardingL(3366, "172.20.3.6", 3306);
         } catch (JSchException e) {
             e.printStackTrace();
         }
