@@ -4,6 +4,10 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
+
 
 @WebListener
 public class ContextListener implements ServletContextListener{
@@ -27,11 +31,11 @@ public class ContextListener implements ServletContextListener{
         config.put("StrictHostKeyChecking", "no");
 
         try {
-            SSH_SESSION = jsch.getSession("아이디", "접속할서버아이피", 포트번호);
-            SSH_SESSION.setPassword("비밀번호");
+            SSH_SESSION = jsch.getSession("ncloud", "223.130.173.101", 22);
+            SSH_SESSION.setPassword("todaudwhswnd12!@");
             SSH_SESSION.setConfig(config);
             SSH_SESSION.connect();
-            SSH_SESSION.setPortForwardingL(가상포트, "127.0.0.1", 사용할데이터베이스포트);
+            SSH_SESSION.setPortForwardingL(3366, "127.0.0.1", 3306);
         } catch (JSchException e) {
             e.printStackTrace();
         }
