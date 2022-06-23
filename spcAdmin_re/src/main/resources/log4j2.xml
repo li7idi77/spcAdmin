@@ -7,12 +7,12 @@
         <Console name="console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d %5p [%c] %m%n" />
         </Console>
-        <File name="file" fileName="C:/apache-tomcat-7.0.99/webapps/logs/lms/lms.log" append="false">
+        <File name="file" fileName="./webapps/logs/lms/lms.log" append="false">
    			<PatternLayout pattern="%d %5p [%c] %m%n"/>
   		</File>
        <RollingFile name="LogToFile">
-	      <FileName>C:/apache-tomcat-7.0.99/webapps/logs/lms/daily/lmsRolling.log</FileName>
-	      <FilePattern>C:/apache-tomcat-7.0.99/webapps/logs/time-based-logs/%d{yyyy-MM-dd-hh-mm}.log.zip</FilePattern>
+	      <FileName>./webapps/logs/lms/daily/lmsRolling.log</FileName>
+	      <FilePattern>./webapps/logs/time-based-logs/%d{yyyy-MM-dd-hh-mm}.log.zip</FilePattern>
 	      <PatternLayout>
 	        <Pattern>%d{yyyy-MMM-dd HH:mm:ss a} [%t] %-5level %logger{36} - %msg%n</Pattern>
 	      </PatternLayout>
