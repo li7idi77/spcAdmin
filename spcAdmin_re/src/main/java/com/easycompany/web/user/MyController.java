@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.easycompany.cmm.util.FileUtil;
 import com.easycompany.cmm.vo.DefaultVO;
 import com.easycompany.service.MyService;
 import com.easycompany.service.SectorService;
+import com.easycompany.service.vo.BoardVo;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
@@ -385,6 +388,8 @@ public class MyController
 	    return "popMyClassDetail";
   }
   
+  
+  
   @RequestMapping({"/popMyPlayer.do"})
   public String popMyPlayer(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model ,HttpServletRequest request)  throws Exception {
 	  paramMap.put("UserAccount", request.getSession().getAttribute("UserAccount"));
@@ -433,6 +438,18 @@ public class MyController
 	  return "my02info";
   }
 
+  @RequestMapping({ "/fileIdDown.do" })
+  @ResponseBody
+  public void fileIdDown(@RequestParam final Map<String, Object> paramMap, final HttpServletRequest request, final HttpServletResponse response) throws Exception {
+      paramMap.put("sqlName", "fileIdDown");
+      Map<String, Object> result = myService.getSelectData(paramMap);
+      
+      BoardVo boardVoForm = new BoardVo();
+      boardVoForm.setFile_name(result.get("FILE_NAME").toString());
+      boardVoForm.setFile_full_path(result.get("FILE_FULL_PATH").toString());
+      FileUtil.fileDownload(request, response, boardVoForm);
+  }
+    
   @RequestMapping({"/my02act.do"})
   public String my02act(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model, HttpServletRequest request) throws Exception{
 	  paramMap.put("pageSize", 10);

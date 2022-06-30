@@ -21,6 +21,13 @@
 	 alert("준비중 입니다.");
  }
  
+ function fileDownload(key1){
+		var frm = document.commonForm;
+		$("#file_id").val(key1)
+		frm.action = "<c:url value='/my/fileIdDown.do'/>";
+		frm.submit();
+	}
+ 
  function openWindowPop(url, name){
 	    var options = 'top=10, left=10, width=1200px, height=600px, status=no, menubar=no, toolbar=no, resizable=no';
 	    window.open(url, name, options);
@@ -119,7 +126,7 @@
                                     <td>${status.index + 1}</td>
                                     <td>${list.EDU_CURR1}</td>
                                     <td class="tl">${list.EDU_CURR2}</td>
-                                    <td><a class="link">다운로드</a></td>
+                                    <td><a class="link" onclick="javascript:fileDownload('${list.FILE_ID}');">다운로드</a></td>
                                     <td><span>${list.EDU_CURR3}</span>분</td>
                                     <td><span>${list.COUR_TIME}</span>분</td>
                                     <td>${list.COUR_STAT}</td>
