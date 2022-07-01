@@ -50,7 +50,7 @@
 	        <h3 class="h3-tit">교육현황</h3>
 	
 	        <div class="radio-cont">
-	            <input type="radio" class="radio-box" id="edu_status" name="edu_status" value="ALL" <c:if test="${edu_status == 'ALL' || (empty edu_status)}">checked </c:if>>
+	            <input type="radio" class="radio-box" id="edu_status" name="edu_status" value="0" <c:if test="${edu_status == '0' || (empty edu_status)}">checked </c:if>>
 	            <label for="">전체</label>
 	        </div>
 	        <div class="radio-cont">
@@ -71,7 +71,7 @@
 	        <h3 class="h3-tit">콘텐츠</h3>
 	
 	        <div class="radio-cont">
-	            <input type="radio" class="radio-box" id="con_chk" name="con_chk" value="ALL" <c:if test="${con_chk == 'ALL' || (empty con_chk)}">checked </c:if>>
+	            <input type="radio" class="radio-box" id="con_chk" name="con_chk" value="0" <c:if test="${con_chk == '0' || (empty con_chk)}">checked </c:if>>
 	            <label for="">전체</label>
 	        </div>
 	        <div class="radio-cont">
