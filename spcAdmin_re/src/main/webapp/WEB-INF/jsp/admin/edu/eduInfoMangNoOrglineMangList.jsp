@@ -275,9 +275,7 @@
                        	</c:if>
                         <option value=''>선택 하세요</option>
                     	<c:forEach var="result" items="${category1list}" varStatus="status">
-                    		<c:if test="${ result.code_name !='기관' }">
                         		<option value='${result.code_cd}'>${result.code_name}</option>
-                        	</c:if>
                         </c:forEach>
                     </select>
                     <select class="select"  id="category2_key" name="category2_key">

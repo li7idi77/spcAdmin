@@ -129,6 +129,7 @@
 	    <if test="orgSearch !=null and orgSearch == 'TEXT'">
 	      	AND a.EDU_ORG_NAME LIKE CONCAT('%', #{edu_org_name}, '%')
 	    </if>
+	    ORDER BY a.SCHEDULE_NO DESC
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 	
@@ -223,6 +224,7 @@
 	    <if test="orgSearch !=null and orgSearch == 'TEXT'">
 	      	AND a.EDU_ORG_NAME LIKE CONCAT('%', #{edu_org_name}, '%')
 	    </if>
+	    ORDER BY a.SCHEDULE_NO DESC
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 	
@@ -356,6 +358,7 @@
 		<if test="edu_nm != '' and edu_nm != null and eduSearch =='TEXT'">
 			AND a.CATEGORY3_KEY IN (SELECT CATEGORY3_KEY FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_NAME LIKE CONCAT('%',#{edu_nm},'%'))
 		</if>
+		ORDER BY EDU_NO DESC
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 		
 	</select>
@@ -516,6 +519,7 @@
 		<if test=" category3_key !=null and category3_key !='' and category_chk != 'ALL'">
 			AND a.USER_ID IN (SELECT DISTINCT USER_ID FROM COM_USER_EDUINFO WHERE CAST(EDU_CD AS unsigned) = #{category3_key})
 		</if>
+		ORDER BY b.INSTRUCTOR_IDX DESC
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 
@@ -714,6 +718,7 @@
 		<if test=" category3_key !=null and category3_key !='' and category_chk != 'ALL'">
 			AND a.CATEGORY3_KEY =  #{category3_key}
 		</if>
+		ORDER BY a.SCHEDULE_NO DESC
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 
@@ -809,6 +814,7 @@
 		<if test=" category3_key !=null and category3_key !='' and category_chk != 'ALL'">
 			AND a.CATEGORY3_KEY =  #{category3_key}
 		</if>
+		ORDER BY a.SCHEDULE_NO DESC
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 
@@ -896,7 +902,7 @@
 		<if test="area_nm !=null and area_nm !=''">
 			AND tb.AREA_NM LIKE CONCAT('%',#{area_nm},'%')
 		</if>
-		
+		ORDER BY a.INSTRUCTOR_LEAVE_IDX DESC
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 

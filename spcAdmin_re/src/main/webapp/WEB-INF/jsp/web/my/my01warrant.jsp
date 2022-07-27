@@ -132,7 +132,15 @@
                             <div class="search-cont">
                                 <label>교육분류 :</label>
                                 <select class="select mr30"  id="category1_key" name="category1_key">
+									<c:if test="${site eq 'on'}">
 										<option value='1' >일반</option>
+									</c:if>
+									<c:if test="${site eq 'off'}">
+										<option value='4' >일반</option>
+									</c:if>
+									<c:if test="${site eq 'org'}">
+										<option value='7' >기관</option>
+									</c:if>
 								</select>
 					            <select class="select"  id="category2_key" name="category2_key">
 					            	<option value='' >선택 하세요</option>

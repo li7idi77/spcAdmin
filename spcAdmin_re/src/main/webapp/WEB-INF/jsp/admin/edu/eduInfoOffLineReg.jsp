@@ -170,7 +170,7 @@
 			return;
 		}	
 		if (edu_garden == ""){			
-			alert("교육인원을 입력 하세요.");
+			alert("교육정원을 입력 하세요.");
 			$("#edu_garden").focus()
 			return;
 		}	
@@ -233,7 +233,7 @@
 	}	
 	
 	function openWindowPop(url, name){
-	    var options = 'top=10, left=10, width=720px, height=680px, status=no, menubar=no, toolbar=no, resizable=no';
+	    var options = 'top=10, left=10, width=720px, height=780px, status=no, menubar=no, toolbar=no, resizable=no';
 	    window.open(url, name, options);
 	}
 	
@@ -274,7 +274,9 @@
                                     	</c:if>
                                         <option value=''>선택 하세요</option>
 	                                    <c:forEach var="result" items="${category1list}" varStatus="status">
+	                                    	<c:if test="${result.code_name == '기관'}">
 	                                    	<option value='${result.code_cd}'>${result.code_name}</option>
+	                                    	</c:if>
 	                                    </c:forEach>
                                     </select>
                                     <select class="select"  id="category2_key" name="category2_key">
@@ -329,10 +331,10 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th colspan="2">교육인원</th>
+                                <th colspan="2"><span class="red-txt">*</span>교육정원</th>
                                 <td>
                                     <input type="text" id="edu_garden"  name="edu_garden" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"  maxlength="5" class="input-box" value="${categoryForm.edu_garden}"/>
-                                    <span class="point">ex. 기입하지 않으면 무한대, 신청인원과 연동</span>
+                                    <span class="point">교육정원을 꼭 기입하시기 바랍니다.</span>
                                 </td>
                             </tr>
                             <tr>

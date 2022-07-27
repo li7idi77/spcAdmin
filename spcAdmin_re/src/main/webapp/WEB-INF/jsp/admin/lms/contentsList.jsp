@@ -20,27 +20,27 @@
 	        <h3 class="h3-tit">구분</h3>
 	
 	        <div class="radio-cont">
-	            <input type="radio" class="radio-box" id="searchCondition" name="searchCondition" value="ALL" checked>
+	            <input type="radio" class="radio-box" id="searchCondition" name="searchCondition" value="ALL" <c:if test="${searchCondition == 'ALL' || (empty searchCondition)}">checked </c:if>>
 	            <label for="">전체</label>
 	        </div>
 	        <div class="radio-cont">
-	            <input type="radio" class="radio-box" id="searchCondition" name="searchCondition" value="CATEGORY">
+	            <input type="radio" class="radio-box" id="searchCondition" name="searchCondition" value="CATEGORY" <c:if test="${searchCondition == 'CATEGORY'}">checked </c:if>>
 	            <select class="select"  id="category1_key" name="category1_key">
 	            	<option value='' >선택 하세요</option>
 					<c:forEach var="result" items="${category1list}" varStatus="status">
-						<option value='${result.CATEGORY1_KEY}' >${result.CATEGORY1_NAME}</option>
+						<option value='${result.CATEGORY1_KEY}' <c:if test="${category1_key == result.CATEGORY1_KEY}">selected</c:if>>${result.CATEGORY1_NAME}</option>
 					</c:forEach>
 	            </select>
 	                           <select class="select"  id="category2_key" name="category2_key">
 	            	<option value='' >선택 하세요</option>
 					<c:forEach var="result" items="${category2list}" varStatus="status">
-						<option value='${result.CATEGORY2_KEY}' >${result.CATEGORY2_NAME}</option>
+						<option value='${result.CATEGORY2_KEY}' <c:if test="${category2_key == result.CATEGORY2_KEY}">selected</c:if>>${result.CATEGORY2_NAME}</option>
 					</c:forEach>
 	            </select>
 	            <select class="select lg-width"  id="category3_key" name="category3_key">
 	            	<option value='' >선택 하세요</option>
 					<c:forEach var="result" items="${category3list}" varStatus="status">
-						<option value='${result.CATEGORY3_KEY}' >${result.CATEGORY3_NAME}</option>
+						<option value='${result.CATEGORY3_KEY}' <c:if test="${category3_key == result.CATEGORY3_KEY}">selected</c:if>>${result.CATEGORY3_NAME}</option>
 					</c:forEach>
 	            </select>
 	        </div>
@@ -54,7 +54,7 @@
 	            <label for="">전체</label>
 	        </div>
 	        <div class="radio-cont">
-	            <input type="radio" class="radio-box" id="edu_status" name="edu_status" value="2" <c:if test="${edu_status == '1'}">checked </c:if>>
+	            <input type="radio" class="radio-box" id="edu_status" name="edu_status" value="2" <c:if test="${edu_status == 'w'}">checked </c:if>>
 	            <label for="">진행중(노출)</label>
 	        </div>
 	        <div class="radio-cont">

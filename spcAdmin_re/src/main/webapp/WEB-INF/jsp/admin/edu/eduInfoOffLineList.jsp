@@ -313,7 +313,7 @@
                                 <td>${result.edu_garden}</td>
                                 <td>${result.edu_status}</td>
                                 <td>${result.exp_use_yn}</td>
-                                <td>
+                                <td>${result.schedule_no}
                                     <button type="button" class="sm-btn blue-btn"  onClick="javascript:fn_edit('${result.edu_no}',  'E');" >수정</button>
                            			<button type="button" class="sm-btn white-btn" onClick="javascript:fn_delete('${result.edu_no}', 'D');">삭제</button>
                                 </td>

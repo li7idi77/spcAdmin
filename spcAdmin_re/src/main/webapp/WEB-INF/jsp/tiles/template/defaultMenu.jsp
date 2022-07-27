@@ -86,7 +86,7 @@ model.addAttribute("path", request.getServletPath());
         <ul class="depth02-menu">
             <li <c:if test="${fn:contains(path, '/warrant/warrantGeneralDefault')}"> class="active" </c:if>><a href="<c:url value='/warrant/warrantGeneralDefault.do' />">일반 수료증</a></li>
             <li <c:if test="${fn:contains(path, '/warrant/warrantNumber')}"> class="active" </c:if>><a href="<c:url value='/warrant/warrantNumber.do' />">번호 수료증</a></li>
-            <li><a href="#">수료증 발급</a></li>
+            <!-- <li><a href="#">수료증 발급</a></li> -->
             <li><a href="#">업로드 자료</a></li>
         </ul>
     </li>

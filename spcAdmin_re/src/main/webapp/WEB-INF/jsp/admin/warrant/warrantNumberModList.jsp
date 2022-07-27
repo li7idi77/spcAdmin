@@ -21,6 +21,7 @@
 
 <div class="search-wrap">
     <form id="listForm" name="listForm" target="_self" action="" method="post" onsubmit="">
+	<input type="hidden" id="pageIndex"  name="pageIndex" value=1 />
     <input type="hidden" id="category3" name="category3" value="${category3_key}">
     <div class="search-cont">
     	<div class="radio-cont">
@@ -36,6 +37,8 @@
                <span class="next-ico">-</span>
            <input type="text" id="end_date" name="end_date" class="input-box" readonly value="${end_date}"/>
         </div>
+    </div>
+    <div class="search-cont">
        	<select class="select" id="site" name="site">
             <option value="on">온라인</option>
             <option value="off">오프라인</option>
@@ -66,7 +69,7 @@
 </div>
 
 <div class="btn-cont mb20">
-    <button class="mid-btn white-btn">선택삭제</button>
+    <!-- <button class="mid-btn white-btn">선택삭제</button> -->
 </div>
 
 <div class="table-wrap">
@@ -239,7 +242,7 @@ function openWindowPop(url, name){
 }	
 
 function fn_egov_link_page(pageNo){
-	 var frm = document.commonForm;
+	 var frm = document.listForm;
 	 $("#pageIndex").val(pageNo); 
 	 frm.action = "<c:url value='/warrant/warrantNumberModList.do'/>";
   	 frm.submit();

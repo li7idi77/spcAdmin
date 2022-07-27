@@ -24,26 +24,26 @@
 			AND a.CATEGORY3_KEY = #{category3_key} 
 		</if>
 	      
-	      <if test="edu_status != null and edu_status == '1'">
+	      <if test="edu_status != null and edu_status == 1">
 	      	<![CDATA[
 	      	AND a.TRAIN_S_DATE > NOW()
 	      	 ]]>
 	      </if>
-	      <if test="edu_status != null and edu_status == '2'">
+	      <if test="edu_status != null and edu_status == 2">
 	      	<![CDATA[
 	      	AND a.TRAIN_S_DATE <= NOW() AND a.TRAIN_E_DATE >= NOW()
 	      	 ]]>
 	      </if>
-	      <if test="edu_status != null and edu_status == '3'">
+	      <if test="edu_status != null and edu_status == 3">
 	      	<![CDATA[
 	      	AND a.TRAIN_E_DATE > NOW()
 	      	 ]]>
 	      </if>
 	      
-	      <if test="con_chk != null and con_chk == '1'">
+	      <if test="con_chk != null and con_chk == 1">
 	      	AND b.FILE_ID IS NOT NULL
 	      </if>
-	      <if test="con_chk != null and con_chk == '2'">
+	      <if test="con_chk != null and con_chk == 2">
 	      	AND b.FILE_ID IS NULL
 	      </if>
 	      <if test="searchDate !=null and searchDate != 'ALL'">
@@ -66,9 +66,9 @@
 			    ]]>
 		       b.EDU_CURR1, b.EDU_CURR3, 
 		       DATE_FORMAT(b.REG_DT,'%x-%m-%d') AS REG_DT,
-		       CASE WHEN b.FILE_ID IS NOT NULL THEN '등록'
+		       CASE WHEN b.FILE_ID IS NOT NULL AND b.FILE_ID != '' THEN '등록'
 					ELSE '미등록' END AS FILE_CHK,
-		       CASE WHEN b.EDU_CON_URL IS NOT NULL THEN '등록'
+		       CASE WHEN b.EDU_CON_URL IS NOT NULL AND b.EDU_CON_URL != '' THEN '등록'
 					ELSE '미등록' END AS URL_CHK
 		FROM EDU_REGISTRATION a,
 			 EDU_REGISTRATION_DETAIL b
@@ -84,31 +84,31 @@
 			AND a.CATEGORY3_KEY = #{category3_key} 
 		</if>
 	      
-	      <if test="edu_status != null and edu_status == '1'">
+	      <if test="edu_status != null and edu_status == 1">
 	      	<![CDATA[
 	      	AND a.TRAIN_S_DATE > NOW()
 	      	 ]]>
 	      </if>
-	      <if test="edu_status != null and edu_status == '2'">
+	      <if test="edu_status != null and edu_status == 2">
 	      	<![CDATA[
 	      	AND a.TRAIN_S_DATE <= NOW() AND a.TRAIN_E_DATE >= NOW()
 	      	 ]]>
 	      </if>
-	      <if test="edu_status != null and edu_status == '3'">
+	      <if test="edu_status != null and edu_status == 3">
 	      	<![CDATA[
 	      	AND a.TRAIN_E_DATE > NOW()
 	      	 ]]>
 	      </if>
 	      
-	      <if test="con_chk != null and con_chk == '1'">
-	      	AND b.FILE_ID IS NOT NULL
+	      <if test="con_chk != null and con_chk == 1">
+	      	AND b.EDU_CON_URL IS NOT NULL AND b.EDU_CON_URL != ''
 	      </if>
-	      <if test="con_chk != null and con_chk == '2'">
-	      	AND b.FILE_ID IS NULL
+	      <if test="con_chk != null and con_chk == 2">
+	      	AND (b.EDU_CON_URL IS NULL OR b.EDU_CON_URL = '')
 	      </if>
 	      <if test="searchDate !=null and searchDate != 'ALL'">
 	      	<![CDATA[
-		       AND a.TRAIN_S_DATE >= #{start_date} AND a.TRAIN_E_DATE <= #{end_date} 
+		       AND DATE_FORMAT(b.REG_DT,'%x-%m-%d') >= #{start_date} AND DATE_FORMAT(b.REG_DT,'%x-%m-%d') <= #{end_date} 
 	        ]]>
 	      </if>
 	     ORDER BY EDU_SUB_NO DESC
@@ -132,31 +132,31 @@
 			AND a.CATEGORY3_KEY = #{category3_key} 
 		</if>
 	      
-	      <if test="edu_status != null and edu_status == '1'">
+	      <if test="edu_status != null and edu_status == 1">
 	      	<![CDATA[
 	      	AND a.TRAIN_S_DATE > NOW()
 	      	 ]]>
 	      </if>
-	      <if test="edu_status != null and edu_status == '2'">
+	      <if test="edu_status != null and edu_status == 2">
 	      	<![CDATA[
 	      	AND a.TRAIN_S_DATE <= NOW() AND a.TRAIN_E_DATE >= NOW()
 	      	 ]]>
 	      </if>
-	      <if test="edu_status != null and edu_status == '3'">
+	      <if test="edu_status != null and edu_status == 3">
 	      	<![CDATA[
 	      	AND a.TRAIN_E_DATE > NOW()
 	      	 ]]>
 	      </if>
 	      
-	      <if test="con_chk != null and con_chk == '1'">
-	      	AND b.FILE_ID IS NOT NULL
+	      <if test="con_chk != null and con_chk == 1">
+	      	AND b.EDU_CON_URL IS NOT NULL AND b.EDU_CON_URL != ''
 	      </if>
-	      <if test="con_chk != null and con_chk == '2'">
-	      	AND b.FILE_ID IS NULL
+	      <if test="con_chk != null and con_chk == 2">
+	      	AND (b.EDU_CON_URL IS NULL OR b.EDU_CON_URL = '')
 	      </if>
 	      <if test="searchDate !=null and searchDate != 'ALL'">
 	      	<![CDATA[
-		       AND a.TRAIN_S_DATE >= #{start_date} AND a.TRAIN_E_DATE <= #{end_date} 
+		       AND DATE_FORMAT(b.REG_DT,'%x-%m-%d') >= #{start_date} AND DATE_FORMAT(b.REG_DT,'%x-%m-%d') <= #{end_date} 
 	        ]]>
 	      </if>
 	</select>

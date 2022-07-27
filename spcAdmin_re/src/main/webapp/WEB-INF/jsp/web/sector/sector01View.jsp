@@ -95,9 +95,26 @@
  function fn_goList(edu_no){
 	document.location = "<c:url value='/user/sectorList.do'/>"+"?edu_no="+$('#edu_no').val()+"&idx="+$('#idx').val();
  }	
+ 
+ function fileDownload(key1){
+		var frm = document.commonForm;
+		$("#file_id").val(key1)
+		frm.action = "<c:url value='/my/fileIdDown.do'/>";
+		frm.submit();
+	}
+ 
+ function fileDownload(key1){
+		var frm = document.commonForm;
+		$("#file_id").val(key1)
+		frm.action = "<c:url value='/my/fileIdDown.do'/>";
+		frm.submit();
+	}
 </script>
 
      <!-- container  begin -->
+     <form  id="commonForm" name="commonForm"  method="post"  action="">
+		<input type="hidden" id="file_id" name="file_id">
+	</form>
                 <div id="container">
 					<input type="hidden" id="edu_no" name="edu_no" value="${edu_no}">
 					<input type="hidden" id="idx" name="idx" value="${idx}">
@@ -145,7 +162,7 @@
                                 </li>
                                 <li>
                                     <label>안내문 :</label>
-                                    <a class="link">다운로드(${result.EDU_NOTICE})</a>
+                                    <c:if test="${result.EDU_NOTICE != null}"><a class="link" onclick="javascript:fileDownload('${result.EDU_NOTICE}');">다운로드</a></c:if>
                                 </li>
                                 
                             </ul>

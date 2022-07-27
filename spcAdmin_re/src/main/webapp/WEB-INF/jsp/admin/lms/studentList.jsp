@@ -78,7 +78,7 @@
  function fn_egov_link_page(pageNo){
  	 var frm = document.commonForm;
  	 $("#pageIndex").val(pageNo); 
- 	 frm.action = "<c:url value='/adm/studentList.do'/>";
+ 	 frm.action = "<c:url value='/lms/studentList.do'/>";
    	 frm.submit();
  }
 </script>
@@ -86,6 +86,7 @@
 
 <div class="search-wrap">
 <form id="commonForm" name="commonForm" method="post" enctype="Multipart/form-data">
+    <input type="hidden" id="pageIndex"  name="pageIndex" value=1 />
     <div class="search-cont">
         <div class="radio-cont">
             <input type="radio" class="radio-box" id="user_gubun" name="user_gubun" value="ALL" <c:if test="${user_gubun == 'ALL' || (empty user_gubun)}">checked </c:if>>

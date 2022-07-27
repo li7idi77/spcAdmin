@@ -14,12 +14,14 @@
 	</bean> 
 	
 	 <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="classpath:/property/globals.properties"/>
+        <!-- <property name="location" value="classpath:/property/globals.properties"/> -->
+        <property name="location" value="classpath:/property/globals_local.properties"/>
         <property name="fileEncoding" value="UTF-8" />
     </bean>
 
-	<util:properties id="dbinfo" location="classpath:/property/globals.properties"/>
-
+	<!-- <util:properties id="dbinfo" location="classpath:/property/globals.properties"/> -->
+	<util:properties id="dbinfo" location="classpath:/property/globals_local.properties"/>
+	
 
 	
 </beans>	

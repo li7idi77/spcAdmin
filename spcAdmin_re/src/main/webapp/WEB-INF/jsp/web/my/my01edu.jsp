@@ -230,8 +230,8 @@
 								</c:if>
 								<c:if test="${site eq 'off'}">
                                 <select class="select mr30"  id="category1_key" name="category1_key">
-										<option value='4' <c:if test="${category1_key == '4'}">selected</c:if>>일반</option>
 										<option value='7' <c:if test="${category1_key == '7'}">selected</c:if>>기관</option>
+										<option value='4' <c:if test="${category1_key == '4'}">selected</c:if>>일반</option>
 								</select>
 								</c:if>
 					            <select class="select"  id="category2_key" name="category2_key">
@@ -274,7 +274,7 @@
                                   
                                 <div class="radio-cont">
                                     <input type="radio" class="radio-box" id="edu_status" name="edu_status" value="2" <c:if test="${edu_status == '2'}">checked </c:if>>
-                                    <label for="">교육중</label>
+                                    <label for="">교육전</label>
                                 </div>
                                 
                                 <div class="radio-cont mr10">
@@ -301,7 +301,7 @@
                         </c:if>
                         <c:if test="${site eq 'off'}">
                             <p class="total">전체 : <span>${allCount.ALL_CNT}</span>건</p>
-                            <p class="total">교육중 : <span>${allCount.ING_CNT}</span>건</p>
+                            <p class="total">교육전 : <span>${allCount.ING_CNT}</span>건</p>
                             <p class="total">교육완료 : <span>${allCount.END_CNT}</span>건</p>
                         </c:if>
                         </div>

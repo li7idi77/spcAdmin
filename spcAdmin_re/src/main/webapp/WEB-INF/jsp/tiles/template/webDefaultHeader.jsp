@@ -32,7 +32,7 @@ function openWindowPop(url, name){
         	</c:if>
         </div>
         <div class="nav-wrap">
-            <a class="logo" href="${pageContext.request.contextPath}/user/webMain.do">
+            <a class="logo" href="http://www.kfsp.co.kr/web">
             	<c:if test="${not empty logoForm.logo_no }">
             		<c:set var="ppx" value="${fn:split(logoForm.file_name,'.')}" />
             		<img src="/${logoForm.webPath}/${logoForm.gubun2}/${logoForm.file_id}.${ppx[1]}"  alt="${logoForm.file_name}"/>

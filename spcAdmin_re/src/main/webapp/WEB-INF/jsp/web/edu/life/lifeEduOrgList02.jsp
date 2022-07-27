@@ -211,7 +211,7 @@
          <!---- sub-cont begin ---->
           <div class="tit-cont">
               <p class="total">전체 : <span>${paginationInfo.totalRecordCount}</span>건</p>
-              <select class="select" id="sort_ordr" name="sort_ordr">
+              <select class="select" id="sort_ordr" name="sort_ordr" onChange="fn_search();">
                   <option value="TRAIN_S_DATE" <c:if test="${categoryVo.sort_ordr =='TRAIN_S_DATE'}">selected </c:if>> 교육기간순</option>
                   <option value="REG_DT"       <c:if test="${categoryVo.sort_ordr =='REG_DT'}">selected </c:if>>교육등록순</option>
               </select>

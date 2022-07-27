@@ -118,9 +118,9 @@
 		$("#addNum").val(addNum);
 
 		var row = "<div class='grid-box'>";
-			row += "<input type='text' id='edu_curr1_arr'  name='edu_curr1_arr' class='input-box' />";
-			row += "<input type='text' id='edu_curr2_arr'  name='edu_curr2_arr' class='input-box' />";
-			row += "<input type='text' id='edu_curr3_arr'  onKeyup=this.value=this.value.replace(/[^0-9]/g,'') name='edu_curr3_arr' class='input-box' />";
+			row += "<input type='text' id='edu_curr1_arr'  name='edu_curr1_arr' placeholder='ex.1차시(차시)' class='input-box' />";
+			row += "<input type='text' id='edu_curr2_arr'  name='edu_curr2_arr' placeholder='ex.기초편(차시명)' class='input-box' />";
+			row += "<input type='text' id='edu_curr3_arr'  onKeyup=this.value=this.value.replace(/[^0-9]/g,'') name='edu_curr3_arr' placeholder='ex.60(학습시간)' class='input-box' />";
 			//row += "<span>삭제</span>";
 			row += "<button type='button' class='sm-btn black-btn'>삭제</button>";
 			
@@ -165,6 +165,10 @@
 			var edu_curr1 = $('input[name=edu_curr1_arr]').eq(i).val();
 			var edu_curr2 = $('input[name=edu_curr2_arr]').eq(i).val();
 			var edu_curr3 = $('input[name=edu_curr3_arr]').eq(i).val();
+			if(edu_curr1 == "" || edu_curr2 == "" || edu_curr3 == ""){
+				alert("차시를 전부 입력 하세요.");
+				return;
+			}
 			arr1[i] = edu_curr1;
 			arr2[i] = edu_curr2;
 			arr3[i] = edu_curr3;
@@ -218,6 +222,16 @@
 			$("#inst_nm").focus();
 			return;
 		}		
+	   
+	   if (train_s_date == "" || train_e_date == ""){			
+			alert("교육기간을 입력 하세요.");
+			return;
+		}	
+	   
+	   if (edu_garden == ""){			
+			alert("교육정원을 입력 하세요.");
+			return;
+		}	
 		
 		var msg = "온라인 교육을  등록 하시겠습니까?";
 		if (gubun1 == "E"){
@@ -399,17 +413,18 @@
                                 <td><input type="text"  id="inst_nm" name="inst_nm" class="input-box" value="${categoryForm.inst_nm}"/></td>
                             </tr>
                             <tr>
-                                <th colspan="2">교육기간</th>
+                                <th colspan="2"><span class="red-txt">*</span>교육기간</th>
                                 <td>
                                     <div class="tb-cont">
-                                        <div class="radio-cont">
-                                            <input type="radio" class="radio-box cdate" id="set_use_yn" name="set_use_yn" value="NONE" <c:if test="${categoryForm.set_use_yn =='NONE'  || (empty categoryForm.set_use_yn) }">checked </c:if>>
+                                    	<input type="hidden" id="set_use_yn" name="set_use_yn" value="TERM">
+                                        <!-- <div class="radio-cont">
+                                            <input type="radio" class="radio-box cdate" id="set_use_yn" name="set_use_yn" value="NONE" disabled="disabled">
                                             <label for="">설정 없음</label>
-                                        </div>
-                                        <div class="radio-cont mr10">
-                                            <input type="radio" class="radio-box cdate" id="set_use_yn" name="set_use_yn" value="TERM" <c:if test="${categoryForm.set_use_yn =='TERM'}">checked </c:if>>
+                                        </div> -->
+                                        <!-- <div class="radio-cont mr10">
+                                            <input type="radio" class="radio-box cdate" id="set_use_yn" name="set_use_yn" value="TERM" checked >
                                             <label for="">기간선택</label>
-                                        </div>
+                                        </div> -->
     
                                         <div class="picker-wrap">
                                             <input type="text" id="train_s_date"  name="train_s_date" readonly value="${categoryForm.train_s_date}" class="input-box"/>
@@ -428,7 +443,7 @@
                                 <td><input type="text" id="edu_method"  name="edu_method" class="input-box" value="${categoryForm.edu_method}"/></td>
                             </tr>
                             <tr>
-                                <th colspan="2">학습시간</th>
+                                <th colspan="2">총 학습시간</th>
                                 <td>
                                     <input type="text" id="edu_time"  name="edu_time" class="input-box" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"  value="${categoryForm.edu_time}"  maxlength="5"/>분
                                 </td>
@@ -442,10 +457,10 @@
                             </tr>
                           
                             <tr>
-                                <th colspan="2">교육정원</th>
+                                <th colspan="2"><span class="red-txt">*</span>교육정원</th>
                                 <td>
                                     <input type="text" id="edu_garden"  name="edu_garden" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"  maxlength="5" class="input-box" value="${categoryForm.edu_garden}"/>
-                                    <span class="point">ex. 기입하지 않으면 무한대, 신청인원과 연동</span>
+                                    <span class="point">*교육정원을 꼭 기입하시기 바랍니다.</span>
                                 </td>
                             </tr>
                             <tr>
@@ -495,7 +510,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th colspan="2">안내문</th>
+                                <th colspan="2">안내문<br><span class="red-txt">*분야별 교육신청에서 필요 및 노출</span></th>
                                 <td>
                                     <div class="upload-box">
                                         <input  id="files"  type="file"   name="files" accept=".jpg, .jpeg, .png"/>
@@ -518,21 +533,21 @@
                                 <td><input type="text" id="edu_goals"  name="edu_goals"  class="input-box lg-width" value="${categoryForm.edu_goals}""/></td>
                             </tr>
                             <tr>
-                                <th>차시</th>
+                                <th><span class="red-txt">*</span>차시</th>
                                 <td>
                                  <div id="insertCurr">
                                    <c:if test="${empty categoryFormSubList }">
                                     <div class="grid-box">
-                                        <input type="text" id="edu_curr1_arr"  name="edu_curr1_arr" class="input-box" value=""/>
-                                        <input type="text" id="edu_curr2_arr"  name="edu_curr2_arr" class="input-box" value=""/>
-                                        <input type="text" id="edu_curr3_arr"  name="edu_curr3_arr" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" class="input-box" value=""/>
+                                        <input type="text" id="edu_curr1_arr" placeholder="ex.1차시(차시)" name="edu_curr1_arr" class="input-box" value=""/>
+                                        <input type="text" id="edu_curr2_arr" placeholder="ex.기초편(차시명)" name="edu_curr2_arr" class="input-box" value=""/>
+                                        <input type="text" id="edu_curr3_arr" placeholder="ex.60(학습시간)" name="edu_curr3_arr" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" class="input-box" value=""/>
                                     </div>
                                     </c:if>
                                      <c:forEach var="result" items="${categoryFormSubList}" varStatus="status">
                                      <div class="grid-box">
-                                        <input type="text" id="edu_curr1_arr" placeholder="회차"    name="edu_curr1_arr"  class="input-box" value="${result.edu_curr1}"/>
-                                        <input type="text" id="edu_curr2_arr" placeholder="단원명"   name="edu_curr2_arr"  class="input-box" value="${result.edu_curr2}"/>
-                                        <input type="text" id="edu_curr3_arr" placeholder="강의시간"  name="edu_curr3_arr"  class="input-box" value="${result.edu_curr3}" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" />
+                                        <input type="text" id="edu_curr1_arr" placeholder="ex.1차시(차시)"    name="edu_curr1_arr"  class="input-box" value="${result.edu_curr1}"/>
+                                        <input type="text" id="edu_curr2_arr" placeholder="ex.기초편(차시명)"   name="edu_curr2_arr"  class="input-box" value="${result.edu_curr2}"/>
+                                        <input type="text" id="edu_curr3_arr" placeholder="ex.60(학습시간)"  name="edu_curr3_arr"  class="input-box" value="${result.edu_curr3}" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" />
                                         <c:if test="${status.index !=0 }">
                                         	<button type='button' class='sm-btn black-btn'>삭제</button>
                                 		</c:if>

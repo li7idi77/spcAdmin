@@ -187,7 +187,7 @@
 	                 <li <c:if test="${fn:contains(path, '/my/my04')}">  class="on" </c:if>>
 	                 	<a href="#">기관</a>
 	                 	<ul class="sub-lnb">
-                        	<li <c:if test="${fn:contains(path, '/my/my04info') }">  class="active" </c:if>> <a href="${pageContext.request.contextPath}/my/my03info.do">기본정보</a></li>
+                        	<li <c:if test="${fn:contains(path, '/my/my04info') }">  class="active" </c:if>> <a href="${pageContext.request.contextPath}/my/my04info.do">기본정보</a></li>
 	                    	<li <c:if test="${fn:contains(path, '/my/my04app') }">    class="active" </c:if>> <a href="${pageContext.request.contextPath}/my/my04app.do">교육신청 내역</a></li>
 	                    	<li <c:if test="${fn:contains(path, '/my/my04insSel') }">    class="active" </c:if>> <a href="${pageContext.request.contextPath}/my/my04insSel.do">강사 미선택 현황</a></li>
 	                    	<li <c:if test="${fn:contains(path, '/my/my04eduApp') }">    class="active" </c:if>> <a href="${pageContext.request.contextPath}/my/my04eduApp.do">교육명 별 신청자</a></li>

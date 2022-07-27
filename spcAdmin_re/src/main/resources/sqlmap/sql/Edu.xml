@@ -141,7 +141,7 @@
 	  	 WHERE A.SITE = #{site}
 		   AND A.CATEGORY1_KEY = #{category1_key}
 		   AND A.CATEGORY2_KEY = #{category2_key}
-		 ORDER BY A.CATEGORY1_KEY
+		 ORDER BY A.CATEGORY3_KEY DESC
 		 LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 
@@ -942,23 +942,23 @@
 	
 	<select id="getOrgPopSearchList"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
 		/** com.easycompany.mapper.EduMapper.getOrgPopSearchList **/
-		SELECT A.USER_ID, A.AREA_CD CD, B.CD_NM, A.COPER_NM
+		SELECT A.USER_ID, A.RGN_CD AS CD, B.CD_NM, A.INST_NM AS COPER_NM
 		  FROM COM_USER A, COM_CD_MNG B
 	 	 WHERE A.AREA_CD = B.CD
 		   AND B.UP_CD_NO ='32' 
            AND A.USER_STTUS_CD = 'Y' 
-           AND A.USER_GU = '1' 
-           AND A.COPER_NM IS NOT NULL 
+           AND A.MBR_SE_CD = '1' 
+           AND A.INST_NM IS NOT NULL 
            <![CDATA[
-		      AND A.COPER_NM <> ''
+		      AND A.INST_NM <> ''
 		   ]]>
 		  <if test=" coper_nm !=null and coper_nm !=''">
-		   AND  A.COPER_NM LIKE CONCAT('%', #{coper_nm} ,'%')
+		   AND  A.INST_NM LIKE CONCAT('%', #{coper_nm} ,'%')
 		  </if>
           <if test=" cd_nm !=null and cd_nm !=''">
 		   AND  B.CD_NM LIKE CONCAT('%', #{cd_nm} ,'%')
 		  </if>
-		ORDER BY A.INSTRUCTOR_COPER_NM
+		ORDER BY A.INSTR_INST_ND_ENTRPS_NM
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 
@@ -969,13 +969,13 @@
 	 	 WHERE A.AREA_CD = B.CD
 		   AND B.UP_CD_NO ='32' 
            AND A.USER_STTUS_CD = 'Y' 
-           AND A.USER_GU = '1' 
-           AND A.COPER_NM IS NOT NULL 
+           AND A.MBR_SE_CD = '1' 
+           AND A.INST_NM IS NOT NULL 
            <![CDATA[
-		   AND A.COPER_NM <> ''
+		   AND A.INST_NM <> ''
 		   ]]>
 		  <if test=" coper_nm !=null and coper_nm !=''">
-		   AND  A.COPER_NM LIKE CONCAT('%', #{coper_nm} ,'%')
+		   AND  A.INST_NM LIKE CONCAT('%', #{coper_nm} ,'%')
 		  </if>
           <if test=" cd_nm !=null and cd_nm !=''">
 		   AND  B.CD_NM LIKE CONCAT('%', #{cd_nm} ,'%')
@@ -1026,6 +1026,7 @@
 		) AS CATEGORY3_NAME
 		FROM EDU_SCHEDULE A
 		WHERE A.EDU_KEY = #{edu_key}
+		AND A.SCHEDULE_NO = #{sch_no}
 	</select>
 
 	<select id="getEeuInfoOnlineDetail"		parameterType="com.easycompany.service.vo.CategoryVo"		resultType="com.easycompany.service.vo.CategoryVo">
@@ -1608,7 +1609,7 @@
 			 WHERE A.CATEGORY1_KEY = B.CATEGORY1_KEY 
 			   AND A.CATEGORY2_KEY = B.CATEGORY2_KEY 
 			   AND A.CATEGORY3_KEY = B.CATEGORY3_KEY
-			   AND A.SCH_STATUS IN ('신청완료')
+			   AND A.SCH_STATUS IN ('신청완료','교육완료','보고완료')
 			   )
 	    SELECT *
 		  FROM REGI_D
@@ -1663,10 +1664,10 @@
 	            END
 	               AS INS_STATUS,
 	              <![CDATA[
-	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN ''
-						WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
-						WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
-						WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > DATE_FORMAT(NOW(),'%x-%m-%d') THEN ''
+						WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > DATE_FORMAT(NOW(),'%x-%m-%d') THEN '신청완료'
+						WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > DATE_FORMAT(NOW(),'%x-%m-%d') THEN '신청완료'
+						WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > DATE_FORMAT(NOW(),'%x-%m-%d') THEN '신청완료'
 						WHEN b.SCH_STATUS = 'C' THEN '신청취소'
 						WHEN b.SCH_STATUS IS NULL AND a.EDU_START_DATE <= NOW() THEN '교육완료'
 						WHEN b.SCH_STATUS = 'S' THEN '보고완료'
@@ -1740,10 +1741,10 @@
 	            END
 	               AS INS_STATUS,
 	             <![CDATA[
-	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN ''
-						WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
-						WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
-						WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE >= DATE_FORMAT(NOW(),'%x-%m-%d') THEN ''
+						WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE >= DATE_FORMAT(NOW(),'%x-%m-%d') THEN '신청완료'
+						WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE >= DATE_FORMAT(NOW(),'%x-%m-%d') THEN '신청완료'
+						WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE >= DATE_FORMAT(NOW(),'%x-%m-%d') THEN '신청완료'
 						WHEN b.SCH_STATUS = 'C' THEN '신청취소'
 						WHEN b.SCH_STATUS IS NULL AND a.EDU_START_DATE <= NOW() THEN '교육완료'
 						WHEN b.SCH_STATUS = 'S' THEN '보고완료'
@@ -1829,10 +1830,10 @@
 	            END
 	               AS INS_STATUS,
 	              <![CDATA[
-	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN ''
-						WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
-						WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
-						WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE > NOW() THEN '신청완료'
+	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE >= NOW() THEN ''
+						WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE >= NOW() THEN '신청완료'
+						WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE >= NOW() THEN '신청완료'
+						WHEN b.INS_TYPE = 'input' AND INS_STATUS IS NULL AND b.SCH_STATUS IS NULL AND a.EDU_START_DATE >= NOW() THEN '신청완료'
 						WHEN b.SCH_STATUS = 'C' THEN '신청취소'
 						WHEN b.SCH_STATUS IS NULL AND a.EDU_START_DATE <= NOW() THEN '교육완료'
 						WHEN b.SCH_STATUS = 'S' THEN '보고완료'
@@ -1892,7 +1893,7 @@
 				      END AS USER_SEX
 				    , FN_GET_CD_NM1('238', U.JOB_CD) JOB_CD
 				    , DATE_FORMAT(U.BIRTH_YMD,'%Y-%m-%d') AS BIRTH_YMD
-				    , C.EML_ADDR, C.MBL_TELNO, CONCAT(U.JUSO ,' ', U.JUSO_DETAIL) AS JUSO 
+				    , C.EML_ADDR, C.MBL_TELNO, CONCAT(U.ENCPT_ADDR ,' ', U.ENCPT_DADDR) AS JUSO 
 				    , DATE_FORMAT(C.REG_DT,'%Y-%m-%d') AS REG_DT
 			   FROM EDU_COURSE_REGISTRATION C , EDU_REGISTRATION R , COM_USER U
 			  WHERE C.EDU_NO = R.EDU_NO
@@ -2149,6 +2150,7 @@
 		, EDU_NUMBER
 		, EDU_TEAC_NAME
 		, EDU_KEY
+		, SCHEDULE_NO
 		FROM EDU_SCHEDULE A
 		)
 		SELECT *
@@ -2172,7 +2174,7 @@
 		       ]]>
 			</when>
 		</choose>
-		ORDER BY EDU_KEY DESC
+		ORDER BY SCHEDULE_NO DESC
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 

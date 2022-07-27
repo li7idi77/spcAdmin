@@ -51,12 +51,12 @@
  	<form  id="commonForm" name="commonForm"  method="post"  >
            
 	<div class="dim-layer"> </div>
-	    <div class="pop-wrap">
+	    <div class="pop-wrap" style="height:750px;">
 	        <div class="pop-header">
 	            <h1 class="h1-tit">기관명 검색</h1>
 	            <button type="button"  onClick="javascript:self.close();"  class="close-btn"><img src="${pageContext.request.contextPath}/images/common/close.png" alt="닫기"/></button>
 	        </div>
-	        <div class="pop-cont">
+	        <div class="pop-cont" style="height:620px;">
 				<form  id="commonForm" name="commonForm"  method="post"  action="">
 					<input type="hidden" id="gubun1"         name="gubun1"      value='${categoryVo.gubun1}'  class="input-box" />
 					<input type="hidden" id="gubun1"         name="gubun2"      value='${categoryVo.gubun2}'  class="input-box" />
@@ -80,7 +80,7 @@
 	            </div>
 	            </form>
 	
-	            <div class="table-wrap">
+	            <div class="table-wrap" style="height:500px;">
 	                <table class="list-tb">
 	                    <caption>선택, 지역, 소속기관 정보가 있는 테이블</caption>
 	                    <colgroup>

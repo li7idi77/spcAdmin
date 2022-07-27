@@ -959,6 +959,7 @@ public class EduController
 	      if ("D".equals(categoryVo.getGubun1()))
 	      {
 	        resultCnt = this.eduService.deleteEduCation(categoryVo);
+	        resultCnt = this.eduService.deleteSchedule(categoryVo);
 	        categoryVo.setResult(resultCnt > 0 ? "SUCCESS" : "FAIL");
 	      }
 	
@@ -967,6 +968,7 @@ public class EduController
 	        for (String s : ArraysStr) {
 	          categoryVo.setEdu_no(Integer.parseInt(s));
 	          resultCnt = this.eduService.deleteEduCation(categoryVo);
+		      resultCnt = this.eduService.deleteSchedule(categoryVo);
 	        }
 	        categoryVo.setResult(resultCnt > 0 ? "SUCCESS" : "FAIL");
 	      }

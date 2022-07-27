@@ -67,7 +67,7 @@
 		</if>
 		<choose>
 			<when test="listOder == 'edu_no'">
-				ORDER BY EDU_NO DESC
+				ORDER BY ER.EDU_NO DESC
 			</when>
 			<otherwise>
 				ORDER BY TRAIN_S_DATE DESC

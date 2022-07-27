@@ -56,7 +56,7 @@
 				,(SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = b.CATEGORY2_KEY) AS CATEGORY2_NAME
 		        ,(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = b.CATEGORY3_KEY) AS CATEGORY3_NAME
 		        ,DATE_FORMAT(a.REG_DT,'%Y-%m-%d') AS REG_DT, b.INST_NM
-                ,CASE WHEN b.TRAIN_S_DATE > NOW() THEN 'Y' ELSE 'N' END AS CANCEL_CHECK 
+                ,CASE WHEN b.TRAIN_S_DATE > DATE_FORMAT(NOW(),'%x-%m-%d') THEN 'Y' ELSE 'N' END AS CANCEL_CHECK 
 		FROM EDU_COURSE_REGISTRATION a, 
 			 EDU_REGISTRATION b
 		WHERE a.EDU_NO = b.EDU_NO
@@ -76,12 +76,12 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.REG_DT = NOW()
+				AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  a.REG_DT >= #{start_date} AND a.REG_DT <= #{end_date} 
+		       AND  DATE_FORMAT(a.REG_DT,'%x-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -110,12 +110,12 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND b.REG_DT = NOW()
+				AND DATE_FORMAT(b.REG_DT,'%x-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  b.REG_DT >= #{start_date} AND b.REG_DT <= #{end_date} 
+		       AND  DATE_FORMAT(b.REG_DT,'%x-%m-%d') >= #{start_date} AND DATE_FORMAT(b.REG_DT,'%x-%m-%d') <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -134,7 +134,7 @@
 			AND a.USER_ID = #{UserAccount.user_id}
 			AND b.EDU_SITE = #{site}
 			<![CDATA[
-			AND TRAIN_S_DATE <= NOW() 
+			AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%x-%m-%d') 
 	        ]]>
 			<if test="category1_key != '' and category1_key != null">
 				AND b.CATEGORY1_KEY = #{category1_key}
@@ -150,12 +150,12 @@
 				</when>
 				<when
 					test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-					AND b.REG_DT = NOW()
+					AND DATE_FORMAT(b.REG_DT,'%x-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
 				</when>
 				<when
 					test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 			      <![CDATA[
-			       AND  b.REG_DT >= #{start_date} AND b.REG_DT <= #{end_date} 
+			       AND  DATE_FORMAT(b.REG_DT,'%x-%m-%d') >= #{start_date} AND DATE_FORMAT(b.REG_DT,'%x-%m-%d') <= #{end_date} 
 			       ]]>
 				</when>
 			</choose>
@@ -182,7 +182,7 @@
 		AND a.USER_ID = #{UserAccount.user_id}
 		AND b.EDU_SITE = #{site}
 		<![CDATA[
-		AND TRAIN_S_DATE <= NOW() 
+		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%x-%m-%d') 
         ]]>
 		<if test="edu_status != '' and edu_status != null">
 			AND COUR_STAT = #{edu_status}
@@ -201,12 +201,12 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.REG_DT = NOW()
+				AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  a.REG_DT >= #{start_date} AND a.REG_DT <= #{end_date} 
+		       AND  DATE_FORMAT(a.REG_DT,'%x-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -222,7 +222,7 @@
 		AND a.USER_ID = #{UserAccount.user_id}
 		AND b.EDU_SITE = #{site}
 		<![CDATA[
-        AND TRAIN_S_DATE <= NOW() 
+        AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%x-%m-%d') 
         ]]>
 		<if test="edu_status != ''">
 			AND a.COUR_STAT = 1
@@ -241,12 +241,12 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.REG_DT = NOW()
+				AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  a.REG_DT >= #{start_date} AND a.REG_DT <= #{end_date} 
+		       AND  DATE_FORMAT(a.REG_DT,'%x-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -269,7 +269,7 @@
         AND b.CATEGORY1_KEY IN ('1','2','3')
 		AND a.USER_ID = #{UserAccount.user_id}
 		<![CDATA[
-		AND TRAIN_S_DATE <= NOW() 
+		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%x-%m-%d') 
         ]]>
 		AND (a.COUR_STAT != '1' OR a.COUR_STAT IS NULL)
 		<choose>
@@ -277,7 +277,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = NOW()
+				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -309,7 +309,7 @@
         AND b.CATEGORY1_KEY IN ('1','2','3')
 		AND a.USER_ID = #{UserAccount.user_id}
 		<![CDATA[
-		AND TRAIN_S_DATE <= NOW() 
+		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%x-%m-%d') 
         ]]>
 		AND COUR_STAT = '1'
 		<choose>
@@ -317,7 +317,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = NOW()
+				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -330,6 +330,13 @@
 			AND b.CATEGORY3_NAME = #{edu_name}
 		</if>
 		ORDER BY COUR_NO DESC
+	</select>
+	  
+	<select id="fileIdDown" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT FILE_FULL_PATH,
+			   FILE_NAME
+		FROM EDU_FILE
+		WHERE FILE_ID = #{file_id}
 	</select>
 	  
 	<select id="getCourInfo" parameterType="java.util.Map" resultType="java.util.Map">
@@ -396,14 +403,14 @@
 	
 	<update id="onclassFinish" parameterType="java.util.Map">	
 		UPDATE EDU_COURSE_REGISTRATION
-		SET COUR_STAT = '1', CHG_DT = NOW()
+		SET COUR_STAT = '1', CHG_DT = DATE_FORMAT(NOW(),'%x-%m-%d')
 		WHERE COUR_NO = #{cour_no}
 		  AND EDU_NO = #{edu_no}
 	</update>
 	
 	<update id="myWarrantUpdate" parameterType="java.util.Map">	
 		UPDATE EDU_COURSE_REGISTRATION
-		SET LICENSE_PBL = '1', LICENSE_PBL_DATE = NOW()
+		SET LICENSE_PBL = '1', LICENSE_PBL_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
 		WHERE COUR_NO = #{cour_no}
 		  AND EDU_NO = #{edu_no}
 	</update><!--수정해야함-->
@@ -424,7 +431,7 @@
 		WHERE a.EDU_NO = b.EDU_NO
 		AND a.USER_ID = #{UserAccount.user_id}
 		<![CDATA[
-		AND TRAIN_S_DATE <= NOW() 
+		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%x-%m-%d') 
         ]]>
 		AND COUR_STAT = 1
 		AND b.CATEGORY1_KEY = #{category1_key}
@@ -438,11 +445,11 @@
 			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
 			</when>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.REG_DT = NOW()
+				AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  a.REG_DT >= #{start_date} AND a.REG_DT <= #{end_date} 
+		       AND  DATE_FORMAT(a.REG_DT,'%x-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -467,7 +474,7 @@
 		WHERE a.EDU_NO = b.EDU_NO
 		AND a.USER_ID = #{UserAccount.user_id}
 		<![CDATA[
-		AND TRAIN_S_DATE <= NOW() 
+		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%x-%m-%d') 
         ]]>
 		AND COUR_STAT = 1
 		AND b.CATEGORY1_KEY = #{category1_key}
@@ -482,12 +489,12 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.REG_DT = NOW()
+				AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  a.REG_DT >= #{start_date} AND a.REG_DT <= #{end_date} 
+		       AND  DATE_FORMAT(a.REG_DT,'%x-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -538,7 +545,7 @@
 			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
 			</when>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND CAST( DATE_FORMAT( REG_DT, '%Y-%m-%d' ) AS CHAR(19)) = NOW()
+				AND CAST( DATE_FORMAT( REG_DT, '%Y-%m-%d' ) AS CHAR(19)) = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
@@ -559,7 +566,7 @@
 			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
 			</when>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND CAST( DATE_FORMAT( REG_DT, '%Y-%m-%d' ) AS CHAR(19)) = NOW()
+				AND CAST( DATE_FORMAT( REG_DT, '%Y-%m-%d' ) AS CHAR(19)) = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
@@ -590,7 +597,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND EDU_START_DATE = NOW()
+				AND EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -608,6 +615,7 @@
 		<if test="edu_org_name != '' and edu_org_name != null">
 			AND a.EDU_ORG_NAME LIKE CONCAT('%',#{edu_org_name},'%') 
 		</if>
+		ORDER BY a.SCHEDULE_NO DESC
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 	
@@ -624,7 +632,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND EDU_START_DATE = NOW()
+				AND EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -668,7 +676,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND REG_DT = NOW()
+				AND REG_DT = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -677,6 +685,7 @@
 		       ]]>
 			</when>
 		</choose>
+		ORDER BY INSTRUCTOR_LEAVE_IDX DESC
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 	
@@ -689,7 +698,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND REG_DT = NOW()
+				AND REG_DT = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -722,7 +731,7 @@
 					</when>
 					<when test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
 					<![CDATA[
-						AND TRAIN_S_DATE <= NOW() AND TRAIN_E_DATE >= NOW()
+						AND TRAIN_S_DATE <= DATE_FORMAT(NOW(),'%x-%m-%d') AND TRAIN_E_DATE >= DATE_FORMAT(NOW(),'%x-%m-%d')
 					]]>
 					</when>
 					<when test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -735,6 +744,7 @@
 			 EDU_COURSE_REGISTRATION b
 		WHERE a.EDU_NO = b.EDU_NO
         AND b.USER_ID = #{UserAccount.user_id}
+        ORDER BY b.COUR_NO DESC
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 	
@@ -753,7 +763,7 @@
 					</when>
 					<when test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
 					<![CDATA[
-						AND TRAIN_S_DATE <= NOW() AND TRAIN_E_DATE >= NOW()
+						AND TRAIN_S_DATE <= DATE_FORMAT(NOW(),'%x-%m-%d') AND TRAIN_E_DATE >= DATE_FORMAT(NOW(),'%x-%m-%d')
 					]]>
 					</when>
 					<when test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -789,7 +799,7 @@
 		WHERE a.EDU_NO = b.EDU_NO
 		AND a.USER_ID = #{UserAccount.user_id}
 		<![CDATA[
-		AND TRAIN_S_DATE <= NOW() 
+		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%x-%m-%d') 
         ]]>
 		AND COUR_STAT = 1
 		AND b.CATEGORY1_KEY = '3'
@@ -803,11 +813,11 @@
 			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
 			</when>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.REG_DT = NOW()
+				AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  a.REG_DT >= #{start_date} AND a.REG_DT <= #{end_date} 
+		       AND  DATE_FORMAT(a.REG_DT,'%x-%m-%d') >= #{start_date} AND a.REG_DT <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -821,7 +831,7 @@
 		      	AND LICENSE_PBL = '2'
 			</when>
 		</choose>
-		ORDER BY COUR_NO DESC
+		ORDER BY a.COUR_NO DESC
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 	
@@ -832,7 +842,7 @@
 		WHERE a.EDU_NO = b.EDU_NO
 		AND a.USER_ID = #{UserAccount.user_id}
 		<![CDATA[
-		AND TRAIN_S_DATE <= NOW() 
+		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%x-%m-%d') 
         ]]>
 		AND COUR_STAT = 1
 		AND b.CATEGORY1_KEY = '3'
@@ -847,12 +857,12 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.REG_DT = NOW()
+				AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  a.REG_DT >= #{start_date} AND a.REG_DT <= #{end_date} 
+		       AND  DATE_FORMAT(a.REG_DT,'%x-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -897,7 +907,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.EDU_START_DATE = NOW()
+				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -906,6 +916,7 @@
 		       ]]>
 			</when>
 		</choose>
+		ORDER BY a.SCHEDULE_NO DESC
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 	
@@ -928,7 +939,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.EDU_START_DATE = NOW()
+				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -979,7 +990,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.EDU_START_DATE = NOW()
+				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -988,6 +999,7 @@
 		       ]]>
 			</when>
 		</choose>
+		ORDER BY a.SCHEDULE_NO DESC
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 	
@@ -1009,7 +1021,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.EDU_START_DATE = NOW()
+				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -1043,7 +1055,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.EDU_START_DATE = NOW()
+				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -1052,6 +1064,7 @@
 		       ]]>
 			</when>
 		</choose>
+		ORDER BY a.SCHEDULE_NO DESC
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 	
@@ -1072,7 +1085,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.EDU_START_DATE = NOW()
+				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -1106,7 +1119,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = NOW()
+				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -1123,6 +1136,7 @@
 				ORDER BY USER_NM ASC
 			</when>
 		</choose>
+		ORDER BY a.COUR_NO DESC
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 	
@@ -1141,7 +1155,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = NOW()
+				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -1175,7 +1189,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.EDU_START_DATE = NOW()
+				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -1184,6 +1198,7 @@
 		       ]]>
 			</when>
 		</choose>
+		ORDER BY a.SCHEDULE_NO DESC
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 	
@@ -1204,7 +1219,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.EDU_START_DATE = NOW()
+				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -1243,6 +1258,7 @@
 				ORDER BY USER_NM ASC
 			</when>
 		</choose>
+		ORDER BY a.COUR_NO DESC
 		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 	

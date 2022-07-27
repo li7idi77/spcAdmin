@@ -75,6 +75,7 @@
  			checkNo = checkNo.substring( 1, checkNo.length );
  			
  			$("#edu_key").val(0); 
+ 			$("#sch_no").val(0); 
  			$("#gubun1").val("A"); 
 			$("#gubun2").val("A");
 			$("#checkdstr").val(checkNo);
@@ -100,21 +101,23 @@
  		
  	 });
 
-	 function fn_edit(key1,gubun1,gubun2){
+	 function fn_edit(key1,key2,gubun1,gubun2){
 		
 		var frm = document.commonForm;
 		
 		$("#edu_key").val(key1);
  		$("#gubun1").val(gubun1); 
  		$("#gubun2").val(gubun2);   		
+ 		$("#sch_no").val(key2);
  		
  		frm.action = "<c:url value='/edu/eduInfoScheduleCate.do'/>";
  		frm.submit();
 	}	
 	 
-	 function fn_delete(key1,gubun1,gubun2){
+	 function fn_delete(key1,key2,gubun1,gubun2){
 			
 			$("#edu_key").val(key1); 
+			$("#sch_no").val(key2); 
 		
 			$("#gubun1").val(gubun1); 
 			$("#gubun2").val(gubun2); 
@@ -221,7 +224,8 @@
 			<input type="hidden" id="gubun1"         name="gubun1"         value='I'                   class="input-box" />
 		    <input type="hidden" id="gubun2"         name="gubun2"         value='eduInfoScheduleList' class="input-box" />	
 		    <input type="hidden" id="excelFileName"  name="excelFileName"  value=''                    class="input-box" />
-		    <input type="hidden" id="edu_key"        name="edu_key"        value='0'                   class="input-box" />		
+		    <input type="hidden" id="edu_key"        name="edu_key"        value='0'                 class="input-box" />
+		    <input type="hidden" id="sch_no"        name="sch_no"        value='0'                   class="input-box" />		
 		    <input type="hidden" id="checkdstr"      name="checkdstr"      value=''                    class="input-box" />	
 		    <input type="hidden" id="pageIndex"      name="pageIndex"      class="input-box" value=1 />	
 		  
@@ -256,7 +260,7 @@
            <div class="btn-cont mb20">
                <button type="button" class="mid-btn black-btn"  onClick="fn_excel();">엑셀다운</button>
                <!-- <button type="button" class="mid-btn blue-btn"   onClick="fn_load('1');">등록</button> -->
-               <button type="button" class="mid-btn white-btn btnOneApr">선택삭제</button>
+               <!-- <button type="button" class="mid-btn white-btn btnOneApr">선택삭제</button> -->
            </div>
            
            <div class="table-wrap">
@@ -274,7 +278,7 @@
                        <col width="7%"/>
                        <col width="8%"/>
                        <col width="7%"/>
-                       <col width="7%"/>
+                       <%-- <col width="7%"/> --%>
                    </colgroup>
                    <thead>
                        <tr>
@@ -288,7 +292,7 @@
                            <th>교육 대상</th>
                            <th>교육 인원</th>
                            <th>강사명</th>
-                           <th colspan="2">관리</th>
+                           <th>관리</th>
                        </tr>
                    </thead>
                    <tbody>
@@ -304,8 +308,8 @@
                            <td>${result.edu_target}</td>
                            <td>${result.edu_number}</td>
                            <td>${result.edu_teac_name}</td>
-                           <td><button type="button" class="sm-btn blue-btn"  onClick="javascript:fn_edit('${result.edu_key}',  'E', 'eduInfoScheduleList');" >수정</button></td>
-                           <td><button type="button" class="sm-btn white-btn" onClick="javascript:fn_delete('${result.edu_key}','D', 'eduInfoScheduleList');">삭제</button></td>
+                           <td><button type="button" class="sm-btn blue-btn"  onClick="javascript:fn_edit('${result.edu_key}','${result.schedule_no}',  'E', 'eduInfoScheduleList');" >수정</button></td>
+                           <%-- <td><button type="button" class="sm-btn white-btn" onClick="javascript:fn_delete('${result.edu_key}','D', 'eduInfoScheduleList');">삭제</button></td> --%>
                        </tr>
                       </c:forEach>
                    </tbody>

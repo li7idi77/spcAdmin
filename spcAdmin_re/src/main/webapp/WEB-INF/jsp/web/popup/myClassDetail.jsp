@@ -34,6 +34,8 @@
 	}
 </script>
     <!--  class-wrap begin -->
+    <form id="commonForm" name="commonForm" method="post">
+    <input type="hidden" id="file_id" name="file_id">
             <div class="class-wrap">
 				<input type="hidden" id="cour_no"  name="cour_no" value="${cour_no}" />
                 <div class="tit-wrap flex-colum">
@@ -47,7 +49,7 @@
                     <!---- info-group end ---->
 
                     <div class="right-cont">
-                        <button class="sm-btn white-btn" onClick="location.href='${pageContext.request.contextPath}/my/popMyClass.do'">강의실 홈</button>
+                        <button class="sm-btn white-btn" type="button" onClick="location.href='${pageContext.request.contextPath}/my/popMyClass.do'">강의실 홈</button>
                     </div>
                 </div>
                 
@@ -126,7 +128,7 @@
                                     <td>${status.index + 1}</td>
                                     <td>${list.EDU_CURR1}</td>
                                     <td class="tl">${list.EDU_CURR2}</td>
-                                    <td><a class="link" onclick="javascript:fileDownload('${list.FILE_ID}');">다운로드</a></td>
+                                    <td><c:if test="${list.FILE_ID != null && list.FILE_ID != ''}"><a class="link" onclick="javascript:fileDownload('${list.FILE_ID}');">다운로드</a></c:if></td>
                                     <td><span>${list.EDU_CURR3}</span>분</td>
                                     <td><span>${list.COUR_TIME}</span>분</td>
                                     <td>${list.COUR_STAT}</td>
@@ -143,4 +145,5 @@
                     </div>
                 </div>
             </div>
+       </form>
             <!--  class-wrap end -->

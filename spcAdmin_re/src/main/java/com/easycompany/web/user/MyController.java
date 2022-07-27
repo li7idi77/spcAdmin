@@ -152,6 +152,8 @@ public class MyController
 		  }else {
 			  if(!paramMap.containsKey("category1_key")) {
 				  paramMap.put("category1_key", "4");
+			  }else if(paramMap.get("category1_key").toString().equals("1")){
+				  paramMap.put("category1_key", "7");
 			  }
 		  }
 	  }
@@ -193,6 +195,8 @@ public class MyController
 		  }else {
 			  if(!paramMap.containsKey("category1_key")) {
 				  paramMap.put("category1_key", "4");
+			  }else if(paramMap.get("category1_key").toString().equals("1")){
+				  paramMap.put("category1_key", "7");
 			  }
 		  }
 	  }

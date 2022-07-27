@@ -29,6 +29,7 @@ public class CategoryVo extends MemberVo
   int edu_number;
   String edu_teac_name;
   int edu_key;
+  int sch_no;
   int code_cd;
   String code_name;
   String gubun3;
@@ -415,6 +416,14 @@ public String getSite() {
 
   public void setEdu_key(int edu_key) {
     this.edu_key = edu_key;
+  }
+  
+  public int getSch_no() {
+    return this.sch_no;
+  }
+
+  public void setSch_no(int sch_no) {
+    this.sch_no = sch_no;
   }
 
   public int getEdu_no() {

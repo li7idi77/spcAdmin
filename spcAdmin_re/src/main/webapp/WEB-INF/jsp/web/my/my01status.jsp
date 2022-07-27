@@ -227,8 +227,8 @@
 								</c:if>
 								<c:if test="${site eq 'off'}">
                                 <select class="select mr30"  id="category1_key" name="category1_key">
-										<option value='4' <c:if test="${category1_key == '4'}">selected</c:if>>일반</option>
 										<option value='7' <c:if test="${category1_key == '7'}">selected</c:if>>기관</option>
+										<option value='4' <c:if test="${category1_key == '4'}">selected</c:if>>일반</option>
 								</select>
 								</c:if>
 					            <select class="select"  id="category2_key" name="category2_key">

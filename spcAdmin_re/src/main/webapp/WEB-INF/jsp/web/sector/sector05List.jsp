@@ -83,8 +83,18 @@
  	 frm.action = "<c:url value='/user/sectorList.do'/>";
    	 frm.submit();
  }
+ 
+ function fileDownload(key1){
+		var frm = document.commonForm;
+		$("#file_id").val(key1)
+		frm.action = "<c:url value='/my/fileIdDown.do'/>";
+		frm.submit();
+	}
 </script>
      <!-- container  begin -->
+     <form  id="commonForm" name="commonForm"  method="post"  action="">
+		<input type="hidden" id="file_id" name="file_id">
+	</form>
                 <div id="container">
                 	<input type="hidden" id="category1" name="category1" value="${category1_key}">
                 	<input type="hidden" id="category2" name="category2" value="${category2_key}">
@@ -108,6 +118,7 @@
 
                     <div class="contents-wrap">
 						<form  id="commonForm" name="commonForm"  method="post"  action="">
+						<input type="hidden" id="file_id" name="file_id">
                         <!---- search-wrap begin ---->
                         <div class="search-wrap">
                             <div class="search-cont">
@@ -185,11 +196,6 @@
 	                                            <label>강사명 :</label>
 	                                            <span>${list.INST_NM}</span>
 	                                        </li>
-	                                        <li>
-	                                            <label>안내문 :</label>
-	                                            <a class="link">다운로드(${list.EDU_NOTICE})</a>
-	                                        </li>
-	                                        
 	                                    </ul>
 	                                </li>
                             	</c:forEach>
