@@ -6,7 +6,11 @@
 <%@ taglib prefix="ui"     uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-
+<style>
+.han_font{
+	font-family: auto;
+}
+</style>
      <!-- container  begin -->
      <div id="container">
 
@@ -34,7 +38,7 @@
                             
                             <ul class="dot-list">
                                 <li>교육비는 무료로, 만 14세 이상 회원가입을 한 누구나 교육을 신청하고, 수강할 수 있습니다.</li>
-                                <li>온라인 교육은 현재 “보고듣고말하기2.0(기본형, 중학생, 고등학생, 청년편, 중년편)”과 “이어줌人(청소년, 노인)”, “연예 관련 종사자 대상 자살예방 교육”만 제공하고 있으며, 생명지킴이 교육신청 > 교육신청 > 온라인교육에서 상시 학습 가능합니다.</li>
+                                <li>온라인 교육은 현재 “보고듣고말하기2.0(기본형, 중학생, 고등학생, 청년편, 중년편)”과 “이어줌<span class="han_font">人</span>(청소년, 노인)”, “연예 관련 종사자 대상 자살예방 교육”만 제공하고 있으며, 생명지킴이 교육신청 > 교육신청 > 온라인교육에서 상시 학습 가능합니다.</li>
                                 <li>생명지킴이 교육신청 > 교육신청 > 교육 기관별에서는 대면교육, 실시간 화상교육(줌)으로 진행되는 모든 생명지킴이 교육 프로그램 목록이 있습니다. 해당 기관으로 문의 후 교육 신청을 하시기 바랍니다.</li>
                             </ul>
 
@@ -68,7 +72,26 @@
                                                     <th>보고듣고말하기 직장인(1.6W)</th>
                                                     <td>
                                                         <p class="tl">직장인을 위한 보고듣고말하기 교육으로 국내 자살 현황 및 실태, 자살의 위험요인 및 보호요인을 파악하는 자살예방교육 자료를 제공하며, 자살 위험 대처능력을 향상시키고자 함</p>
-                                                        <dl><dt>교육시간</dt><dd>110분</dd><dt>교육인원</dt><dd>최대 200명</dd><dt>교육대상</dt><dd>직장인</dd></dl>
+                                                        <table class="small-list" style="border:1px #ddd solid;">
+                                                            <colgroup>
+                                                                <col width="16%"/>
+                                                                <col width="16%"/>
+                                                                <col width="16%"/>
+                                                                <col width="16%"/>
+                                                                <col width="16%"/>
+                                                                <col width="16%"/>
+                                                            </colgroup>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <th>교육시간</th>
+                                                                    <td>110분</td>
+                                                                    <th>교육인원</th>
+                                                                    <td>200명</td>
+                                                                    <th>교육대상</th>
+                                                                    <td>직장인</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -136,7 +159,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td>3</td>
-                                                    <th>이어줌人</th>
+                                                    <th>이어줌<span class="han_font">人</span></th>
                                                     <td>
                                                         <p class="tl">생명지킴이교육 프로그램의 다양화를 통해 생명지킴이교육 활성화에 기여하고 있으며, 청소년·대학생·성인·노인·직장인 총 5가지 버전으로 이루어져 있음</p>
                                                         <table class="small-list">

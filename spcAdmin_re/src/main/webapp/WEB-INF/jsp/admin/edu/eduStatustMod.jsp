@@ -110,7 +110,7 @@ function openWindowPop(url, name){
  </script>
  
            <form  id="commonForm" name="commonForm"  method="post"  >
-               <input type="text" id="schedule_no" name="schedule_no" value="${sch_no}">
+               <input type="hidden" id="schedule_no" name="schedule_no" value="${sch_no}">
          	<h1 class="h1-tit">교육 신청 현황 수정</h1>
 
 

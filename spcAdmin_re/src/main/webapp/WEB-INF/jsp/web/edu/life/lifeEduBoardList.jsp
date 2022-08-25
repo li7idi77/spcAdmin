@@ -37,7 +37,7 @@
 
            <div class="search-wrap">
                <div class="search-cont">
-                   <label>기간 :</label>
+                   <label>작성일 :</label>
                    <div class="radio-cont">
                        <input type="radio" class="radio-box" id="searchDate" name="searchDate" value="ALL" <c:if test="${adBoardVo.searchDate == 'ALL' || (empty adBoardVo.searchDate)}">checked </c:if>>
                        <label for="dateAll">전체</label>

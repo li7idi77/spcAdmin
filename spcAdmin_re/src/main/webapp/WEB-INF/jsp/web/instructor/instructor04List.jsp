@@ -90,7 +90,7 @@
                                     </colgroup>
                                     <thead>
                                         <tr>
-                                            <th>자격범위 및 자격유지 기간</th>
+                                            <th>자격범위</th>
                                             <th>자격</th>
                                             <th>자격 유지기간</th>
                                         </tr>
@@ -99,7 +99,7 @@
                                     <c:forEach var="result" items="${resultList}" varStatus="status">
                                         <tr>
                                             <td class="tl">${result.CATEGORY3_NAME}</td>
-                                            <td><input type="checkbox" class="check-box" <c:if test="${result.EDU_CD != null}">checked</c:if>/></td>
+                                            <td><input type="checkbox" class="check-box" <c:if test="${result.EDU_CD != null}">checked</c:if> disabled/></td>
                                             <td>
                                                 <span>${result.AUTH_SDATE}</span>~<span>${result.AUTH_EDATE}</span></td>
                                         </tr>

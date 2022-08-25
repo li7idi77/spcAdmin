@@ -90,7 +90,8 @@ public class InstructorController
 	    paramMap.put("board_type","05"); 	 
 	    paramMap.put("sqlName", "getBoardView");	
 		Map<String, Object> result = instructorService.getSelectData(paramMap);
-	  	model.addAttribute("result", result);
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
+		  model.addAttribute("result", result);
 		model.addAttribute("path", request.getServletPath());
 	    model.addAllAttributes(paramMap);
 		return "instructor01View";
@@ -134,7 +135,8 @@ public class InstructorController
 	    paramMap.put("board_type","06"); 	 
 	    paramMap.put("sqlName", "getBoardView");	
 		Map<String, Object> result = instructorService.getSelectData(paramMap);
-	  	model.addAttribute("result", result);
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
+		  model.addAttribute("result", result);
 		model.addAttribute("path", request.getServletPath());
 	    model.addAllAttributes(paramMap);
 		return "instructor02View";

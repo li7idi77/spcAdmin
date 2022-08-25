@@ -944,7 +944,7 @@
 		/** com.easycompany.mapper.EduMapper.getOrgPopSearchList **/
 		SELECT A.USER_ID, A.RGN_CD AS CD, B.CD_NM, A.INST_NM AS COPER_NM
 		  FROM COM_USER A, COM_CD_MNG B
-	 	 WHERE A.AREA_CD = B.CD
+	 	 WHERE A.RGN_CD = B.CD
 		   AND B.UP_CD_NO ='32' 
            AND A.USER_STTUS_CD = 'Y' 
            AND A.MBR_SE_CD = '1' 
@@ -966,7 +966,7 @@
 		/** com.easycompany.mapper.EduMapper.getOrgPopSearchCount **/
 		SELECT count(*) cnt
 	 	  FROM COM_USER A, COM_CD_MNG B
-	 	 WHERE A.AREA_CD = B.CD
+	 	 WHERE A.RGN_CD = B.CD
 		   AND B.UP_CD_NO ='32' 
            AND A.USER_STTUS_CD = 'Y' 
            AND A.MBR_SE_CD = '1' 
@@ -1885,15 +1885,15 @@
 		/** com.easycompany.mapper.EduMapper.getEduInfoOnlineMangViewList **/
 		WITH TB_MEM AS 
 			(
-			SELECT   U.USER_NM
+			SELECT   FN_DECRYPT(U.ENCPT_USER_NM) AS USER_NM
 				   , CASE
-					   WHEN U.USER_SEX = 'M' THEN '남자'
-					   WHEN U.USER_SEX = 'W' THEN '여자'
-					   ELSE U.USER_SEX
+					   WHEN FN_DECRYPT(U.ENCPT_SEXDSTN_SE) = 'M' THEN '남자'
+					   WHEN FN_DECRYPT(U.ENCPT_SEXDSTN_SE) = 'W' THEN '여자'
+					   ELSE FN_DECRYPT(U.ENCPT_SEXDSTN_SE)
 				      END AS USER_SEX
 				    , FN_GET_CD_NM1('238', U.JOB_CD) JOB_CD
-				    , DATE_FORMAT(U.BIRTH_YMD,'%Y-%m-%d') AS BIRTH_YMD
-				    , C.EML_ADDR, C.MBL_TELNO, CONCAT(U.ENCPT_ADDR ,' ', U.ENCPT_DADDR) AS JUSO 
+				    , DATE_FORMAT(U.BRDT,'%Y-%m-%d') AS BIRTH_YMD
+				    , C.EML_ADDR, C.MBL_TELNO, CONCAT(FN_DECRYPT(U.ENCPT_ADDR) ,' ', FN_DECRYPT(U.ENCPT_DADDR)) AS JUSO 
 				    , DATE_FORMAT(C.REG_DT,'%Y-%m-%d') AS REG_DT
 			   FROM EDU_COURSE_REGISTRATION C , EDU_REGISTRATION R , COM_USER U
 			  WHERE C.EDU_NO = R.EDU_NO
@@ -1925,15 +1925,15 @@
 		/** com.easycompany.mapper.EduMapper.getEduInfoOnlineMangViewCount **/
 		WITH TB_MEM AS 
 			(
-			SELECT   U.USER_NM
+			SELECT   FN_DECRYPT(U.ENCPT_USER_NM) AS USER_NM
 				   , CASE
-					   WHEN U.USER_SEX = 'M' THEN '남자'
-					   WHEN U.USER_SEX = 'W' THEN '여자'
-					   ELSE U.USER_SEX
+					   WHEN FN_DECRYPT(U.ENCPT_SEXDSTN_SE) = 'M' THEN '남자'
+					   WHEN FN_DECRYPT(U.ENCPT_SEXDSTN_SE) = 'W' THEN '여자'
+					   ELSE FN_DECRYPT(U.ENCPT_SEXDSTN_SE)
 				      END AS USER_SEX
 				    , FN_GET_CD_NM1('238', U.JOB_CD) JOB_CD
-				    , DATE_FORMAT(U.BIRTH_YMD,'%Y-%m-%d') AS BIRTH_YMD
-				    , C.EML_ADDR, C.MBL_TELNO, CONCAT(U.JUSO ,' ', U.JUSO_DETAIL) AS JUSO 
+				    , DATE_FORMAT(U.BRDT,'%Y-%m-%d') AS BIRTH_YMD
+				    , C.EML_ADDR, C.MBL_TELNO, CONCAT(FN_DECRYPT(U.ENCPT_ADDR) ,' ', FN_DECRYPT(U.ENCPT_DADDR)) AS JUSO 
 				    , DATE_FORMAT(C.REG_DT,'%Y-%m-%d') AS REG_DT
 			   FROM EDU_COURSE_REGISTRATION C , EDU_REGISTRATION R , COM_USER U
 			  WHERE C.EDU_NO = R.EDU_NO

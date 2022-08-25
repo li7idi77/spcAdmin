@@ -4,7 +4,7 @@
 <mapper namespace="com.easycompany.mapper.OrgMapper">
 	<select id="getOrgList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT  a.EDU_NO,
-				(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY) AS CATEGORY3_NAME,
+				(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY AND CATEGORY2_KEY = a.CATEGORY2_KEY AND CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY3_NAME,
 		        a.COPER_NM_AUTO,
 		        a.EDU_TARGET,
 		        a.EDU_TIME,
@@ -45,8 +45,8 @@
 	</select>
 	
 	<select id="getOrgView" parameterType="java.util.Map" resultType="java.util.Map">
-	SELECT  ER.EDU_NO, CU.AREA_CD, CONCAT(CU.JUSO,CU.JUSO_DETAIL) AS ADDR ,IFNULL(ER.COPER_NM,ER.COPER_NM_AUTO) AS COPER_NM,
-			(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = ER.CATEGORY3_KEY) AS CATEGORY3, ER.CATEGORY3_KEY,
+	SELECT  ER.EDU_NO, CU.RGN_CD, CONCAT(FN_DECRYPT(CU.ENCPT_DADDR),FN_DECRYPT(CU.ENCPT_ADDR)) AS ADDR ,IFNULL(ER.COPER_NM,ER.COPER_NM_AUTO) AS COPER_NM,
+			(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = ER.CATEGORY3_KEY AND CATEGORY2_KEY = ER.CATEGORY2_KEY AND CATEGORY1_KEY = ER.CATEGORY1_KEY) AS CATEGORY3, ER.CATEGORY3_KEY,
 			ER.EDU_TIME, ER.EDU_GARDEN, ER.EDU_TARGET,
 			ER.EDU_TARGET, ER.EDU_STATUS
 		FROM EDU_REGISTRATION ER,
@@ -62,10 +62,10 @@
 	
 	<select id="getInsSearch" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT a.INSTRUCTOR_IDX,
-			  (SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = b.AREA_CD) AS AREA_NM,
-			  b.USER_NM,
+			  (SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = b.RGN_CD) AS AREA_NM,
+			  FN_DECRYPT(b.ENCPT_USER_NM) AS USER_NM,
 			  b.USER_ID,
-              b.COPER_NM
+              b.INST_NM AS COPER_NM
 		 FROM EDU_INSTRUCTOR a,
 			  COM_USER b
 		WHERE 1=1
@@ -73,21 +73,21 @@
         AND a.STATUS = 1
         AND a.USE_YN = 'Y'
         AND a.COM_USER_ID IN (SELECT f.USER_ID
-							 FROM 	com_user_eduinfo f,
+							 FROM 	COM_USER_EDU_INFO f,
 									(SELECT (SELECT CD_NO 
 											 FROM EDU_CLASS_CATEGORY3 
                                              WHERE CATEGORY3_KEY = d.CATEGORY3_KEY) AS CD 
                                      FROM EDU_REGISTRATION d 
                                      WHERE d.EDU_NO = ${edu_no}) g
-							 WHERE f.EDU_CD = g.CD)
+							 WHERE f.EDU_INFO_CD = g.CD)
         <if test="area_nm !=null and area_nm != ''">
-	      	AND b.AREA_CD = ${area_nm}
+	      	AND b.RGN_CD = ${area_nm}
 	      </if>
 	      <if test="ins_nm !=null and ins_nm != ''">
-	      	AND b.USER_NM LIKE CONCAT('%', #{ins_nm}, '%')
+	      	AND FN_DECRYPT(b.ENCPT_USER_NM) LIKE CONCAT('%', #{ins_nm}, '%')
 	      </if>
 	      <if test="coper_nm !=null and coper_nm != ''">
-	      	AND b.COPER_NM LIKE CONCAT('%', #{coper_nm}, '%')
+	      	AND b.INST_NM LIKE CONCAT('%', #{coper_nm}, '%')
 	      </if>
 	</select>
 	
@@ -205,10 +205,10 @@
 	</select>
 		
 	<select id="getInsSelectList" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT a.SCHEDULE_NO,b.USER_ID,b.USER_NM, 
-				CASE WHEN b.USER_SEX = 'M' THEN '남' ELSE '여' END AS USER_SEX,
-			   (SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = b.AREA_CD) AS AREA_NM, 
-			   b.INSTRUCTOR_COPER_NM
+		SELECT a.SCHEDULE_NO,b.USER_ID,FN_DECRYPT(b.ENCPT_USER_NM) AS USER_NM, 
+				CASE WHEN FN_DECRYPT(b.ENCPT_SEXDSTN_SE) = 'M' THEN '남' ELSE '여' END AS USER_SEX,
+			   (SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = b.RGN_CD) AS AREA_NM, 
+			   b.INSTR_INST_ND_ENTRPS_NM AS INSTRUCTOR_COPER_NM
         FROM EDU_SCHEDULE_DETAIL a,
 			 COM_USER b
         WHERE a.SCHEDULE_NO = #{sch_no}
@@ -268,14 +268,14 @@
 	</select>
 	
 	<select id="getEduAttList" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT  a.USER_ID,
-				a.USER_NM,
-				CASE WHEN b.USER_SEX = 'M' THEN '남자' ELSE '여자' END AS USER_SEX,
+		SELECT  b.USER_ID,
+				FN_DECRYPT(b.ENCPT_USER_NM) AS USER_NM,
+				CASE WHEN FN_DECRYPT(b.ENCPT_SEXDSTN_SE) = 'M' THEN '남자' ELSE '여자' END AS USER_SEX,
                 FN_GET_CD_NM1('238', b.JOB_CD) JOB_CD,
-                DATE_FORMAT(b.BIRTH_YMD,'%Y-%m-%d') AS BIRTH_YMD,
+                DATE_FORMAT(b.BRDT,'%Y-%m-%d') AS BIRTH_YMD,
                 b.EML_ADDR, 
-                b.MBL_TELNO, 
-                CONCAT(b.JUSO ,' ', b.JUSO_DETAIL) AS JUSO,
+                FN_DECRYPT(b.ENCPT_MBL_TELNO) AS MBL_TELNO,
+                CONCAT(FN_DECRYPT(b.ENCPT_DADDR) ,' ', FN_DECRYPT(b.ENCPT_ADDR)) AS JUSO,
                 CASE WHEN a.COUR_STAT = '1' THEN '참석' ELSE '미참석' END AS COUR_STAT
         FROM EDU_COURSE_REGISTRATION a,
 			 COM_USER b
@@ -327,7 +327,7 @@
                (SELECT EDU_TIME FROM EDU_REGISTRATION WHERE EDU_NO = a.EDU_KEY) AS EDU_TIME,
                (SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = b.COPER_AREA_CD) AS AREA_NM,
                a.EDU_ORG_NAME,
-               (SELECT USER_NM FROM COM_USER WHERE USER_ID = a.REG_ID) AS USER_NM,
+               (SELECT FN_DECRYPT(ENCPT_USER_NM) FROM COM_USER WHERE USER_ID = a.REG_ID) AS USER_NM,
                a.EDU_TARGET,
                b.EDU_PLACE,
                a.EDU_NUMBER,
@@ -405,7 +405,7 @@
                (SELECT EDU_TIME FROM EDU_REGISTRATION WHERE EDU_NO = a.EDU_KEY) AS EDU_TIME,
                (SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = b.COPER_AREA_CD) AS AREA_NM,
                a.EDU_ORG_NAME,
-               (SELECT USER_NM FROM COM_USER WHERE USER_ID = a.REG_ID) AS USER_NM,
+               (SELECT FN_DECRYPT(ENCPT_USER_NM) FROM COM_USER WHERE USER_ID = a.REG_ID) AS USER_NM,
                a.EDU_TARGET,
                b.EDU_PLACE,
                a.EDU_NUMBER,
@@ -486,7 +486,7 @@
                (SELECT EDU_TIME FROM EDU_REGISTRATION WHERE EDU_NO = a.EDU_KEY) AS EDU_TIME,
                (SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = b.COPER_AREA_CD) AS AREA_NM,
                a.EDU_ORG_NAME,
-               (SELECT USER_NM FROM COM_USER WHERE USER_ID = a.REG_ID) AS USER_NM,
+               (SELECT FN_DECRYPT(ENCPT_USER_NM) FROM COM_USER WHERE USER_ID = a.REG_ID) AS USER_NM,
                a.EDU_TARGET,
                b.EDU_PLACE,
                a.EDU_NUMBER,
@@ -753,14 +753,14 @@
 	<select id="geEduAppUserList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT a.EDU_NO,
 			   a.COUR_NO,
-			   b.USER_NM,
-			   CASE WHEN b.USER_SEX = 'M' THEN '남' ELSE '여' END AS USER_SEX,
+			   FN_DECRYPT(b.ENCPT_USER_NM) AS USER_NM,
+			   CASE WHEN FN_DECRYPT(b.ENCPT_SEXDSTN_SE) = 'M' THEN '남' ELSE '여' END AS USER_SEX,
                FN_GET_CD_NM1('238', b.JOB_CD) AS JOB_CD,
-               b.BIRTH_YMD,
+               b.BRDT AS BIRTH_YMD,
                b.EML_ADDR,
-               b.MBL_TELNO,
-               b.JUSO,
-               b.JUSO_DETAIL,
+               FN_DECRYPT(b.ENCPT_MBL_TELNO) AS MBL_TELNO,
+               FN_DECRYPT(b.ENCPT_ADDR) AS JUSO,
+               FN_DECRYPT(b.ENCPT_DADDR) AS JUSO_DETAIL,
                DATE_FORMAT(a.REG_DT,'%Y-%m-%d') AS REG_DT
         FROM EDU_COURSE_REGISTRATION a,
 			 COM_USER b
@@ -768,7 +768,7 @@
         AND a.USER_ID = b.USER_ID
         AND a.SCHEDULE_NO = #{sch_no}
         <if test="user_nm != '' and user_nm != null">
-			AND b.USER_NM LIKE CONCAT('%',#{user_nm},'%')
+			AND FN_DECRYPT(b.ENCPT_USER_NM) LIKE CONCAT('%',#{user_nm},'%')
 		</if>
 		<choose>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
@@ -789,7 +789,7 @@
 				ORDER BY REG_DT DESC
 			</when>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='name' ">
-				ORDER BY USER_NM ASC
+				ORDER BY FN_DECRYPT(b.ENCPT_USER_NM) ASC
 			</when>
 		</choose>
 		ORDER BY a.COUR_NO DESC
@@ -804,7 +804,7 @@
         AND a.USER_ID = b.USER_ID
         AND a.SCHEDULE_NO = #{sch_no}
         <if test="user_nm != '' and user_nm != null">
-			AND b.USER_NM LIKE CONCAT('%',#{user_nm},'%')
+			AND FN_DECRYPT(b.ENCPT_USER_NM) LIKE CONCAT('%',#{user_nm},'%')
 		</if>
 		<choose>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">

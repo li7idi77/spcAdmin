@@ -71,8 +71,12 @@
  });
   
  
- function fn_detail(id){
-	document.location = "<c:url value='/inst/instructorAdm01View.do'/>?user_id="+id;
+ function fn_detail(edu_no){
+	document.location = "<c:url value='/lms/studentLearn.do'/>?edu_no="+edu_no;
+ }	
+ 
+ function fn_detail2(edu_no){
+ 	document.location = "<c:url value='/lms/studentGraduate.do'/>?edu_no="+edu_no;
  }	
  
  function fn_egov_link_page(pageNo){
@@ -186,8 +190,8 @@
                 <td class="tl">${result.CATEGORY3_NAME}</td>
                 <td>${result.INST_NM}</td>
                 <td>${result.REG_DT}</td>
-                <td><a class="link">${result.APP_CNT}</a></td>
-                <td><a class="link">${result.APP_FIN_CNT}</a></td>
+                <td><a class="link" onClick="fn_detail('${result.EDU_NO}');">${result.APP_CNT}</a></td>
+                <td><a class="link" onClick="fn_detail2('${result.EDU_NO}');">${result.APP_FIN_CNT}</a></td>
             </tr>
             </c:forEach>
             <c:if test="${empty resultList }">

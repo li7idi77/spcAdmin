@@ -4,7 +4,7 @@
 <mapper namespace="com.easycompany.mapper.MyMapper">
 	<select id="getCartList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT a.BASKET_NO,b.EDU_TIME,b.INST_NM,b.EDU_NO,a.user_id
-			   ,(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = b.CATEGORY3_KEY) AS CATEGORY3_NAME
+			   ,(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = b.CATEGORY3_KEY AND CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY3_NAME
 		FROM EDU_BASKET a, 
 			 EDU_REGISTRATION b
 		WHERE 1=1
@@ -53,10 +53,10 @@
 	
 	<select id="getStatusList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT  (SELECT CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 WHERE CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY1_NAME
-				,(SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = b.CATEGORY2_KEY) AS CATEGORY2_NAME
-		        ,(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = b.CATEGORY3_KEY) AS CATEGORY3_NAME
+				,(SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY2_NAME
+		        ,(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = b.CATEGORY3_KEY AND CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY3_NAME
 		        ,DATE_FORMAT(a.REG_DT,'%Y-%m-%d') AS REG_DT, b.INST_NM
-                ,CASE WHEN b.TRAIN_S_DATE > DATE_FORMAT(NOW(),'%x-%m-%d') THEN 'Y' ELSE 'N' END AS CANCEL_CHECK 
+                ,CASE WHEN b.TRAIN_S_DATE > DATE_FORMAT(NOW(),'%Y-%m-%d') THEN 'Y' ELSE 'N' END AS CANCEL_CHECK 
 		FROM EDU_COURSE_REGISTRATION a, 
 			 EDU_REGISTRATION b
 		WHERE a.EDU_NO = b.EDU_NO
@@ -76,12 +76,12 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  DATE_FORMAT(a.REG_DT,'%x-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') <= #{end_date} 
+		       AND  DATE_FORMAT(a.REG_DT,'%Y-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -110,12 +110,12 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND DATE_FORMAT(b.REG_DT,'%x-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND DATE_FORMAT(b.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  DATE_FORMAT(b.REG_DT,'%x-%m-%d') >= #{start_date} AND DATE_FORMAT(b.REG_DT,'%x-%m-%d') <= #{end_date} 
+		       AND  DATE_FORMAT(b.REG_DT,'%Y-%m-%d') >= #{start_date} AND DATE_FORMAT(b.REG_DT,'%Y-%m-%d') <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -134,7 +134,7 @@
 			AND a.USER_ID = #{UserAccount.user_id}
 			AND b.EDU_SITE = #{site}
 			<![CDATA[
-			AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%x-%m-%d') 
+			AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%Y-%m-%d') 
 	        ]]>
 			<if test="category1_key != '' and category1_key != null">
 				AND b.CATEGORY1_KEY = #{category1_key}
@@ -150,12 +150,12 @@
 				</when>
 				<when
 					test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-					AND DATE_FORMAT(b.REG_DT,'%x-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
+					AND DATE_FORMAT(b.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
 				</when>
 				<when
 					test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 			      <![CDATA[
-			       AND  DATE_FORMAT(b.REG_DT,'%x-%m-%d') >= #{start_date} AND DATE_FORMAT(b.REG_DT,'%x-%m-%d') <= #{end_date} 
+			       AND  DATE_FORMAT(b.REG_DT,'%Y-%m-%d') >= #{start_date} AND DATE_FORMAT(b.REG_DT,'%Y-%m-%d') <= #{end_date} 
 			       ]]>
 				</when>
 			</choose>
@@ -164,8 +164,8 @@
 	
 	<select id="getEduList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT  (SELECT CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 WHERE CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY1_NAME
-				,(SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = b.CATEGORY2_KEY) AS CATEGORY2_NAME
-		        ,(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = b.CATEGORY3_KEY) AS CATEGORY3_NAME
+				,(SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY2_NAME
+		        ,(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = b.CATEGORY3_KEY AND CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY3_NAME
 		        ,DATE_FORMAT(a.REG_DT,'%Y-%m-%d') AS REG_DT, b.INST_NM
 		        ,a.USER_NM, a.COUR_NO
 		        ,CASE a.COUR_STAT
@@ -182,7 +182,7 @@
 		AND a.USER_ID = #{UserAccount.user_id}
 		AND b.EDU_SITE = #{site}
 		<![CDATA[
-		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%x-%m-%d') 
+		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%Y-%m-%d') 
         ]]>
 		<if test="edu_status != '' and edu_status != null">
 			AND COUR_STAT = #{edu_status}
@@ -201,12 +201,12 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  DATE_FORMAT(a.REG_DT,'%x-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') <= #{end_date} 
+		       AND  DATE_FORMAT(a.REG_DT,'%Y-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -222,7 +222,7 @@
 		AND a.USER_ID = #{UserAccount.user_id}
 		AND b.EDU_SITE = #{site}
 		<![CDATA[
-        AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%x-%m-%d') 
+        AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%Y-%m-%d') 
         ]]>
 		<if test="edu_status != ''">
 			AND a.COUR_STAT = 1
@@ -241,12 +241,12 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  DATE_FORMAT(a.REG_DT,'%x-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') <= #{end_date} 
+		       AND  DATE_FORMAT(a.REG_DT,'%Y-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -254,8 +254,8 @@
 	
 	<select id="getEduIngList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT  (SELECT CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 WHERE CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY1_NAME
-				,(SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = b.CATEGORY2_KEY) AS CATEGORY2_NAME
-		        ,(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = b.CATEGORY3_KEY) AS CATEGORY3_NAME
+				,(SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY2_NAME
+		        ,(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = b.CATEGORY3_KEY AND CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY3_NAME
 		        ,DATE_FORMAT(a.REG_DT,'%Y-%m-%d') AS REG_DT, b.INST_NM, b.EDU_TIME
                 ,(SELECT TIME_FORMAT(SEC_TO_TIME(SUM(c.COUR_TIME)), '%H시간 %i분 %s초') FROM EDU_COURSE_ONLINE c WHERE c.COUR_NO = a.COUR_NO AND c.USER_ID = a.USER_ID) AS COUR_TIME
 		        ,a.USER_NM, a.COUR_NO, b.EDU_NO
@@ -269,7 +269,7 @@
         AND b.CATEGORY1_KEY IN ('1','2','3')
 		AND a.USER_ID = #{UserAccount.user_id}
 		<![CDATA[
-		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%x-%m-%d') 
+		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%Y-%m-%d') 
         ]]>
 		AND (a.COUR_STAT != '1' OR a.COUR_STAT IS NULL)
 		<choose>
@@ -277,7 +277,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -294,8 +294,8 @@
 	
 	<select id="getEduEndList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT  (SELECT CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 WHERE CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY1_NAME
-				,(SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = b.CATEGORY2_KEY) AS CATEGORY2_NAME
-		        ,(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = b.CATEGORY3_KEY) AS CATEGORY3_NAME
+				,(SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY2_NAME
+		        ,(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = b.CATEGORY3_KEY AND CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY3_NAME
 		        ,DATE_FORMAT(a.REG_DT,'%Y-%m-%d') AS REG_DT, b.INST_NM, b.EDU_TIME
                 ,(SELECT TIME_FORMAT(SEC_TO_TIME(SUM(c.COUR_TIME)), '%H시간 %i분 %s초') FROM EDU_COURSE_ONLINE c WHERE c.COUR_NO = a.COUR_NO AND c.USER_ID = a.USER_ID) AS COUR_TIME
 		        ,a.USER_NM, a.COUR_NO, b.EDU_NO
@@ -309,7 +309,7 @@
         AND b.CATEGORY1_KEY IN ('1','2','3')
 		AND a.USER_ID = #{UserAccount.user_id}
 		<![CDATA[
-		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%x-%m-%d') 
+		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%Y-%m-%d') 
         ]]>
 		AND COUR_STAT = '1'
 		<choose>
@@ -317,7 +317,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -341,8 +341,8 @@
 	  
 	<select id="getCourInfo" parameterType="java.util.Map" resultType="java.util.Map">
 	SELECT  (SELECT CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 WHERE CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY1_NAME,
-				(SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = b.CATEGORY2_KEY) AS CATEGORY2_NAME,
-		        (SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = b.CATEGORY3_KEY) AS CATEGORY3_NAME,
+				(SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY2_NAME,
+		        (SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = b.CATEGORY3_KEY AND CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY3_NAME,
 		        b.INST_NM, DATE_FORMAT(a.REG_DT,'%Y-%m-%d') AS REG_DT, b.EDU_TIME,
                 (SELECT COUNT(*) FROM EDU_COURSE_ONLINE WHERE COUR_NO = a.COUR_NO AND USER_ID = a.USER_ID AND COUR_STAT = '1') AS SECTOR_CNT1,
                 (SELECT COUNT(*) FROM EDU_REGISTRATION_DETAIL WHERE EDU_NO = b.EDU_NO) AS SECTOR_CNT2,
@@ -384,7 +384,7 @@
 		INSERT INTO EDU_COURSE_ONLINE (
 			COUR_NO, EDU_NO, EDU_SUB_NO, USER_ID, COUR_TIME, COUR_STAT, REG_DT, REG_ID
 		)VALUES(
-			#{cour_no},#{edu_no},#{edu_sub_no},#{UserAccount.user_id},#{cour_time},#{cour_stat},DATE_FORMAT(NOW(),'%x-%m-%d'),#{UserAccount.user_id}
+			#{cour_no},#{edu_no},#{edu_sub_no},#{UserAccount.user_id},#{cour_time},#{cour_stat},DATE_FORMAT(NOW(),'%Y-%m-%d'),#{UserAccount.user_id}
 		)
 		ON
 	      DUPLICATE KEY
@@ -395,7 +395,9 @@
 	
 	<select id="onclassFinishCheck" parameterType="java.util.Map" resultType="java.util.Map">
 	SELECT (SELECT COUNT(*) from EDU_REGISTRATION_DETAIL WHERE EDU_NO = a.EDU_NO) AS ALLCNT,
-				SUM(CASE WHEN COUR_STAT = '1' THEN 1 ELSE 0 END) AS CNT
+				SUM(CASE WHEN COUR_STAT = '1' THEN 1 ELSE 0 END) AS CNT,
+                (SELECT COUNT(*) FROM EDU_REGISTRATION WHERE CATEGORY1_KEY = 3 AND CATEGORY2_KEY = 7 
+                AND EDU_NO = a.EDU_NO) AS INS_EDU_CHK
         FROM EDU_COURSE_ONLINE a 
         WHERE a.USER_ID = #{UserAccount.user_id}
         AND a.COUR_NO = #{cour_no}
@@ -403,22 +405,38 @@
 	
 	<update id="onclassFinish" parameterType="java.util.Map">	
 		UPDATE EDU_COURSE_REGISTRATION
-		SET COUR_STAT = '1', CHG_DT = DATE_FORMAT(NOW(),'%x-%m-%d')
+		SET COUR_STAT = '1', CHG_DT = DATE_FORMAT(NOW(),'%Y-%m-%d')
 		WHERE COUR_NO = #{cour_no}
 		  AND EDU_NO = #{edu_no}
 	</update>
 	
+	<update id="updateInsOnEdu" parameterType="java.util.Map">	
+		UPDATE EDU_INSTRUCTOR
+		SET INS_ON_STATUS = 1
+		WHERE COM_USER_ID = #{UserAccount.user_id}
+	</update>
+	
+	<update id="updateInsEduAuth" parameterType="java.util.Map">	
+		UPDATE COM_USER_EDU_INFO a
+		   SET  EDU_AUTHOR_END_DT = CONCAT(DATE_FORMAT(a.EDU_AUTHOR_END_DT,'%Y')+1,'-12-31')
+ 		 WHERE a.USER_ID = #{UserAccount.user_id}
+         and (select (CASE WHEN a.INS_OFF_STATUS = 1 THEN 1 ELSE 0 END + 
+					CASE WHEN a.INS_ON_STATUS = 1 THEN 1 ELSE 0 END) 
+			from EDU_INSTRUCTOR a 
+            where com_user_id = a.USER_ID) = 2
+	</update>
+	
 	<update id="myWarrantUpdate" parameterType="java.util.Map">	
 		UPDATE EDU_COURSE_REGISTRATION
-		SET LICENSE_PBL = '1', LICENSE_PBL_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
+		SET LICENSE_PBL = '1', LICENSE_PBL_DATE = DATE_FORMAT(NOW(),'%Y-%m-%d')
 		WHERE COUR_NO = #{cour_no}
 		  AND EDU_NO = #{edu_no}
 	</update><!--수정해야함-->
 	
 	<select id="getWarrantList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT  (SELECT CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 WHERE CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY1_NAME
-				,(SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = b.CATEGORY2_KEY) AS CATEGORY2_NAME
-		        ,(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = b.CATEGORY3_KEY) AS CATEGORY3_NAME
+				,(SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY2_NAME
+		        ,(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = b.CATEGORY3_KEY AND CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY3_NAME
 		        ,DATE_FORMAT(a.REG_DT,'%Y-%m-%d') AS REG_DT, b.INST_NM
 		        ,a.USER_NM, a.COUR_NO, a.EDU_NO
 		        ,DATE_FORMAT(a.LICENSE_PBL_DATE,'%Y-%m-%d') AS LICENSE_PBL_DATE
@@ -431,7 +449,7 @@
 		WHERE a.EDU_NO = b.EDU_NO
 		AND a.USER_ID = #{UserAccount.user_id}
 		<![CDATA[
-		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%x-%m-%d') 
+		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%Y-%m-%d') 
         ]]>
 		AND COUR_STAT = 1
 		AND b.CATEGORY1_KEY = #{category1_key}
@@ -445,11 +463,11 @@
 			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
 			</when>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  DATE_FORMAT(a.REG_DT,'%x-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') <= #{end_date} 
+		       AND  DATE_FORMAT(a.REG_DT,'%Y-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -474,7 +492,7 @@
 		WHERE a.EDU_NO = b.EDU_NO
 		AND a.USER_ID = #{UserAccount.user_id}
 		<![CDATA[
-		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%x-%m-%d') 
+		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%Y-%m-%d') 
         ]]>
 		AND COUR_STAT = 1
 		AND b.CATEGORY1_KEY = #{category1_key}
@@ -489,12 +507,12 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  DATE_FORMAT(a.REG_DT,'%x-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') <= #{end_date} 
+		       AND  DATE_FORMAT(a.REG_DT,'%Y-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -512,11 +530,11 @@
 	
 	<select id="getMyWarrant" parameterType="java.util.Map" resultType="java.util.Map">
 	SELECT  a.USER_NM, a.USER_ID
-			,(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = b.CATEGORY3_KEY) AS CATEGORY3_NAME
+			,(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = b.CATEGORY3_KEY AND CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY3_NAME
             ,DATE_FORMAT(IFNULL(a.CHG_DT,NOW()),'%Y년 %m월 %d일') AS DATE1
             ,DATE_FORMAT(NOW(), '%y') AS NOWYEAR
             ,(SELECT LICENSE_NUMBER FROM EDU_USER_LICENSE WHERE COUR_NO = a.COUR_NO AND EDU_NO = a.EDU_NO) AS LICENSE_NUMBER
-            ,(SELECT COPER_NM FROM COM_USER WHERE USER_ID = a.USER_ID) AS COPER_NM
+            ,(SELECT INST_NM FROM COM_USER WHERE USER_ID = a.USER_ID) AS COPER_NM
             ,(SELECT DATE_FORMAT(REG_DT,'%Y년 %m월 %d일') FROM EDU_USER_LICENSE WHERE COUR_NO = a.COUR_NO AND EDU_NO = a.EDU_NO) AS DATE2
 			,a.LICENSE_PBL
 			,a.LICENSE_PBL_DATE
@@ -545,7 +563,7 @@
 			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
 			</when>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND CAST( DATE_FORMAT( REG_DT, '%Y-%m-%d' ) AS CHAR(19)) = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND CAST( DATE_FORMAT( REG_DT, '%Y-%m-%d' ) AS CHAR(19)) = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
@@ -566,7 +584,7 @@
 			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
 			</when>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND CAST( DATE_FORMAT( REG_DT, '%Y-%m-%d' ) AS CHAR(19)) = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND CAST( DATE_FORMAT( REG_DT, '%Y-%m-%d' ) AS CHAR(19)) = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
@@ -597,7 +615,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND EDU_START_DATE = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -632,7 +650,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND EDU_START_DATE = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -676,7 +694,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND REG_DT = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND REG_DT = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -698,7 +716,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND REG_DT = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND REG_DT = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -715,7 +733,7 @@
 	</delete>
 	
 	<select id="getInsEduList" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT (select CATEGORY3_NAME From EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY) AS EDU_NAME,
+		SELECT (select CATEGORY3_NAME From EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY AND CATEGORY2_KEY = a.CATEGORY2_KEY AND CATEGORY1_KEY = a.CATEGORY1_KEY) AS EDU_NAME,
 				a.TRAIN_S_DATE, a.TRAIN_E_DATE,
                 a.EDU_METHOD, a.EDU_NO, DATE_FORMAT(b.REG_DT,'%Y-%m-%d') AS REG_DT, b.COUR_NO
         FROM (SELECT *
@@ -731,7 +749,7 @@
 					</when>
 					<when test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
 					<![CDATA[
-						AND TRAIN_S_DATE <= DATE_FORMAT(NOW(),'%x-%m-%d') AND TRAIN_E_DATE >= DATE_FORMAT(NOW(),'%x-%m-%d')
+						AND TRAIN_S_DATE <= DATE_FORMAT(NOW(),'%Y-%m-%d') AND TRAIN_E_DATE >= DATE_FORMAT(NOW(),'%Y-%m-%d')
 					]]>
 					</when>
 					<when test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -763,7 +781,7 @@
 					</when>
 					<when test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
 					<![CDATA[
-						AND TRAIN_S_DATE <= DATE_FORMAT(NOW(),'%x-%m-%d') AND TRAIN_E_DATE >= DATE_FORMAT(NOW(),'%x-%m-%d')
+						AND TRAIN_S_DATE <= DATE_FORMAT(NOW(),'%Y-%m-%d') AND TRAIN_E_DATE >= DATE_FORMAT(NOW(),'%Y-%m-%d')
 					]]>
 					</when>
 					<when test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -785,8 +803,8 @@
 	
 	<select id="getInsWarrantList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT  (SELECT CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 WHERE CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY1_NAME
-				,(SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = b.CATEGORY2_KEY) AS CATEGORY2_NAME
-		        ,(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = b.CATEGORY3_KEY) AS CATEGORY3_NAME
+				,(SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY2_NAME
+		        ,(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = b.CATEGORY3_KEY AND CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY1_KEY = b.CATEGORY1_KEY) AS CATEGORY3_NAME
 		        ,DATE_FORMAT(a.REG_DT,'%Y-%m-%d') AS REG_DT, b.INST_NM
 		        ,a.USER_NM, a.COUR_NO, a.EDU_NO
 		        ,DATE_FORMAT(a.LICENSE_PBL_DATE,'%Y-%m-%d') AS LICENSE_PBL_DATE
@@ -799,7 +817,7 @@
 		WHERE a.EDU_NO = b.EDU_NO
 		AND a.USER_ID = #{UserAccount.user_id}
 		<![CDATA[
-		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%x-%m-%d') 
+		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%Y-%m-%d') 
         ]]>
 		AND COUR_STAT = 1
 		AND b.CATEGORY1_KEY = '3'
@@ -813,11 +831,11 @@
 			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
 			</when>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  DATE_FORMAT(a.REG_DT,'%x-%m-%d') >= #{start_date} AND a.REG_DT <= #{end_date} 
+		       AND  DATE_FORMAT(a.REG_DT,'%Y-%m-%d') >= #{start_date} AND a.REG_DT <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -842,7 +860,7 @@
 		WHERE a.EDU_NO = b.EDU_NO
 		AND a.USER_ID = #{UserAccount.user_id}
 		<![CDATA[
-		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%x-%m-%d') 
+		AND IFNULL(TRAIN_S_DATE,(SELECT EDU_START_DATE FROM EDU_SCHEDULE WHERE SCHEDULE_NO = a.SCHEDULE_NO)) <= DATE_FORMAT(NOW(),'%Y-%m-%d') 
         ]]>
 		AND COUR_STAT = 1
 		AND b.CATEGORY1_KEY = '3'
@@ -857,12 +875,12 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
 		      <![CDATA[
-		       AND  DATE_FORMAT(a.REG_DT,'%x-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%x-%m-%d') <= #{end_date} 
+		       AND  DATE_FORMAT(a.REG_DT,'%Y-%m-%d') >= #{start_date} AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') <= #{end_date} 
 		       ]]>
 			</when>
 		</choose>
@@ -880,8 +898,8 @@
 	
 	<select id="getOrgEduList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT (SELECT CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 WHERE CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY1_NAME,
-			   (SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = a.CATEGORY2_KEY) AS CATEGORY2_NAME,
-			   (SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY) AS CATEGORY3_NAME,
+			   (SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = a.CATEGORY2_KEY AND CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY2_NAME,
+			   (SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY AND CATEGORY2_KEY = a.CATEGORY2_KEY AND CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY3_NAME,
 		       a.SCHEDULE_NO,
 		       a.EDU_TARGET,
 		       a.EDU_START_DATE,
@@ -907,7 +925,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -939,7 +957,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -966,10 +984,10 @@
 		       a.EDU_START_DATE,
 		       (SELECT EDU_TIME FROM EDU_REGISTRATION WHERE EDU_NO = a.EDU_KEY) AS EDU_TIME,
                a.EDU_ORG_NAME,
-               (SELECT USER_NM FROM COM_USER WHERE USER_ID = a.REG_ID) AS USER_NM,
+               (SELECT FN_DECRYPT(ENCPT_USER_NM) FROM COM_USER WHERE USER_ID = a.REG_ID) AS USER_NM,
                (SELECT CD_NM FROM COM_CD_MNG WHERE UP_CD_NO = '32' AND CD = b.COPER_AREA_CD) AS AREA_NM,
 		       a.EDU_TARGET,
-		       CASE WHEN a.EDU_TEAC_ID IS NOT NULL THEN (SELECT USER_NM FROM COM_USER WHERE USER_ID = a.EDU_TEAC_ID)
+		       CASE WHEN a.EDU_TEAC_ID IS NOT NULL THEN (SELECT FN_DECRYPT(ENCPT_USER_NM) FROM COM_USER WHERE USER_ID = a.EDU_TEAC_ID)
 					WHEN a.EDU_TEAC_ID IS NULL THEN a.EDU_TEAC_NAME END AS EDU_TEAC_NM,
 			   a.EDU_TEAC_ID,
 		       CASE WHEN b.INS_STATUS IS NOT NULL THEN '1'
@@ -990,7 +1008,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -1021,7 +1039,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -1055,7 +1073,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -1085,7 +1103,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -1097,14 +1115,14 @@
 	</select>
 	
 	<select id="geEduAppUserList" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT b.USER_NM,
-			   CASE WHEN b.USER_SEX = 'M' THEN '남' ELSE '여' END AS USER_SEX,
+		SELECT FN_DECRYPT(b.ENCPT_USER_NM) AS USER_NM,
+			   CASE WHEN FN_DECRYPT(b.ENCPT_SEXDSTN_SE) = 'M' THEN '남' ELSE '여' END AS USER_SEX,
                FN_GET_CD_NM1('238', b.JOB_CD) AS JOB_CD,
-               b.BIRTH_YMD,
+               b.BRDT AS BIRTH_YMD,
                b.EML_ADDR,
-               b.MBL_TELNO,
-               b.JUSO,
-               b.JUSO_DETAIL,
+               FN_DECRYPT(b.ENCPT_MBL_TELNO) AS MBL_TELNO,
+               FN_DECRYPT(b.ENCPT_ADDR) AS JUSO,
+               FN_DECRYPT(b.ENCPT_DADDR) AS JUSO_DETAIL,
                DATE_FORMAT(a.REG_DT,'%Y-%m-%d') AS REG_DT
         FROM EDU_COURSE_REGISTRATION a,
 			 COM_USER b
@@ -1112,14 +1130,14 @@
         AND a.USER_ID = b.USER_ID
         AND a.SCHEDULE_NO = #{sch_no}
         <if test="user_nm != '' and user_nm != null">
-			AND b.USER_NM LIKE CONCAT('%',#{user_nm},'%')
+			AND FN_DECRYPT(b.ENCPT_USER_NM) LIKE CONCAT('%',#{user_nm},'%')
 		</if>
 		<choose>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -1133,7 +1151,7 @@
 				ORDER BY REG_DT DESC
 			</when>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='name' ">
-				ORDER BY USER_NM ASC
+				ORDER BY FN_DECRYPT(b.ENCPT_USER_NM) ASC
 			</when>
 		</choose>
 		ORDER BY a.COUR_NO DESC
@@ -1148,14 +1166,14 @@
         AND a.USER_ID = b.USER_ID
         AND a.SCHEDULE_NO = #{sch_no}
         <if test="user_nm != '' and user_nm != null">
-			AND b.USER_NM LIKE CONCAT('%',#{user_nm},'%')
+			AND FN_DECRYPT(b.ENCPT_USER_NM) LIKE CONCAT('%',#{user_nm},'%')
 		</if>
 		<choose>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='ALL' ">
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND DATE_FORMAT(a.REG_DT,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -1189,7 +1207,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -1219,7 +1237,7 @@
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='TODAY' ">
-				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%x-%m-%d')
+				AND a.EDU_START_DATE = DATE_FORMAT(NOW(),'%Y-%m-%d')
 			</when>
 			<when
 				test="searchDate !=null and searchDate !='' and searchDate =='CHECK' ">
@@ -1231,14 +1249,14 @@
 	</select>
 	
 	<select id="geEduResultUserList" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT b.USER_NM,
-			   CASE WHEN b.USER_SEX = 'M' THEN '남' ELSE '여' END AS USER_SEX,
+		SELECT FN_DECRYPT(b.ENCPT_USER_NM) AS USER_NM,
+			   CASE WHEN FN_DECRYPT(b.ENCPT_SEXDSTN_SE) = 'M' THEN '남' ELSE '여' END AS USER_SEX,
                FN_GET_CD_NM1('238', b.JOB_CD) AS JOB_CD,
-               b.BIRTH_YMD,
+               b.BRDT AS BIRTH_YMD,
                b.EML_ADDR,
-               b.MBL_TELNO,
-               b.JUSO,
-               b.JUSO_DETAIL,
+               FN_DECRYPT(b.ENCPT_MBL_TELNO) AS MBL_TELNO,
+               FN_DECRYPT(b.ENCPT_ADDR) AS JUSO,
+               FN_DECRYPT(b.ENCPT_DADDR) AS JUSO_DETAIL,
                DATE_FORMAT(a.REG_DT,'%Y-%m-%d') AS REG_DT,
                a.COUR_NO,
                a.EDU_NO
@@ -1248,14 +1266,14 @@
         AND a.USER_ID = b.USER_ID
         AND a.SCHEDULE_NO = #{sch_no}
         <if test="user_nm != '' and user_nm != null">
-			AND b.USER_NM LIKE CONCAT('%',#{user_nm},'%')
+			AND FN_DECRYPT(b.ENCPT_USER_NM) LIKE CONCAT('%',#{user_nm},'%')
 		</if>
 		<choose>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='date' ">
 				ORDER BY REG_DT DESC
 			</when>
 			<when test="searchDate !=null and searchDate !='' and searchDate =='name' ">
-				ORDER BY USER_NM ASC
+				ORDER BY FN_DECRYPT(b.ENCPT_USER_NM) ASC
 			</when>
 		</choose>
 		ORDER BY a.COUR_NO DESC
@@ -1270,7 +1288,7 @@
         AND a.USER_ID = b.USER_ID
         AND a.SCHEDULE_NO = #{sch_no}
         <if test="user_nm != '' and user_nm != null">
-			AND b.USER_NM LIKE CONCAT('%',#{user_nm},'%')
+			AND FN_DECRYPT(b.ENCPT_USER_NM) LIKE CONCAT('%',#{user_nm},'%')
 		</if>
 	</select>
 </mapper>

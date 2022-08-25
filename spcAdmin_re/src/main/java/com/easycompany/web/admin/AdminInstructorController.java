@@ -145,9 +145,21 @@ public class AdminInstructorController
 	    try {
 	      paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
 	      
+	      paramMap.put("sqlName", "getInsEduChk");	
+		  Map<String, Object> result1 = instructorService.getSelectData(paramMap);
+		  System.out.println("edu_chk1 = "+result1.get("result"));
 	      paramMap.put("sqlName", "updateInstructorData");	
 	      resultCnt = instructorService.updateData(paramMap);
 	      
+	      paramMap.put("sqlName", "getInsEduChk");	
+		  Map<String, Object> result2 = instructorService.getSelectData(paramMap);
+		  System.out.println("edu_chk2 = "+result2.get("result"));
+	      
+		  if(!result1.get("result").toString().equals("2") && result2.get("result").toString().equals("2")) {
+			  paramMap.put("sqlName", "updateInsEduAuth");	
+		      resultCnt = instructorService.updateData(paramMap);
+		  }
+		  
 	      if(resultCnt > 0) {
 	    	  result.put("result", "SUCCESS");
 	      }else {

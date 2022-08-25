@@ -6,8 +6,8 @@
     
     <select id="checkPassword" parameterType="com.easycompany.cmm.vo.LoginVo"	resultType="com.easycompany.cmm.vo.LoginVo">
 	    /**  com.easycompany.mapper.LoginMapper.checkPassword **/	 
-	    SELECT USER_ID ID
-	          ,USER_NM NAME
+	    SELECT USER_ID AS ID
+	          ,FN_DECRYPT(ENCPT_USER_NM) AS NAME
 	          ,PASSWORD
 	     FROM COM_USER	    
 	    WHERE USER_ID  =  #{id}
@@ -16,13 +16,25 @@
 	
     <select id="userLogin" parameterType="com.easycompany.cmm.vo.LoginVo"	resultType="com.easycompany.cmm.vo.LoginVo">
 	    /**  com.easycompany.mapper.LoginMapper.userLogin **/	 
-	    SELECT  USER_ID ID
-	          , USER_NM NAME
+	    SELECT  A.USER_ID AS ID
+	          , FN_DECRYPT(A.ENCPT_USER_NM) AS NAME
+			  , FN_DECRYPT(A.ENCPT_USER_NM) AS USER_NM
+	          , FN_DECRYPT(A.ENCPT_MBL_TELNO) AS MBL_TELNO
+	          , A.BRDT AS BIRTH_YMD
+	          , FN_DECRYPT(A.ENCPT_SEXDSTN_SE) AS JUSO
+			  , FN_DECRYPT(A.ENCPT_DADDR) AS JUSO_DETAIL
+			  , FN_DECRYPT(A.ENCPT_ADDR) AS USER_SEX
+			  , A.INST_NM AS COPER_NM
+			  , A.RGN_CD AS AREA_CD
+			  , A.EDU_AUTHOR_CD AS EDU_AUTH_CD
+			  , A.INSTR_INST_ND_ENTRPS_NM AS INSTRUCTOR_COPER_NM
+			  , A.MBR_SE_CD AS USER_GU
+			  , A.INSTR_CTFHV_NO AS INSTRUCTOR_LICENSE
 	          , A.*
-              , (SELECT CD_NM FROM COM_CD_MNG  WHERE UP_CD_NO ='23' AND USER_GROUP_CD = CD) USER_GROUP_CD_NM
-              , (SELECT CD_NM FROM COM_CD_MNG  WHERE UP_CD_NO ='265' AND IFNULL(A.EDU_AUTH_CD,'01') = CD) EDU_AUTH_CD_NM
-              , DATE_FORMAT(SYSDATE(),'%Y-%m-%d %T') LOGIN_DT
-              , DATE_FORMAT(PASSWORD_CHG_DT,'%Y-%m-%d') PASSWORD_CHG_DT_NM
+              , (SELECT CD_NM FROM COM_CD_MNG  WHERE UP_CD_NO ='23' AND USER_GROUP_CD = CD) AS USER_GROUP_CD_NM
+              , (SELECT CD_NM FROM COM_CD_MNG  WHERE UP_CD_NO ='265' AND IFNULL(A.EDU_AUTHOR_CD,'01') = CD) AS EDU_AUTH_CD_NM
+              , DATE_FORMAT(SYSDATE(),'%Y-%m-%d %T') AS LOGIN_DT
+              , DATE_FORMAT(PASSWORD_CHG_DT,'%Y-%m-%d') AS PASSWORD_CHG_DT_NM
 	     FROM COM_USER	A    
 	    WHERE 1=1
 	    <if test=" user_id !=null and user_id !=''">

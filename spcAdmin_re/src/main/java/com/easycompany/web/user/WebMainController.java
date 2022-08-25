@@ -147,6 +147,8 @@ public class WebMainController
   public String summaryList01(@ModelAttribute("MainVo") MainVo mainVo, ModelMap model, HttpServletRequest request)
     throws Exception
   {
+	LoginVo loginvo = (LoginVo)WebUtils.getSessionAttribute(request, "UserAccount");
+    model.addAttribute("sessionId", loginvo);
     model.addAttribute("path",      request.getServletPath());
     return "summaryList01";
   }
@@ -158,6 +160,8 @@ public class WebMainController
   public String summaryList02(@ModelAttribute("MainVo") MainVo mainVo, ModelMap model, HttpServletRequest request)
     throws Exception
   {
+	  LoginVo loginvo = (LoginVo)WebUtils.getSessionAttribute(request, "UserAccount");
+	  model.addAttribute("sessionId", loginvo);
     model.addAttribute("path",      request.getServletPath());
     return "summaryList02";
   }
@@ -169,6 +173,8 @@ public class WebMainController
   public String summaryList03(@ModelAttribute("MainVo") MainVo mainVo, ModelMap model, HttpServletRequest request)
     throws Exception
   {
+	LoginVo loginvo = (LoginVo)WebUtils.getSessionAttribute(request, "UserAccount");
+	model.addAttribute("sessionId", loginvo);
     model.addAttribute("path",      request.getServletPath());
     return "summaryList03";
   }
@@ -180,6 +186,8 @@ public class WebMainController
   public String summaryList04(@ModelAttribute("MainVo") MainVo mainVo, ModelMap model, HttpServletRequest request)
     throws Exception
   {
+	LoginVo loginvo = (LoginVo)WebUtils.getSessionAttribute(request, "UserAccount");
+	model.addAttribute("sessionId", loginvo);
     model.addAttribute("path",      request.getServletPath());
     return "summaryList04";
   }
@@ -191,6 +199,8 @@ public class WebMainController
   public String summaryList05(@ModelAttribute("MainVo") MainVo mainVo, ModelMap model, HttpServletRequest request)
     throws Exception
   {
+	LoginVo loginvo = (LoginVo)WebUtils.getSessionAttribute(request, "UserAccount");
+	model.addAttribute("sessionId", loginvo);  
     model.addAttribute("path",      request.getServletPath());
     return "summaryList05";
   }
@@ -202,6 +212,8 @@ public class WebMainController
   public String info01(@ModelAttribute("MainVo") MainVo mainVo, ModelMap model, HttpServletRequest request)
     throws Exception
   {
+	LoginVo loginvo = (LoginVo)WebUtils.getSessionAttribute(request, "UserAccount");
+	model.addAttribute("sessionId", loginvo);
     model.addAttribute("path",      request.getServletPath());
     return "info01";
   }
@@ -212,8 +224,10 @@ public class WebMainController
   @RequestMapping({"/info02.do"})
   public String info02(@ModelAttribute("MainVo") MainVo mainVo, ModelMap model, HttpServletRequest request)
     throws Exception
-  {
-    model.addAttribute("path",      request.getServletPath());
+  {	
+	LoginVo loginvo = (LoginVo)WebUtils.getSessionAttribute(request, "UserAccount");
+	model.addAttribute("sessionId", loginvo);
+	model.addAttribute("path",      request.getServletPath());
     return "info02";
   }
   
@@ -225,6 +239,8 @@ public class WebMainController
   public String info03(@ModelAttribute("MainVo") MainVo mainVo, ModelMap model, HttpServletRequest request)
     throws Exception
   {
+	LoginVo loginvo = (LoginVo)WebUtils.getSessionAttribute(request, "UserAccount");
+	model.addAttribute("sessionId", loginvo);
     model.addAttribute("path",      request.getServletPath());
     return "info03";
   }
@@ -236,6 +252,8 @@ public class WebMainController
   public String info04(@ModelAttribute("MainVo") MainVo mainVo, ModelMap model, HttpServletRequest request)
     throws Exception
   {
+	LoginVo loginvo = (LoginVo)WebUtils.getSessionAttribute(request, "UserAccount");
+	model.addAttribute("sessionId", loginvo);
     model.addAttribute("path",      request.getServletPath());
     return "info04";
   }
@@ -247,6 +265,8 @@ public class WebMainController
   public String info05(@ModelAttribute("MainVo") MainVo mainVo, ModelMap model, HttpServletRequest request)
     throws Exception
   {
+	LoginVo loginvo = (LoginVo)WebUtils.getSessionAttribute(request, "UserAccount");
+	model.addAttribute("sessionId", loginvo);
     model.addAttribute("path",      request.getServletPath());
     return "info05";
   }
@@ -258,6 +278,8 @@ public class WebMainController
   public String info06(@ModelAttribute("MainVo") MainVo mainVo, ModelMap model, HttpServletRequest request)
     throws Exception
   {
+	LoginVo loginvo = (LoginVo)WebUtils.getSessionAttribute(request, "UserAccount");
+	model.addAttribute("sessionId", loginvo);
     model.addAttribute("path",      request.getServletPath());
     return "info06";
   }

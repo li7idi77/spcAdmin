@@ -38,11 +38,11 @@
                         <div class="side-cont">
                             <img src="${pageContext.request.contextPath}/user/images/common/ico_home.png" alt="홈 바로가기"/>
                             <img src="${pageContext.request.contextPath}/user/images/common/ico_next.png" alt="다음 아이콘"/>
-                            <span>기관 회원 서비스</span>
+                            <span>기관회원 공간</span>
                             <img src="${pageContext.request.contextPath}/user/images/common/ico_next.png" alt="다음 아이콘"/>
-                            <span>기관회원 교육신청</span>
+                            <span>교육개설</span>
                             <img src="${pageContext.request.contextPath}/user/images/common/ico_next.png" alt="다음 아이콘"/>
-                            <span>교육신청</span>
+                            <span>교육개설</span>
                         </div>
                     </div>
 
@@ -113,9 +113,9 @@
                                             <td><span>${result.EDU_TIME}</span>분</td>
                                             <td>최대<span>${result.EDU_GARDEN}</span>명</td>
                                             <td>
-                                            	<c:if test="${result.EDU_STATUS eq '신청중'}">
+                                            	<%-- <c:if test="${result.EDU_STATUS eq '신청중'}"> --%>
                                             		<button class="sm-btn navy-btn" onClick="fn_detail('${result.EDU_NO}');">신청하기</button>
-                                            	</c:if>
+                                            	<%-- </c:if> --%>
                                             </td>
                                         </tr>
                                         </c:forEach>

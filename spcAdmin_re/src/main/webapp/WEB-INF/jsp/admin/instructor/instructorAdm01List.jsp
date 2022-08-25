@@ -294,7 +294,7 @@
                 <th><input type="checkbox" class="check-box"/></th>
                 <th>No.</th>
                 <th>상태</th>   
-                <th>강사(ID)</th>
+                <th>강사명(ID)</th>
                 <th>강사분류</th>
                 <th>성별</th>
                 <th>이메일</th>
@@ -315,7 +315,7 @@
                 <td><input type="checkbox" class="check-box"/></td>
                 <td>${status.index + 1}</td>
                 <td>${result.INS_STATUS}</td>
-                <td><span class="block">${result.USER_NM}</span><span  class="block">${result.USER_ID}</span></td>
+                <td><span class="block">${result.USER_NM}</span><span  class="block">(${result.USER_ID})</span></td>
                 <td>${result.INS_CLASS}</td>
                 <td>${result.USER_SEX_NM}</td>
                 <td>${result.EML_ADDR}</td>

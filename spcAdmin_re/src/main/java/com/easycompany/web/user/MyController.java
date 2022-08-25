@@ -51,6 +51,7 @@ public class MyController
    */
   @RequestMapping({"/my01info.do"})
   public String my01info(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model, HttpServletRequest request) throws Exception{
+	  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 	  model.addAttribute("path", request.getServletPath());
 	  model.addAllAttributes(paramMap);
 	  
@@ -302,6 +303,7 @@ public class MyController
 		  }
 	  }
       
+	  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 	  model.addAttribute("path", request.getServletPath());
 	  model.addAllAttributes(paramMap);
 	  if(result.get("LICENSE_GUBUN").toString().equals("일반")) {
@@ -315,6 +317,7 @@ public class MyController
   public String popMyWarrantNum(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model ,HttpServletRequest request)  throws Exception {
 	  paramMap.put("UserAccount", request.getSession().getAttribute("UserAccount"));
 	  paramMap.put("sqlName", "getMyWarrant");
+	  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 	  model.addAttribute("result", myService.getSelectData(paramMap));
 	  model.addAttribute("path", request.getServletPath());
 	  model.addAllAttributes(paramMap);
@@ -368,6 +371,7 @@ public class MyController
 	  
 	  LocalDate today = LocalDate.now();
 	  paramMap.put("today", today);
+	  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 	  model.addAttribute("path", request.getServletPath());
 	  model.addAllAttributes(paramMap);
 	
@@ -385,6 +389,7 @@ public class MyController
 	  model.addAttribute("resultList", resultList);
 	  
 	  LocalDate today = LocalDate.now();
+	  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 	  paramMap.put("today", today);
 	  model.addAttribute("path", request.getServletPath());
 	  model.addAllAttributes(paramMap);
@@ -398,6 +403,7 @@ public class MyController
   public String popMyPlayer(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model ,HttpServletRequest request)  throws Exception {
 	  paramMap.put("UserAccount", request.getSession().getAttribute("UserAccount"));
 	  paramMap.put("sqlName", "getOnclassTime");
+	  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 	  model.addAttribute("result", myService.getSelectData(paramMap));
 	  model.addAttribute("path", request.getServletPath());
 	  model.addAllAttributes(paramMap);
@@ -420,6 +426,12 @@ public class MyController
 	      if(cntMap.get("ALLCNT").toString().equals(cntMap.get("CNT").toString())) {
 	    	  paramMap.put("sqlName", "onclassFinish");	
 		      resultCnt = myService.updateData(paramMap);
+		      if(cntMap.get("INS_EDU_CHK").toString().equals("1")){
+		    	  paramMap.put("sqlName", "updateInsOnEdu");	
+			      resultCnt = myService.updateData(paramMap);
+			      paramMap.put("sqlName", "updateInsEduAuth");	
+			      resultCnt = myService.updateData(paramMap);
+		      }
 	      }
 	      
 	      if(resultCnt < 1) {
@@ -436,6 +448,7 @@ public class MyController
   
   @RequestMapping({"/my02info.do"})
   public String my02info(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model, HttpServletRequest request) throws Exception{
+	  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 	  model.addAttribute("path", request.getServletPath());
 	  model.addAllAttributes(paramMap);
 	  
@@ -673,6 +686,7 @@ public class MyController
   
   @RequestMapping({"/my03info.do"})
   public String my03info(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model, HttpServletRequest request) throws Exception{
+	  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 	  model.addAttribute("path", request.getServletPath());
 	  model.addAllAttributes(paramMap);
 	  
@@ -897,6 +911,7 @@ public class MyController
   
   @RequestMapping({"/my04info.do"})
   public String my04info(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model, HttpServletRequest request) throws Exception{
+	  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 	  model.addAttribute("path", request.getServletPath());
 	  model.addAllAttributes(paramMap);
 	  

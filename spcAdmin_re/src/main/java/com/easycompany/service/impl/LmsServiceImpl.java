@@ -65,4 +65,8 @@ public class LmsServiceImpl extends EgovAbstractServiceImpl implements LmsServic
 		  
 	    return cnt;
 	}
+	
+	public int deleteData(Map<String, Object> paramMap) throws Exception {
+		return lmsMapper.deleteData(paramMap);
+	}
 }

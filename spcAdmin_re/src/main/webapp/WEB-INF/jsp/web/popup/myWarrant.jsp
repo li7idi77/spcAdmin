@@ -73,7 +73,7 @@
     <div class="warrant-cont">
         <p class="name"><span>${result.USER_NM}</span>님</p>
         <p class="title">교육명 :<span> ${result.CATEGORY3_NAME}</span></p>
-        <p class="des">한국생명존중희망재단에서 시행하는 <br/>생명지킴이교육을성실하게 마쳤으며,<br/>향후 생명지킴이로서의 역할을 충실히 <br/>이행 할 준비가 되어 있으므로 이 수료증을 드립니다.</p>
+        <p class="des">한국생명존중희망재단에서 시행하는 <br/>생명지킴이교육을 성실하게 마쳤으며,<br/>향후 생명지킴이로서의 역할을 충실히 <br/>이행할 준비가 되어 있으므로 이 수료증을 드립니다.</p>
         <p class="date"><span>${result.DATE1}</span></p>
     </div>
 

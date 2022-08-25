@@ -55,8 +55,8 @@
 	
 	<select id="contentsList" parameterType="java.util.Map"	resultType="java.util.Map">
 		SELECT (SELECT CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 WHERE CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY1_NAME,
-			   (SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = a.CATEGORY2_KEY) AS CATEGORY2_NAME,
-			   (SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY) AS CATEGORY3_NAME,
+			   (SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = a.CATEGORY2_KEY AND CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY2_NAME,
+			   (SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY AND CATEGORY2_KEY = a.CATEGORY2_KEY AND CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY3_NAME,
 		       a.EDU_NO, b.EDU_SUB_NO,
 		       <![CDATA[
 		       CASE WHEN TRAIN_S_DATE > NOW() THEN '대기중'
@@ -163,8 +163,8 @@
 	
 	<select id="selectDetailLms" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT (SELECT CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 WHERE CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY1_NAME,
-			   (SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = a.CATEGORY2_KEY) AS CATEGORY2_NAME,
-			   (SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY) AS CATEGORY3_NAME,
+			   (SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = a.CATEGORY2_KEY AND CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY2_NAME,
+			   (SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY AND CATEGORY2_KEY = a.CATEGORY2_KEY AND CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY3_NAME,
 		       a.EDU_NO, b.EDU_SUB_NO,
 		       b.EDU_CURR1, b.EDU_CURR2, b.EDU_CURR3, 
                b.EDU_ON_APP_TIME, b.EDU_CON_URL,
@@ -269,11 +269,11 @@
 	
 	<select id="studentList" parameterType="java.util.Map"	resultType="java.util.Map">
 		SELECT (SELECT CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 WHERE CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY1_NAME,
-			   (SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = a.CATEGORY2_KEY) AS CATEGORY2_NAME,
-			   (SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY) AS CATEGORY3_NAME,
-		       a.INST_NM, DATE_FORMAT(a.REG_DT,'%Y-%m-%d') AS REG_DT,
-               (SELECT COUNT(COUR_ON_KEY) FROM EDU_COURSE_ONLINE WHERE EDU_NO = a.EDU_NO) AS APP_CNT,
-               (SELECT COUNT(COUR_ON_KEY) FROM EDU_COURSE_ONLINE WHERE EDU_NO = a.EDU_NO AND COUR_STAT = 1) AS APP_FIN_CNT               
+			   (SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = a.CATEGORY2_KEY AND CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY2_NAME,
+			   (SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY AND CATEGORY2_KEY = a.CATEGORY2_KEY AND CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY3_NAME,
+		       a.INST_NM, DATE_FORMAT(a.REG_DT,'%Y-%m-%d') AS REG_DT, a.EDU_NO,
+               (SELECT COUNT(COUR_NO) FROM EDU_COURSE_REGISTRATION WHERE EDU_NO = a.EDU_NO) AS APP_CNT,
+               (SELECT COUNT(COUR_NO) FROM EDU_COURSE_REGISTRATION WHERE EDU_NO = a.EDU_NO AND COUR_STAT = 1) AS APP_FIN_CNT               
 		FROM EDU_REGISTRATION a
 		WHERE a.EDU_SITE = 'on'
 	      <if test=" category1_key !=null and category1_key != '' and searchCondition == 'CATEGORY'">
@@ -285,6 +285,7 @@
 		<if test=" category3_key !=null and category3_key != '' and searchCondition == 'CATEGORY'">
 			AND a.CATEGORY3_KEY = #{category3_key} 
 		</if>
+		ORDER BY a.EDU_NO DESC
 	    LIMIT #{recordCountPerPage}  OFFSET  #{offset}		
 	</select>
 
@@ -303,4 +304,86 @@
 			AND a.CATEGORY3_KEY = #{category3_key} 
 		</if>
 	</select>
+	
+	<select id="studentLearnList" parameterType="java.util.Map"	resultType="java.util.Map">
+		SELECT a.EDU_NO,
+			   a.COUR_NO,
+               (SELECT (SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = c.CATEGORY3_KEY AND CATEGORY2_KEY = c.CATEGORY2_KEY AND CATEGORY1_KEY = c.CATEGORY1_KEY) 
+               FROM EDU_REGISTRATION c WHERE EDU_NO = a.EDU_NO) AS CATEGORY3_NAME,
+			   FN_DECRYPT(b.ENCPT_USER_NM) AS USER_NM, 
+               b.USER_ID,
+               DATE_FORMAT(a.REG_DT,'%Y-%m-%d') AS REG_DT,
+               COUR_STAT,
+               (SELECT EDU_TIME FROM EDU_REGISTRATION WHERE EDU_NO = a.EDU_NO) AS EDU_TIME,
+               (select IFNULL(TIME_FORMAT(SEC_TO_TIME(SUM(COUR_TIME)), '%H시간 %i분 %s초'),0) From EDU_COURSE_ONLINE WHERE USER_ID = b.USER_ID AND EDU_NO = a.EDU_NO) AS COUR_TIME
+        FROM EDU_COURSE_REGISTRATION a,
+			 COM_USER b
+        WHERE 1=1
+        AND a.USER_ID = b.USER_ID
+        AND a.EDU_NO = #{edu_no} 
+        <if test="user_nm != '' and user_nm != null and search_type == 'NAME'">
+			AND FN_DECRYPT(b.ENCPT_USER_NM) LIKE CONCAT('%',#{user_nm},'%')
+		</if> 
+	    LIMIT #{recordCountPerPage}  OFFSET  #{offset}		
+	</select>
+
+
+	<select id="studentLearnListCnt" parameterType="java.util.Map" resultType="int">
+		 SELECT COUNT(*) cnt
+	     FROM EDU_COURSE_REGISTRATION a,
+			 COM_USER b
+        WHERE 1=1
+        AND a.USER_ID = b.USER_ID
+        AND a.EDU_NO = #{edu_no} 
+        <if test="user_nm != '' and user_nm != null and search_type == 'NAME'">
+			AND FN_DECRYPT(b.ENCPT_USER_NM) LIKE CONCAT('%',#{user_nm},'%')
+		</if> 
+	</select>
+	
+	<select id="studentGraduateList" parameterType="java.util.Map"	resultType="java.util.Map">
+		SELECT a.EDU_NO,
+			   a.COUR_NO,
+               (SELECT (SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = c.CATEGORY3_KEY AND CATEGORY2_KEY = c.CATEGORY2_KEY AND CATEGORY1_KEY = c.CATEGORY1_KEY) 
+               FROM EDU_REGISTRATION c WHERE EDU_NO = a.EDU_NO) AS CATEGORY3_NAME,
+			   FN_DECRYPT(b.ENCPT_USER_NM) AS USER_NM, 
+               b.USER_ID,
+               DATE_FORMAT(a.REG_DT,'%Y-%m-%d') AS REG_DT,
+               COUR_STAT,
+               (SELECT EDU_TIME FROM EDU_REGISTRATION WHERE EDU_NO = a.EDU_NO) AS EDU_TIME,
+               (select IFNULL(TIME_FORMAT(SEC_TO_TIME(SUM(COUR_TIME)), '%H시간 %i분 %s초'),0) From EDU_COURSE_ONLINE WHERE USER_ID = b.USER_ID AND EDU_NO = a.EDU_NO) AS COUR_TIME,
+               (CASE WHEN a.LICENSE_PBL = 1 THEN '발급' ELSE '미발급' END) AS LICENSE_PBL,
+               DATE_FORMAT(a.LICENSE_PBL_DATE, '%Y-%m-%d %H:%i') AS LICENSE_PBL_DATE
+        FROM EDU_COURSE_REGISTRATION a,
+			 COM_USER b
+        WHERE 1=1
+        AND a.USER_ID = b.USER_ID
+        AND a.EDU_NO = #{edu_no} 
+        AND COUR_STAT = 1
+        <if test="user_nm != '' and user_nm != null and search_type == 'NAME'">
+			AND FN_DECRYPT(b.ENCPT_USER_NM) LIKE CONCAT('%',#{user_nm},'%')
+		</if> 
+	    LIMIT #{recordCountPerPage}  OFFSET  #{offset}		
+	</select>
+
+
+	<select id="studentGraduateListCnt" parameterType="java.util.Map" resultType="int">
+		 SELECT COUNT(*) cnt
+	     FROM EDU_COURSE_REGISTRATION a,
+			 COM_USER b
+        WHERE 1=1
+        AND a.USER_ID = b.USER_ID
+        AND a.EDU_NO = #{edu_no} 
+        AND COUR_STAT = 1
+        <if test="user_nm != '' and user_nm != null and search_type == 'NAME'">
+			AND FN_DECRYPT(b.ENCPT_USER_NM) LIKE CONCAT('%',#{user_nm},'%')
+		</if> 
+	</select>
+	
+	<delete id="studentDel">
+		DELETE FROM EDU_COURSE_REGISTRATION 
+ 		 WHERE COUR_NO IN (
+				<foreach collection="courNoArrayList" item="item" separator=",">
+					#{item}
+				</foreach>)
+	</delete>
 </mapper>

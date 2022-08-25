@@ -134,11 +134,11 @@
                         <div class="side-cont">
                             <img src="${pageContext.request.contextPath}/user/images/common/ico_home.png" alt="홈 바로가기"/>
                             <img src="${pageContext.request.contextPath}/user/images/common/ico_next.png" alt="다음 아이콘"/>
-                            <span>기관 회원 서비스</span>
+                            <span>기관회원 공간</span>
                             <img src="${pageContext.request.contextPath}/user/images/common/ico_next.png" alt="다음 아이콘"/>
-                            <span>기관회원 교육신청</span>
+                            <span>교육개설</span>
                             <img src="${pageContext.request.contextPath}/user/images/common/ico_next.png" alt="다음 아이콘"/>
-                            <span>교육신청</span>
+                            <span>교육개설</span>
                         </div>
                     </div>
 
@@ -232,7 +232,8 @@
                                                         <input type="radio" class="radio-box" id="ins_type" name="ins_type" value="recruit">
                                                         <label for="">강사섭외 필요</label>
                                                     </div>
-                                                    <p class="point ml20">* 이어줌인 교육의 경우, 강사들이 충분하지 않아 섭외가 어려울 수 있습니다.</p>
+                                                    <p class="point ml20">* 보고듣고말하기&이어줌인을 제외한 다른 교육의 경우 직접입력 칸 사용하시기 바랍니다.</p>
+                                                    <p class="point ml20">** 강사섭외는 보고듣고말하기&이어줌인만 가능하며, 이어줌인 교육의 경우, 강사풀이 충분하지 않아 섭외가 어려울 수 <br>있습니다.</p>
                                                 </div>
                                             </td>
                                         </tr>
@@ -306,6 +307,7 @@
                                             <th>교육장소</th>
                                             <td>
                                                 <input type="text" id="edu_place" name="edu_place" class="input-box" value=""/>
+                                                <p class="point ml20">* 실시간 비대면 교육의 경우 ‘비대면 교육‘ 혹은 ‘줌교육‘ 으로 기재</p>
                                             </td>
                                         </tr>
                                     </tbody>

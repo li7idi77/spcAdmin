@@ -188,6 +188,7 @@ public class OrgController
 	  List<Map<String, Object>> list = orgService.getSelectList(paramMap);
 	  model.addAttribute("resultList", list);
 			  
+	  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 	  model.addAttribute("path", request.getServletPath());
 	  model.addAllAttributes(paramMap);
 	
@@ -232,7 +233,7 @@ public class OrgController
 		  Map<String, Object> result = orgService.getSelectData(paramMap);
 		  model.addAttribute("result", result);
 	  }
-			  
+	  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 	  model.addAttribute("path", request.getServletPath());
 	  model.addAllAttributes(paramMap);
 	
@@ -272,6 +273,7 @@ public class OrgController
 	  List<Map<String, Object>> list = orgService.getSelectList(paramMap);
 	  model.addAttribute("resultList", list);
 	  
+	  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 	  model.addAttribute("path", request.getServletPath());
 	  model.addAllAttributes(paramMap);
 	  return "org02Report";

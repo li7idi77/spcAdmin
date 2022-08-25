@@ -452,7 +452,7 @@
                                 <th colspan="2">교육대상</th>
                                 <td>
                                     <input type="text" id="edu_target"  name="edu_target" class="input-box" value="${categoryForm.edu_target}"/>
-                                    <span class="point">ex. 성인, 청소년, 중장년, 노인, 이어줌인, 대학생, 직장인 등</span>
+                                    <span class="point">ex. 성인, 청소년, 중장년, 노인, 대학생, 직장인 등</span>
                                 </td>
                             </tr>
                           

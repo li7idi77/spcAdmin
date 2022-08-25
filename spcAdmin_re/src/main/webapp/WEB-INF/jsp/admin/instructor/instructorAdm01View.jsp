@@ -276,14 +276,13 @@ function fn_goList(){
                                             <input type="radio" class="radio-box" id="ins_off_stat" name="ins_off_stat" value="1" <c:if test="${result.INS_OFF_STATUS == '1'}">checked</c:if>>
                                             <label>완료</label>
                                         </div>
+                                        <c:if test="${result.INS_OFF_STATUS != '1'}">
                                         <div class="radio-cont">
                                             <input type="radio" class="radio-box" id="ins_off_stat" name="ins_off_stat" value="2" <c:if test="${result.INS_OFF_STATUS == '2' || (empty result.INS_OFF_STATUS)}">checked</c:if>>
                                             <label>미완료</label>
                                         </div>
-                                        <div class="radio-cont">
-                                            <input type="radio" class="radio-box" id="ins_off_stat" name="ins_off_stat" value="3" <c:if test="${result.INS_OFF_STATUS == '3'}">checked</c:if>>
-                                            <label>해당년도 수료 시 체크 ( 오프/온라인 교육 모두 완료 시 1년 자격연장 )</label>
-                                        </div>
+                                        </c:if>
+                                        * 해당년도 수료 시 체크 ( 오프/온라인 교육 모두 완료 시 1년 자격연장 )
                                     </div>
                                 </td>
                             </tr>
@@ -295,14 +294,13 @@ function fn_goList(){
                                             <input type="radio" class="radio-box" id="ins_on_stat" name="ins_on_stat" value="1" <c:if test="${result.INS_ON_STATUS == '1'}">checked</c:if>>
                                             <label>완료</label>
                                         </div>
+                                        <c:if test="${result.INS_ON_STATUS != '1'}">
                                         <div class="radio-cont">
                                             <input type="radio" class="radio-box" id="ins_on_stat" name="ins_on_stat" value="2" <c:if test="${result.INS_ON_STATUS == '2' || (empty result.INS_ON_STATUS)}">checked</c:if>>
                                             <label>미완료</label>
                                         </div>
-                                        <div class="radio-cont">
-                                            <input type="radio" class="radio-box" id="ins_on_stat" name="ins_on_stat" value="3" <c:if test="${result.INS_ON_STATUS == '3'}">checked</c:if>>
-                                            <label>해당년도 수료 시 체크 ( 오프/온라인 교육 모두 완료 시 1년 자격연장 )</label>
-                                        </div>
+                                        </c:if>
+                                        * 해당년도 수료 시 체크 ( 오프/온라인 교육 모두 완료 시 1년 자격연장 )
                                     </div>
                                 </td>
                             </tr>

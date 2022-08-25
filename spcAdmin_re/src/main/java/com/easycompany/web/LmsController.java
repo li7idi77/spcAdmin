@@ -164,6 +164,11 @@ public class LmsController {
 		  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
 		  paramMap.put("offset",offset);
 		
+		  paramMap.put("sqlName", "getCategoryList1");
+		  paramMap.put("site","on");
+		  List<Map<String, Object>> category1list = sectorService.getSelectList(paramMap);
+		  model.addAttribute("category1list", category1list);
+		  
 		  paramMap.put("sqlName", "studentAllCnt");	
 		  Map<String, Object> result = lmsService.getSelectData(paramMap);
 		  model.addAttribute("count", result);  
@@ -184,5 +189,97 @@ public class LmsController {
 		  
 		return "studentList";
 	}
+	
+	@RequestMapping(value = "/studentLearn.do")
+	public String studentLearn(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
+		  paramMap.put("pageSize", 10);
+		  paramMap.put("recordCountPerPage", 10);
+		  paramMap.put("UserAccount", request.getSession().getAttribute("AdminAccount"));
+		  if(!paramMap.containsKey("pageIndex")) {
+			  paramMap.put("pageIndex", 1);
+		  }
+		  PaginationInfo paginationInfo = new PaginationInfo();
+		  paginationInfo.setCurrentPageNo(Integer.parseInt(paramMap.get("pageIndex").toString()));
+		  paginationInfo.setRecordCountPerPage(Integer.parseInt(paramMap.get("recordCountPerPage").toString()));
+		  paginationInfo.setPageSize(Integer.parseInt(paramMap.get("pageSize").toString()));
+		  
+		  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
+		  paramMap.put("offset",offset);
+				  
+		  paramMap.put("sqlName", "studentLearnList");
+		  List<Map<String, Object>> list = lmsService.getSelectList(paramMap);
+		  model.addAttribute("resultList", list);
+			
+		  paramMap.put("sqlName", "studentLearnListCnt");
+		  int totCnt = lmsService.getSelectListCnt(paramMap);
+		  model.addAttribute("totCnt", totCnt);
+		  paginationInfo.setTotalRecordCount(totCnt);
+		
+		  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
+		  model.addAttribute("paginationInfo", paginationInfo);
+		  model.addAttribute("path", request.getServletPath());
+		  model.addAllAttributes(paramMap);
+		  
+		return "studentLearn";
+	}
+	
+	@RequestMapping(value = "/studentGraduate.do")
+	public String studentGraduate(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
+		  paramMap.put("pageSize", 10);
+		  paramMap.put("recordCountPerPage", 10);
+		  paramMap.put("UserAccount", request.getSession().getAttribute("AdminAccount"));
+		  if(!paramMap.containsKey("pageIndex")) {
+			  paramMap.put("pageIndex", 1);
+		  }
+		  PaginationInfo paginationInfo = new PaginationInfo();
+		  paginationInfo.setCurrentPageNo(Integer.parseInt(paramMap.get("pageIndex").toString()));
+		  paginationInfo.setRecordCountPerPage(Integer.parseInt(paramMap.get("recordCountPerPage").toString()));
+		  paginationInfo.setPageSize(Integer.parseInt(paramMap.get("pageSize").toString()));
+		  
+		  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
+		  paramMap.put("offset",offset);
+		  
+		  paramMap.put("sqlName", "studentGraduateList");
+		  List<Map<String, Object>> list = lmsService.getSelectList(paramMap);
+		  model.addAttribute("resultList", list);
+			
+		  paramMap.put("sqlName", "studentGraduateListCnt");
+		  int totCnt = lmsService.getSelectListCnt(paramMap);
+		  model.addAttribute("totCnt", totCnt);
+		  paginationInfo.setTotalRecordCount(totCnt);
+		
+		  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
+		  model.addAttribute("paginationInfo", paginationInfo);
+		  model.addAttribute("path", request.getServletPath());
+		  model.addAllAttributes(paramMap);
+		  
+		return "studentGraduate";
+	}
 
+	@RequestMapping(value = "/studentDel.do")
+	@ResponseBody
+	public String studentDel(HttpServletRequest request, @RequestParam(value="courNoArray[]") List<String> courNoArray, @RequestParam Map<String, Object> paramMap) throws Exception {
+		int resultCnt = 0;
+		String result = "";
+		try {
+			LoginVo loginvo = (LoginVo) WebUtils.getSessionAttribute(request, "AdminAccount");
+			/*List<Long> boardIdxList = new ArrayList<Long>();
+			
+			for(String idxStr : boardIdxStrArray){
+				boardIdxList.add(Long.parseLong(idxStr));
+			}
+			
+		    HashMap<String, Object> map = new HashMap<String, Object>();
+		    map.put("boardIdxList", boardIdxList);*/
+			paramMap.put("courNoArrayList", courNoArray); 
+		    paramMap.put("sqlName", "studentDel");
+		    resultCnt = lmsService.deleteData(paramMap);
+		    result = (resultCnt > 0 ? "SUCCESS" : "FAIL");
+		    
+		} catch (Exception e) {
+			result = "FAIL";
+		}
+		
+		return result;
+	}
 }

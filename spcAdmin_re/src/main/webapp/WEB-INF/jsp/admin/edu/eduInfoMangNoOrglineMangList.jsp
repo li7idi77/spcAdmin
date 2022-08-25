@@ -282,11 +282,13 @@
                        <c:if test="${not empty categoryVo.category2_name }">
                        		<option value='${categoryVo.category2_key}'>${categoryVo.category2_name}</option>
                        	</c:if>
+                       	<option value=''>선택 하세요</option>
                     </select>
                     <select class="select lg-width"  id="category3_key" name="category3_key">
                     	<c:if test="${not empty categoryVo.category3_name }">
                        		<option value='${categoryVo.category3_key}'>${categoryVo.category3_name}</option>
                        	</c:if>
+                       	<option value=''>선택 하세요</option>
                     </select>
                     
                 </div>

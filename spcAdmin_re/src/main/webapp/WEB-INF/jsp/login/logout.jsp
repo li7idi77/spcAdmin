@@ -6,6 +6,7 @@
 <script type="text/javascript">	
 	$(document).ready(function(){	
 		alert('로그 아웃 되었습니다.');
-		self.close();
+		//self.close();
+		window.location = "<c:url value='/main/logoList.do'/>";
 	});
 </script>

@@ -22,5 +22,6 @@ public interface LmsService {
 	public int updateData(Map<String, Object> paramMap) throws Exception;
 	
 	public int insertCommonFile(Map<String, Object> paramMap, Map<String, Object> fileSave, int gubun);
-
+	
+	public int deleteData(Map<String, Object> paramMap) throws Exception;
 }

@@ -65,7 +65,7 @@
                         <!---- search-wrap begin ---->
                         <div class="search-wrap">
                             <div class="search-cont">
-                                <label>기간 :</label>
+                                <label>작성일 :</label>
                                 <div class="radio-cont">
                                     <input type="radio" class="radio-box" id="dateAll" name="radioGroupDate" value="" checked>
                                     <label for="dateAll">전체</label>

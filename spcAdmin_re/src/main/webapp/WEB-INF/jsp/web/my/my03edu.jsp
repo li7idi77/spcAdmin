@@ -375,7 +375,7 @@
                                             <th>분류3(교육명)</th>
                                             <th>강사명</th>
                                             <th>신청일</th>
-                                            <th>학습여부</th>
+                                            <th>교육현황</th>
                                         </tr>
                                     </thead>
                                     <tbody>

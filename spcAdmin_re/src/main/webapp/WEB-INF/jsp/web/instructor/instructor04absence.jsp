@@ -161,7 +161,7 @@
                                         </tr>
                                         <tr>
                                             <th>신청서 양식</th>
-                                            <td><button class="sm-btn white-btn">신청하기</button></td>
+                                            <td><button type="button" class="sm-btn white-btn" onClick="document.location='/upload/spcAdmin/data/강사휴직신청서.hwp'">다운로드</button></td>
                                         </tr>
                                         <tr>
                                             <th>신청서 첨부</th>

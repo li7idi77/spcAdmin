@@ -28,7 +28,7 @@
 	      </div>
      </c:if>
      <c:if test="${fn:contains(path, '/user/info')}">
-	      <aside class="tit">개요</aside>
+	      <aside class="tit">교육안내</aside>
 	      <div class="lnb-menu">
 	          <ul>
 	                 <li <c:if test="${path =='/user/info01.do'}">   class="on" </c:if>>
@@ -126,14 +126,14 @@
      </c:if>
      
      <c:if test="${fn:contains(path, '/user/org')}">
-	      <aside class="tit">기관 회원 서비스</aside>
+	      <aside class="tit">기관회원 공간</aside>
 	      <div class="lnb-menu">
 	          <ul>
 	          		<li <c:if test="${fn:contains(path, '/user/org01')}">  class="on" </c:if>>
-	                 	<a href="#">기관회원 교육신청</a>
+	                 	<a href="#">교육개설</a>
 	                 	<ul class="sub-lnb">
-                        	<li <c:if test="${fn:contains(path, '/user/org01info') }">  class="active" </c:if>> <a href="${pageContext.request.contextPath}/user/org01info.do">교육소개</a></li>
-	                    	<li <c:if test="${fn:contains(path, '/user/org01List') }">    class="active" </c:if>> <a href="${pageContext.request.contextPath}/user/org01List.do">교육신청</a></li>
+                        	<li <c:if test="${fn:contains(path, '/user/org01info') }">  class="active" </c:if>> <a href="${pageContext.request.contextPath}/user/org01info.do">개설절차</a></li>
+	                    	<li <c:if test="${fn:contains(path, '/user/org01List') }">    class="active" </c:if>> <a href="${pageContext.request.contextPath}/user/org01List.do">교육개설</a></li>
                         </ul>
 	                 </li>
 	                 
