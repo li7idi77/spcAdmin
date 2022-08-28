@@ -101,7 +101,9 @@
 
            <!---- sub-cont begin ---->
            <div class="btn-cont mb20">
-               <button type="button" class="sm-btn navy-btn" onClick="javascript:fn_regt();">등록</button>
+            <c:if test="${sessionId != null}">
+            	<button type="button" class="sm-btn navy-btn" onClick="javascript:fn_regt();">등록</button>
+            </c:if>
            </div>
            <!---- sub-cont end ---->
 

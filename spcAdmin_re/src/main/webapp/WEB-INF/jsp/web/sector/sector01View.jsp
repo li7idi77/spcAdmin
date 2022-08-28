@@ -212,8 +212,11 @@
 
                         <!---- button begin ---->
                         <div class="btn-cont">
+                        	${sessionId.user_group_cd},${sessionId.user_gu}
+                        	<c:if test="${sessionId.user_group_cd == '0002' && (sessionId.edu_auth_cd == '01'|| sessionId.edu_auth_cd == '02')}">
                             <button class="lg-btn orange-btn" onClick="fn_regist();">수강신청</button>
                             <button class="lg-btn navy-btn" onClick="fn_basket();">장바구니</button>
+                            </c:if>
                             <button class="lg-btn white-btn" onClick="fn_goList();">목록</button>
                         </div>
                         <!---- button end ---->
