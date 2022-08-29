@@ -39,6 +39,7 @@ model.addAttribute("path", request.getServletPath());
 	             <li><a href="${pageContext.request.contextPath}/user/lifeEduSch.do">교육일정</a></li>
 	             <li><a href="${pageContext.request.contextPath}/user/lifeEduBoardList.do">생명지킴이 활동 수기</a></li>
 	         </ul>
+	         <c:if test="${sessionId.user_group_cd == '0002' && (sessionId.edu_auth_cd == '01'|| sessionId.edu_auth_cd == '02')}">
 	         <ul class="depth2">
 	             <li>
 	                 <a href="#">생명지킴이 강사 양성 교육</a>
@@ -71,6 +72,7 @@ model.addAttribute("path", request.getServletPath());
 	                 </ul>
 	             </li>
 	         </ul>
+	         </c:if>
 	         <ul class="depth2">
 	             <li>
 	                 <a href="#">교육개설</a>
