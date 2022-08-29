@@ -115,9 +115,17 @@
 	                 <li <c:if test="${fn:contains(path, '/user/notice01')}">  class="on" </c:if>>
 	                 	<a href="${pageContext.request.contextPath}/user/notice01List.do">공지사항</a>
 		             </li>
-		             <li <c:if test="${fn:contains(path, '/user/notice02')}">  class="on" </c:if>>
+		             
+		             <c:if test="${sessionId == null}">
+		             <li <c:if test="${fn:contains(path, '/user/notice02')}">  class="on" </c:if> title="개인 회원가입 후 이용이 가능합니다.">
+			             <a title="개인 회원가입 후 이용이 가능합니다.">자료실</a>
+			         </li>
+			         </c:if>  
+			         <c:if test="${sessionId != null}">
+					 <li <c:if test="${fn:contains(path, '/user/notice02')}">  class="on" </c:if>>
 	                 	<a href="${pageContext.request.contextPath}/user/notice02List.do">자료실</a>
 		             </li>
+		             </c:if>
 		             <li <c:if test="${fn:contains(path, '/user/notice03')}">  class="on" </c:if>>
 	                 	<a href="${pageContext.request.contextPath}/user/notice03List.do">F&Q</a>
 		             </li>
@@ -151,6 +159,7 @@
 	      <aside class="tit">마이페이지</aside>
 	      <div class="lnb-menu">
 	          <ul>
+	          		<c:if test="${sessionId.edu_auth_cd == '01'}">
 	                 <li <c:if test="${fn:contains(path, '/my/my01')}">  class="on" </c:if>>
 	                 	<a href="#">일반</a>
 	                 	<ul class="sub-lnb">
@@ -162,6 +171,8 @@
 	                    	<li <c:if test="${fn:contains(path, '/my/my01mylist') }">    class="active" </c:if>> <a href="${pageContext.request.contextPath}/my/my01mylist.do">나의 글 보기</a></li>
                         </ul>
 	                 </li>
+	                </c:if>
+	                <c:if test="${sessionId.edu_auth_cd == '02'}">
 	                 <li <c:if test="${fn:contains(path, '/my/my02')}">  class="on" </c:if>>
 	                 	<a href="#">강사</a>
 	                 	<ul class="sub-lnb">
@@ -173,6 +184,8 @@
 	                    	<li <c:if test="${fn:contains(path, '/my/my02mylist') }">    class="active" </c:if>> <a href="${pageContext.request.contextPath}/my/my02mylist.do">나의 글 보기</a></li>
                         </ul>
 	                 </li>
+	                </c:if>
+	                <c:if test="${sessionId.edu_auth_cd == '03'}">
 	                 <li <c:if test="${fn:contains(path, '/my/my03')}">  class="on" </c:if>>
 	                 	<a href="#">실무자</a>
 	                 	<ul class="sub-lnb">
@@ -184,6 +197,8 @@
 	                    	<li <c:if test="${fn:contains(path, '/my/my03mylist') }">    class="active" </c:if>> <a href="${pageContext.request.contextPath}/my/my03mylist.do">나의 글 보기</a></li>
                         </ul>
 	                 </li>
+	                </c:if>
+	                <c:if test="${sessionId.edu_auth_cd == '04'}">
 	                 <li <c:if test="${fn:contains(path, '/my/my04')}">  class="on" </c:if>>
 	                 	<a href="#">기관</a>
 	                 	<ul class="sub-lnb">
@@ -195,6 +210,7 @@
 	                    	<li <c:if test="${fn:contains(path, '/my/my04mylist') }">    class="active" </c:if>> <a href="${pageContext.request.contextPath}/my/my04mylist.do">나의 글 보기</a></li>
                         </ul>
 	                 </li> 
+	                </c:if>
 		      </ul>
 	      </div>
      </c:if>

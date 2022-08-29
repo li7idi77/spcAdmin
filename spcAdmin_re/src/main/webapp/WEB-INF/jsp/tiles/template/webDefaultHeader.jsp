@@ -26,7 +26,20 @@ function openWindowPop(url, name){
 </script>
 	<div id="header">
         <div class="top-wrap">
-            <a  href="${pageContext.request.contextPath}/user/webMain.do">홈</a>|<a href="${pageContext.request.contextPath}/user/notice01List.do">공지사항</a><c:if test="${sessionId != null}">|<a href="${pageContext.request.contextPath}/my/my01info.do">마이페이지</a>|<a onClick="javascript:openWindowPop('<c:url value='/my/popMyClass.do'/>','popup');">나의 강의실</a>|<a Onclick="javascript:gfnLogout()">로그아웃</a></c:if>
+            <a  href="${pageContext.request.contextPath}/user/webMain.do">홈</a>|<a href="${pageContext.request.contextPath}/user/notice01List.do">공지사항</a><c:if test="${sessionId != null}">|
+            <c:if test="${sessionId.edu_auth_cd == '01'}">
+            	<a href="${pageContext.request.contextPath}/my/my01info.do">마이페이지</a>|
+            </c:if>
+            <c:if test="${sessionId.edu_auth_cd == '02'}">
+            	<a href="${pageContext.request.contextPath}/my/my02info.do">마이페이지</a>|
+            </c:if>
+            <c:if test="${sessionId.edu_auth_cd == '03'}">
+            	<a href="${pageContext.request.contextPath}/my/my03info.do">마이페이지</a>|
+            </c:if>
+            <c:if test="${sessionId.edu_auth_cd == '04'}">
+            	<a href="${pageContext.request.contextPath}/my/my04info.do">마이페이지</a>|
+            </c:if>
+            <a onClick="javascript:openWindowPop('<c:url value='/my/popMyClass.do'/>','popup');">나의 강의실</a>|<a Onclick="javascript:gfnLogout()">로그아웃</a></c:if>
         	<c:if test="${sessionId.user_group_cd eq '0003'}">
         	|<a href="${pageContext.request.contextPath}/admin/">LMS 관리자</a>
         	</c:if>
@@ -49,7 +62,9 @@ function openWindowPop(url, name){
                     <li><a href="#">생명지킴이 교육신청</a></li>
                     <li><a href="#">분야별 교육신청</a></li>
                     <li><a href="#">기관회원 공간</a></li>
+                    <c:if test="${sessionId.edu_auth_cd == '03'|| sessionId.edu_auth_cd == '04'}">
                     <li><a href="#">생명지킴이 강사 공간</a></li>
+                    </c:if>
                 </ul>
             </nav>
         </div>

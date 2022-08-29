@@ -71,7 +71,8 @@
                                <th>첨부파일</th>
                                <td colspan="5">
 	                               <c:forEach var="result" items="${resultFileList}" varStatus="status">
-	                               	<a  class="link  block" onclick="javascript:fileDownload('${result.file_seq}');"> ${result.file_name}</a>
+	                               	<c:if test="${sessionId != null}"><a  class="link  block"  onclick="javascript:fileDownload('${result.file_seq}');"> ${result.file_name}</a></c:if>
+	                               	<c:if test="${sessionId == null}"><span title="개인 회원가입 후 이용이 가능합니다.">${result.file_name}</span></c:if>
 	                               </c:forEach>
                                </td>
                            </tr>
