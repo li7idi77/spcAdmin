@@ -36,7 +36,7 @@ function openWindowPop(url, name){
             <c:if test="${sessionId.edu_auth_cd == '03'}">
             	<a href="${pageContext.request.contextPath}/my/my03info.do">마이페이지</a>|
             </c:if>
-            <c:if test="${sessionId.edu_auth_cd == '04'}">
+            <c:if test="${sessionId.user_gu == '02'}">
             	<a href="${pageContext.request.contextPath}/my/my04info.do">마이페이지</a>|
             </c:if>
             <a onClick="javascript:openWindowPop('<c:url value='/my/popMyClass.do'/>','popup');">나의 강의실</a>|<a Onclick="javascript:gfnLogout()">로그아웃</a></c:if>

@@ -198,7 +198,7 @@
                         </ul>
 	                 </li>
 	                </c:if>
-	                <c:if test="${sessionId.edu_auth_cd == '04'}">
+	                <c:if test="${sessionId.user_gu == '02'}">
 	                 <li <c:if test="${fn:contains(path, '/my/my04')}">  class="on" </c:if>>
 	                 	<a href="#">기관</a>
 	                 	<ul class="sub-lnb">
