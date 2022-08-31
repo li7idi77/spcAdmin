@@ -44,6 +44,7 @@ public class OrgController
 
   @RequestMapping({"/org01info.do"})
   public String org01info(@RequestParam Map<String, Object> paramMap, ModelMap model ,HttpServletRequest request) throws Exception {
+	  	model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 	  	model.addAttribute("path", request.getServletPath());
 	    model.addAllAttributes(paramMap);
 		return "org01info";
@@ -93,6 +94,7 @@ public class OrgController
 		  
 	  	paramMap.put("sqlName", "getOrgView");	
 		Map<String, Object> result = orgService.getSelectData(paramMap);
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 	  	model.addAttribute("result", result);
 	  	model.addAttribute("path", request.getServletPath());
 	    model.addAllAttributes(paramMap);
@@ -112,6 +114,7 @@ public class OrgController
 	  List<Map<String, Object>> list = orgService.getSelectList(paramMap);
 	  model.addAttribute("resultList", list);
 	  
+	  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 	  model.addAttribute("path", request.getServletPath());
 	  model.addAllAttributes(paramMap);
 	

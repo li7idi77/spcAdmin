@@ -134,23 +134,26 @@
      </c:if>
      
      <c:if test="${fn:contains(path, '/user/org')}">
-	      <aside class="tit">기관회원 공간</aside>
+	      <aside class="tit">기관회원 공간${sessionId.user_gu}</aside>
 	      <div class="lnb-menu">
 	          <ul>
 	          		<li <c:if test="${fn:contains(path, '/user/org01')}">  class="on" </c:if>>
 	                 	<a href="#">교육개설</a>
 	                 	<ul class="sub-lnb">
                         	<li <c:if test="${fn:contains(path, '/user/org01info') }">  class="active" </c:if>> <a href="${pageContext.request.contextPath}/user/org01info.do">개설절차</a></li>
+                        	<c:if test="${sessionId.user_gu == '2'}">
 	                    	<li <c:if test="${fn:contains(path, '/user/org01List') }">    class="active" </c:if>> <a href="${pageContext.request.contextPath}/user/org01List.do">교육개설</a></li>
+	                    	</c:if>
                         </ul>
 	                 </li>
-	                 
+	                 <c:if test="${sessionId.user_gu == '2'}">
 	                 <li <c:if test="${fn:contains(path, '/user/org02')}">  class="on" </c:if>>
 	                 	<a href="${pageContext.request.contextPath}/user/org02List.do">신청 현황</a>
 		             </li>
 		             <li <c:if test="${fn:contains(path, '/user/org03')}">  class="on" </c:if>>
 	                 	<a href="${pageContext.request.contextPath}/user/org03List.do">결과 보고</a>
 		             </li>
+		             </c:if>
 		      </ul>
 	      </div>
      </c:if>
@@ -172,7 +175,7 @@
                         </ul>
 	                 </li>
 	                </c:if>
-	                <c:if test="${sessionId.edu_auth_cd == '02'}">
+	                <c:if test="${sessionId.edu_auth_cd == '02' || sessionId.edu_auth_cd == '04'}">
 	                 <li <c:if test="${fn:contains(path, '/my/my02')}">  class="on" </c:if>>
 	                 	<a href="#">강사</a>
 	                 	<ul class="sub-lnb">
@@ -185,7 +188,7 @@
                         </ul>
 	                 </li>
 	                </c:if>
-	                <c:if test="${sessionId.edu_auth_cd == '03'}">
+	                <c:if test="${sessionId.edu_auth_cd == '03' || sessionId.edu_auth_cd == '04'}">
 	                 <li <c:if test="${fn:contains(path, '/my/my03')}">  class="on" </c:if>>
 	                 	<a href="#">실무자</a>
 	                 	<ul class="sub-lnb">
@@ -198,7 +201,7 @@
                         </ul>
 	                 </li>
 	                </c:if>
-	                <c:if test="${sessionId.user_gu == '02'}">
+	                <c:if test="${sessionId.user_gu == '2'}">
 	                 <li <c:if test="${fn:contains(path, '/my/my04')}">  class="on" </c:if>>
 	                 	<a href="#">기관</a>
 	                 	<ul class="sub-lnb">

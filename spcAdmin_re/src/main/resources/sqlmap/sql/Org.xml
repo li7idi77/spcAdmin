@@ -76,7 +76,7 @@
 							 FROM 	COM_USER_EDU_INFO f,
 									(SELECT (SELECT CD_NO 
 											 FROM EDU_CLASS_CATEGORY3 
-                                             WHERE CATEGORY3_KEY = d.CATEGORY3_KEY) AS CD 
+                                             WHERE CATEGORY3_KEY = d.CATEGORY3_KEY AND CATEGORY2_KEY = d.CATEGORY2_KEY AND CATEGORY1_KEY = d.CATEGORY1_KEY) AS CD 
                                      FROM EDU_REGISTRATION d 
                                      WHERE d.EDU_NO = ${edu_no}) g
 							 WHERE f.EDU_INFO_CD = g.CD)

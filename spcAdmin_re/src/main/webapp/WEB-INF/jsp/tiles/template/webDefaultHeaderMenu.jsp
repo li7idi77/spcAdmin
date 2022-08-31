@@ -77,11 +77,15 @@ model.addAttribute("path", request.getServletPath());
 	                 <a href="#">교육개설</a>
 	                 <ul class="depth3">
 	                     <li><a href="${pageContext.request.contextPath}/user/org01info.do">개설절차</a></li>
+	                     <c:if test="${sessionId.user_gu == '2'}">
 	                     <li><a href="${pageContext.request.contextPath}/user/org01List.do">교육개설</a></li>
+	                     </c:if>
 	                 </ul>
 	             </li>
+	             <c:if test="${sessionId.user_gu == '2'}">
 	             <li><a href="${pageContext.request.contextPath}/user/org02List.do">신청현황</a></li>
 	             <li><a href="${pageContext.request.contextPath}/user/org03List.do">결과보고</a></li>
+	             </c:if>
 	         </ul>
 	         <c:if test="${ssessionId.edu_auth_cd == '03'|| sessionId.edu_auth_cd == '04'}">
 	         <ul class="depth2">

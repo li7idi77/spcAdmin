@@ -130,7 +130,7 @@ function fn_goList(){
                             </tr>
                             <tr>
                                 <th>팩스번호</th>
-                                <td>${result.FAXNO}</td>
+                                <td>${result.FXNO}</td>
                             </tr>
                             <tr>
                                 <th>이메일</th>
