@@ -48,16 +48,78 @@
 	    var options = 'top=10, left=10, width=1200px, height=800px, status=no, menubar=no, toolbar=no, resizable=no';
 	    window.open(url, name, options);
 	}	
+	
+	function fn_excel(){
+	   	 var frm = document.commonForm;
+	   	 frm.action = "<c:url value='/org/orgExcelDownload.do'/>";
+	   	 $("#excelFileName").val('교육일정'); 
+	   	 frm.submit();
+	}
+	
 	function fn_egov_link_page(pageNo){
 		 var frm = document.commonForm;
 		 $("#pageIndex").val(pageNo); 
 	 	 frm.action = "<c:url value='/org/eduReportList.do'/>";
 	   	 frm.submit();
 	 }
+	
+	function getExcelCondition(){ // 엑셀 출력 시 모델,인덱스 가져오기
+		var condition = "";
+		$(".conSearch tr").each(function() {
+			$tr = $(this);
+			var aa = $tr.find("th").length;
+		    for(i=0; i< aa; i++) {
+				var oriText = $tr.find("td:eq("+i+")").html();
+				if($tr.find("td:eq("+i+")").find('input').val() == null) {
+					//select
+					condition += " ◆" + $(".searchArea th:eq("+ i +")").text() ;
+					condition += " = " + $tr.find("td:eq("+i+") option:selected").text();
+				} else {
+					//input
+					if($tr.find("td:eq("+i+")").find('input').val() != "" ){
+						condition += " ◆" + $(".searchArea th:eq("+ i +")").text() ;
+						condition += " = " + $tr.find("td:eq("+i+")").find('input:eq(0)').val()					
+						if($tr.find("td:eq("+i+")").find('input:eq(1)').val() != null){
+							condition += " ~ " + $tr.find("td:eq("+i+")").find('input:eq(1)').val();
+						}
+					}
+				}
+			}
+		});
+		return condition;
+	}
+	function fn_excelDownload() {
+		//그리드의 label과 name을 받는다.
+		//용도 : 엑셀 출력 시 헤더 및 데이터 맵퍼 자동 설정
+		var colName = new Array();
+		var dataName = new Array();
+		
+		var cn = $( "#eduAchievList" ).jqGrid( "getGridParam", "colNames" );
+		var cm = $( "#eduAchievList" ).jqGrid( "getGridParam", "colModel" );
+		for(var i=1; i<cm.length; i++ ){
+			
+			if(cm[i]['hidden'] == false) {
+				colName.push(cn[i]);
+				dataName.push(cm[i]['index']);	
+			}
+		}
+		var condition = getExcelCondition();
+		$( '#searchCondition').val(condition);
+		
+		$( '#p_col_name' ).val(colName);
+		$( '#p_data_name' ).val(dataName);
+		var f    = document.application_form;
+		f.action = "eduAchievListExcelExport.do";
+		f.method = "post";
+		f.submit();
+	}		
  </script>
  
            <form  id="commonForm" name="commonForm"  method="post"  >
 			<input type="hidden" id="pageIndex"      name="pageIndex"      class="input-box" value=1 />
+			<input type="hidden" id="excelFileName"  name="excelFileName"  value=''	class="input-box" />
+			<input type="hidden" id="p_col_name"  name="p_col_name"  value=''	class="input-box" />
+			<input type="hidden" id="p_data_name"  name="p_data_name"  value=''	class="input-box" />
 			
          	<h1 class="h1-tit">교육 결과 보고</h1>
 

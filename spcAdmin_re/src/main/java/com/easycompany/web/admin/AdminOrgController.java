@@ -11,13 +11,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
- 
+import org.springframework.web.servlet.ModelAndView;
+
 import com.easycompany.cmm.vo.DefaultVO;
 import com.easycompany.service.InstructorService;
 import com.easycompany.service.OrgService;
+import com.easycompany.service.vo.CategoryVo;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
@@ -249,6 +252,22 @@ public class AdminOrgController
 	  model.addAllAttributes(paramMap);
 	  
 	  return "eduReportList";
+  }
+  
+  @RequestMapping({"/orgExcelDownload.do"})
+  public ModelAndView excelDownload(@RequestParam Map<String, Object> paramMap)
+    throws Exception
+  {
+		paramMap.put("recordCountPerPage", 10000);
+		paramMap.put("offset",0);
+		paramMap.put("pageSize", 1);
+		paramMap.put("pageIndex", 1);
+		paramMap.put("sqlName", "getReportList");
+		
+		List<Map<String, Object>> list = orgService.getSelectList(paramMap);
+	    paramMap.put("list", list);
+	
+	    return new ModelAndView("schduleExcelView", map);
   }
   
   @RequestMapping({"/eduReportView.do"})

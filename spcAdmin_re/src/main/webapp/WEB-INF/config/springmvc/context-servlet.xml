@@ -116,6 +116,6 @@
 	<bean id="addressPOIExcelView"       class="com.easycompany.cmm.excel.EgovPOIExcel" />
 	<bean id="schduleExcelView"          class="com.easycompany.cmm.excel.EgovEduSchduleExcel" />
 	<bean id="onLineEducationExcelView"  class="com.easycompany.cmm.excel.EgovoOLineEducationExcel" />
-	
+	<bean id="commonExcelView"  		 class="com.easycompany.cmm.excel.EgovoCommonExcel" />
 	
 </beans>
