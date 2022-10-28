@@ -118,9 +118,9 @@
            <form  id="commonForm" name="commonForm"  method="post"  >
 			<input type="hidden" id="pageIndex"      name="pageIndex"      class="input-box" value=1 />
 			<input type="hidden" id="excelFileName"  name="excelFileName"  value=''	class="input-box" />
-			<input type="hidden" id="p_col_name"  name="p_col_name"  value=''	class="input-box" />
-			<input type="hidden" id="p_data_name"  name="p_data_name"  value=''	class="input-box" />
-			
+			<input type="hidden" id="p_col_name"  name="p_col_name"  value='교육명,교육일,지역,기관명,교육대상,교육장소,교육정원,교육인원,강사이름,강사ID,진행현황'	class="input-box" />
+			<input type="hidden" id="p_data_name"  name="p_data_name"  value='EDU_NAME,EDU_START_DATE,AREA_NM,EDU_ORG_NAME,EDU_TARGET,EDU_PLACE,APP_CNT,EDU_CNT,EDU_TEAC_NAME,EDU_TEAC_ID,SCH_STATUS'	class="input-box" />
+            
          	<h1 class="h1-tit">교육 결과 보고</h1>
 
             <div class="search-wrap">
@@ -231,7 +231,7 @@
                         <col width="6%"/>
                     </colgroup>
                     <thead>
-                        <tr>
+			            <tr>
                             <!-- <th><input type="checkbox" class="check-box"/></th> -->
                             <th>No.</th>
                             <th>교육명</th>

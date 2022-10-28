@@ -27,7 +27,7 @@ public class EgovoCommonExcel extends AbstractExcelView
 
     cell = getCell(sheet, 0, 0);
     setText(cell, "Schedule List");
-
+    
     setText(getCell(sheet, 2, 0), "No.");
     setText(getCell(sheet, 2, 1), "교육일시");
     setText(getCell(sheet, 2, 2), "기관명");
