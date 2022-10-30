@@ -165,7 +165,7 @@
                                                 <div class="tb-cont">
                                                     <select id="area_cd" name="area_cd" class="select" readonly>
                                                         <c:forEach var="code" items="${codeList}" varStatus="status" >
-                                                        	<c:if test="${result.AREA_CD == code.CD}">
+                                                        	<c:if test="${result.RGN_CD == code.CD}">
 															<option value='${code.CD}' selected>${code.CD_NM}</option>
 															</c:if>
 														</c:forEach>

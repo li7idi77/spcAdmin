@@ -1768,8 +1768,8 @@
 		  FROM REGI_D
 	   	 WHERE 1=1
 	   	  <choose>
-			<when test ="searchCondition !=null and searchCondition !='' and searchCondition =='INST_NM'        and searchKeyword !=null and searchKeyword !='' ">
-			   AND  INST_NM  LIKE CONCAT('%', #{searchKeyword} ,'%')
+			<when test ="searchCondition !=null and searchCondition !='' and searchCondition =='COPER_NM'        and searchKeyword !=null and searchKeyword !='' ">
+			   AND  COPER_NM  LIKE CONCAT('%', #{searchKeyword} ,'%')
 			</when>
 			<when test ="searchCondition !=null and searchCondition !='' and searchCondition =='CATEGORY3_NAME' and searchKeyword !=null and searchKeyword !='' ">
 			  AND  CATEGORY3_NAME LIKE CONCAT('%', #{searchKeyword} ,'%')

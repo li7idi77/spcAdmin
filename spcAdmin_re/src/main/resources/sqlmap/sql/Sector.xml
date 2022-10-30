@@ -99,7 +99,6 @@
 		<if test=" category3_key !=null and category3_key !=0">
 			AND ER.CATEGORY3_KEY = #{category3_key} 
 		</if>
-		LIMIT #{recordCountPerPage} OFFSET #{offset}
 	</select>
 	
 	<select id="getSectorView" parameterType="java.util.Map" resultType="java.util.Map">

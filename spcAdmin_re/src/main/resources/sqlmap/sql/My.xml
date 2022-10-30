@@ -998,6 +998,7 @@
 		WHERE 1=1
 		AND a.SCHEDULE_NO = b.SCHEDULE_NO
 		AND a.REG_ID = #{UserAccount.user_id}
+		AND b.INS_STATUS IS NULL
 		AND a.CATEGORY1_KEY = '7'
         AND b.INS_TYPE = 'recruit'
         <if test="edu_nm != '' and edu_nm != null">
@@ -1029,6 +1030,7 @@
 		WHERE 1=1
 		AND a.SCHEDULE_NO = b.SCHEDULE_NO
 		AND a.REG_ID = #{UserAccount.user_id}
+		AND b.INS_STATUS IS NULL
 		AND a.CATEGORY1_KEY = '7'
         AND b.INS_TYPE = 'recruit'
         <if test="edu_nm != '' and edu_nm != null">

@@ -196,7 +196,7 @@
                     <label>검색 :</label>
                     <select id="searchCondition"     name="searchCondition" class="select">
                         <option value="CATEGORY3_NAME" <c:if test="${categoryVo.searchCondition =='CATEGORY3_NAME'}">selected </c:if>>교육명</option>
-                        <option value="TRAIN_S_DATE"   <c:if test="${categoryVo.searchCondition =='TRAIN_S_DATE'}">selected </c:if>>교육기관</option>
+                        <option value="COPER_NM"   <c:if test="${categoryVo.searchCondition =='COPER_NM'}">selected </c:if>>교육기관</option>
                     </select>
                     <input id="searchKeyword" name="searchKeyword" type="text" value='${categoryVo.searchKeyword}' class="input-box" placeholder="직접입력"/>
                 </div>

@@ -100,7 +100,7 @@
                AS INS_STATUS,
                b.SCH_STATUS,
                a.EDU_KEY,
-               (SELECT 'Y' FROM EDU_SCHEDULE_APP WHERE INS_USER = #{UserAccount.user_id}) AS INS_APP_CHECK
+               (SELECT 'Y' FROM EDU_SCHEDULE_APP WHERE INS_USER = #{UserAccount.user_id} AND SCHEDULE_NO = a.SCHEDULE_NO) AS INS_APP_CHECK
 		FROM EDU_SCHEDULE a,
 			 EDU_SCHEDULE_DETAIL b
 		WHERE a.SCHEDULE_NO = b.SCHEDULE_NO
@@ -187,7 +187,7 @@
                AS INS_STATUS,
                b.SCH_STATUS,
                a.EDU_KEY,
-               (SELECT 'Y' FROM EDU_SCHEDULE_APP WHERE INS_USER = #{UserAccount.user_id}) AS INS_APP_CHECK
+               (SELECT 'Y' FROM EDU_SCHEDULE_APP WHERE INS_USER = #{UserAccount.user_id} AND SCHEDULE_NO = a.SCHEDULE_NO) AS INS_APP_CHECK
 		FROM EDU_SCHEDULE a,
 			 EDU_SCHEDULE_DETAIL b
 		WHERE a.SCHEDULE_NO = b.SCHEDULE_NO

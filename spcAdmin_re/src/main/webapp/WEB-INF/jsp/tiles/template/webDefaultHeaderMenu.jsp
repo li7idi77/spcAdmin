@@ -87,7 +87,7 @@ model.addAttribute("path", request.getServletPath());
 	             <li><a href="${pageContext.request.contextPath}/user/org03List.do">결과보고</a></li>
 	             </c:if>
 	         </ul>
-	         <c:if test="${ssessionId.edu_auth_cd == '03'|| sessionId.edu_auth_cd == '04'}">
+	         <c:if test="${sessionId.edu_auth_cd == '03'|| sessionId.edu_auth_cd == '04'}">
 	         <ul class="depth2">
 	             <li><a href="${pageContext.request.contextPath}/user/instructor01List.do">공지사항</a></li>
 	             <li><a href="${pageContext.request.contextPath}/user/instructor02List.do">자료실</a></li>

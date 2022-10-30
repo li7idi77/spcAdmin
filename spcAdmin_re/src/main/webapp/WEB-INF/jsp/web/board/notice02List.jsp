@@ -46,7 +46,6 @@
 </script>
      <!-- container  begin -->
                 <div id="container">
-		    		<input type="hidden" id="pageIndex"  name="pageIndex" value=1 />
                 	
                     <div class="tit-wrap">
                         <h1 class="h1-tit">자료실</h1>
@@ -62,6 +61,7 @@
 
                     <div class="contents-wrap">
 						<form  id="commonForm" name="commonForm"  method="post"  action="">
+						<input type="hidden" id="pageIndex"  name="pageIndex" value=1 />
                         <!---- search-wrap begin ---->
                         <div class="search-wrap">
                             <div class="search-cont">

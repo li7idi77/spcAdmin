@@ -62,7 +62,6 @@
 </script>
      <!-- container  begin -->
                 <div id="container">
-		    		<input type="hidden" id="pageIndex"  name="pageIndex" value=1 />
                 	
                     <div class="tit-wrap">
                         <h1 class="h1-tit">
@@ -86,6 +85,7 @@
 
                     <div class="contents-wrap">
 						<form  id="commonForm" name="commonForm"  method="post"  action="">
+						<input type="hidden" id="pageIndex"  name="pageIndex" value=1 />
 						<input type="hidden" id="board_idx"   name="board_idx"  value="0"/>
      					<input type="hidden" id="board_type"  name="board_type" value="${adBoardVo.board_type}">
                         <!---- search-wrap begin ---->

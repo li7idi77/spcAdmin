@@ -80,7 +80,7 @@
  function fn_egov_link_page(pageNo){
 	 var frm = document.commonForm;
 	 $("#pageIndex").val(pageNo); 
- 	 frm.action = "<c:url value='/user/sectorList.do'/>";
+ 	 frm.action = "<c:url value='/user/sectorList.do'/>?idx="+$('#idx').val();
    	 frm.submit();
  }
  
@@ -93,11 +93,6 @@
 </script>
      <!-- container  begin -->
                 <div id="container">
-                	<input type="hidden" id="category1" name="category1" value="${category1_key}">
-                	<input type="hidden" id="category2" name="category2" value="${category2_key}">
-                	<input type="hidden" id="category3" name="category3" value="${category3_key}">
-                	<input type="hidden" id="idx" name="idx" value="${idx}">
-		    		<input type="hidden" id="pageIndex"  name="pageIndex" value=1 />
                 	
                     <div class="tit-wrap">
                         <h1 class="h1-tit">교육신청</h1>
@@ -115,6 +110,11 @@
 
                     <div class="contents-wrap">
 						<form  id="commonForm" name="commonForm"  method="post"  action="">
+                	<input type="hidden" id="category1" name="category1" value="${category1_key}">
+                	<input type="hidden" id="category2" name="category2" value="${category2_key}">
+                	<input type="hidden" id="category3" name="category3" value="${category3_key}">
+                	<input type="hidden" id="idx" name="idx" value="${idx}">
+		    		<input type="hidden" id="pageIndex"  name="pageIndex" value=1 />
     					<input type="hidden" id="file_id" name="file_id">
                         <!---- search-wrap begin ---->
                         <div class="search-wrap">

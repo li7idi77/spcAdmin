@@ -36,9 +36,42 @@
                     </div>
 
                     <div class="contents-wrap">
-
-                        
-
+						<div class="comp">
+                            <div class="table-wrap">
+                                <table class="detail-tb">
+                                    <caption>회원유형, 이름, 아이디, 휴대폰, 이메일 정보가 있는 테이블</caption>
+                                    <colgroup>
+                                        <col width="20%"/>
+                                        <col width="*"/>
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th>회원유형</th>
+                                            <td>
+	                                            <c:if test="${UserAccount.user_gu == '1'}">개인</c:if>
+	                                            <c:if test="${UserAccount.user_gu == '2'}">기업</c:if>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>이름</th>
+                                            <td>${UserAccount.user_nm}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>아이디</th>
+                                            <td>${UserAccount.user_id}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>휴대폰</th>
+                                            <td>${UserAccount.mbl_telno}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>이메일</th>
+                                            <td>${UserAccount.eml_addr}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!--  container end -->

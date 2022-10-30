@@ -9,7 +9,7 @@
 		        a.EDU_TARGET,
 		        a.EDU_TIME,
 		        a.EDU_GARDEN,
-		        IFNULL((SELECT SCHEDULE_NO FROM EDU_SCHEDULE WHERE EDU_KEY = a.EDU_NO AND REG_ID = #{UserAccount.user_id}),a.EDU_STATUS) AS EDU_STATUS
+		        IFNULL((SELECT SCHEDULE_NO FROM (SELECT SCHEDULE_NO, ROW_NUMBER() OVER (ORDER BY SCHEDULE_NO DESC) AS SEQ FROM EDU_SCHEDULE WHERE 1=1 AND REG_ID = #{UserAccount.user_id}) a WHERE a.SEQ = 1),a.EDU_STATUS) AS EDU_STATUS
 		FROM EDU_REGISTRATION a
 		WHERE EDU_SITE = 'off'
 		AND CATEGORY1_KEY = '7'
@@ -366,19 +366,19 @@
 			AND tb.EDU_NAME LIKE CONCAT('%',#{edu_nm},'%')
 		</if>
 		<choose>
-			<when test="status_type !=null and status_type !='' and status_type =='ALL' ">
+			<when test='status_type != null and status_type !="" and status_type =="ALL" '>
 			</when>
-			<when test="status_type !=null and status_type !='' and status_type =='1' ">
-				AND tb.SCH_STATUS = '신청완료'
+			<when test='status_type != null and status_type !="" and status_type =="stat1" '>
+				AND tb.SCH_STATUS = '1'
 			</when>
-			<when test="status_type !=null and status_type !='' and status_type =='2' ">
-				AND tb.SCH_STATUS = '신청취소'
+			<when test='status_type != null and status_type !="" and status_type =="stat2" '>
+				AND tb.SCH_STATUS = '2'
 			</when>
-			<when test="status_type !=null and status_type !='' and status_type =='3' ">
-				AND tb.SCH_STATUS = '교육완료'
+			<when test='status_type != null and status_type !="" and status_type =="stat3" '>
+				AND tb.SCH_STATUS = '3'
 			</when>
-			<when test="status_type !=null and status_type !='' and status_type =='4' ">
-				AND tb.SCH_STATUS = '보고완료'
+			<when test='status_type != null and status_type !="" and status_type =="stat4" '>
+				AND tb.SCH_STATUS = '4'
 			</when>
 		</choose>
 		<choose>
@@ -444,18 +444,18 @@
 			AND tb.EDU_NAME LIKE CONCAT('%',#{edu_nm},'%')
 		</if>
 		<choose>
-			<when test="status_type !=null and status_type !='' and status_type =='ALL' ">
+			<when test='status_type != null and status_type !="" and status_type =="ALL" '>
 			</when>
-			<when test="status_type !=null and status_type !='' and status_type =='1' ">
+			<when test='status_type != null and status_type !="" and status_type =="stat1" '>
 				AND tb.SCH_STATUS = '신청완료'
 			</when>
-			<when test="status_type !=null and status_type !='' and status_type =='2' ">
+			<when test='status_type != null and status_type !="" and status_type =="stat2" '>
 				AND tb.SCH_STATUS = '신청취소'
 			</when>
-			<when test="status_type !=null and status_type !='' and status_type =='3' ">
+			<when test='status_type != null and status_type !="" and status_type =="stat3" '>
 				AND tb.SCH_STATUS = '교육완료'
 			</when>
-			<when test="status_type !=null and status_type !='' and status_type =='4' ">
+			<when test='status_type != null and status_type !="" and status_type =="stat4" '>
 				AND tb.SCH_STATUS = '보고완료'
 			</when>
 		</choose>
@@ -525,18 +525,18 @@
 			AND tb.EDU_NAME LIKE CONCAT('%',#{edu_nm},'%')
 		</if>
 		<choose>
-			<when test="status_type !=null and status_type !='' and status_type =='ALL' ">
+			<when test='status_type != null and status_type !="" and status_type =="ALL" '>
 			</when>
-			<when test="status_type !=null and status_type !='' and status_type =='1' ">
+			<when test='status_type != null and status_type !="" and status_type =="stat1" '>
 				AND tb.SCH_STATUS = '신청완료'
 			</when>
-			<when test="status_type !=null and status_type !='' and status_type =='2' ">
+			<when test='status_type != null and status_type !="" and status_type =="stat2" '>
 				AND tb.SCH_STATUS = '신청취소'
 			</when>
-			<when test="status_type !=null and status_type !='' and status_type =='3' ">
+			<when test='status_type != null and status_type !="" and status_type =="stat3" '>
 				AND tb.SCH_STATUS = '교육완료'
 			</when>
-			<when test="status_type !=null and status_type !='' and status_type =='4' ">
+			<when test='status_type != null and status_type !="" and status_type =="stat4" '>
 				AND tb.SCH_STATUS = '보고완료'
 			</when>
 		</choose>

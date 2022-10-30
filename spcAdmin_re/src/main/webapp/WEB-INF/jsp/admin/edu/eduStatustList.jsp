@@ -27,8 +27,8 @@
         ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip
         ,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 텍스트
         ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 Tooltip
-        ,minDate: "-5Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
-        ,maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)  
+        ,minDate: "-10Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
+        ,maxDate: "+10y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)  
   	});
  });
  function fn_egov_link_page(pageNo){
@@ -58,23 +58,23 @@ function openWindowPop(url, name){
                  </div>
                  
                  <div class="radio-cont mr10">
-                     <input type="radio" class="radio-box" id="status_type" name="status_type" value="1" <c:if test="${status_type == '1'}">checked </c:if>>
+                     <input type="radio" class="radio-box" id="status_type" name="status_type" value="stat1" <c:if test="${status_type == 'stat1'}">checked </c:if>>
                      <label for="">신청완료</label>
                  </div>
 
                  <div class="radio-cont">
-                     <input type="radio" class="radio-box" id="status_type" name="status_type" value="2" <c:if test="${status_type == '2'}">checked </c:if>>
+                     <input type="radio" class="radio-box" id="status_type" name="status_type" value="stat2" <c:if test="${status_type == 'stat2'}">checked </c:if>>
                      <label for="">신청취소</label>
                  </div>
                  
                  
                  <div class="radio-cont">
-                     <input type="radio" class="radio-box" id="status_type" name="status_type" value="3" <c:if test="${status_type == '3'}">checked </c:if>>
+                     <input type="radio" class="radio-box" id="status_type" name="status_type" value="stat3" <c:if test="${status_type == 'stat3'}">checked </c:if>>
                      <label for="">교육완료/결과보고</label>
                  </div>
                  
                  <div class="radio-cont">
-                     <input type="radio" class="radio-box" id="status_type" name="status_type" value="4" <c:if test="${status_type == '4'}">checked </c:if>>
+                     <input type="radio" class="radio-box" id="status_type" name="status_type" value="stat4" <c:if test="${status_type == 'stat4'}">checked </c:if>>
                      <label for="">보고완료</label>
                  </div>
              </div>
