@@ -90,4 +90,16 @@ model.addAttribute("path", request.getServletPath());
             <li><a href="#">업로드 자료</a></li>
         </ul>
     </li>
+    
+    
+    <li <c:if test="${fn:contains(path, '/org/orgOn') }">  class="on" </c:if>>
+        <a href="#">기관관리자</a>
+        <ul class="depth02-menu">
+            <li <c:if test="${fn:contains(path, '/org/orgOnlineList')}">   class="active" </c:if>><a href="<c:url value='/orgMng/orgOnlineList.do' />">온라인 교육등록</a></li>
+            <li <c:if test="${fn:contains(path, '/org/orgOnContentsList')}">   class="active" </c:if>><a href="<c:url value='/orgMng/orgOnContentsList.do' />">온라인 콘텐츠 등록</a></li>
+            <li <c:if test="${fn:contains(path, '/org/orgOnContentsList')}">   class="active" </c:if>><a href="<c:url value='/orgMng/orgOnContentsList.do' />">신청자 관리</a></li>
+            <li <c:if test="${fn:contains(path, '/org/orgOnContentsList')}">   class="active" </c:if>><a href="<c:url value='/orgMng/orgOnContentsList.do' />">수강생/수료생 현황</a></li>
+            <li <c:if test="${fn:contains(path, '/org/orgOnContentsList')}">   class="active" </c:if>><a href="<c:url value='/orgMng/orgOnContentsList.do' />">수료증</a></li>
+        </ul>
+    </li>
 </ul>

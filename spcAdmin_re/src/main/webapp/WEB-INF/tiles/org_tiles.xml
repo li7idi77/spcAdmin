@@ -33,4 +33,16 @@
 	       <put-attribute name="title" value="기관회원 - 교육결과보고" />  
 	       <put-attribute name="body" value="/WEB-INF/jsp/web/org/org03List.jsp" />  
 	   </definition> 
+	   
+	   
+	   <!-- 기관관리자 > 온라인교육 등록   -->
+	   <definition name="orgOnlineList" extends="base-definition">  
+	       <put-attribute name="title" value="온라인교육 등록" />  
+	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnlineList.jsp" />  
+	   </definition> 
+	   
+	   <definition name="orgOnContentsList" extends="base-definition">  
+	       <put-attribute name="title" value="온라인 컨텐츠 등록" />  
+	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnContentsList.jsp" />  
+	   </definition> 
   </tiles-definitions>
