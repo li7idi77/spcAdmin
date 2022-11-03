@@ -32,7 +32,7 @@ public class EgovoCommonExcel extends AbstractExcelView
     setText(cell, fileName);
     
     for (int i = 0; i < cellNameArr.length; i++) {
-       setText(getCell(sheet, 2, i), cellNameArr[i]);
+       setText(getCell(sheet, 2, i+1), cellNameArr[i]);
     }
 
     List<Map<String, Object>> list = (List<Map<String, Object>>) model.get("list");
@@ -40,12 +40,16 @@ public class EgovoCommonExcel extends AbstractExcelView
     for (int i = 0; i < list.size(); i++) {
     	Map<String, Object> map = list.get(i);
 
-      cell = getCell(sheet, 3 + i, i);
+      cell = getCell(sheet, 3 + i, 0);
       setText(cell, Integer.toString(i + 1));
       
-      for (int j = 0; i < dataNameArr.length; j++) {
+      for (int j = 0; j < dataNameArr.length; j++) {
     	  cell = getCell(sheet, 3 + i, j+1);
-          setText(cell, map.get(dataNameArr[j]).toString());
+    	  if(map.containsKey(dataNameArr[j])) {
+    		  setText(cell, map.get(dataNameArr[j]).toString());
+    	  }else {
+    		  setText(cell, "");
+    	  }
       }
     }
   }
