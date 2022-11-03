@@ -8,19 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.easycompany.cmm.vo.DefaultVO;
-import com.easycompany.service.InstructorService;
-import com.easycompany.service.OrgService;
-import com.easycompany.service.vo.CategoryVo;
+import com.easycompany.service.OrgMngService;
+import com.easycompany.service.SectorService;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
@@ -31,14 +28,14 @@ public class OrgMngController
 {
 
   @Autowired
-  private OrgService orgService;
+  private OrgMngService orgMngService;
+  
+  @Autowired
+  private SectorService sectorService;
   
   @Autowired
   protected EgovPropertyService propertiesService;
   
-  @Autowired
-  protected InstructorService instructorService;
-
   @Value("#{dbinfo['file.path']}")
   private String filePath;
 
@@ -61,17 +58,25 @@ public class OrgMngController
 	  
 	  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
 	  paramMap.put("offset",offset);
+	  paramMap.put("site","");
+	  paramMap.put("sqlName", "getCategoryList1");
+	  List<Map<String, Object>> category1list = sectorService.getSelectList(paramMap);
+	  model.addAttribute("category1list", category1list);
+	  	  
+	  paramMap.put("sqlName", "getCategoryList2");
+	  List<Map<String, Object>> category2list = sectorService.getSelectList(paramMap);
+	  model.addAttribute("category2list", category2list);
 	  
-	  paramMap.put("sqlName", "getAdOrgStatAllCnt");
-	  Map<String, Object> allCount = orgService.getSelectData(paramMap);
-	  model.addAttribute("allCount", allCount);
+	  paramMap.put("sqlName", "getCategoryList3");
+	  List<Map<String, Object>> category3list = sectorService.getSelectList(paramMap);
+	  model.addAttribute("category3list", category3list);
 	  
-	  paramMap.put("sqlName", "getAdOrgStatList");
-	  List<Map<String, Object>> list = orgService.getSelectList(paramMap);
+	  paramMap.put("sqlName", "orgOnlineList");
+	  List<Map<String, Object>> list = orgMngService.getSelectList(paramMap);
 	  model.addAttribute("resultList", list);
 	  
-	  paramMap.put("sqlName", "getAdOrgStatListCnt");
-	  int totCnt = orgService.getSelectListCnt(paramMap);
+	  paramMap.put("sqlName", "orgOnlineListCnt");
+	  int totCnt = orgMngService.getSelectListCnt(paramMap);
 	  model.addAttribute("totCnt", totCnt);
 	  paginationInfo.setTotalRecordCount(totCnt);
 	  
@@ -89,11 +94,11 @@ public class OrgMngController
 	  	   
 	  paramMap.put("sqlName", "getCodeList");
 	  paramMap.put("code","32");
-	  List<Map<String, Object>> codeList = instructorService.getSelectList(paramMap);
+	  List<Map<String, Object>> codeList = orgMngService.getSelectList(paramMap);
 	  model.addAttribute("codeList", codeList);
 		
 	  paramMap.put("sqlName", "getEduStatView");	
-	  Map<String, Object> result = orgService.getSelectData(paramMap);
+	  Map<String, Object> result = orgMngService.getSelectData(paramMap);
 	  
 	  model.addAttribute("result", result);
 	  model.addAttribute("sessionId", request.getSession().getAttribute("AdminAccount"));
@@ -110,10 +115,10 @@ public class OrgMngController
 	    try {
 	      paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
 	      paramMap.put("sqlName", "orgUpdate");	
-	      resultCnt = orgService.updateData(paramMap);
+	      resultCnt = orgMngService.updateData(paramMap);
 	      
 	      paramMap.put("sqlName", "orgUpdateDtl");	
-	      resultCnt = orgService.updateData(paramMap);
+	      resultCnt = orgMngService.updateData(paramMap);
 	      
 	      if(resultCnt > 0) {
 	    	  result.put("result", "SUCCESS");
@@ -144,11 +149,11 @@ public class OrgMngController
 	  paramMap.put("offset",offset);
 	  
 	  paramMap.put("sqlName", "geEduAppList");
-	  List<Map<String, Object>> list = orgService.getSelectList(paramMap);
+	  List<Map<String, Object>> list = orgMngService.getSelectList(paramMap);
 	  model.addAttribute("resultList", list);
 	  
 	  paramMap.put("sqlName", "geEduAppListCnt");
-	  int totCnt = orgService.getSelectListCnt(paramMap);
+	  int totCnt = orgMngService.getSelectListCnt(paramMap);
 	  model.addAttribute("totCnt", totCnt);
 	  paginationInfo.setTotalRecordCount(totCnt);
 	  
@@ -177,11 +182,11 @@ public class OrgMngController
 	  paramMap.put("offset",offset);
 	  
 	  paramMap.put("sqlName", "geEduAppUserList");
-	  List<Map<String, Object>> list = orgService.getSelectList(paramMap);
+	  List<Map<String, Object>> list = orgMngService.getSelectList(paramMap);
 	  model.addAttribute("resultList", list);
 	  
 	  paramMap.put("sqlName", "geEduAppUserListCnt");
-	  int totCnt = orgService.getSelectListCnt(paramMap);
+	  int totCnt = orgMngService.getSelectListCnt(paramMap);
 	  model.addAttribute("totCnt", totCnt);
 	  paginationInfo.setTotalRecordCount(totCnt);
 	  
@@ -202,10 +207,10 @@ public class OrgMngController
 			paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
 			paramMap.put("userList", userList); 
 			paramMap.put("sqlName", "courUserAtt"); 
-			resultCnt = orgService.updateData(paramMap);
+			resultCnt = orgMngService.updateData(paramMap);
 			
 			paramMap.put("sqlName", "scheduleStatUpdate"); 
-			resultCnt = orgService.updateData(paramMap);
+			resultCnt = orgMngService.updateData(paramMap);
 			
 		    result = (resultCnt > 0 ? "SUCCESS" : "FAIL");
 		    
@@ -234,15 +239,15 @@ public class OrgMngController
 	  paramMap.put("offset",offset);
 	  
 	  paramMap.put("sqlName", "getReportAllCnt");
-	  Map<String, Object> allCount = orgService.getSelectData(paramMap);
+	  Map<String, Object> allCount = orgMngService.getSelectData(paramMap);
 	  model.addAttribute("allCount", allCount);
 	  
 	  paramMap.put("sqlName", "getReportList");
-	  List<Map<String, Object>> list = orgService.getSelectList(paramMap);
+	  List<Map<String, Object>> list = orgMngService.getSelectList(paramMap);
 	  model.addAttribute("resultList", list);
 	  
 	  paramMap.put("sqlName", "getReportListCnt");
-	  int totCnt = orgService.getSelectListCnt(paramMap);
+	  int totCnt = orgMngService.getSelectListCnt(paramMap);
 	  model.addAttribute("totCnt", totCnt);
 	  paginationInfo.setTotalRecordCount(totCnt);
 	  
@@ -264,20 +269,20 @@ public class OrgMngController
 		paramMap.put("pageIndex", 1);
 		paramMap.put("sqlName", "getReportList");
 		
-		List<Map<String, Object>> list = orgService.getSelectList(paramMap);
+		List<Map<String, Object>> list = orgMngService.getSelectList(paramMap);
 	    paramMap.put("list", list);
 	
-	    return new ModelAndView("schduleExcelView", map);
+	    return new ModelAndView("schduleExcelView", paramMap);
   }
   
   @RequestMapping({"/eduReportView.do"})
   public String eduReportView(@RequestParam Map<String, Object> paramMap, ModelMap model ,HttpServletRequest request) throws Exception {
 	  paramMap.put("sqlName", "getOrgReport");	
-	  Map<String, Object> result = orgService.getSelectData(paramMap);
+	  Map<String, Object> result = orgMngService.getSelectData(paramMap);
 	  model.addAttribute("result", result);	
 	  
 	  paramMap.put("sqlName", "getEduAttList");
-	  List<Map<String, Object>> list = orgService.getSelectList(paramMap);
+	  List<Map<String, Object>> list = orgMngService.getSelectList(paramMap);
 	  model.addAttribute("resultList", list);
 	  
 	  model.addAttribute("path", request.getServletPath());
@@ -288,11 +293,11 @@ public class OrgMngController
   @RequestMapping({"/eduReportMod.do"})
   public String eduReportMod(@RequestParam Map<String, Object> paramMap, ModelMap model ,HttpServletRequest request) throws Exception {
 	  paramMap.put("sqlName", "getOrgReport");	
-	  Map<String, Object> result = orgService.getSelectData(paramMap);
+	  Map<String, Object> result = orgMngService.getSelectData(paramMap);
 	  model.addAttribute("result", result);	
 	  
 	  paramMap.put("sqlName", "getEduAttList");
-	  List<Map<String, Object>> list = orgService.getSelectList(paramMap);
+	  List<Map<String, Object>> list = orgMngService.getSelectList(paramMap);
 	  model.addAttribute("resultList", list);
 	  
 	  model.addAttribute("path", request.getServletPath());

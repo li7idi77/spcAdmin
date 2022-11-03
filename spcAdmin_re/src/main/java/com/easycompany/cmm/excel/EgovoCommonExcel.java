@@ -16,59 +16,37 @@ public class EgovoCommonExcel extends AbstractExcelView
   protected void buildExcelDocument(Map<String, Object> model, HSSFWorkbook wb, HttpServletRequest request, HttpServletResponse response)
     throws Exception
   {
-    String fileName = (String)model.get("filename");
+    String fileName = (String)model.get("p_title");
 
     response.setHeader("Content-Disposition", "attachment; filename=\"" + URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "\\ ") + ".xls\"");
 
+    String[] cellNameArr = model.get("p_col_name").toString().split(",");
+    String[] dataNameArr = model.get("p_data_name").toString().split(",");
+    
     HSSFCell cell = null;
 
-    HSSFSheet sheet = wb.createSheet("교육일정");
+    HSSFSheet sheet = wb.createSheet(fileName);
     sheet.setDefaultColumnWidth(12);
 
     cell = getCell(sheet, 0, 0);
-    setText(cell, "Schedule List");
+    setText(cell, fileName);
     
-    setText(getCell(sheet, 2, 0), "No.");
-    setText(getCell(sheet, 2, 1), "교육일시");
-    setText(getCell(sheet, 2, 2), "기관명");
-    setText(getCell(sheet, 2, 3), "분류1");
-    setText(getCell(sheet, 2, 4), "분류2");
-    setText(getCell(sheet, 2, 5), "분류3");
-    setText(getCell(sheet, 2, 6), "교육 대상");
-    setText(getCell(sheet, 2, 7), "교육 인원");
-    setText(getCell(sheet, 2, 8), "강사명");
+    for (int i = 0; i < cellNameArr.length; i++) {
+       setText(getCell(sheet, 2, i), cellNameArr[i]);
+    }
 
-    List list = (List)model.get("list");
+    List<Map<String, Object>> list = (List<Map<String, Object>>) model.get("list");
 
     for (int i = 0; i < list.size(); i++) {
-      CategoryVo categoryVo = (CategoryVo)list.get(i);
+    	Map<String, Object> map = list.get(i);
 
-      cell = getCell(sheet, 3 + i, 0);
+      cell = getCell(sheet, 3 + i, i);
       setText(cell, Integer.toString(i + 1));
-
-      cell = getCell(sheet, 3 + i, 1);
-      setText(cell, categoryVo.getEdu_start_date());
-
-      cell = getCell(sheet, 3 + i, 2);
-      setText(cell, categoryVo.getEdu_org_name());
-
-      cell = getCell(sheet, 3 + i, 3);
-      setText(cell, categoryVo.getCategory1_name());
-
-      cell = getCell(sheet, 3 + i, 4);
-      setText(cell, categoryVo.getCategory2_name());
-
-      cell = getCell(sheet, 3 + i, 5);
-      setText(cell, categoryVo.getCategory3_name());
-
-      cell = getCell(sheet, 3 + i, 6);
-      setText(cell, categoryVo.getEdu_target());
-
-      cell = getCell(sheet, 3 + i, 7);
-      setText(cell, String.valueOf(categoryVo.getEdu_number()));
-
-      cell = getCell(sheet, 3 + i, 8);
-      setText(cell, categoryVo.getEdu_teac_name());
+      
+      for (int j = 0; i < dataNameArr.length; j++) {
+    	  cell = getCell(sheet, 3 + i, j+1);
+          setText(cell, map.get(dataNameArr[j]).toString());
+      }
     }
   }
 }

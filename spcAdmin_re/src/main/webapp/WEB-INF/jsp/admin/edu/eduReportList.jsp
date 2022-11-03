@@ -50,7 +50,7 @@
 	}	
 	
 	function fn_excel(){
-	   	 var frm = document.commonForm;
+		 var frm = document.commonForm;
 	   	 frm.action = "<c:url value='/org/orgExcelDownload.do'/>";
 	   	 $("#excelFileName").val('교육일정'); 
 	   	 frm.submit();
@@ -63,56 +63,7 @@
 	   	 frm.submit();
 	 }
 	
-	function getExcelCondition(){ // 엑셀 출력 시 모델,인덱스 가져오기
-		var condition = "";
-		$(".conSearch tr").each(function() {
-			$tr = $(this);
-			var aa = $tr.find("th").length;
-		    for(i=0; i< aa; i++) {
-				var oriText = $tr.find("td:eq("+i+")").html();
-				if($tr.find("td:eq("+i+")").find('input').val() == null) {
-					//select
-					condition += " ◆" + $(".searchArea th:eq("+ i +")").text() ;
-					condition += " = " + $tr.find("td:eq("+i+") option:selected").text();
-				} else {
-					//input
-					if($tr.find("td:eq("+i+")").find('input').val() != "" ){
-						condition += " ◆" + $(".searchArea th:eq("+ i +")").text() ;
-						condition += " = " + $tr.find("td:eq("+i+")").find('input:eq(0)').val()					
-						if($tr.find("td:eq("+i+")").find('input:eq(1)').val() != null){
-							condition += " ~ " + $tr.find("td:eq("+i+")").find('input:eq(1)').val();
-						}
-					}
-				}
-			}
-		});
-		return condition;
-	}
-	function fn_excelDownload() {
-		//그리드의 label과 name을 받는다.
-		//용도 : 엑셀 출력 시 헤더 및 데이터 맵퍼 자동 설정
-		var colName = new Array();
-		var dataName = new Array();
-		
-		var cn = $( "#eduAchievList" ).jqGrid( "getGridParam", "colNames" );
-		var cm = $( "#eduAchievList" ).jqGrid( "getGridParam", "colModel" );
-		for(var i=1; i<cm.length; i++ ){
-			
-			if(cm[i]['hidden'] == false) {
-				colName.push(cn[i]);
-				dataName.push(cm[i]['index']);	
-			}
-		}
-		var condition = getExcelCondition();
-		$( '#searchCondition').val(condition);
-		
-		$( '#p_col_name' ).val(colName);
-		$( '#p_data_name' ).val(dataName);
-		var f    = document.application_form;
-		f.action = "eduAchievListExcelExport.do";
-		f.method = "post";
-		f.submit();
-	}		
+	
  </script>
  
            <form  id="commonForm" name="commonForm"  method="post"  >
@@ -120,7 +71,7 @@
 			<input type="hidden" id="excelFileName"  name="excelFileName"  value=''	class="input-box" />
 			<input type="hidden" id="p_col_name"  name="p_col_name"  value='교육명,교육일,지역,기관명,교육대상,교육장소,교육정원,교육인원,강사이름,강사ID,진행현황'	class="input-box" />
 			<input type="hidden" id="p_data_name"  name="p_data_name"  value='EDU_NAME,EDU_START_DATE,AREA_NM,EDU_ORG_NAME,EDU_TARGET,EDU_PLACE,APP_CNT,EDU_CNT,EDU_TEAC_NAME,EDU_TEAC_ID,SCH_STATUS'	class="input-box" />
-            
+            <input type="hidden" id="p_title"  name="p_title" value="교육 결과 보고">
          	<h1 class="h1-tit">교육 결과 보고</h1>
 
             <div class="search-wrap">
@@ -208,7 +159,7 @@
                     <dt class="gray-txt">보고완료 <span>${allCount.CNT1}</span></dt>
                 </dl>
 
-                <button class="mid-btn black-btn">엑셀다운</button>
+                <button class="mid-btn black-btn" onClick="fn_excel();">엑셀다운</button>
                 <!-- <button class="mid-btn white-btn">선택삭제</button> -->
             </div>
             

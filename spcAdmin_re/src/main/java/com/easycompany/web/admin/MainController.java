@@ -5,11 +5,15 @@ import com.easycompany.cmm.util.StringUtil;
 import com.easycompany.cmm.vo.LoginVo;
 import com.easycompany.service.MainService;
 import com.easycompany.service.vo.BoardVo;
+import com.easycompany.service.vo.CategoryVo;
 import com.easycompany.service.vo.MainVo;
 import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
 
 @Controller
@@ -556,5 +561,18 @@ public class MainController
     }
 
     return mainVo;
+  }
+  
+  @RequestMapping({"/excelDownload.do"})
+  public ModelAndView excelDownloadOnLine(@ModelAttribute("MainVo") MainVo mainVo)
+    throws Exception
+  {
+	  	//TEST
+	    List list = this.mainService.getCommonList(mainVo);
+	
+	    Map map = new HashMap();
+	    map.put("list", list);
+	
+	    return new ModelAndView("commonExcelView", map);
   }
 }

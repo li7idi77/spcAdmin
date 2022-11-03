@@ -258,7 +258,7 @@ public class AdminOrgController
   public ModelAndView excelDownload(@RequestParam Map<String, Object> paramMap)
     throws Exception
   {
-		paramMap.put("recordCountPerPage", 10000);
+		paramMap.put("recordCountPerPage", 100);
 		paramMap.put("offset",0);
 		paramMap.put("pageSize", 1);
 		paramMap.put("pageIndex", 1);
@@ -267,7 +267,7 @@ public class AdminOrgController
 		List<Map<String, Object>> list = orgService.getSelectList(paramMap);
 	    paramMap.put("list", list);
 	
-	    return new ModelAndView("schduleExcelView", map);
+	    return new ModelAndView("commonExcelView", paramMap);
   }
   
   @RequestMapping({"/eduReportView.do"})
