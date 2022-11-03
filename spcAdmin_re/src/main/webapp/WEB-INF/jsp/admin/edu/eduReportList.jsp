@@ -76,7 +76,7 @@
 			<input type="hidden" id="p_col_name"  name="p_col_name"  value='교육명,교육일,지역,기관명,교육대상,교육장소,교육정원,교육인원,강사이름,강사ID,진행현황'	class="input-box" />
 			<input type="hidden" id="p_data_name"  name="p_data_name"  value='EDU_NAME,EDU_START_DATE,AREA_NM,EDU_ORG_NAME,EDU_TARGET,EDU_PLACE,APP_CNT,EDU_CNT,EDU_TEAC_NAME,EDU_TEAC_ID,SCH_STATUS'	class="input-box" />
             <input type="hidden" id="p_title"  name="p_title" value="교육 결과 보고">
-            <input type="text" id="totCnt"  name="totCnt" value="${paginationInfo.totalRecordCount}">
+            <input type="hidden" id="totCnt"  name="totCnt" value="${paginationInfo.totalRecordCount}">
          	<h1 class="h1-tit">교육 결과 보고</h1>
 
             <div class="search-wrap">
