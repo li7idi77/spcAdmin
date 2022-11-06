@@ -1,4 +1,5 @@
 
+
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
@@ -39,12 +40,11 @@
  			if( val ==""){
  				return;
  			}
- 			$("#gubun3").val('categorycode2');
- 			$("#category2_key").val(0);
- 			$("#category3_key").val(0);
+ 			$("#category2_key").val("");
+			$("#category3_key").val("");
  			
  			 $.ajax({	
- 			    url     : "<c:url value='/edu/eduInfoCategoryCodeList.do'/>",
+ 			    url     : "<c:url value='/user/category2list.do'/>",
  			    data    : $("#commonForm").serialize(),
  		        dataType: "JSON",
  		        cache   : false,
@@ -54,7 +54,7 @@
  				var option = '';
  				option += '<option value="">선택 하세요</opton>'; //선택
  				$.each(data, function(i, ret){
- 					option += '<option value="'+ret.code_cd+'">'+ret.code_name+'</option>';		
+ 					option += '<option value="'+ret.CATEGORY2_KEY+'">'+ret.CATEGORY2_NAME+'</option>';		
  				});
  				$('select[name=category2_key]').html(option);						
  	        },	       
@@ -69,11 +69,10 @@
  			if( val ==""){
  				return;
  			}
- 			$("#gubun3").val('categorycode3');
- 			$("#category3_key").val(0);
+ 			$("#category3_key").val("");
  					
  			 $.ajax({	
- 			    url     : "<c:url value='/edu/eduInfoCategoryCodeList.do'/>",
+ 			    url     : "<c:url value='/user/category3list.do'/>",
  			    data    : $("#commonForm").serialize(),
  		        dataType: "JSON",
  		        cache   : false,
@@ -83,7 +82,7 @@
  				var option = '';
  				option += '<option value="">선택 하세요</opton>'; //선택
  				$.each(data, function(i, ret){
- 					option += '<option value="'+ret.code_cd+'">'+ret.code_name+'</option>';		
+ 					option += '<option value="'+ret.CATEGORY3_KEY+'">'+ret.CATEGORY3_NAME+'</option>';		
  				});
  				$('select[name=category3_key]').html(option);						
  		        },	       
@@ -312,19 +311,15 @@
 			$("#category3_key").val(0);
 		}	
 		
-		frm.action = "<c:url value='/edu/eduInfoOnlineList.do'/>";
+		frm.action = "<c:url value='/orgMng/orgOnlineList.do'/>";
 		frm.submit();
 	}
     
     
 	function fn_load(str) {
     	var frm = document.commonForm;
-    	 		
-	    $("#category1_key").val(0);					
-		$("#category2_key").val(0);				
-		$("#category3_key").val(0);
 			
-     	frm.action = "<c:url value='/edu/eduInfoOnlineReg.do'/>";
+     	frm.action = "<c:url value='/orgMng/orgOnlineReq.do'/>";
     	frm.submit();
      }
      
@@ -344,7 +339,7 @@
 		 if (category3_key == ""){			
 			$("#category3_key").val(0);
 		 }	
-    	 frm.action = "<c:url value='/edu/excelDownloadOnLine.do'/>";
+    	 frm.action = "<c:url value='/orgMng/excelDownloadOnLine.do'/>";
     	 $("#excelFileName").val('온라인 교육'); 
     	 //$("#excelFileName").val('OnlineEducationList'); 
     	 frm.submit();
@@ -376,71 +371,62 @@
 			$("#category3_key").val(0);
 		 }	
 		 $("#pageIndex").val(pageNo); 
-     	 frm.action = "<c:url value='/edu/eduInfoOnlineList.do'/>";
+     	 frm.action = "<c:url value='/orgMng/orgOnlineList.do'/>";
        	 frm.submit();
      }
  </script>
 
         <h1 class="h1-tit">온라인 교육등록</h1>
 		<form  id="commonForm" name="commonForm"  method="post"  action="">
-			<input type="hidden" id="gubun1"         name="gubun1"         value='I'               class="input-box" />
-		    <input type="hidden" id="gubun2"         name="gubun2"         value='eduInfoOnline'   class="input-box" />	
-		    <input type="hidden" id="gubun3"         name="gubun3"         value=''                class="input-box" />
-		    <input type="hidden" id="excelFileName"  name="excelFileName"  value=''                class="input-box" />
-		    <input type="hidden" id="edu_no"         name="edu_no"         value='0'               class="input-box" />		
-		    <input type="hidden" id="checkdstr"      name="checkdstr"      value=''                class="input-box" />	
-		    <input type="hidden" id="edu_site"       name="edu_site"       value='on'/>
-		    <input type="hidden" id="pageIndex"      name="pageIndex"      class="input-box" value=1 />	
-		    <input type="hidden" id="category1_name"  name="category1_name"  value=''                  class="input-box" />
-		    <input type="hidden" id="category2_name"  name="category2_name"  value=''                  class="input-box" />
-		    <input type="hidden" id="category3_name"  name="category3_name"  value=''                  class="input-box" />
+			<input type="hidden" id="pageIndex"      name="pageIndex"      class="input-box" value=1 />
 		   
            <div class="search-wrap">
                <div class="search-cont">
-                    <select class="select mr30"  id="category1_key" name="category1_key">
-                    	<c:if test="${not empty categoryVo.category1_name }">
-                       		<option value='${categoryVo.category1_key}'>${categoryVo.category1_name}</option>
-                       	</c:if>
-                        <option value=''>선택 하세요</option>
-                    	<c:forEach var="result" items="${category1list}" varStatus="status">
-                        	<option value='${result.code_cd}'>${result.code_name}</option>
-                        </c:forEach>
-                    </select>
-                    <select class="select"  id="category2_key" name="category2_key">
-                        <c:if test="${not empty categoryVo.category2_name }">
-                       		<option value='${categoryVo.category2_key}'>${categoryVo.category2_name}</option>
-                       	</c:if>
-                    </select>
-                    <select class="select lg-width"  id="category3_key" name="category3_key">
-                    	<c:if test="${not empty categoryVo.category3_name }">
-                       		<option value='${categoryVo.category3_key}'>${categoryVo.category3_name}</option>
-                       	</c:if>
-                    </select>
+                 <select class="select"  id="category1_key" name="category1_key">
+					<c:forEach var="result" items="${category1list}" varStatus="status">
+						<c:if test="${result.CATEGORY1_KEY == '9'}">
+						<option value='${result.CATEGORY1_KEY}' >${result.CATEGORY1_NAME}</option>
+						</c:if>
+					</c:forEach>
+	            </select>
+	                <select class="select"  id="category2_key" name="category2_key">
+					<c:forEach var="result" items="${category2list}" varStatus="status">
+						<c:if test="${result.CATEGORY2_KEY == '16'}">
+						<option value='${result.CATEGORY2_KEY}' >${result.CATEGORY2_NAME}</option>
+						</c:if>
+					</c:forEach>
+	            </select>
+	            <select class="select lg-width"  id="category3_key" name="category3_key">
+	            	<option value='' >선택 하세요</option>
+					<c:forEach var="result" items="${category3list}" varStatus="status">
+						<option value='${result.CATEGORY3_KEY}' >${result.CATEGORY3_NAME}</option>
+					</c:forEach>
+	            </select>
                 </div>
                <div class="search-cont">
-                   <div class="radio-cont">
-                       <input type="radio" class="radio-box cdate" id="checkdate"  name="checkdate" value="ALL"  <c:if test="${categoryVo.checkdate =='ALL'  || (empty categoryForm.category1_name) }">checked </c:if>  >
-                       <label for="dateAll">전체</label>
-                   </div>                          
-                   <div class="radio-cont">
-                       <input type="radio" class="radio-box cdate" id="checkdate" name="checkdate" value="TODAY" <c:if test="${categoryVo.checkdate =='TODAY'}">checked </c:if>  >
-                       <label for="dateToday">오늘</label>
-                   </div>
-                   
-                   <div class="radio-cont mr10">
-                       <input type="radio" class="radio-box cdate" id="checkdate" name="checkdate" value="TERM" <c:if test="${categoryVo.checkdate =='TERM'}">checked </c:if>  >
-                       <label for="dateTerm">기간선택</label>
-                   </div>
-                   <div class="picker-wrap">
-                       <input type="text" id="train_s_date" name="train_s_date" readonly class="input-box" value="${categoryVo.train_s_date}"/>
-                       <span class="next-ico">-</span>
-                       <input type="text" id="train_e_date"   name="train_e_date"   readonly class="input-box" value="${categoryVo.train_e_date}"/>
-                   </div>
-                   <input type="text" class="input-box" id="inst_nm" name="inst_nm" value="${categoryVo.inst_nm}" placeholder="강사명"/>
-                   <button  type="button" class="search-btn" onClick="fn_search();">검색</button>&nbsp;&nbsp;
-            <button type="button" class="search-btn white-btn" onClick="fn_clear();">초기화</button>     
-               </div>
-           </div>
+		        <div class="radio-cont">
+		            <input type="radio" class="radio-box" id="searchDate" name="searchDate" value="ALL" <c:if test="${searchDate == 'ALL' || (empty searchDate)}">checked </c:if>>
+		            <label for="dateAll">전체</label>
+		        </div>
+		          
+		        <div class="radio-cont">
+		            <input type="radio" class="radio-box" id="searchDate" name="searchDate" value="TODAY" <c:if test="${searchDate == 'TODAY'}">checked </c:if>>
+		            <label for="dateToday">오늘</label>
+		        </div>
+		        
+		        <div class="radio-cont mr10">
+		            <input type="radio" class="radio-box" id="searchDate" name="searchDate" value="CHECK" <c:if test="${searchDate == 'CHECK'}">checked </c:if>>
+		            <label for="dateTerm">기간선택</label>
+		        </div>
+		        <div class="picker-wrap">
+		            <input type="text" id="start_date" name="start_date" class="input-box" readonly value="${start_date}"/>
+		            <span class="next-ico">-</span>
+		            <input type="text" id="end_date" name="end_date" class="input-box" readonly value="${end_date}"/>
+		        </div>
+		        
+		        <button class="search-btn">검색</button>
+		        <button type="button" class="search-btn white-btn ml20" onClick="fn_clear();">초기화</button>
+		    </div>
            </form>
 
            <div class="btn-cont mb20">
@@ -487,21 +473,21 @@
                         <tbody>
                             <c:forEach var="result" items="${resultList}" varStatus="status">
 	                        <tr>
-	                            <td><input type="checkbox" id='checkNo' name='checkNo' value="${result.edu_no}" class="check-box"/></td>
-	                            <td><c:out value="${(categoryVo.pageIndex-1) * categoryVo.pageSize + (status.count)}"/></td>
-                                <td class="tl">${result.category1_name}</td>
-                                <td class="tl">${result.category2_name}</td>
-                                <td class="tl">${result.category3_name}</td>
-                                <td>${result.inst_nm}</td>
-                                <td><span class="block">${result.train_s_date}</span> ~ <span class="block">${result.train_e_date}</span></td>
-                                <td>${result.edu_time}분</td>
-                                <td>${result.edu_target}</td>
-                                <td>${result.edu_garden}</td>
-                                <td>${result.edu_status}</td>
-                                <td>${result.exp_use_yn}</td>
+	                            <td><input type="checkbox" id='checkNo' name='checkNo' value="${result.EDU_NO}" class="check-box"/></td>
+	                            <td>${status.index + 1}</td>
+                                <td class="tl">${result.CATEGORY1_NAME}</td>
+                                <td class="tl">${result.CATEGORY2_NAME}</td>
+                                <td class="tl">${result.CATEGORY3_NAME}</td>
+                                <td>${result.INST_NM}</td>
+                                <td><span class="block">${result.TRAIN_S_DATE}</span> ~ <span class="block">${result.TRAIN_E_DATE}</span></td>
+                                <td>${result.EDU_TIME}분</td>
+                                <td>${result.EDU_TARGET}</td>
+                                <td>${result.EDU_GARDEN}</td>
+                                <td>${result.EDU_STATUS}</td>
+                                <td>${result.EXP_USE_YN}</td>
                                 <td>
-                                    <button type="button" class="sm-btn blue-btn"  onClick="javascript:fn_edit('${result.edu_no}',  'E');" >수정</button>
-                           			<button type="button" class="sm-btn white-btn" onClick="javascript:fn_delete('${result.edu_no}', 'D');">삭제</button>
+                                    <button type="button" class="sm-btn blue-btn"  onClick="javascript:fn_edit('${result.EDU_NO}',  'E');" >수정</button>
+                           			<button type="button" class="sm-btn white-btn" onClick="javascript:fn_delete('${result.EDU_NO}', 'D');">삭제</button>
                                 </td>
                             </tr>
                             </c:forEach>

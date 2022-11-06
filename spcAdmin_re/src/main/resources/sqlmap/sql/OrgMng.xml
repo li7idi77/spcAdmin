@@ -11,9 +11,9 @@
 		        a.EDU_GARDEN,
 		        IFNULL((SELECT SCHEDULE_NO FROM (SELECT SCHEDULE_NO, ROW_NUMBER() OVER (ORDER BY SCHEDULE_NO DESC) AS SEQ FROM EDU_SCHEDULE WHERE 1=1 AND REG_ID = #{UserAccount.user_id}) a WHERE a.SEQ = 1),a.EDU_STATUS) AS EDU_STATUS
 		FROM EDU_REGISTRATION a
-		WHERE EDU_SITE = 'off'
-		AND CATEGORY1_KEY = '7'
-		AND CATEGORY2_KEY = '14'
+		WHERE EDU_SITE = #{site}
+		AND CATEGORY1_KEY = #{category1_key}
+		AND CATEGORY2_KEY = #{category2_key}
 		AND EXP_USE_YN = 'Y'
 		<choose>                                                        
 			<when test="searchType !=null and searchType !='' and searchType =='coper' ">
@@ -30,9 +30,9 @@
 	<select id="orgOnlineListCnt" parameterType="java.util.Map" resultType="int">
 		SELECT COUNT(*) 
 		 FROM EDU_REGISTRATION a
-		WHERE EDU_SITE = 'off'
-		AND CATEGORY1_KEY = '7'
-		AND CATEGORY2_KEY = '14'
+		WHERE EDU_SITE = #{site}
+		AND CATEGORY1_KEY = #{category1_key}
+		AND CATEGORY2_KEY = #{category2_key}
 		AND EXP_USE_YN = 'Y'
 		<choose>
 			<when test="searchType !=null and searchType !='' and searchType =='coper' ">
@@ -44,7 +44,7 @@
 		</choose>
 	</select>
 	
-	<select id="getOrgView" parameterType="java.util.Map" resultType="java.util.Map">
+	<select id="orgOnlineReq" parameterType="java.util.Map" resultType="java.util.Map">
 	SELECT  ER.EDU_NO, CU.RGN_CD, CONCAT(FN_DECRYPT(CU.ENCPT_DADDR),FN_DECRYPT(CU.ENCPT_ADDR)) AS ADDR ,IFNULL(ER.COPER_NM,ER.COPER_NM_AUTO) AS COPER_NM,
 			(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = ER.CATEGORY3_KEY AND CATEGORY2_KEY = ER.CATEGORY2_KEY AND CATEGORY1_KEY = ER.CATEGORY1_KEY) AS CATEGORY3, ER.CATEGORY3_KEY,
 			ER.EDU_TIME, ER.EDU_GARDEN, ER.EDU_TARGET,
@@ -52,12 +52,12 @@
 		FROM EDU_REGISTRATION ER,
 			 COM_USER CU
         WHERE 1=1
-        AND ER.EDU_SITE = 'off'
-		AND ER.CATEGORY1_KEY = '7'
-		AND ER.CATEGORY2_KEY = '14'
+		AND EDU_SITE = #{site}
+		AND CATEGORY1_KEY = #{category1_key}
+		AND CATEGORY2_KEY = #{category2_key}
 		AND ER.EXP_USE_YN = 'Y'
         AND ER.COPER_ID = CU.USER_ID
-        AND EDU_NO = ${edu_no}
+        AND EDU_NO = ${edu_sub_no}
 	</select>																																																																																																																																																																																																																																																																																																																																																																																																
 	
 	<select id="getInsSearch" parameterType="java.util.Map" resultType="java.util.Map">

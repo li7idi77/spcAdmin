@@ -58,7 +58,10 @@ public class OrgMngController
 	  
 	  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
 	  paramMap.put("offset",offset);
-	  paramMap.put("site","");
+	  paramMap.put("site","on");
+	  paramMap.put("category1_key","9");
+	  paramMap.put("category2_key","16");
+	  
 	  paramMap.put("sqlName", "getCategoryList1");
 	  List<Map<String, Object>> category1list = sectorService.getSelectList(paramMap);
 	  model.addAttribute("category1list", category1list);
@@ -88,16 +91,27 @@ public class OrgMngController
 	  return "orgOnlineList";
   }
   
-  @RequestMapping({"/eduStatustMod.do"})
+  @RequestMapping({"/orgOnlineReq.do"})
   public String eduStatustMod(@RequestParam Map<String, Object> paramMap, ModelMap model ,HttpServletRequest request) throws Exception {
 	  paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));  
 	  	   
-	  paramMap.put("sqlName", "getCodeList");
-	  paramMap.put("code","32");
-	  List<Map<String, Object>> codeList = orgMngService.getSelectList(paramMap);
-	  model.addAttribute("codeList", codeList);
+	  paramMap.put("site","on");
+	  paramMap.put("category1_key","9");
+	  paramMap.put("category2_key","16");
+	  
+	  paramMap.put("sqlName", "getCategoryList1");
+	  List<Map<String, Object>> category1list = sectorService.getSelectList(paramMap);
+	  model.addAttribute("category1list", category1list);
+	  	  
+	  paramMap.put("sqlName", "getCategoryList2");
+	  List<Map<String, Object>> category2list = sectorService.getSelectList(paramMap);
+	  model.addAttribute("category2list", category2list);
+	  
+	  paramMap.put("sqlName", "getCategoryList3");
+	  List<Map<String, Object>> category3list = sectorService.getSelectList(paramMap);
+	  model.addAttribute("category3list", category3list);
 		
-	  paramMap.put("sqlName", "getEduStatView");	
+	  paramMap.put("sqlName", "orgOnlineReq");	
 	  Map<String, Object> result = orgMngService.getSelectData(paramMap);
 	  
 	  model.addAttribute("result", result);
