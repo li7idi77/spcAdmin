@@ -118,7 +118,7 @@ public class OrgMngController
 	  model.addAttribute("sessionId", request.getSession().getAttribute("AdminAccount"));
 	  model.addAttribute("path", request.getServletPath());
 	  model.addAllAttributes(paramMap);
-	  return "eduStatustMod";
+	  return "orgOnlineReq";
   }
   
   @RequestMapping({"/orgSave.do"})

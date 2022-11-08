@@ -41,6 +41,11 @@
 	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnlineList.jsp" />  
 	   </definition> 
 	   
+	   <definition name="orgOnlineReq" extends="base-definition">  
+	       <put-attribute name="title" value="온라인교육 등록" />  
+	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnlineReq.jsp" />  
+	   </definition> 
+	   
 	   <definition name="orgOnContentsList" extends="base-definition">  
 	       <put-attribute name="title" value="온라인 컨텐츠 등록" />  
 	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnContentsList.jsp" />  

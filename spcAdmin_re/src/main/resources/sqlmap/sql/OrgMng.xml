@@ -55,9 +55,9 @@
 		AND EDU_SITE = #{site}
 		AND CATEGORY1_KEY = #{category1_key}
 		AND CATEGORY2_KEY = #{category2_key}
+		AND CATEGORY3_KEY = #{category3_key}
 		AND ER.EXP_USE_YN = 'Y'
         AND ER.COPER_ID = CU.USER_ID
-        AND EDU_NO = ${edu_sub_no}
 	</select>																																																																																																																																																																																																																																																																																																																																																																																																
 	
 	<select id="getInsSearch" parameterType="java.util.Map" resultType="java.util.Map">
