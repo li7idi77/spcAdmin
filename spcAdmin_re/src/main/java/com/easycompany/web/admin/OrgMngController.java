@@ -10,14 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.easycompany.cmm.util.StringUtil;
 import com.easycompany.cmm.vo.DefaultVO;
+import com.easycompany.service.EduService;
 import com.easycompany.service.OrgMngService;
 import com.easycompany.service.SectorService;
+import com.easycompany.service.vo.CategoryVo;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
@@ -29,6 +33,9 @@ public class OrgMngController
 
   @Autowired
   private OrgMngService orgMngService;
+  
+  @Autowired
+  private EduService eduService;
   
   @Autowired
   private SectorService sectorService;
@@ -44,80 +51,92 @@ public class OrgMngController
 
   
   @RequestMapping({"/orgOnlineList.do"})
-  public String orgOnlineList(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model, HttpServletRequest request) throws Exception{
-	  paramMap.put("pageSize", 10);
-	  paramMap.put("recordCountPerPage", 10);
-	  paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
-	  if(!paramMap.containsKey("pageIndex")) {
-		  paramMap.put("pageIndex", 1);
-	  }
-	  PaginationInfo paginationInfo = new PaginationInfo();
-	  paginationInfo.setCurrentPageNo(Integer.parseInt(paramMap.get("pageIndex").toString()));
-	  paginationInfo.setRecordCountPerPage(Integer.parseInt(paramMap.get("recordCountPerPage").toString()));
-	  paginationInfo.setPageSize(Integer.parseInt(paramMap.get("pageSize").toString()));
-	  
-	  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
-	  paramMap.put("offset",offset);
-	  paramMap.put("site","on");
-	  paramMap.put("category1_key","9");
-	  paramMap.put("category2_key","16");
-	  
-	  paramMap.put("sqlName", "getCategoryList1");
-	  List<Map<String, Object>> category1list = sectorService.getSelectList(paramMap);
-	  model.addAttribute("category1list", category1list);
-	  	  
-	  paramMap.put("sqlName", "getCategoryList2");
-	  List<Map<String, Object>> category2list = sectorService.getSelectList(paramMap);
-	  model.addAttribute("category2list", category2list);
-	  
-	  paramMap.put("sqlName", "getCategoryList3");
-	  List<Map<String, Object>> category3list = sectorService.getSelectList(paramMap);
-	  model.addAttribute("category3list", category3list);
-	  
-	  paramMap.put("sqlName", "orgOnlineList");
-	  List<Map<String, Object>> list = orgMngService.getSelectList(paramMap);
-	  model.addAttribute("resultList", list);
-	  
-	  paramMap.put("sqlName", "orgOnlineListCnt");
-	  int totCnt = orgMngService.getSelectListCnt(paramMap);
-	  model.addAttribute("totCnt", totCnt);
-	  paginationInfo.setTotalRecordCount(totCnt);
-	  
-	  model.addAttribute("sessionId", request.getSession().getAttribute("AdminAccount"));
-	  model.addAttribute("paginationInfo", paginationInfo);
-	  model.addAttribute("path", request.getServletPath());
-	  model.addAllAttributes(paramMap);
-	  
+  public String orgOnlineList(@ModelAttribute("categoryVo") CategoryVo categoryVo, ModelMap model ,HttpServletRequest request)
+    throws Exception
+  {
+	  //paramMap.put("site","on");
+	  //paramMap.put("category1_key","9");
+	  //paramMap.put("category2_key","16");
+	    categoryVo.setPageUnit(this.propertiesService.getInt("pageUnit"));
+	    categoryVo.setPageSize(this.propertiesService.getInt("pageSize"));
+	
+	    PaginationInfo paginationInfo = new PaginationInfo();
+	    paginationInfo.setCurrentPageNo(categoryVo.getPageIndex());
+	    paginationInfo.setRecordCountPerPage(categoryVo.getPageUnit());
+	    paginationInfo.setPageSize(categoryVo.getPageSize());
+	
+	    int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getPageSize();
+	    categoryVo.setOffset(offset);
+	    categoryVo.setCategory1_key(9);
+	    categoryVo.setCategory2_key(16);
+	    
+	    if (StringUtil.isEmpty(categoryVo.getGubun1())) {
+	      categoryVo.setGubun1("R");
+	    }
+	
+	    if (StringUtil.isEmpty(categoryVo.getGubun2())) {
+	      categoryVo.setGubun2("eduInfoOnline");
+	    }
+	
+	    if (StringUtil.isEmpty(categoryVo.getEdu_site())) {
+	        categoryVo.setEdu_site("on");
+	    }
+	
+	    if (StringUtil.isEmpty(categoryVo.getSite())) {
+	        categoryVo.setSite("on");
+	    }
+	    
+	    categoryVo.setWebPath(this.webPath);
+	
+	    categoryVo.setGubun3("categorycode1");
+	    List category1list = this.eduService.getCategoryCodeList(categoryVo);
+	    model.addAttribute("category1list", category1list);
+	
+	    List list = this.eduService.getEducationList(categoryVo);
+	    model.addAttribute("resultList", list);
+	
+	    int totCnt = this.eduService.getEducationCount(categoryVo);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    model.addAttribute("categoryVo", categoryVo);
+	    model.addAttribute("path", request.getServletPath());
+			
 	  return "orgOnlineList";
   }
   
   @RequestMapping({"/orgOnlineReq.do"})
-  public String eduStatustMod(@RequestParam Map<String, Object> paramMap, ModelMap model ,HttpServletRequest request) throws Exception {
-	  paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));  
-	  	   
-	  paramMap.put("site","on");
-	  paramMap.put("category1_key","9");
-	  paramMap.put("category2_key","16");
-	  
-	  paramMap.put("sqlName", "getCategoryList1");
-	  List<Map<String, Object>> category1list = sectorService.getSelectList(paramMap);
-	  model.addAttribute("category1list", category1list);
-	  	  
-	  paramMap.put("sqlName", "getCategoryList2");
-	  List<Map<String, Object>> category2list = sectorService.getSelectList(paramMap);
-	  model.addAttribute("category2list", category2list);
-	  
-	  paramMap.put("sqlName", "getCategoryList3");
-	  List<Map<String, Object>> category3list = sectorService.getSelectList(paramMap);
-	  model.addAttribute("category3list", category3list);
-		
-	  paramMap.put("sqlName", "orgOnlineReq");	
-	  Map<String, Object> result = orgMngService.getSelectData(paramMap);
-	  
-	  model.addAttribute("result", result);
-	  model.addAttribute("sessionId", request.getSession().getAttribute("AdminAccount"));
-	  model.addAttribute("path", request.getServletPath());
-	  model.addAllAttributes(paramMap);
+  public String eduStatustMod(@ModelAttribute("categoryVo") CategoryVo categoryVo, ModelMap model ,HttpServletRequest request) throws Exception
+  {
+	    if (StringUtil.isEmpty(categoryVo.getGubun1())) {
+	      categoryVo.setGubun1("R");
+	    }
+	
+	    if (StringUtil.isEmpty(categoryVo.getGubun2())) {
+	      categoryVo.setGubun2("eduInfoOnline");
+	    }
+	
+	    if (StringUtil.isEmpty(categoryVo.getEdu_site())) {
+	        categoryVo.setEdu_site("on");
+	    }
+	
+	    if (StringUtil.isEmpty(categoryVo.getSite())) {
+	        categoryVo.setSite("on");
+	    }
+	
+	    categoryVo.setWebPath(this.webPath);
+	
+	    categoryVo.setGubun3("categorycode1");
+	    List category1list = this.eduService.getCategoryCodeList(categoryVo);
+	    model.addAttribute("category1list", category1list);
+	
+	    CategoryVo categoryForm = this.eduService.getEduCationDetail(categoryVo);
+	    model.addAttribute("categoryForm", categoryForm);
+	
+	    List categoryFormSubList = this.eduService.getEduCationDetailSub(categoryVo);
+	    model.addAttribute("categoryFormSubList", categoryFormSubList);
+	
+	    model.addAttribute("categoryVo", categoryVo);
+	    model.addAttribute("path", request.getServletPath());
 	  return "orgOnlineReq";
   }
   

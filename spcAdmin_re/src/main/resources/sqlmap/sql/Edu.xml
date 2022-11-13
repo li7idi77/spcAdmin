@@ -1368,7 +1368,8 @@
 			<when test="gubun3 !=null and gubun3 !='' and gubun3 =='categorycode1' ">
 				SELECT CATEGORY1_KEY AS CODE_CD, CATEGORY1_NAME AS CODE_NAME
 				FROM TEMP
-				WHERE CATEGORY3_KEY IS NOT NULL
+				WHERE 1=1
+				<!-- AND CATEGORY3_KEY IS NOT NULL -->
 				AND SITE= #{site}
 				GROUP BY CATEGORY1_KEY, CATEGORY1_NAME
 			</when>
