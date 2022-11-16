@@ -201,7 +201,7 @@
 	   
 	   var category1_key = $("select[name=category1_key] option:selected").val();  //교육분류1
        var category2_key = $("select[name=category2_key] option:selected").val();  //교육분류2
-	   var category3_key = $("select[name=category3_key] option:selected").val();  //교육명		   
+	   var category3_name = $("#category3_name").val();  //교육명		   
 	   	   
 	   if (category1_key == ""){			
 			alert("교육분류을 선택 하세요.");
@@ -252,7 +252,7 @@
 		
 		formData.append("category1_key",   category1_key);
 		formData.append("category2_key",   category2_key);
-		formData.append("category3_key",   category3_key);
+		formData.append("category3_name",   category3_name);
 		
 	    formData.append("inst_nm",      inst_nm);
 		formData.append("set_use_yn",   set_use_yn);
@@ -283,7 +283,7 @@
 		if(yn){
 			$.ajax({	
 				data       : formData,
-			    url		   : "<c:url value='/edu/eduInfoOnlineSave.do'/>",
+			    url		   : "<c:url value='/orgMng/orgSave.do'/>",
 			    dataType   : "JSON",
 		        processData: false, 
 		        contentType: false,
@@ -398,12 +398,14 @@
                             <tr>
                                 <th colspan="2"><span class="red-txt">*</span>교육명</th>
                                 <td>
-                                    <select class="select lg-width"  id="category3_key" name="category3_key">
+                                	<input type="text"  id="category3_name" name="category3_name" class="input-box" value="${categoryForm.category3_name}"/>
+                                	<input type="hidden"  id="category3_key" name="category3_key" class="input-box" value="${categoryForm.category3_key}"/>
+                                    <%-- <select class="select lg-width"  id="category3_key" name="category3_key">
 						            	<option value='' >선택 하세요</option>
 										<c:forEach var="result" items="${category3list}" varStatus="status">
 											<option value='${result.CATEGORY3_KEY}' >${result.CATEGORY3_NAME}</option>
 										</c:forEach>
-						            </select>
+						            </select> --%>
                                 </td>
                             </tr>
                             <tr>

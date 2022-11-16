@@ -683,7 +683,106 @@
 		)
 	</insert>
 
+	<insert id="insertEduInfoOnline2"		parameterType="com.easycompany.service.vo.CategoryVo">
+		/** com.easycompany.mapper.EduMapper.insertEduInfoOnline **/
+		INSERT
+		INTO EDU_REGISTRATION
+		(
+		EDU_NO
+		, EDU_SITE
+		, CATEGORY1_KEY
+		, CATEGORY2_KEY
+		, CATEGORY3_KEY
 
+		, INST_NM
+		, SET_USE_YN
+		, TRAIN_S_DATE
+		, TRAIN_E_DATE
+
+		, EDU_CONT
+		, EDU_METHOD
+		, EDU_TIME
+		, EDU_TARGET
+		, EDU_GARDEN
+
+
+		, EDU_STATUS
+		, EXP_USE_YN
+		, EDU_NOTICE
+
+		, EDU_INTRO
+		, EDU_GOALS
+
+
+		, REG_ID
+
+		<if test=" coper_nm !=null and coper_nm !=''">
+			, COPER_NM
+		</if>
+		<if test=" coper_nm_auto !=null and coper_nm_auto !=''">
+			, COPER_NM_AUTO
+		</if>
+		<if test=" coper_id !=null and coper_id !=''">
+			, COPER_ID
+		</if>
+		<if test=" coper_check !=null and coper_check !=''">
+			, COPER_CHECK
+		</if>
+		<if test=" app_s_date !=null and app_s_date !=''">
+			, APP_S_DATE
+		</if>
+		<if test=" app_e_date !=null and app_e_date !=''">
+			, APP_E_DATE
+		</if>
+		)
+		VALUES
+		(
+		#{edu_no}
+		, #{edu_site}
+		, #{category1_key}
+		, #{category2_key}
+		, (SELECT CATEGORY3_KEY FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_NAME =#{category3_name})
+
+		, #{inst_nm}
+		, #{set_use_yn}
+		, #{train_s_date}
+		, #{train_e_date}
+
+		, #{edu_cont}
+		, #{edu_method}
+		, #{edu_time}
+		, #{edu_target}
+		, #{edu_garden}
+
+		, #{edu_status}
+		, #{exp_use_yn}
+		, #{edu_notice}
+
+		, #{edu_intro}
+		, #{edu_goals}
+
+		, IFNULL(#{user_id},'SYSTEM')
+
+		<if test=" coper_nm !=null and coper_nm !=''">
+			, #{coper_nm}
+		</if>
+		<if test=" coper_nm_auto !=null and coper_nm_auto !=''">
+			, #{coper_nm_auto}
+		</if>
+		<if test=" coper_id !=null and coper_id !=''">
+			, #{coper_id}
+		</if>
+		<if test=" coper_check !=null and coper_check !=''">
+			, #{coper_check}
+		</if>
+		<if test=" app_s_date !=null and app_s_date !=''">
+			, #{app_s_date}
+		</if>
+		<if test=" app_e_date !=null and app_e_date !=''">
+			, #{app_e_date}
+		</if>
+		)
+	</insert>
 
 	<insert id="insertEduInfoOnlineSub"		parameterType="com.easycompany.service.vo.CategoryVo">
 		/** com.easycompany.mapper.EduMapper.insertEduInfoOnlineSub **/

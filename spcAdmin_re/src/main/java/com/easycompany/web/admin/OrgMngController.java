@@ -1,5 +1,6 @@
 package com.easycompany.web.admin;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,12 +16,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.WebUtils;
 
+import com.easycompany.cmm.util.FileUtil;
 import com.easycompany.cmm.util.StringUtil;
 import com.easycompany.cmm.vo.DefaultVO;
+import com.easycompany.cmm.vo.LoginVo;
 import com.easycompany.service.EduService;
 import com.easycompany.service.OrgMngService;
 import com.easycompany.service.SectorService;
+import com.easycompany.service.vo.BoardVo;
 import com.easycompany.service.vo.CategoryVo;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
@@ -142,27 +147,127 @@ public class OrgMngController
   
   @RequestMapping({"/orgSave.do"})
   @ResponseBody
-  public Map<String, Object> orgSave(HttpServletRequest request, @RequestParam Map<String, Object> paramMap) throws Exception {
-	    int resultCnt = 0;
-	    Map<String, Object> result = new HashMap<String, Object>();
-	    try {
-	      paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
-	      paramMap.put("sqlName", "orgUpdate");	
-	      resultCnt = orgMngService.updateData(paramMap);
-	      
-	      paramMap.put("sqlName", "orgUpdateDtl");	
-	      resultCnt = orgMngService.updateData(paramMap);
-	      
-	      if(resultCnt > 0) {
-	    	  result.put("result", "SUCCESS");
-	      }else {
-	    	  result.put("result", "FAIL");	 
+  public CategoryVo orgSave(HttpServletRequest request, CategoryVo categoryVo) throws Exception {
+	  int resultCnt = 0;
+	    try
+	    {
+	      LoginVo loginvo = (LoginVo)WebUtils.getSessionAttribute(request, "AdminAccount");
+	
+	      categoryVo.setUser_id(loginvo.getUser_id());
+	      categoryVo.setReg_id(loginvo.getId());
+	      categoryVo.setUser_nm(loginvo.getUser_nm());
+	
+	      if (StringUtil.isEmpty(categoryVo.getGubun2())) {
+	        categoryVo.setGubun2("eduInfoOnline2");
 	      }
-	    } catch (Exception e) {
-	      result.put("result", "FAIL");
+	
+	      if (StringUtil.isEmpty(categoryVo.getEdu_site())) {
+	          categoryVo.setEdu_site("on");
+	      }
+	
+	      if (StringUtil.isEmpty(categoryVo.getSite())) {
+	          categoryVo.setSite("on");
+	      }
+	
+	      if (StringUtil.isEmpty(categoryVo.getFileExit())) {
+	        categoryVo.setFileExit("NO");
+	      }
+	
+	      String fileAddpath = this.filePath + File.separator + categoryVo.getGubun2();
+	
+	      if ("I".equals(categoryVo.getGubun1()))
+	      {
+    	    resultCnt = this.eduService.getCategoryExist(categoryVo);
+    		
+	        if (resultCnt == 1) {
+	          categoryVo.setResult("EXIST");
+	        } else {
+	          resultCnt = this.eduService.insertCatgegory(categoryVo);
+	          categoryVo.setResult(resultCnt > 0 ? "SUCCESS" : "FAIL");
+	        }
+	        if ("YES".equals(categoryVo.getFileExit())) {
+	          BoardVo fileVo = FileUtil.uploadFile(request, fileAddpath);
+	          categoryVo.setFile_uuid(fileVo.getFile_uuid());
+	          categoryVo.setFile_name(fileVo.getFile_name());
+	          categoryVo.setFile_full_path(fileVo.getFile_full_path());
+	          categoryVo.setFile_size(fileVo.getFile_size());
+	          categoryVo.setEdu_notice(fileVo.getFile_uuid());
+	        }
+	
+	        resultCnt = this.eduService.insertEducation(categoryVo);
+	        categoryVo.setResult(resultCnt > 0 ? "SUCCESS" : "FAIL");
+	      }
+	
+	      if ("E".equals(categoryVo.getGubun1()))
+	      {
+	    	 CategoryVo fileCategoryVo = this.eduService.getEduCationFile(categoryVo);
+	    	 
+	         String fileFullPath = "";
+	         
+	         if( fileCategoryVo !=null) {
+	        	 fileFullPath = fileCategoryVo.getFile_full_path();
+	         }
+	         if ("YES".equals(categoryVo.getFileExit())) {
+	          BoardVo fileVo = FileUtil.uploadFile(request, fileAddpath);
+	          categoryVo.setFile_uuid(fileVo.getFile_uuid());
+	          categoryVo.setFile_name(fileVo.getFile_name());
+	          categoryVo.setFile_full_path(fileVo.getFile_full_path());
+	          categoryVo.setFile_size(fileVo.getFile_size());
+	        }
+	
+	        resultCnt = this.eduService.updateEduCation(categoryVo);
+	        categoryVo.setResult(resultCnt > 0 ? "SUCCESS" : "FAIL");
+	
+	        if ((resultCnt > 0) && ("YES".equals(categoryVo.getFileExit())))
+	        {
+	          if ((fileFullPath != null) && (fileFullPath.length() > 3))
+	          {
+	            FileUtil.deleteFile(request, fileFullPath);
+	          }
+	
+	        }
+	
+	      }
+	
+	      if ("D".equals(categoryVo.getGubun1())) {
+	    	  
+	    	 CategoryVo fileCategoryVo = this.eduService.getEduCationFile(categoryVo);
+		    	 
+			 String fileFullPath = "";
+			     
+		     if( fileCategoryVo !=null) {
+		    	 fileFullPath = fileCategoryVo.getFile_full_path();
+		     }
+			resultCnt = this.eduService.deleteEduCation(categoryVo);
+			if ((fileFullPath != null) && (fileFullPath.length() > 3)) {
+			  FileUtil.deleteFile(request, fileFullPath);
+			}
+			categoryVo.setResult(resultCnt > 0 ? "SUCCESS" : "FAIL");
+	      }
+	
+	      if ("A".equals(categoryVo.getGubun1())) {
+	        String[] ArraysStr = categoryVo.getCheckdstr().split(",");
+	        for (String s : ArraysStr) {
+	          categoryVo.setEdu_no(Integer.parseInt(s));
+	          CategoryVo fileCategoryVo = this.eduService.getEduCationFile(categoryVo);
+		      String fileFullPath = "";
+	          if( fileCategoryVo !=null) {
+	        	  fileFullPath = fileCategoryVo.getFile_full_path();
+	          }
+	          resultCnt = this.eduService.deleteEduCation(categoryVo);
+	          if ((fileFullPath != null) && (fileFullPath.length() > 3)) {
+	            FileUtil.deleteFile(request, fileFullPath);
+	          }
+	        }
+	        categoryVo.setResult(resultCnt > 0 ? "SUCCESS" : "FAIL");
+	      }
+	    }
+	    catch (Exception e)
+	    {
+	      categoryVo.setResult("FAIL");
 	    }
 	
-	    return result;
+	    return categoryVo;
   }
     
   @RequestMapping({"/eduTitleList.do"})

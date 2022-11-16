@@ -134,6 +134,9 @@ public class EduMapper extends EgovAbstractMapper
     if ("eduInfoOnline".equals(categoryVo.getGubun2())) {
       sqlName = "insertEduInfoOnline";
     }
+    if ("eduInfoOnline2".equals(categoryVo.getGubun2())) {
+        sqlName = "insertEduInfoOnline2";
+      }
 
     return Integer.valueOf(insert(this.nameSpace + "." + sqlName, categoryVo)).intValue();
   }
