@@ -380,18 +380,10 @@
                                 <th colspan="2"><span class="red-txt">*</span>교육분류</th>
                                 <td>
                                     <select class="select"  id="category1_key" name="category1_key">
-										<c:forEach var="result" items="${category1list}" varStatus="status">
-											<c:if test="${result.CATEGORY1_KEY == '9'}">
-											<option value='${result.CATEGORY1_KEY}' >${result.CATEGORY1_NAME}</option>
-											</c:if>
-										</c:forEach>
+										<option value='9'>기관</option>
 						            </select>
                                     <select class="select"  id="category2_key" name="category2_key">
-										<c:forEach var="result" items="${category2list}" varStatus="status">
-											<c:if test="${result.CATEGORY2_KEY == '16'}">
-											<option value='${result.CATEGORY2_KEY}' >${result.CATEGORY2_NAME}</option>
-											</c:if>
-										</c:forEach>
+										<option value='16'>교육기관별(ON-LINE)</option>
 						            </select>
                                 </td>
                             </tr>

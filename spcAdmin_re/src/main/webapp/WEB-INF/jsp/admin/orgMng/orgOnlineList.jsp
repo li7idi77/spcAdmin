@@ -381,7 +381,7 @@
      }
  </script>
 
-        <h1 class="h1-tit">온라인 교육</h1>
+        <h1 class="h1-tit">온라인 교육등록</h1>
 		<form  id="commonForm" name="commonForm"  method="post"  action="">
 			<input type="hidden" id="gubun1"         name="gubun1"         value='I'               class="input-box" />
 		    <input type="hidden" id="gubun2"         name="gubun2"         value='eduInfoOnline'   class="input-box" />	
