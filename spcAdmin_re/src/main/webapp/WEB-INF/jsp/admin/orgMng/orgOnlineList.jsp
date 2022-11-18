@@ -158,7 +158,7 @@
 					
 				$.ajax({	
 					data     : $("#commonForm").serialize(),
-				    url		 : "<c:url value='/orgMng/eduInfoOnlineSave.do'/>",
+				    url		 : "<c:url value='/orgMng/orgOnlineSave.do'/>",
 			        dataType : "JSON",
 			        cache    : false,
 			        async    : false,
@@ -213,7 +213,7 @@
 					
 				$.ajax({	
 					data     : $("#commonForm").serialize(),
-				    url		 : "<c:url value='/orgMng/eduInfoOnlineSave.do'/>",
+				    url		 : "<c:url value='/orgMng/orgOnlineSave.do'/>",
 			        dataType : "JSON",
 			        cache    : false,
 			        async    : false,
@@ -384,7 +384,7 @@
         <h1 class="h1-tit">온라인 교육등록</h1>
 		<form  id="commonForm" name="commonForm"  method="post"  action="">
 			<input type="hidden" id="gubun1"         name="gubun1"         value='I'               class="input-box" />
-		    <input type="hidden" id="gubun2"         name="gubun2"         value='eduInfoOnline'   class="input-box" />	
+		    <input type="hidden" id="gubun2"         name="gubun2"         value='eduInfoOnline2'   class="input-box" />	
 		    <input type="hidden" id="gubun3"         name="gubun3"         value=''                class="input-box" />
 		    <input type="hidden" id="excelFileName"  name="excelFileName"  value=''                class="input-box" />
 		    <input type="hidden" id="edu_no"         name="edu_no"         value='0'               class="input-box" />		

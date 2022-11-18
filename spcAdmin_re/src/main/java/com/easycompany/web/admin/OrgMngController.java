@@ -133,21 +133,23 @@ public class OrgMngController
 	    categoryVo.setGubun3("categorycode1");
 	    List category1list = this.eduService.getCategoryCodeList(categoryVo);
 	    model.addAttribute("category1list", category1list);
-	
-	    CategoryVo categoryForm = this.eduService.getEduCationDetail(categoryVo);
-	    model.addAttribute("categoryForm", categoryForm);
-	
-	    List categoryFormSubList = this.eduService.getEduCationDetailSub(categoryVo);
-	    model.addAttribute("categoryFormSubList", categoryFormSubList);
+	    
+	    if(categoryVo.getEdu_no() != 0) {
+	    	CategoryVo categoryForm = this.eduService.getEduCationDetail(categoryVo);
+		    model.addAttribute("categoryForm", categoryForm);
+		
+		    List categoryFormSubList = this.eduService.getEduCationDetailSub(categoryVo);
+		    model.addAttribute("categoryFormSubList", categoryFormSubList);
+	    }
 	
 	    model.addAttribute("categoryVo", categoryVo);
 	    model.addAttribute("path", request.getServletPath());
 	  return "orgOnlineReq";
   }
   
-  @RequestMapping({"/orgSave.do"})
+  @RequestMapping({"/orgOnlineSave.do"})
   @ResponseBody
-  public CategoryVo orgSave(HttpServletRequest request, CategoryVo categoryVo) throws Exception {
+  public CategoryVo orgOnlineSave(HttpServletRequest request, CategoryVo categoryVo) throws Exception {
 	  int resultCnt = 0;
 	    try
 	    {
@@ -182,6 +184,7 @@ public class OrgMngController
 	        if (resultCnt == 1) {
 	          categoryVo.setResult("EXIST");
 	        } else {
+	          categoryVo.setGubun2("category6");
 	          resultCnt = this.eduService.insertCatgegory(categoryVo);
 	          categoryVo.setResult(resultCnt > 0 ? "SUCCESS" : "FAIL");
 	        }
@@ -193,7 +196,7 @@ public class OrgMngController
 	          categoryVo.setFile_size(fileVo.getFile_size());
 	          categoryVo.setEdu_notice(fileVo.getFile_uuid());
 	        }
-	
+	        categoryVo.setGubun2("eduInfoOnline2");
 	        resultCnt = this.eduService.insertEducation(categoryVo);
 	        categoryVo.setResult(resultCnt > 0 ? "SUCCESS" : "FAIL");
 	      }

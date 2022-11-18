@@ -570,7 +570,7 @@
 		#{category1_key}
 		, #{category2_key}
 		, #{category3_key}
-		, #{categoryName}
+		, #{category3_name}
 		, #{site}
 		, IFNULL(#{user_id},'SYSTEM')
 		)

@@ -150,7 +150,7 @@
 		$("#category3_key").val(0); //교육명
 		$("#category3_name").val(''); //교육명
 		$("#category3_name").val(''); //교육명
-		frm.action = "<c:url value='/edu/eduInfoOnlineList.do'/>";
+		frm.action = "<c:url value='/orgMng/orgOnlineList.do'/>";
 		frm.submit();
    }
 	    
@@ -283,7 +283,7 @@
 		if(yn){
 			$.ajax({	
 				data       : formData,
-			    url		   : "<c:url value='/orgMng/orgSave.do'/>",
+			    url		   : "<c:url value='/orgMng/orgOnlineSave`c'/>",
 			    dataType   : "JSON",
 		        processData: false, 
 		        contentType: false,
@@ -351,7 +351,7 @@
  		   
            <form  id="commonForm" name="commonForm"  method="post"  >
 			<input type="hidden" id="gubun1"   name="gubun1"   class="input-box" />
-			<input type="hidden" id="gubun2"   name="gubun2"   class="input-box" value='eduInfoOnline'/>
+			<input type="hidden" id="gubun2"   name="gubun2"   class="input-box" value='eduInfoOnline2'/>
 			<input type="hidden" id="gubun3"   name="gubun3"   class="input-box" />
 			<input type="hidden" id="edu_no"   name="edu_no"   class="input-box" value='${categoryVo.edu_no}'/>
 			<input type="hidden" id="edu_site" name="edu_site" class="input-box" value='on'/>
