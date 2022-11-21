@@ -50,4 +50,24 @@
 	       <put-attribute name="title" value="온라인 컨텐츠 등록" />  
 	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnContentsList.jsp" />  
 	   </definition> 
+	   
+	   <definition name="orgOnContentsReq" extends="base-definition">  
+	       <put-attribute name="title" value="온라인 컨텐츠 등록" />  
+	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnContentsReq.jsp" />  
+	   </definition> 
+	   
+	   <definition name="orgOnStudentList" extends="base-definition">  
+	       <put-attribute name="title" value="신청자 관리" />  
+	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnStudentList.jsp" />  
+	   </definition> 
+	   
+	   <definition name="orgOnStudentLearn" extends="base-definition">  
+	       <put-attribute name="title" value="수강생/수료생 현황" />  
+	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnStudentLearn.jsp" />  
+	   </definition> 
+	   
+	   <definition name="orgOnStudentGraduate" extends="base-definition">  
+	       <put-attribute name="title" value="수료증" />  
+	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnStudentGraduate.jsp" />  
+	   </definition> 
   </tiles-definitions>

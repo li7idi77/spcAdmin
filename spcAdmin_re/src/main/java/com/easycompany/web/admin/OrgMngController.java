@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
 
@@ -23,6 +24,7 @@ import com.easycompany.cmm.util.StringUtil;
 import com.easycompany.cmm.vo.DefaultVO;
 import com.easycompany.cmm.vo.LoginVo;
 import com.easycompany.service.EduService;
+import com.easycompany.service.LmsService;
 import com.easycompany.service.OrgMngService;
 import com.easycompany.service.SectorService;
 import com.easycompany.service.vo.BoardVo;
@@ -41,6 +43,9 @@ public class OrgMngController
   
   @Autowired
   private EduService eduService;
+  
+  @Autowired
+  private LmsService lmsService;
   
   @Autowired
   private SectorService sectorService;
@@ -273,86 +278,238 @@ public class OrgMngController
 	    return categoryVo;
   }
     
-  @RequestMapping({"/eduTitleList.do"})
-  public String eduTitleList(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model, HttpServletRequest request) throws Exception{
-	  paramMap.put("pageSize", 10);
-	  paramMap.put("recordCountPerPage", 10);
-	  paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
-	  if(!paramMap.containsKey("pageIndex")) {
-		  paramMap.put("pageIndex", 1);
-	  }
-	  PaginationInfo paginationInfo = new PaginationInfo();
-	  paginationInfo.setCurrentPageNo(Integer.parseInt(paramMap.get("pageIndex").toString()));
-	  paginationInfo.setRecordCountPerPage(Integer.parseInt(paramMap.get("recordCountPerPage").toString()));
-	  paginationInfo.setPageSize(Integer.parseInt(paramMap.get("pageSize").toString()));
-	  
-	  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
-	  paramMap.put("offset",offset);
-	  
-	  paramMap.put("sqlName", "geEduAppList");
-	  List<Map<String, Object>> list = orgMngService.getSelectList(paramMap);
-	  model.addAttribute("resultList", list);
-	  
-	  paramMap.put("sqlName", "geEduAppListCnt");
-	  int totCnt = orgMngService.getSelectListCnt(paramMap);
-	  model.addAttribute("totCnt", totCnt);
-	  paginationInfo.setTotalRecordCount(totCnt);
-	  
-	  model.addAttribute("sessionId", request.getSession().getAttribute("AdminAccount"));
-	  model.addAttribute("paginationInfo", paginationInfo);
-	  model.addAttribute("path", request.getServletPath());
-	  model.addAllAttributes(paramMap);
-	  
-	  return "eduTitleList";
-  }
-  
-  @RequestMapping({"/eduTitleDetail.do"})
-  public String eduTitleDetail(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model, HttpServletRequest request) throws Exception{
-	  paramMap.put("pageSize", 10);
-	  paramMap.put("recordCountPerPage", 10);
-	  paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
-	  if(!paramMap.containsKey("pageIndex")) {
-		  paramMap.put("pageIndex", 1);
-	  }
-	  PaginationInfo paginationInfo = new PaginationInfo();
-	  paginationInfo.setCurrentPageNo(Integer.parseInt(paramMap.get("pageIndex").toString()));
-	  paginationInfo.setRecordCountPerPage(Integer.parseInt(paramMap.get("recordCountPerPage").toString()));
-	  paginationInfo.setPageSize(Integer.parseInt(paramMap.get("pageSize").toString()));
-	  
-	  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
-	  paramMap.put("offset",offset);
-	  
-	  paramMap.put("sqlName", "geEduAppUserList");
-	  List<Map<String, Object>> list = orgMngService.getSelectList(paramMap);
-	  model.addAttribute("resultList", list);
-	  
-	  paramMap.put("sqlName", "geEduAppUserListCnt");
-	  int totCnt = orgMngService.getSelectListCnt(paramMap);
-	  model.addAttribute("totCnt", totCnt);
-	  paginationInfo.setTotalRecordCount(totCnt);
-	  
-	  model.addAttribute("sessionId", request.getSession().getAttribute("AdminAccount"));
-	  model.addAttribute("paginationInfo", paginationInfo);
-	  model.addAttribute("path", request.getServletPath());
-	  model.addAllAttributes(paramMap);
-	  
-	  return "eduTitleDetail";
-  }
-  
-  @RequestMapping({"/courUserAtt.do"})
+  @RequestMapping(value = "/orgOnContentsList.do")
+	public String contentsList(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
+		  paramMap.put("pageSize", 10);
+		  paramMap.put("recordCountPerPage", 10);
+		  paramMap.put("UserAccount", request.getSession().getAttribute("AdminAccount"));
+		  if(!paramMap.containsKey("pageIndex")) {
+			  paramMap.put("pageIndex", 1);
+		  }
+		  PaginationInfo paginationInfo = new PaginationInfo();
+		  paginationInfo.setCurrentPageNo(Integer.parseInt(paramMap.get("pageIndex").toString()));
+		  paginationInfo.setRecordCountPerPage(Integer.parseInt(paramMap.get("recordCountPerPage").toString()));
+		  paginationInfo.setPageSize(Integer.parseInt(paramMap.get("pageSize").toString()));
+		  
+		  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
+		  paramMap.put("offset",offset);
+		
+		  paramMap.put("sqlName", "getCategoryList1");
+		  paramMap.put("site","on");
+		  paramMap.put("category1_key","9");
+		  paramMap.put("category2_key","16");
+		  
+		  List<Map<String, Object>> category1list = sectorService.getSelectList(paramMap);
+		  model.addAttribute("category1list", category1list);
+		  
+		  paramMap.put("sqlName", "contentsAllCnt");	
+		  Map<String, Object> result = lmsService.getSelectData(paramMap);
+		  model.addAttribute("count", result);  
+			
+		  paramMap.put("sqlName", "contentsList");
+		  List<Map<String, Object>> list = lmsService.getSelectList(paramMap);
+		  model.addAttribute("resultList", list);
+			
+		  paramMap.put("sqlName", "contentsListCnt");
+		  int totCnt = lmsService.getSelectListCnt(paramMap);
+		  model.addAttribute("totCnt", totCnt);
+		  paginationInfo.setTotalRecordCount(totCnt);
+		
+		  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
+		  model.addAttribute("paginationInfo", paginationInfo);
+		  model.addAttribute("path", request.getServletPath());
+		  model.addAllAttributes(paramMap);
+
+		return "orgOnContentsList";
+	}
+	
+	@RequestMapping(value = "/orgOnContentsReq.do")
+	public String noticeReq(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
+		paramMap.put("sqlName", "selectDetailLms");	
+		Map<String, Object> result = lmsService.getSelectData(paramMap);
+		model.addAttribute("result", result);  
+	  	model.addAttribute("path", request.getServletPath());
+		model.addAllAttributes(paramMap);
+		
+		return "orgOnContentsReq";
+	}
+	
+	@RequestMapping(value = "/orgOnContentsSave.do")
+	@ResponseBody
+	public Map<String, Object> contentsSave(HttpServletRequest request, @RequestParam Map<String, Object> paramMap, @RequestParam("file1") MultipartFile file1) throws Exception {
+		int resultCnt = 0;
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
+		    
+		      
+		    String fileAddpath  = this.filePath + File.separator + paramMap.get("file_gubun");
+		    Map<String, Object> fileSave = null;
+		    if (file1 != null) {
+		    	if(file1.getSize() > 0) {
+		    		fileSave = FileUtil.uploadFile(file1, fileAddpath, request); 
+			    	resultCnt = this.lmsService.insertCommonFile(paramMap, fileSave, 1);
+			    	paramMap.put("file_id", fileSave.get("file_uuid"));
+		    	}
+	    	}     
+		    
+		    paramMap.put("sqlName", "updateContents");	
+		    resultCnt = lmsService.updateData(paramMap);
+		    
+		    if(resultCnt > 0) {
+		        result.put("result", "SUCCESS");
+		    }else {
+		        result.put("result", "FAIL");	 
+		    }
+		} catch (Exception e) {
+		    result.put("result", "FAIL");
+		}
+		return result;
+	}
+	
+  @RequestMapping({"/orgOnContentsDel.do"})
   @ResponseBody
-  public String courUserAtt(HttpServletRequest request, @RequestParam(value="userArr[]") List<String> userList, @RequestParam Map<String, Object> paramMap) throws Exception {
+  public String contentsDel(HttpServletRequest request, @RequestParam Map<String, Object> paramMap) throws Exception {
 		int resultCnt = 0;
 		String result = "";
 		try {
-			paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
-			paramMap.put("userList", userList); 
-			paramMap.put("sqlName", "courUserAtt"); 
-			resultCnt = orgMngService.updateData(paramMap);
+			paramMap.put("UserAccount", request.getSession().getAttribute("AdminAccount"));
+			paramMap.put("sqlName", "deleteContents"); 
+			resultCnt = lmsService.updateData(paramMap);
+		    result = (resultCnt > 0 ? "SUCCESS" : "FAIL");
+		} catch (Exception e) {
+			result = "FAIL";
+		}
+		
+		return result;
+	}
+  
+  @RequestMapping(value = "/orgOnStudentList.do")
+	public String studentList(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
+		  paramMap.put("pageSize", 10);
+		  paramMap.put("recordCountPerPage", 10);
+		  paramMap.put("UserAccount", request.getSession().getAttribute("AdminAccount"));
+		  if(!paramMap.containsKey("pageIndex")) {
+			  paramMap.put("pageIndex", 1);
+		  }
+		  PaginationInfo paginationInfo = new PaginationInfo();
+		  paginationInfo.setCurrentPageNo(Integer.parseInt(paramMap.get("pageIndex").toString()));
+		  paginationInfo.setRecordCountPerPage(Integer.parseInt(paramMap.get("recordCountPerPage").toString()));
+		  paginationInfo.setPageSize(Integer.parseInt(paramMap.get("pageSize").toString()));
+		  
+		  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
+		  paramMap.put("offset",offset);
+		
+		  paramMap.put("sqlName", "getCategoryList1");
+		  paramMap.put("site","on");
+		  List<Map<String, Object>> category1list = sectorService.getSelectList(paramMap);
+		  model.addAttribute("category1list", category1list);
+		  
+		  paramMap.put("sqlName", "studentAllCnt");	
+		  Map<String, Object> result = lmsService.getSelectData(paramMap);
+		  model.addAttribute("count", result);  
+		  
+		  paramMap.put("sqlName", "studentList");
+		  List<Map<String, Object>> list = lmsService.getSelectList(paramMap);
+		  model.addAttribute("resultList", list);
 			
-			paramMap.put("sqlName", "scheduleStatUpdate"); 
-			resultCnt = orgMngService.updateData(paramMap);
+		  paramMap.put("sqlName", "studentListCnt");
+		  int totCnt = lmsService.getSelectListCnt(paramMap);
+		  model.addAttribute("totCnt", totCnt);
+		  paginationInfo.setTotalRecordCount(totCnt);
+		
+		  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
+		  model.addAttribute("paginationInfo", paginationInfo);
+		  model.addAttribute("path", request.getServletPath());
+		  model.addAllAttributes(paramMap);
+		  
+		return "orgOnStudentList";
+	}
+	
+	@RequestMapping(value = "/orgOnStudentLearn.do")
+	public String studentLearn(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
+		  paramMap.put("pageSize", 10);
+		  paramMap.put("recordCountPerPage", 10);
+		  paramMap.put("UserAccount", request.getSession().getAttribute("AdminAccount"));
+		  if(!paramMap.containsKey("pageIndex")) {
+			  paramMap.put("pageIndex", 1);
+		  }
+		  PaginationInfo paginationInfo = new PaginationInfo();
+		  paginationInfo.setCurrentPageNo(Integer.parseInt(paramMap.get("pageIndex").toString()));
+		  paginationInfo.setRecordCountPerPage(Integer.parseInt(paramMap.get("recordCountPerPage").toString()));
+		  paginationInfo.setPageSize(Integer.parseInt(paramMap.get("pageSize").toString()));
+		  
+		  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
+		  paramMap.put("offset",offset);
+				  
+		  paramMap.put("sqlName", "studentLearnList");
+		  List<Map<String, Object>> list = lmsService.getSelectList(paramMap);
+		  model.addAttribute("resultList", list);
 			
+		  paramMap.put("sqlName", "studentLearnListCnt");
+		  int totCnt = lmsService.getSelectListCnt(paramMap);
+		  model.addAttribute("totCnt", totCnt);
+		  paginationInfo.setTotalRecordCount(totCnt);
+		
+		  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
+		  model.addAttribute("paginationInfo", paginationInfo);
+		  model.addAttribute("path", request.getServletPath());
+		  model.addAllAttributes(paramMap);
+		  
+		return "orgOnStudentLearn";
+	}
+	
+	@RequestMapping(value = "/orgOnStudentGraduate.do")
+	public String studentGraduate(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
+		  paramMap.put("pageSize", 10);
+		  paramMap.put("recordCountPerPage", 10);
+		  paramMap.put("UserAccount", request.getSession().getAttribute("AdminAccount"));
+		  if(!paramMap.containsKey("pageIndex")) {
+			  paramMap.put("pageIndex", 1);
+		  }
+		  PaginationInfo paginationInfo = new PaginationInfo();
+		  paginationInfo.setCurrentPageNo(Integer.parseInt(paramMap.get("pageIndex").toString()));
+		  paginationInfo.setRecordCountPerPage(Integer.parseInt(paramMap.get("recordCountPerPage").toString()));
+		  paginationInfo.setPageSize(Integer.parseInt(paramMap.get("pageSize").toString()));
+		  
+		  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
+		  paramMap.put("offset",offset);
+		  
+		  paramMap.put("sqlName", "studentGraduateList");
+		  List<Map<String, Object>> list = lmsService.getSelectList(paramMap);
+		  model.addAttribute("resultList", list);
+			
+		  paramMap.put("sqlName", "studentGraduateListCnt");
+		  int totCnt = lmsService.getSelectListCnt(paramMap);
+		  model.addAttribute("totCnt", totCnt);
+		  paginationInfo.setTotalRecordCount(totCnt);
+		
+		  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
+		  model.addAttribute("paginationInfo", paginationInfo);
+		  model.addAttribute("path", request.getServletPath());
+		  model.addAllAttributes(paramMap);
+		  
+		return "orgOnStudentGraduate";
+	}
+
+	@RequestMapping(value = "/orgOnStudentDel.do")
+	@ResponseBody
+	public String studentDel(HttpServletRequest request, @RequestParam(value="courNoArray[]") List<String> courNoArray, @RequestParam Map<String, Object> paramMap) throws Exception {
+		int resultCnt = 0;
+		String result = "";
+		try {
+			LoginVo loginvo = (LoginVo) WebUtils.getSessionAttribute(request, "AdminAccount");
+			/*List<Long> boardIdxList = new ArrayList<Long>();
+			
+			for(String idxStr : boardIdxStrArray){
+				boardIdxList.add(Long.parseLong(idxStr));
+			}
+			
+		    HashMap<String, Object> map = new HashMap<String, Object>();
+		    map.put("boardIdxList", boardIdxList);*/
+			paramMap.put("courNoArrayList", courNoArray); 
+		    paramMap.put("sqlName", "studentDel");
+		    resultCnt = lmsService.deleteData(paramMap);
 		    result = (resultCnt > 0 ? "SUCCESS" : "FAIL");
 		    
 		} catch (Exception e) {
@@ -361,88 +518,4 @@ public class OrgMngController
 		
 		return result;
 	}
-  
-  
-  @RequestMapping({"/eduReportList.do"})
-  public String eduReportList(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model, HttpServletRequest request) throws Exception{
-	  paramMap.put("pageSize", 10);
-	  paramMap.put("recordCountPerPage", 10);
-	  paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
-	  if(!paramMap.containsKey("pageIndex")) {
-		  paramMap.put("pageIndex", 1);
-	  }
-	  PaginationInfo paginationInfo = new PaginationInfo();
-	  paginationInfo.setCurrentPageNo(Integer.parseInt(paramMap.get("pageIndex").toString()));
-	  paginationInfo.setRecordCountPerPage(Integer.parseInt(paramMap.get("recordCountPerPage").toString()));
-	  paginationInfo.setPageSize(Integer.parseInt(paramMap.get("pageSize").toString()));
-	  
-	  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
-	  paramMap.put("offset",offset);
-	  
-	  paramMap.put("sqlName", "getReportAllCnt");
-	  Map<String, Object> allCount = orgMngService.getSelectData(paramMap);
-	  model.addAttribute("allCount", allCount);
-	  
-	  paramMap.put("sqlName", "getReportList");
-	  List<Map<String, Object>> list = orgMngService.getSelectList(paramMap);
-	  model.addAttribute("resultList", list);
-	  
-	  paramMap.put("sqlName", "getReportListCnt");
-	  int totCnt = orgMngService.getSelectListCnt(paramMap);
-	  model.addAttribute("totCnt", totCnt);
-	  paginationInfo.setTotalRecordCount(totCnt);
-	  
-	  model.addAttribute("sessionId", request.getSession().getAttribute("AdminAccount"));
-	  model.addAttribute("paginationInfo", paginationInfo);
-	  model.addAttribute("path", request.getServletPath());
-	  model.addAllAttributes(paramMap);
-	  
-	  return "eduReportList";
-  }
-  
-  @RequestMapping({"/orgExcelDownload.do"})
-  public ModelAndView excelDownload(@RequestParam Map<String, Object> paramMap)
-    throws Exception
-  {
-		paramMap.put("recordCountPerPage", 10000);
-		paramMap.put("offset",0);
-		paramMap.put("pageSize", 1);
-		paramMap.put("pageIndex", 1);
-		paramMap.put("sqlName", "getReportList");
-		
-		List<Map<String, Object>> list = orgMngService.getSelectList(paramMap);
-	    paramMap.put("list", list);
-	
-	    return new ModelAndView("schduleExcelView", paramMap);
-  }
-  
-  @RequestMapping({"/eduReportView.do"})
-  public String eduReportView(@RequestParam Map<String, Object> paramMap, ModelMap model ,HttpServletRequest request) throws Exception {
-	  paramMap.put("sqlName", "getOrgReport");	
-	  Map<String, Object> result = orgMngService.getSelectData(paramMap);
-	  model.addAttribute("result", result);	
-	  
-	  paramMap.put("sqlName", "getEduAttList");
-	  List<Map<String, Object>> list = orgMngService.getSelectList(paramMap);
-	  model.addAttribute("resultList", list);
-	  
-	  model.addAttribute("path", request.getServletPath());
-	  model.addAllAttributes(paramMap);
-	  return "eduReportView";
-  }
-  
-  @RequestMapping({"/eduReportMod.do"})
-  public String eduReportMod(@RequestParam Map<String, Object> paramMap, ModelMap model ,HttpServletRequest request) throws Exception {
-	  paramMap.put("sqlName", "getOrgReport");	
-	  Map<String, Object> result = orgMngService.getSelectData(paramMap);
-	  model.addAttribute("result", result);	
-	  
-	  paramMap.put("sqlName", "getEduAttList");
-	  List<Map<String, Object>> list = orgMngService.getSelectList(paramMap);
-	  model.addAttribute("resultList", list);
-	  
-	  model.addAttribute("path", request.getServletPath());
-	  model.addAllAttributes(paramMap);
-	  return "eduReportMod";
-  }
 }
