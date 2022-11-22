@@ -98,9 +98,9 @@ public class OrgMngController
 	    
 	    categoryVo.setWebPath(this.webPath);
 	
-	    categoryVo.setGubun3("categorycode1");
-	    List category1list = this.eduService.getCategoryCodeList(categoryVo);
-	    model.addAttribute("category1list", category1list);
+	    categoryVo.setGubun3("categorycode3");
+	    List category3list = this.eduService.getCategoryCodeList(categoryVo);
+	    model.addAttribute("category3list", category3list);
 	
 	    List list = this.eduService.getEducationList(categoryVo);
 	    model.addAttribute("resultList", list);

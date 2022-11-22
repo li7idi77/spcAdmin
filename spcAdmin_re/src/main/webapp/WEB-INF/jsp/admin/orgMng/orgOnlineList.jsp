@@ -52,7 +52,6 @@
  				type	: "POST",	
  				success: function(data, opt, inx){
  				var option = '';
- 				option += '<option value="">선택 하세요</opton>'; //선택
  				$.each(data, function(i, ret){
  					option += '<option value="'+ret.code_cd+'">'+ret.code_name+'</option>';		
  				});
@@ -413,9 +412,10 @@
                        	</c:if> --%>
                     </select>
                     <select class="select lg-width"  id="category3_key" name="category3_key">
-                    	<c:if test="${not empty categoryVo.category3_name }">
-                       		<option value='${categoryVo.category3_key}'>${categoryVo.category3_name}</option>
-                       	</c:if>
+                    	<option value=''>선택 하세요</option>
+                    	<c:forEach var="result" items="${category3list}" varStatus="status">
+                        	<option value='${result.code_cd}'>${result.code_name}</option>
+                        </c:forEach>
                     </select>
                 </div>
                <div class="search-cont">

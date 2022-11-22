@@ -283,7 +283,7 @@
 		if(yn){
 			$.ajax({	
 				data       : formData,
-			    url		   : "<c:url value='/orgMng/orgOnlineSave`c'/>",
+			    url		   : "<c:url value='/orgMng/orgOnlineSave.do'/>",
 			    dataType   : "JSON",
 		        processData: false, 
 		        contentType: false,

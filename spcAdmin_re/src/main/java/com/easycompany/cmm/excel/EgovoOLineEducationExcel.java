@@ -71,7 +71,7 @@ public class EgovoOLineEducationExcel extends AbstractExcelView
       CategoryVo categVo = (CategoryVo)list.get(i);
 
       //기관
-      if ("eduInfoOnline".equals(categoryVo.getGubun2()))
+      if ("eduInfoOnline".equals(categoryVo.getGubun2()) || "eduInfoOnline2".equals(categoryVo.getGubun2()))
       {
         cell = getCell(sheet, 3 + i, 0);
         setText(cell, Integer.toString(i + 1));

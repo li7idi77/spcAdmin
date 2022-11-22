@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 
-<h1 class="h1-tit">콘텐츠/교육자료 등록</h1>
+<h1 class="h1-tit">온라인 콘텐츠 등록</h1>
 
 <div class="search-wrap">
 	<form id="commonForm" name="commonForm" target="_self" method="post" onsubmit="">
