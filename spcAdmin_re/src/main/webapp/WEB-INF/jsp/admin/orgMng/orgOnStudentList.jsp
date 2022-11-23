@@ -82,7 +82,7 @@
  function fn_egov_link_page(pageNo){
  	 var frm = document.commonForm;
  	 $("#pageIndex").val(pageNo); 
- 	 frm.action = "<c:url value='/lms/studentList.do'/>";
+ 	 frm.action = "<c:url value='/orgMng/orgOnStudentList.do'/>";
    	 frm.submit();
  }
 </script>

@@ -269,14 +269,14 @@ $(document).ready(function(){
 function fn_egov_link_page(pageNo){
 	 var frm = document.commonForm;
 	 $("#pageIndex").val(pageNo); 
-	 frm.action = "<c:url value='/lms/contentsList.do'/>";
+	 frm.action = "<c:url value='/orgMng/orgOnContentsList.do'/>";
   	 frm.submit();
 }
  
 function fn_edit(key1) {
  	var frm = document.commonForm;
  	$("#edu_sub_no").val(key1);
-  	frm.action = "<c:url value='/lms/contentsReq.do'/>?flag=I";
+  	frm.action = "<c:url value='/orgMng/orgOnContentsReq.do'/>?flag=I";
  	frm.submit();
 }
 

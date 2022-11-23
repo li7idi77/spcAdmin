@@ -210,7 +210,7 @@ function commonCallBack(obj){
 
 function fn_load(str) {
 	var frm = document.commonForm;
-	frm.action = "<c:url value='/lms/contentsList.do'/>";    
+	frm.action = "<c:url value='/orgMng/orgOnContentsList.do'/>";    
 	frm.submit();
  }
  
