@@ -294,13 +294,14 @@ public class OrgMngController
 		  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
 		  paramMap.put("offset",offset);
 		
-		  paramMap.put("sqlName", "getCategoryList1");
+		  paramMap.put("sqlName", "getCategoryList3");
 		  paramMap.put("site","on");
 		  paramMap.put("category1_key","9");
 		  paramMap.put("category2_key","16");
+		  paramMap.put("searchCondition","CATEGORY");
 		  
-		  List<Map<String, Object>> category1list = sectorService.getSelectList(paramMap);
-		  model.addAttribute("category1list", category1list);
+		  List<Map<String, Object>> category3list = sectorService.getSelectList(paramMap);
+		  model.addAttribute("category3list", category3list);
 		  
 		  paramMap.put("sqlName", "contentsAllCnt");	
 		  Map<String, Object> result = lmsService.getSelectData(paramMap);
@@ -383,6 +384,105 @@ public class OrgMngController
 		
 		return result;
 	}
+  
+  @RequestMapping({"/orgOnAppUserList.do"})
+  public String orgOnAppUserList(@ModelAttribute("categoryVo") CategoryVo categoryVo, ModelMap model ,HttpServletRequest request)
+    throws Exception
+  {
+ 	    categoryVo.setPageUnit(this.propertiesService.getInt("pageUnit"));
+ 	    categoryVo.setPageSize(this.propertiesService.getInt("pageSize"));
+ 	
+ 	    PaginationInfo paginationInfo = new PaginationInfo();
+ 	    paginationInfo.setCurrentPageNo(categoryVo.getPageIndex());
+ 	    paginationInfo.setRecordCountPerPage(categoryVo.getPageUnit());
+ 	    paginationInfo.setPageSize(categoryVo.getPageSize());
+ 	
+ 	    int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getPageSize();
+ 	    categoryVo.setOffset(offset);
+	    categoryVo.setCategory1_key(9);
+	    categoryVo.setCategory2_key(16);
+ 	
+ 	    if (StringUtil.isEmpty(categoryVo.getGubun1())) {
+ 	      categoryVo.setGubun1("R");
+ 	    }
+ 	
+ 	    if (StringUtil.isEmpty(categoryVo.getGubun2())) {
+ 	      categoryVo.setGubun2("eduInfoOnlineMangList");
+ 	    }
+ 	
+ 	    if (StringUtil.isEmpty(categoryVo.getEdu_site())) {
+ 	        categoryVo.setEdu_site("on");
+ 	    }
+ 	
+ 	    if (StringUtil.isEmpty(categoryVo.getSite())) {
+ 	        categoryVo.setSite("on");
+ 	    }
+ 	  
+ 	    categoryVo.setWebPath(this.webPath);
+ 	
+ 	    categoryVo.setGubun3("categorycode1");
+ 	    List category1list = this.eduService.getCategoryCodeList(categoryVo);
+ 	    model.addAttribute("category1list", category1list);
+ 	
+ 	    List list = this.eduService.getEducationList(categoryVo);
+ 	    model.addAttribute("resultList", list);
+ 	
+ 	    int totCnt = this.eduService.getEducationCount(categoryVo);
+ 	    paginationInfo.setTotalRecordCount(totCnt);
+ 	    model.addAttribute("paginationInfo", paginationInfo);
+ 	    model.addAttribute("categoryVo", categoryVo);
+ 	    model.addAttribute("path", request.getServletPath());
+ 	
+ 	    return "orgOnAppUserList";
+  }
+  
+  @RequestMapping({"/orgOnAppUserView.do"})
+  public String eduInfoOnlineMangView(@ModelAttribute("categoryVo") CategoryVo categoryVo, ModelMap model ,HttpServletRequest request)
+    throws Exception
+  {
+ 	    categoryVo.setPageUnit(this.propertiesService.getInt("pageUnit"));
+ 	    categoryVo.setPageSize(this.propertiesService.getInt("pageSize"));
+ 	
+ 	    PaginationInfo paginationInfo = new PaginationInfo();
+ 	    paginationInfo.setCurrentPageNo(categoryVo.getPageIndex());
+ 	    paginationInfo.setRecordCountPerPage(categoryVo.getPageUnit());
+ 	    paginationInfo.setPageSize(categoryVo.getPageSize());
+ 	
+ 	    int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getPageSize();
+ 	    categoryVo.setOffset(offset);
+ 	
+ 	    if (StringUtil.isEmpty(categoryVo.getGubun1())) {
+ 	      categoryVo.setGubun1("R");
+ 	    }
+ 	    
+ 	    if (StringUtil.isEmpty(categoryVo.getUser_nm())) {
+ 	    	categoryVo.setUser_nm("");
+ 		}
+ 	    
+ 	    categoryVo.setGubun2("eduInfoOnlineMangView");
+ 	    
+ 	    if (StringUtil.isEmpty(categoryVo.getEdu_site())) {
+ 	        categoryVo.setEdu_site("on");
+ 	    }
+ 	
+ 	    if (StringUtil.isEmpty(categoryVo.getSite())) {
+ 	        categoryVo.setSite("on");
+ 	    }
+ 	  
+ 	    categoryVo.setWebPath(this.webPath);
+ 	
+ 	
+ 	    List list = this.eduService.getEducationList(categoryVo);
+ 	    model.addAttribute("resultList", list);
+ 	
+ 	    int totCnt = this.eduService.getEducationCount(categoryVo);
+ 	    paginationInfo.setTotalRecordCount(totCnt);
+ 	    model.addAttribute("paginationInfo", paginationInfo);
+ 	    model.addAttribute("categoryVo", categoryVo);
+ 	    model.addAttribute("path", request.getServletPath());
+ 	
+ 	    return "orgOnAppUserView";
+  }
   
   @RequestMapping(value = "/orgOnStudentList.do")
 	public String studentList(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {

@@ -64,6 +64,11 @@
 		            WHEN TRAIN_E_DATE > NOW() THEN '종료'
 			   END AS EDU_STATUS,
 			    ]]>
+			   CASE WHEN EDU_STATUS = '신청중' THEN '교육중'
+					WHEN EDU_STATUS = '신청마감' THEN '교육종료'
+		            WHEN EDU_STATUS = '사용중지' THEN '사용중지'
+			   END AS EDU_STATUS2,
+			   a.EXP_USE_YN,
 		       b.EDU_CURR1, b.EDU_CURR3, 
 		       DATE_FORMAT(b.REG_DT,'%x-%m-%d') AS REG_DT,
 		       CASE WHEN b.FILE_ID IS NOT NULL AND b.FILE_ID != '' THEN '등록'
@@ -100,6 +105,15 @@
 	      	 ]]>
 	      </if>
 	      
+	      <if test="edu_status2 != null and edu_status2 == 1">
+	      	AND a.EDU_STATUS = '신청마감'
+	      </if>
+	      <if test="edu_status2 != null and edu_status2 == 2">
+	      	AND a.EDU_STATUS = '신청중'
+	      </if>
+	      <if test="edu_status2 != null and edu_status2 == 3">
+	      	AND a.EDU_STATUS = '사용중지'
+	      </if>
 	      <if test="con_chk != null and con_chk == 1">
 	      	AND b.EDU_CON_URL IS NOT NULL AND b.EDU_CON_URL != ''
 	      </if>
@@ -167,7 +181,7 @@
 			   (SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY AND CATEGORY2_KEY = a.CATEGORY2_KEY AND CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY3_NAME,
 		       a.EDU_NO, b.EDU_SUB_NO,
 		       b.EDU_CURR1, b.EDU_CURR2, b.EDU_CURR3, 
-               b.EDU_ON_APP_TIME, b.EDU_CON_URL,
+               b.EDU_ON_APP_TIME, b.EDU_CON_URL,a.EXP_USE_YN,
                b.FILE_ID,(SELECT FILE_NAME FROM EDU_FILE WHERE FILE_ID = b.FILE_ID) AS FILE_NAME
 		FROM EDU_REGISTRATION a,
 			 EDU_REGISTRATION_DETAIL b
@@ -175,6 +189,12 @@
 		AND a.EDU_SITE = 'on'
         AND b.EDU_SUB_NO = #{edu_sub_no}
 	</select>
+	
+	<update id="updateContentsMaster" parameterType="java.util.Map">
+		UPDATE EDU_REGISTRATION 
+		   SET EXP_USE_YN =  #{exp_use_yn}
+ 		 WHERE EDU_NO = #{edu_no}
+	</update>
 	
 	<update id="updateContents" parameterType="java.util.Map">
 		UPDATE EDU_REGISTRATION_DETAIL 

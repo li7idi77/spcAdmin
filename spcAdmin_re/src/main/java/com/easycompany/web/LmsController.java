@@ -116,7 +116,10 @@ public class LmsController {
 			    	paramMap.put("file_id", fileSave.get("file_uuid"));
 		    	}
 	    	}     
-		    
+		    if(paramMap.get("file_gubun").equals("lmsContents2")) {
+		    	paramMap.put("sqlName", "updateContentsMaster");	
+			    resultCnt = lmsService.updateData(paramMap);
+		    }
 		    paramMap.put("sqlName", "updateContents");	
 		    resultCnt = lmsService.updateData(paramMap);
 		    

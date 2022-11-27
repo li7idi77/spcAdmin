@@ -56,18 +56,33 @@
 	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnContentsReq.jsp" />  
 	   </definition> 
 	   
-	   <definition name="orgOnStudentList" extends="base-definition">  
+	   <definition name="orgOnAppUserList" extends="base-definition">  
 	       <put-attribute name="title" value="신청자 관리" />  
+	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnAppUserList.jsp" />  
+	   </definition> 
+	   
+	   <definition name="orgOnAppUserView" extends="base-definition">  
+	       <put-attribute name="title" value="신청자 관리 상세" />  
+	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnAppUserView.jsp" />  
+	   </definition> 
+	   
+	   <definition name="orgOnStudentList" extends="base-definition">  
+	       <put-attribute name="title" value="수강생/수료생 현황" />  
 	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnStudentList.jsp" />  
 	   </definition> 
 	   
 	   <definition name="orgOnStudentLearn" extends="base-definition">  
-	       <put-attribute name="title" value="수강생/수료생 현황" />  
+	       <put-attribute name="title" value="수강생 현황" />  
 	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnStudentLearn.jsp" />  
 	   </definition> 
 	   
 	   <definition name="orgOnStudentGraduate" extends="base-definition">  
-	       <put-attribute name="title" value="수료증" />  
+	       <put-attribute name="title" value="수료생 현황" />  
 	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnStudentGraduate.jsp" />  
 	   </definition> 
+	   
+	   <!-- <definition name="orgOnStudentGraduate" extends="base-definition">  
+	       <put-attribute name="title" value="수료증" />  
+	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnStudentGraduate.jsp" />  
+	   </definition>  -->
   </tiles-definitions>

@@ -14,6 +14,9 @@
 		WHERE EDU_SITE = #{site}
 		AND CATEGORY1_KEY = #{category1_key}
 		AND CATEGORY2_KEY = #{category2_key}
+		<if test=" category3_key !=null and category3_key !=0">
+		   AND a.CATEGORY3_KEY = #{category3_key} 
+		  </if>
 		AND EXP_USE_YN = 'Y'
 		<choose>                                                        
 			<when test="searchType !=null and searchType !='' and searchType =='coper' ">
@@ -33,6 +36,9 @@
 		WHERE EDU_SITE = #{site}
 		AND CATEGORY1_KEY = #{category1_key}
 		AND CATEGORY2_KEY = #{category2_key}
+		<if test=" category3_key !=null and category3_key !=0">
+		   AND a.CATEGORY3_KEY = #{category3_key} 
+		  </if>
 		AND EXP_USE_YN = 'Y'
 		<choose>
 			<when test="searchType !=null and searchType !='' and searchType =='coper' ">

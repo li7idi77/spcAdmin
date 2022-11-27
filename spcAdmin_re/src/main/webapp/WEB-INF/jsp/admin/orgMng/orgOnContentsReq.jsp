@@ -9,11 +9,12 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 
-<h1 class="h1-tit">콘텐츠 수정</h1>
+<h1 class="h1-tit">콘텐츠 등록</h1>
 
 <form id="commonForm" name="commonForm" method="post" enctype="Multipart/form-data">
 	<input type="hidden" name="object_id" id="object_id" value="${edu_sub_no}">
-	<input type="hidden" id="file_gubun"  name="file_gubun" value="lmsContents"/>
+	<input type="hidden" name="edu_no" id="edu_no" value="${result.EDU_NO}">
+	<input type="hidden" id="file_gubun"  name="file_gubun" value="lmsContents2"/>
 	<input type="hidden" id="flag"  name="flag" value="${flag}"/>
 	<input type="hidden" id="checkdstr"      name="checkdstr"      class="input-box" value=''/>
 	<input type="hidden" id="file_seq"       name="file_seq"       class="input-box" value=0/>
@@ -49,14 +50,16 @@
 	            <tr>
 	                <th>교육 인증시간</th>
 	                <td>
-	                    <input type="text" class="input-box" id="edu_on_app_time" name="edu_on_app_time" value="${result.EDU_ON_APP_TIME}"/>
+	                    ${result.EDU_CURR3}<input type="hidden" class="input-box" id="edu_on_app_time" name="edu_on_app_time" value="${result.EDU_CURR3}"/>
 	                    <span>분</span>
+	                    <span class="point"> * 교육등록에서 등록한 차시별 학습시간을 100% 이수하여야 다음 차시 시청 가능</span>
 	                </td>
 	            </tr>
 	            <tr>
 	                <th>콘텐츠 등록</th>
 	                <td>
 	                   <input type="text" class="input-box" id="edu_con_url" name="edu_con_url" value="${result.EDU_CON_URL}"/>
+	                   <span class="point"> * http://abc.com/osj/a1.mp4</span>
 	                </td>
 	            </tr>
 	            <tr>
@@ -72,8 +75,25 @@
 	                        <label>파일명: <span>${result.FILE_NAME}</span></label>
 	                        <input type="file" id="file1" name="file1" style="display:none;"/>
 	                    	</c:if>
-	                        <span class="point">권장사이즈 : 10MB이내</span>
+	                        <span class="point">3개</span>
 	                    </div>
+	                </td>
+	            </tr>
+	            <tr>
+	                <th>교육 노출여부</th>
+	                <td>
+	                   <div class="tb-cont">
+                           <div class="radio-cont">
+                               <input type="radio" class="radio-box"  id="exp_use_yn"  name="exp_use_yn" value="Y" <c:if test="${result.EXP_USE_YN =='Y'  || (empty result.EXP_USE_YN) }">checked </c:if>>
+                               <label for="">YES</label>
+                           </div>
+                             
+                           <div class="radio-cont">
+                               <input type="radio" class="radio-box" id="exp_use_yn"  name="exp_use_yn" value="N" <c:if test="${result.EXP_USE_YN =='N'}">checked </c:if>>
+                               <label for="">NO</label>
+                           </div>
+                       </div>
+	                   <span class="point"> * 콘텐츠 등록 후 교육 노출을 원한다면 YES를 선택하세요.</span>
 	                </td>
 	            </tr>
 	        </tbody>

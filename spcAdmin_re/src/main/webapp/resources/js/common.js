@@ -2,6 +2,65 @@
  * 요소기술 스크립트  
  */
 
+function gfnLeadingZeros(n, digits) {
+	var zero = '';
+	n = n.toString();
+
+	if (n.length < digits) {
+		for (i = 0; i < digits - n.length; i++)
+			zero += '0';
+
+	}
+	return zero + n;
+}
+
+function gfnCurYYYY() {
+	var d = new Date();
+
+	return gfnLeadingZeros(d.getFullYear(), 4);
+}
+
+function gfnCurMM() {
+	var d = new Date();
+
+	return gfnLeadingZeros(d.getMonth() + 1, 2);
+}
+
+function gfnCurDD() {
+	var d = new Date();
+
+	return gfnLeadingZeros(d.getDate(), 2);
+}
+
+function gfnCurYYYYMMDD() {
+	return gfnCurYYYY()+gfnCurMM()+gfnCurDD();
+}
+
+function gfnCurDate() {
+	var d = new Date();
+
+	var date = '';
+
+	date += gfnLeadingZeros(d.getFullYear(), 4) + '-';
+	date += gfnLeadingZeros(d.getMonth() + 1, 2) + '-';
+	date += gfnLeadingZeros(d.getDate(), 2);
+
+	return date;
+}
+
+function gfnDateCal(num) {
+	var d = new Date();
+	d.setDate(d.getDate() + Number(num));
+	var nd = new Date(d);
+	var date = '';
+
+	date += gfnLeadingZeros(nd.getFullYear(), 4) + '-';
+	date += gfnLeadingZeros(nd.getMonth() + 1, 2) + '-';
+	date += gfnLeadingZeros(nd.getDate(), 2);
+
+	return date;
+}
+
 // 숫자체크
 function isNumber(control, msg) {
 	

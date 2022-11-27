@@ -154,6 +154,17 @@
 		frm.submit();
    }
 	    
+  	function data_cal(){
+  		var regExp = /^[0-9]*$/;
+  		if(!regExp.test($("#train_date").val())){
+  			alert("숫자만 입력 가능합니다.");
+  			$("#train_date").val("");
+  			return false;	
+  		}
+	  	$("#train_s_date").val(gfnCurDate());
+	  	$("#train_e_date").val(gfnDateCal($("#train_date").val()));
+  	}
+  
 	function fn_save(gubun1){
 	
 	   var addNum = parseInt($("#addNum").val());
@@ -402,21 +413,21 @@
                             </tr>
                             <tr>
                                 <th colspan="2"><span class="red-txt">*</span>강사명</th>
-                                <td><input type="text"  id="inst_nm" name="inst_nm" class="input-box" value="${categoryForm.inst_nm}"/></td>
+                                <td><input type="text" placeholder="ex.김동훈" id="inst_nm" name="inst_nm" class="input-box" value="${categoryForm.inst_nm}"/> 강사</td>
                             </tr>
                             <tr>
                                 <th colspan="2"><span class="red-txt">*</span>교육기간</th>
                                 <td>
                                     <div class="tb-cont">
                                     	<input type="hidden" id="set_use_yn" name="set_use_yn" value="TERM">
-                                        <!-- <div class="radio-cont">
-                                            <input type="radio" class="radio-box cdate" id="set_use_yn" name="set_use_yn" value="NONE" disabled="disabled">
+                                        <div class="radio-cont">
+                                            <input type="radio" class="radio-box cdate" id="set_use_yn" name="set_use_yn" value="NONE" <c:if test="${categoryForm.train_s_date == '' || (empty categoryForm.train_s_date)}">checked </c:if>>
                                             <label for="">설정 없음</label>
-                                        </div> -->
-                                        <!-- <div class="radio-cont mr10">
-                                            <input type="radio" class="radio-box cdate" id="set_use_yn" name="set_use_yn" value="TERM" checked >
-                                            <label for="">기간선택</label>
-                                        </div> -->
+                                        </div>
+                                        <div class="radio-cont mr10">
+                                            <input type="radio" class="radio-box cdate" id="set_use_yn" name="set_use_yn" value="TERM" <c:if test="${categoryForm.train_s_date != ''}">checked </c:if>>
+                                            <input type="text" placeholder="ex.365" id="train_date"  name="train_date" class="input-box" onchange="data_cal();"/> 일
+                                        </div>
     
                                         <div class="picker-wrap">
                                             <input type="text" id="train_s_date"  name="train_s_date" readonly value="${categoryForm.train_s_date}" class="input-box"/>
@@ -437,13 +448,13 @@
                             <tr>
                                 <th colspan="2">총 학습시간</th>
                                 <td>
-                                    <input type="text" id="edu_time"  name="edu_time" class="input-box" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"  value="${categoryForm.edu_time}"  maxlength="5"/>분
+                                    <input type="text" placeholder="ex.90" id="edu_time"  name="edu_time" class="input-box" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"  value="${categoryForm.edu_time}"  maxlength="5"/>분
                                 </td>
                             </tr>
                             <tr>
                                 <th colspan="2">교육대상</th>
                                 <td>
-                                    <input type="text" id="edu_target"  name="edu_target" class="input-box" value="${categoryForm.edu_target}"/>
+                                    <input type="text" placeholder="ex.직장인" id="edu_target"  name="edu_target" class="input-box" value="${categoryForm.edu_target}"/>
                                     <span class="point">ex. 성인, 청소년, 중장년, 노인, 이어줌인, 대학생, 직장인 등</span>
                                 </td>
                             </tr>
@@ -451,8 +462,8 @@
                             <tr>
                                 <th colspan="2"><span class="red-txt">*</span>교육정원</th>
                                 <td>
-                                    <input type="text" id="edu_garden"  name="edu_garden" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"  maxlength="5" class="input-box" value="${categoryForm.edu_garden}"/>
-                                    <span class="point">*교육정원을 꼭 기입하시기 바랍니다.</span>
+                                    <input type="text" placeholder="ex.200" id="edu_garden"  name="edu_garden" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"  maxlength="5" class="input-box" value="${categoryForm.edu_garden}"/>
+                                    <span class="point">*기입하지 않으면 무한대</span>
                                 </td>
                             </tr>
                             <tr>
@@ -461,27 +472,27 @@
                                     <div class="tb-cont">
                                         <div class="radio-cont">
                                             <input type="radio" class="radio-box" id="edu_status"  name="edu_status" value="신청중" <c:if test="${categoryForm.edu_status =='신청중'  || (empty categoryForm.edu_status) }">checked </c:if>>
-                                            <label for="">신청중</label>
+                                            <label for="">교육중</label>
                                         </div>
                                           
-                                        <div class="radio-cont">
+                                        <%-- <div class="radio-cont">
                                             <input type="radio" class="radio-box" id="edu_status"  name="edu_status" value="신청취소" <c:if test="${categoryForm.edu_status =='신청취소'}">checked </c:if>>
                                             <label for="">신청취소</label>
-                                        </div>
+                                        </div> --%>
                                         
                                         <div class="radio-cont mr10">
                                             <input type="radio" class="radio-box" id="edu_status"  name="edu_status" value="신청마감" <c:if test="${categoryForm.edu_status =='신청마감'}">checked </c:if>>
-                                            <label for="">신청마감</label>
+                                            <label for="">교육종료</label>
                                         </div>
                                         <div class="radio-cont">
                                             <input type="radio" class="radio-box" id="edu_status"  name="edu_status" value="사용중지" <c:if test="${categoryForm.edu_status =='사용중지'}">checked </c:if>>
                                             <label for="">사용중지</label>
                                         </div>
                                         
-                                        <div class="radio-cont mr10">
+                                        <%-- <div class="radio-cont mr10">
                                             <input type="radio" class="radio-box" id="edu_status"  name="edu_status" value="결과보고" <c:if test="${categoryForm.edu_status =='결과보고'}">checked </c:if>>
                                             <label for="">결과보고</label>
-                                        </div>
+                                        </div> --%>
                                     </div>
                                 </td>
                             </tr>
@@ -498,6 +509,7 @@
                                             <input type="radio" class="radio-box" id="exp_use_yn"  name="exp_use_yn" value="N" <c:if test="${categoryForm.exp_use_yn =='N'}">checked </c:if>>
                                             <label for="">NO</label>
                                         </div>
+                                        <span class="point">* 특별한 상황이 아니라면 NO를 선택하시고 콘탠츠 등록 후 YES를 선택하세요.</span>
                                     </div>
                                 </td>
                             </tr>
