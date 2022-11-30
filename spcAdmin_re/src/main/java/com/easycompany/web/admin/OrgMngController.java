@@ -420,9 +420,9 @@ public class OrgMngController
  	  
  	    categoryVo.setWebPath(this.webPath);
  	
- 	    categoryVo.setGubun3("categorycode1");
- 	    List category1list = this.eduService.getCategoryCodeList(categoryVo);
- 	    model.addAttribute("category1list", category1list);
+ 	    categoryVo.setGubun3("categorycode3");
+ 	    List category3list = this.eduService.getCategoryCodeList(categoryVo);
+ 	    model.addAttribute("category3list", category3list);
  	
  	    List list = this.eduService.getEducationList(categoryVo);
  	    model.addAttribute("resultList", list);
@@ -499,11 +499,14 @@ public class OrgMngController
 		  
 		  int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
 		  paramMap.put("offset",offset);
-		
-		  paramMap.put("sqlName", "getCategoryList1");
+		  paramMap.put("category1_key","9");
+		  paramMap.put("category2_key","16");
+		  paramMap.put("searchCondition","CATEGORY");
+		  
+		  paramMap.put("sqlName", "getCategoryList3");
 		  paramMap.put("site","on");
-		  List<Map<String, Object>> category1list = sectorService.getSelectList(paramMap);
-		  model.addAttribute("category1list", category1list);
+		  List<Map<String, Object>> category3list = sectorService.getSelectList(paramMap);
+		  model.addAttribute("category3list", category3list);
 		  
 		  paramMap.put("sqlName", "studentAllCnt");	
 		  Map<String, Object> result = lmsService.getSelectData(paramMap);

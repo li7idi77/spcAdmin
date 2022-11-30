@@ -87,7 +87,6 @@ var setDel = function(courNoArray){
     </dl>
 
     <button class="mid-btn black-btn">엑셀다운</button>
-    <button class="mid-btn white-btn" onClick="javascript:btnDel();">선택삭제</button>
 </div>
 
 <div class="table-wrap">

@@ -72,11 +72,11 @@
   
  
  function fn_detail(edu_no){
-	document.location = "<c:url value='/lms/studentLearn.do'/>?edu_no="+edu_no;
+	document.location = "<c:url value='/orgMng/orgOnStudentLearn.do'/>?edu_no="+edu_no;
  }	
  
  function fn_detail2(edu_no){
- 	document.location = "<c:url value='/lms/studentGraduate.do'/>?edu_no="+edu_no;
+ 	document.location = "<c:url value='/orgMng/orgOnStudentGraduate.do'/>?edu_no="+edu_no;
  }	
  
  function fn_egov_link_page(pageNo){
@@ -92,6 +92,30 @@
 <form id="commonForm" name="commonForm" method="post" enctype="Multipart/form-data">
     <input type="hidden" id="pageIndex"  name="pageIndex" value=1 />
     <div class="search-cont">
+    	
+        <h3 class="h3-tit">분류</h3>
+
+        <div class="radio-cont">
+            <input type="radio" class="radio-box" id="cate_gubun" name="cate_gubun" value="ALL" <c:if test="${cate_gubun == 'ALL' || (empty cate_gubun)}">checked </c:if>>
+            <label for="">전체</label>
+        </div>
+        <div class="radio-cont">
+            <input type="radio" class="radio-box" id="cate_gubun" name="cate_gubun" value="SEL" <c:if test="${cate_gubun == 'SEL'}">checked </c:if>>
+            <select class="select"  id="category1_key" name="category1_key">
+	            	<option value='9'>기관</option>
+	            </select>
+	             <select class="select"  id="category2_key" name="category2_key">
+                    	<option value='16'>교육기관별(ON-LINE)</option>
+	            </select>
+	            <select class="select lg-width"  id="category3_key" name="category3_key">
+	            	<option value=''>선택 하세요</option>
+                    	<c:forEach var="result" items="${category3list}" varStatus="status">
+                        	<option value='${result.CATEGORY3_KEY}' <c:if test="${category3_key == result.CATEGORY3_KEY}">selected</c:if>>${result.CATEGORY3_NAME}</option>
+                        </c:forEach>
+	            </select>
+        </div>
+        
+        <h3 class="h3-tit">교육생</h3>
         <div class="radio-cont">
             <input type="radio" class="radio-box" id="user_gubun" name="user_gubun" value="ALL" <c:if test="${user_gubun == 'ALL' || (empty user_gubun)}">checked </c:if>>
             <label for="dateAll">전체</label>
@@ -104,38 +128,7 @@
             <input type="radio" class="radio-box" id="user_gubun" name="user_gubun" value="2" <c:if test="${user_gubun == '2'}">checked </c:if>>
             <label for="dateTerm">수료생</label>
         </div>
-       * 적용될수 없는 조건
-    </div>
-
-    <div class="search-cont search-sub">
-        <h3 class="h3-tit">구분</h3>
-
-        <div class="radio-cont">
-            <input type="radio" class="radio-box" id="cate_gubun" name="cate_gubun" value="ALL" <c:if test="${cate_gubun == 'ALL' || (empty cate_gubun)}">checked </c:if>>
-            <label for="">전체</label>
-        </div>
-        <div class="radio-cont">
-            <input type="radio" class="radio-box" id="cate_gubun" name="cate_gubun" value="SEL" <c:if test="${cate_gubun == 'SEL'}">checked </c:if>>
-            <select class="select"  id="category1_key" name="category1_key">
-            	<option value='' >선택 하세요</option>
-				<c:forEach var="result" items="${category1list}" varStatus="status">
-					<option value='${result.CATEGORY1_KEY}' >${result.CATEGORY1_NAME}</option>
-				</c:forEach>
-            </select>
-                           <select class="select"  id="category2_key" name="category2_key">
-            	<option value='' >선택 하세요</option>
-				<c:forEach var="result" items="${category2list}" varStatus="status">
-					<option value='${result.CATEGORY2_KEY}' >${result.CATEGORY2_NAME}</option>
-				</c:forEach>
-            </select>
-            <select class="select lg-width"  id="category3_key" name="category3_key">
-            	<option value='' >선택 하세요</option>
-				<c:forEach var="result" items="${category3list}" varStatus="status">
-					<option value='${result.CATEGORY3_KEY}' >${result.CATEGORY3_NAME}</option>
-				</c:forEach>
-            </select>
-        </div>
-        
+        &nbsp;&nbsp;
         <button class="search-btn">검색</button>
         <button type="button" class="search-btn white-btn ml20" onClick="fn_clear();">초기화</button>
     </div>
@@ -150,7 +143,6 @@
     </dl>
 
     <button class="mid-btn black-btn">엑셀다운</button>
-    <button class="mid-btn white-btn">선택삭제(불가)</button>
 </div>
 
 <div class="table-wrap">

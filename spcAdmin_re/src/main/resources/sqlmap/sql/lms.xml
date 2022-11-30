@@ -276,13 +276,13 @@
 						FROM EDU_REGISTRATION 
                         WHERE EDU_SITE = 'on'
         			<if test=" category1_key !=null and category1_key != '' and searchCondition == 'CATEGORY'">
-						AND a.CATEGORY1_KEY = #{category1_key} 
+						AND CATEGORY1_KEY = #{category1_key} 
 					</if>
 					<if test=" category2_key !=null and category2_key != '' and searchCondition == 'CATEGORY'">
-						AND a.CATEGORY2_KEY = #{category2_key} 
+						AND CATEGORY2_KEY = #{category2_key} 
 					</if>
 					<if test=" category3_key !=null and category3_key != '' and searchCondition == 'CATEGORY'">
-						AND a.CATEGORY3_KEY = #{category3_key} 
+						AND CATEGORY3_KEY = #{category3_key} 
 					</if>
         				)
 	</select>
