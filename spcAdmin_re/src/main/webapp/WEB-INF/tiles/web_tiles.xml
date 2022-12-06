@@ -82,6 +82,12 @@
        <put-attribute name="body" value="/WEB-INF/jsp/web/edu/life/lifeEduOnLineList.jsp" />  
    </definition> 
    
+   <!--생명지킴이 교육신청 > 교육신청  > 교육기관(ON-LINE) -->
+   <definition name="lifeEduOrgOnList" extends="common-definition">  
+       <put-attribute name="title" value="생명지킴이 교육신청" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/web/edu/life/lifeEduOrgOnList.jsp" />  
+   </definition> 
+   
     <!--생명지킴이 교육신청 > 교육신청  > 온라인교육 -->
    <definition name="lifeEduOnLineInfo" extends="common-definition">  
        <put-attribute name="title" value="생명지킴이 교육신청" />  

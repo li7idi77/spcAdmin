@@ -61,7 +61,8 @@
 	                 	<a href="#">교육신청</a>
 	                 	<ul class="sub-lnb">
                         	<li <c:if test="${fn:contains(path, '/user/lifeEduOnLine') }">  class="active" </c:if>> <a href="${pageContext.request.contextPath}/user/lifeEduOnLineList.do">온라인교육</a></li>
-	                    	<li <c:if test="${fn:contains(path, '/user/lifeEduOrg') }">    class="active" </c:if>> <a href="${pageContext.request.contextPath}/user/lifeEduOrgList.do">교육 기관별</a></li>
+	                    	<li <c:if test="${fn:contains(path, '/user/lifeEduOrgList') }">    class="active" </c:if>> <a href="${pageContext.request.contextPath}/user/lifeEduOrgList.do">교육 기관별</a></li>
+	                    	<li <c:if test="${fn:contains(path, '/user/lifeEduOrgOn') }">    class="active" </c:if>> <a href="${pageContext.request.contextPath}/user/lifeEduOrgOnList.do">교육 기관별(ON-LINE)</a></li>
 	                    </ul>
 	                 </li>
 		             <li <c:if test="${fn:contains(path, '/user/lifeEduSch') }">    class="on" </c:if>>   <a href="${pageContext.request.contextPath}/user/lifeEduSch.do">교육일정</a></li>

@@ -374,6 +374,74 @@ public class WebMainController
     return "lifeEduOnLineList";
   }
  	   
+  @RequestMapping({"/lifeEduOrgOnList.do"})
+  public String lifeEduOrgOnList(@ModelAttribute("CategoryVo") CategoryVo categoryVo, ModelMap model, HttpServletRequest request)
+    throws Exception
+  {
+   
+	LoginVo loginvo = (LoginVo)WebUtils.getSessionAttribute(request, "UserAccount");
+	  
+   	categoryVo.setGubun1("R");
+   	categoryVo.setGubun2("lifeEduOnLineList");
+    
+   	String edu_status ="신청중";
+   	String edu_site   = "on";
+
+    categoryVo.setCategory1_key(9);
+    categoryVo.setCategory2_key(16);
+    categoryVo.setEdu_site(edu_site);
+    categoryVo.setEdu_status(edu_status);
+  
+    
+    categoryVo.setPageUnit(this.propertiesService.getInt("pageUnit"));
+    categoryVo.setPageSize(this.propertiesService.getInt("pageSize"));
+
+    PaginationInfo paginationInfo = new PaginationInfo();
+    paginationInfo.setCurrentPageNo(categoryVo.getPageIndex());
+    paginationInfo.setRecordCountPerPage(categoryVo.getPageUnit());
+    paginationInfo.setPageSize(categoryVo.getPageSize());
+
+    int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getPageSize();
+    categoryVo.setOffset(offset);
+ 
+    if (StringUtil.isEmpty(categoryVo.getSort_ordr())) {
+        categoryVo.setSort_ordr("TRAIN_S_DATE");
+    }
+    
+    if (StringUtil.isEmpty(categoryVo.getSearchCondition())) {
+        categoryVo.setSearchCondition("CATEGORY3_NAME");
+    }
+    
+    List list = this.eduService.getEducationList(categoryVo);
+    model.addAttribute("resultList", list);
+
+    int totCnt = this.eduService.getEducationCount(categoryVo);
+    paginationInfo.setTotalRecordCount(totCnt);
+    model.addAttribute("paginationInfo", paginationInfo);    
+     
+    categoryVo.setCategory3_key(0);
+    //분류1
+    categoryVo.setGubun3("categorycode1");
+    List category1list = this.eduService.getCategoryCodeList(categoryVo);
+    model.addAttribute("category1list", category1list);
+    
+    //분류2
+    categoryVo.setGubun3("categorycode2");
+    List category2list = this.eduService.getCategoryCodeList(categoryVo);
+    model.addAttribute("category2list", category2list);
+        
+    //분류3
+    categoryVo.setGubun3("categorycode3");
+    List category3list = this.eduService.getCategoryCodeList(categoryVo);
+    model.addAttribute("category3list", category3list);
+        
+    categoryVo.setWebPath(this.webPath);
+    model.addAttribute("categoryVo", categoryVo);
+    model.addAttribute("path",       request.getServletPath());
+    model.addAttribute("sessionId",    loginvo);
+
+    return "lifeEduOrgOnList";
+  }
   /*
    * 생명지킴이 교육신청 > 교육신청  > 온라인교육 상세정보
    */
