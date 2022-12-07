@@ -60,7 +60,7 @@
 	 $("#category2_name").val(category2_name);
 	 $("#category3_name").val(category3_name);
 	    
-	 frm.action = "<c:url value='/user/lifeEduOnLineList.do'/>";
+	 frm.action = "<c:url value='/user/lifeEduOrgOnList.do'/>";
 	 frm.submit();
 }
  
@@ -90,7 +90,7 @@
 		$("#category3_key").val(0);
 	 }	
 	 $("#pageIndex").val(pageNo); 
-	 frm.action = "<c:url value='/user/lifeEduOnLineList.do'/>";
+	 frm.action = "<c:url value='/user/lifeEduOrgOnList.do'/>";
    	 frm.submit();
  }
  </script>
@@ -128,13 +128,11 @@
                 <div class="search-cont">
                     <label>분류 :</label>
                     <select class="select" id="category1_key" name="category1_key">
-                        <option value=''>선택 하세요</option>
                     	<c:forEach var="result" items="${category1list}" varStatus="status">
                         	<option value='${result.code_cd}' <c:if test="${categoryVo.category1_name == result.code_name}">selected </c:if> >${result.code_name}</option>
                         </c:forEach>
                     </select>                   
                     <select class="select" id="category2_key" name="category2_key">
-                        <option value=''>선택 하세요</option>
                     	<c:forEach var="result" items="${category2list}" varStatus="status">
                         	<option value='${result.code_cd}' <c:if test="${categoryVo.category2_name == result.code_name}">selected </c:if>>${result.code_name}</option>
                         </c:forEach>
