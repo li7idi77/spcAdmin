@@ -264,3 +264,15 @@ body{min-width:1440px; position: relative;}
 .warrant-wrap .warrant-foot{padding: 0px 70px; text-align: right;}
 .warrant-wrap .warrant-foot span{font-size: 20px; line-height: 30px; font-weight: 600; color: #000;}
 .warrant-wrap .warrant-foot img{width: 20%; max-width: 300px;}
+
+.warrant-wrap .warrant-cont2{padding: 55px 70px;}
+.warrant-wrap .warrant-cont2 p{margin-bottom: 45px; font-size: 16px; font-weight: 500; line-height: 24px; text-align: center; color: #333;}
+.warrant-wrap .warrant-cont2 p span{padding: 0px 3px 0px 0px; font-weight: 700; color: #000;}
+
+.warrant-wrap .warrant-cont2 .name{}
+.warrant-wrap .warrant-cont2 .title{}
+.warrant-wrap .warrant-cont2 .subtitle{}
+.warrant-wrap .warrant-cont2 .des{text-align: center; font-size: 18px; line-height: 30px; font-weight: 400;}
+.warrant-wrap .warrant-cont2 .date{text-align: center;}
+.warrant-wrap .warrant-cont2 .date span{padding: 0px 3px 0px 10px;}
+.warrant-wrap .warrant-cont2 .date span:first-child{padding: 0px 3px 0px 0px;}

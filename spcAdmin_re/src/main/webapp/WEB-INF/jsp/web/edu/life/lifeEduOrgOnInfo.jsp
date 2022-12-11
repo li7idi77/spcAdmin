@@ -20,7 +20,7 @@
 		 alert('해당 교육은 회원 가입 후 사용이 가능합니다.\n회원 가입 후 이용해 주시기 바랍니다.');
 		 return;
 		</c:if>
-		frm.action = "<c:url value='/user/lifeEduOnLineReg.do'/>";
+		frm.action = "<c:url value='/user/lifeEduOrgOnReg.do'/>";
 		frm.submit();
 	}
  
@@ -69,7 +69,7 @@
 
 	function goOkPage(){	
 		var frm = document.commonForm;
-		frm.action = "<c:url value='/user/lifeEduOnLineList.do'/>";
+		frm.action = "<c:url value='/user/lifeEduOrgOnInfo.do'/>";
 		frm.submit();
 	}
    
@@ -88,7 +88,7 @@
                 <img src="${pageContext.request.contextPath}/user/images/common/ico_next.png" alt="다음 아이콘"/>
                 <span>교육신청</span>
                 <img src="${pageContext.request.contextPath}/user/images/common/ico_next.png" alt="다음 아이콘"/>
-                <span>온라인 생명 지킴이 교육</span>
+                <span>교육 기관별 (ON-LINE)</span>
             </div>
         </div>
 

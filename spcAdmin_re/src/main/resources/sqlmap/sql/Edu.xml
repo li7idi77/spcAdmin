@@ -1834,6 +1834,7 @@
 	             a.EDU_NUMBER edu_garden,
 	             b.EDU_PLACE,
 	             a.REG_DT,
+	             (SELECT TELNO FROM COM_USER WHERE USER_ID = a.REG_ID) AS TELNO,
 	               CASE WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NULL THEN '섭외중'
 	               WHEN b.INS_TYPE = 'recruit' AND INS_STATUS IS NOT NULL THEN '완료'
 	               WHEN b.INS_TYPE = 'select' AND INS_STATUS IS NULL THEN '완료'

@@ -133,8 +133,13 @@ public class SectorController
   public String sectorView(@RequestParam Map<String, Object> paramMap, ModelMap model ,HttpServletRequest request) throws Exception {
 		paramMap.put("sqlName", "getSectorView");	
 		Map<String, Object> result = sectorService.getSelectData(paramMap);
+		
+		paramMap.put("sqlName", "getSectorView2");	
+		List<Map<String, Object>> resultList = sectorService.getSelectList(paramMap);
+		
 		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
-		  model.addAttribute("result", result);
+		model.addAttribute("result", result);
+		model.addAttribute("resultList", resultList);
 	    model.addAllAttributes(paramMap);
 		return "sector"+paramMap.get("idx")+"View";
   }

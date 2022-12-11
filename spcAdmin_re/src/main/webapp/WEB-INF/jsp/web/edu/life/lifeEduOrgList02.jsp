@@ -248,12 +248,16 @@
                             <span>${result.coper_nm}</span>
                         </li>
                         <li>
+                            <label>교육명 :</label>
+                            <span>${result.category3_name}</span>
+                        </li>
+                        <li>
                             <label>교육대상 :</label>
                             <span>${result.edu_target}</span>
                         </li>
                         <li>
                             <label>교육일시:</label>
-                            <span>${result.train_s_date}</span></span>
+                            <span>${result.train_s_date}</span>
                         </li>
                         <li>
                             <label>교육시간:</label>
@@ -266,6 +270,10 @@
                         <li>
                             <label>교육장소 :</label>
                             <span>${result.edu_place}</span>
+                        </li>
+                        <li>
+                            <label>연락처 :</label>
+                            <span>${result.telno}</span>
                         </li>
                     </ul>
                   </li>

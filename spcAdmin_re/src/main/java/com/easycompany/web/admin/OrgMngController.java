@@ -621,4 +621,61 @@ public class OrgMngController
 		
 		return result;
 	}
+	
+	@RequestMapping(value = "/orgOnWarrant.do")
+	public String orgOnWarrant(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
+		model.addAllAttributes(paramMap);
+		model.addAttribute("path", request.getServletPath());
+		return "orgOnWarrant";
+	}
+	
+	@RequestMapping(value = "/orgOnLogo.do")
+	public String orgOnLogo(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
+		model.addAllAttributes(paramMap);
+		model.addAttribute("path", request.getServletPath());
+		return "orgOnLogo";
+	}
+	
+	@RequestMapping(value = "/orgOnOutputWarrant.do")
+	public String orgOnWarrantOutput(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
+		paramMap.put("pageSize", 10);
+		paramMap.put("recordCountPerPage", 10);
+		paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
+		if(!paramMap.containsKey("pageIndex")) {
+		  paramMap.put("pageIndex", 1);
+		}
+		PaginationInfo paginationInfo = new PaginationInfo();
+		paginationInfo.setCurrentPageNo(Integer.parseInt(paramMap.get("pageIndex").toString()));
+		paginationInfo.setRecordCountPerPage(Integer.parseInt(paramMap.get("recordCountPerPage").toString()));
+		paginationInfo.setPageSize(Integer.parseInt(paramMap.get("pageSize").toString()));
+		  
+		int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
+		paramMap.put("offset",offset);
+		 
+		if(!paramMap.containsKey("site")) {
+			paramMap.put("site", "on");
+		}
+
+		paramMap.put("category1_key","9");
+		paramMap.put("category2_key","16");
+		  
+		paramMap.put("sqlName", "getCategoryList3");
+		List<Map<String, Object>> category3list = sectorService.getSelectList(paramMap);
+		model.addAttribute("category3list", category3list);
+		
+		paramMap.put("sqlName", "warrantNumberReqList");
+		List<Map<String, Object>> list = orgMngService.getSelectList(paramMap);
+		model.addAttribute("resultList", list);
+		  
+		paramMap.put("sqlName", "warrantNumberReqListCnt");
+		int totCnt = orgMngService.getSelectListCnt(paramMap);
+		model.addAttribute("totCnt", totCnt);
+		paginationInfo.setTotalRecordCount(totCnt);
+
+		model.addAttribute("paginationInfo", paginationInfo);
+		model.addAttribute("path", request.getServletPath());
+		model.addAllAttributes(paramMap);
+		  
+		return "orgOnOutputWarrant";
+	}
 }

@@ -91,7 +91,6 @@ model.addAttribute("path", request.getServletPath());
         </ul>
     </li>
     
-    
     <li <c:if test="${fn:contains(path, '/orgMng/orgOn') }">  class="on" </c:if>>
         <a href="#">기관관리자</a>
         <ul class="depth02-menu">
@@ -99,7 +98,9 @@ model.addAttribute("path", request.getServletPath());
             <li <c:if test="${fn:contains(path, '/orgMng/orgOnContentsList')}">   class="active" </c:if>><a href="<c:url value='/orgMng/orgOnContentsList.do' />">온라인 콘텐츠 등록</a></li>
             <li <c:if test="${fn:contains(path, '/orgMng/orgOnAppUserList')}">   class="active" </c:if>><a href="<c:url value='/orgMng/orgOnAppUserList.do' />">신청자 관리</a></li>
             <li <c:if test="${fn:contains(path, '/orgMng/orgOnStudentList')}">   class="active" </c:if>><a href="<c:url value='/orgMng/orgOnStudentList.do' />">수강생/수료생 현황</a></li>
-            <%-- <li <c:if test="${fn:contains(path, '/orgMng/orgOnContentsList')}">   class="active" </c:if>><a href="<c:url value='/orgMng/orgOnContentsList.do' />">수료증</a></li> --%>
+            <li <c:if test="${fn:contains(path, '/orgMng/orgOnWarrant')}">   class="active" </c:if>><a href="<c:url value='/orgMng/orgOnWarrant.do' />">수료증 기본양식</a></li>
+            <li <c:if test="${fn:contains(path, '/orgMng/orgOnLogo')}">   class="active" </c:if>><a href="<c:url value='/orgMng/orgOnLogo.do' />">수료증 로고 등록</a></li>
+            <li <c:if test="${fn:contains(path, '/orgMng/orgOnOutputWarrant')}">   class="active" </c:if>><a href="<c:url value='/orgMng/orgOnOutputWarrant.do' />">수료증 발급</a></li>
         </ul>
     </li>
 </ul>

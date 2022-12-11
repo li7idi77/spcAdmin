@@ -512,7 +512,7 @@ public class WebMainController
     model.addAttribute("path",       request.getServletPath());
     model.addAttribute("sessionId",    loginvo);
     
-    return "lifeEduOnLineInfo";
+    return "lifeEduOrgOnInfo";
   }
   
   @RequestMapping({"/lifeEduOrgOnReg.do"})
@@ -531,7 +531,7 @@ public class WebMainController
     model.addAttribute("path",         request.getServletPath());
     model.addAttribute("sessionId",    loginvo);
 
-    return "lifeEduOnLineReg";
+    return "lifeEduOrgOnReg";
   }
   /*
    * 생명지킴이 교육신청 > 교육신청  > 온라인교육 장바구니/수강신청

@@ -24,7 +24,7 @@
 		 $("#category3_key").val(0);
 		 
 		 var frm = document.commonForm;
-		 frm.action = "<c:url value='/user/lifeEduOnLineInfo.do'/>";
+		 frm.action = "<c:url value='/user/lifeEduOrgOnInfo.do'/>";
 	   	 frm.submit();	   	 
 	});
  });
@@ -108,7 +108,7 @@
                 <img src="${pageContext.request.contextPath}/user/images/common/ico_next.png" alt="다음 아이콘"/>
                 <span>교육신청</span>
                 <img src="${pageContext.request.contextPath}/user/images/common/ico_next.png" alt="다음 아이콘"/>
-                <span>온라인 생명 지킴이 교육</span>
+                <span>교육 기관별 (ON-LINE)</span>
             </div>
         </div>
 

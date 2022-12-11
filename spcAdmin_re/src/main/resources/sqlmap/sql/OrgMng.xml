@@ -992,4 +992,51 @@
 			</when>
 		</choose>
 	</select>
+	
+	<select id="warrantNumberReqList" parameterType="java.util.Map"	resultType="java.util.Map">
+	    SELECT a.COUR_NO, a.EDU_NO, a.USER_NM, a.USER_ID
+					,(SELECT COPER_NM FROM COM_USER WHERE USER_ID = a.USER_ID) AS COPER_NM
+                    ,(SELECT FN_DECRYPT(ENCPT_MBL_TELNO) FROM COM_USER WHERE USER_ID = a.USER_ID) AS MBL_TELNO
+					,(SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY3_KEY = b.CATEGORY3_KEY) AS CATEGORY2_NAME
+                    ,(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY1_KEY = b.CATEGORY1_KEY AND CATEGORY2_KEY = b.CATEGORY2_KEY AND CATEGORY3_KEY = b.CATEGORY3_KEY) AS EDU_NAME
+                    ,(SELECT LICENSE_IDX FROM EDU_USER_LICENSE WHERE USER_ID = a.USER_ID AND EDU_NO = a.EDU_NO) AS ADD_CHK
+                    ,(SELECT REG_DT FROM EDU_USER_LICENSE WHERE USER_ID = a.USER_ID AND EDU_NO = a.EDU_NO) AS ADD_DT
+				 FROM EDU_COURSE_REGISTRATION a,
+					  EDU_REGISTRATION b
+				WHERE a.EDU_NO = b.EDU_NO
+		      <if test="category1_key != '' and category1_key != null">
+				AND b.CATEGORY1_KEY = #{category1_key}
+			  </if>
+				<if test="category2_key != '' and category2_key != null">
+					AND b.CATEGORY2_KEY = #{category2_key}
+				</if>
+				<if test="category3_key != '' and category3_key != null">
+					AND b.CATEGORY3_KEY = #{category3_key}
+				</if>
+				<if test ="searchType !=null and searchType !=''">
+				  AND a.USER_NM LIKE CONCAT('%', #{searchText} ,'%')
+				</if>
+	     ORDER BY COUR_NO DESC
+	    LIMIT #{recordCountPerPage}  OFFSET  #{offset}
+	</select>
+
+
+	<select id="warrantNumberReqListCnt" parameterType="java.util.Map" resultType="int">
+		 SELECT COUNT(*) cnt
+	       	    FROM EDU_COURSE_REGISTRATION a,
+					  EDU_REGISTRATION b
+				WHERE a.EDU_NO = b.EDU_NO
+		      <if test="category1_key != '' and category1_key != null">
+				AND b.CATEGORY1_KEY = #{category1_key}
+			  </if>
+				<if test="category2_key != '' and category2_key != null">
+					AND b.CATEGORY2_KEY = #{category2_key}
+				</if>
+				<if test="category3_key != '' and category3_key != null">
+					AND b.CATEGORY3_KEY = #{category3_key}
+				</if>
+				<if test ="searchType !=null and searchType !=''">
+				  AND a.USER_NM LIKE CONCAT('%', #{searchText} ,'%')
+				</if>
+	</select>
 </mapper>

@@ -192,15 +192,9 @@
                                             <th>차시</th>
                                             <td>
                                                 <ul class="dot-list">
-                                                	<c:if test="${result.EDU_CURR1 != ''}">
-                                                		<li>${result.EDU_CURR1}</li>
-                                                	</c:if>
-                                                    <c:if test="${result.EDU_CURR2 != ''}">
-                                                		<li>${result.EDU_CURR2}</li>
-                                                	</c:if>
-                                                	<c:if test="${result.EDU_CURR3 != ''}">
-                                                		<li>${result.EDU_CURR3}</li>
-                                                	</c:if>
+                                                	<c:forEach var="list" items="${resultList}" varStatus="status">
+                                                		<li>${list.EDU_CURR1} - ${list.EDU_CURR2} - ${list.EDU_CURR3}</li>
+                                                	</c:forEach>
                                                 </ul>
                                             </td>
                                         </tr>

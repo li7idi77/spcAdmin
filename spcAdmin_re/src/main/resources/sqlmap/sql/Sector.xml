@@ -113,6 +113,14 @@
 		ON ER.EDU_NO = ERD.EDU_NO
 		 WHERE 1=1
         AND ER.EDU_NO = ${edu_no}
+        AND EDU_CURR1 = 1
+	</select>
+	
+	<select id="getSectorView2" parameterType="java.util.Map" resultType="java.util.Map">
+	SELECT  ERD.EDU_CURR1, ERD.EDU_CURR2, ERD.EDU_CURR3
+		FROM EDU_REGISTRATION_DETAIL ERD  
+		 WHERE 1=1
+        AND ERD.EDU_NO = ${edu_no}
 	</select>
 	
 	<select id="getBasketCheck" parameterType="java.util.Map" resultType="int">

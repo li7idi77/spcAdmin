@@ -81,8 +81,18 @@
 	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnStudentGraduate.jsp" />  
 	   </definition> 
 	   
-	   <!-- <definition name="orgOnStudentGraduate" extends="base-definition">  
-	       <put-attribute name="title" value="수료증" />  
-	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnStudentGraduate.jsp" />  
-	   </definition>  -->
+	   <definition name="orgOnWarrant" extends="base-definition">  
+	       <put-attribute name="title" value="수료증 기본양식" />  
+	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnWarrant.jsp" />  
+	   </definition>
+	   
+	   <definition name="orgOnLogo" extends="base-definition">  
+	       <put-attribute name="title" value="수료증 로고등록" />  
+	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnLogo.jsp" />  
+	   </definition>
+	   
+	   <definition name="orgOnOutputWarrant" extends="base-definition">  
+	       <put-attribute name="title" value="수료증 발급" />  
+	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnOutputWarrant.jsp" />  
+	   </definition>
   </tiles-definitions>

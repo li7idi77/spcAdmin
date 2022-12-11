@@ -200,6 +200,26 @@
                             </div>
                         </div>
                         
+                        <div class="comp">
+                            <h4 class="h4-tit">필수 사항</h4>
+                            <div class="table-wrap">
+                                <table class="detail-tb">
+                                    <colgroup>
+                                        <col width="20%"/>
+                                        <col width="*"/>
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th>필수 신청서</th>
+                                            <td>
+	                                           <button type="button" class="lg-btn white-btn" onclick="window.open('http://naver.me/FHce9y30')">작성하기</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
                         <!---- button begin ---->
                         <div class="btn-cont">
                             <button class="lg-btn orange-btn" onClick="fn_save();">신청하기</button>

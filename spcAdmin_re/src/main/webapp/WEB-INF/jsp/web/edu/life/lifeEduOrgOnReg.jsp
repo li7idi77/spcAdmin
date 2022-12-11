@@ -13,16 +13,16 @@
 
 
  <script type="text/javaScript" language="javascript" defer="defer">
- <!--
+
   	$(document).ready(function(){
   		
   	 <c:if test="${empty sessionId }">
 	  	var frm = document.commonForm;
-		frm.action = "<c:url value='/user/lifeEduOnLineList.do'/>";
+		frm.action = "<c:url value='/user/lifeEduOrgOnList.do'/>";
 		frm.submit();
 	 </c:if>	
 	
- 		$('#email_select').change(function(){
+ 		/* $('#email_select').change(function(){
  			var val  = $(this).val();
  			if(val =="AUTO"){
  				$('#eml_addr2').prop('readonly', false);
@@ -31,13 +31,13 @@
  				$('#eml_addr2').prop('readonly', true);
  				$('#eml_addr2').val('');s
  			}
-		});
+		}); */
  	});
  
     /**  페이지 이동 */
 	function goOkPage(){	
 		var frm = document.commonForm;
-		frm.action = "<c:url value='/user/lifeEduOnLineList.do'/>";
+		frm.action = "<c:url value='/user/lifeEduOrgOnList.do'/>";
 		frm.submit();
 	}
  
@@ -132,10 +132,9 @@
 
 	function goOkPage(){	
 		var frm = document.commonForm;
-		frm.action = "<c:url value='/user/lifeEduOnLineList.do'/>";
+		frm.action = "<c:url value='/user/lifeEduOrgOnList.do'/>";
 		frm.submit();
 	}
-     //-->
  </script>
 	
 		   
@@ -143,7 +142,7 @@
     <div id="container">
 
         <div class="tit-wrap">
-            <h1 class="h1-tit">온라인 생명 지킴이 교육</h1>
+            <h1 class="h1-tit">교육 기관별 (ON-LINE)</h1>
             <div class="side-cont">
                 <img src="${pageContext.request.contextPath}/user/images/common/ico_home.png" alt="홈 바로가기"/>
                 <img src="${pageContext.request.contextPath}/user/images/common/ico_next.png" alt="다음 아이콘"/>
@@ -151,7 +150,7 @@
                 <img src="${pageContext.request.contextPath}/user/images/common/ico_next.png" alt="다음 아이콘"/>
                 <span>교육신청</span>
                 <img src="${pageContext.request.contextPath}/user/images/common/ico_next.png" alt="다음 아이콘"/>
-                <span>온라인 생명 지킴이 교육</span>
+                <span>교육 기관별 (ON-LINE)</span>
             </div>
         </div>
 
@@ -177,6 +176,12 @@
                               <col width="*"/>
                           </colgroup>
                           <tbody>
+                          	  <tr>
+                                  <th>기관명</th>
+                                  <td>
+                                      <span>${categoryForm.coper_nm}</span>
+                                 </td>
+                              </tr>
                               <tr>
                                   <th>교육분류</th>
                                   <td>
@@ -213,7 +218,7 @@
               </div>
 
               <div class="comp">
-                  <h4 class="h4-tit">신청자 정보</h4>
+                  <h4 class="h4-tit">신청자 정보  <span class="point">* 신청자 정보를 변경 하시려면 제단 메인 홈페이지(좌측 상단 재단 로고 클릭)에서 수정해야 합니다.</span></h4>
                   <div class="table-wrap">
                       <table class="detail-tb">
                           <caption>회원유형, 이름, 아이디, 휴대폰, 이메일 정보가 있는 테이블</caption>
@@ -236,16 +241,16 @@
                               </tr>
                               <tr>
                                   <th>휴대폰</th>
-                                  <td><input type="text" id="mbl_telno" name="mbl_telno" class="input-box lg-width"  onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"  maxlength="11" value="${fn:replace(sessionId.mbl_telno, '-', '')}" placeholder="- 없이 입력해주세요" value=""/></td>
+                                  <td><input type="text" id="mbl_telno" name="mbl_telno" class="input-box lg-width" readOnly onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"  maxlength="11" value="${fn:replace(sessionId.mbl_telno, '-', '')}" placeholder="- 없이 입력해주세요" value=""/></td>
                               </tr>
                               <tr>
                                   <th>이메일</th>
                                   <td>
                                       <div class="tb-cont">
-                                          <input type="text" class="input-box" id="eml_addr1" name="eml_addr1" maxlength="100" <c:if test="${!empty sessionId.eml_addr }"> value="${fn:split(sessionId.eml_addr, '@')[0]}" </c:if> />
+                                          <input type="text" class="input-box" id="eml_addr1" name="eml_addr1" readOnly maxlength="100" <c:if test="${!empty sessionId.eml_addr }"> value="${fn:split(sessionId.eml_addr, '@')[0]}" </c:if> />
                                           <span>@</span>
-                                          <input type="text" class="input-box" id="eml_addr2" name="eml_addr2" maxlength="100" value="${fn:split(sessionId.eml_addr, '@')[1]}"/>
-                                          <select class="select" id="email_select" name="email_select">
+                                          <input type="text" class="input-box" id="eml_addr2" name="eml_addr2" readOnly maxlength="100" value="${fn:split(sessionId.eml_addr, '@')[1]}"/>
+                                          <!-- <select class="select" id="email_select" name="email_select">
                                               <option value='AUTO'>직접입력</option>
                                               <option value='naver.com'>naver.com</option>
                                               <option value='nate.com'>nate.com</option>
@@ -255,7 +260,7 @@
                                               <option value='paran.com'>paran.com</option>
                                               <option value='dreamwiz.com'>dreamwiz.com</option>
                                               <option value='korea.com'>korea.com</option>
-                                          </select>
+                                          </select> -->
                                       </div>
                                   </td>
                               </tr>
