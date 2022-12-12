@@ -7,6 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.easycompany.service.vo.CategoryVo;
+import com.easycompany.service.vo.MainVo;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
@@ -36,5 +37,17 @@ public class OrgMngMapper extends EgovAbstractMapper {
 	
 	public int deleteData(Map<String, Object> paramMap) throws DataAccessException {
 		return delete(this.nameSpace + "." + paramMap.get("sqlName"), paramMap);
+	}
+	
+	public int selectCommonFile(Map<String, Object> paramMap){
+	    return Integer.valueOf(selectOne(this.nameSpace + "." + "selectCommonFile", paramMap)).intValue();
+	}
+	
+	public int insertCommonFile(Map<String, Object> paramMap){
+	    return Integer.valueOf(insert(this.nameSpace + "." + "insertCommonFile", paramMap)).intValue();
+	}
+	
+	public int updateCommonFile(Map<String, Object> paramMap){
+	    return Integer.valueOf(update(this.nameSpace + "." + "updateCommonFile", paramMap)).intValue();
 	}
 }

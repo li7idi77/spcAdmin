@@ -17,4 +17,6 @@ public abstract interface OrgMngService
 	public int updateData(Map<String, Object> paramMap) throws Exception;
 	
 	public int deleteData(Map<String, Object> paramMap) throws Exception;
+	
+	public int insertCommon(Map<String, Object> paramMap);
 }

@@ -1039,4 +1039,26 @@
 				  AND a.USER_NM LIKE CONCAT('%', #{searchText} ,'%')
 				</if>
 	</select>
+	
+	<insert id="insertCommonFile" parameterType="java.util.Map">
+		INSERT 
+		INTO EDU_BANNER
+		(
+		  	  BANNER_NO
+		  	, BANNER_NM
+		  	, BANNER_POS
+		  	, LINK_URL
+		  	, REG_ID
+		  	, FILE_ID
+		) 
+		VALUES 
+		(
+			  #{banner_no}
+			, #{banner_nm}
+			, #{banner_pos}
+			, #{link_url}
+			, IFNULL(#{user_id},'SYSTEM')
+			, #{file_id}
+		)	
+	</insert>
 </mapper>

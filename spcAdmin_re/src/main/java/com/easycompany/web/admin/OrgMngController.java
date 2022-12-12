@@ -29,6 +29,7 @@ import com.easycompany.service.OrgMngService;
 import com.easycompany.service.SectorService;
 import com.easycompany.service.vo.BoardVo;
 import com.easycompany.service.vo.CategoryVo;
+import com.easycompany.service.vo.MainVo;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
@@ -635,6 +636,44 @@ public class OrgMngController
 		model.addAttribute("path", request.getServletPath());
 		return "orgOnLogo";
 	}
+	
+	@RequestMapping({"/imgSave.do"})
+	  @ResponseBody
+	  public Map<String, Object> imgSave(HttpServletRequest request, @RequestParam Map<String, Object> paramMap) throws Exception
+	  {
+	    int resultCnt = 0;
+	    Map<String, Object> result = new HashMap<String, Object>();
+	    try
+	    {
+	      LoginVo loginvo = (LoginVo)WebUtils.getSessionAttribute(request, "AdminAccount");
+	      paramMap.put("user_id", loginvo.getUser_id());
+	      paramMap.put("reg_id", loginvo.getId());
+	      paramMap.put("user_nm", loginvo.getUser_nm());
+	      paramMap.put("webPath", this.webPath);
+
+	      String fileAddpath = this.filePath + File.separator + paramMap.get("file_gubun");
+	      
+	      BoardVo fileVo = FileUtil.uploadFile(request, fileAddpath);
+
+	      paramMap.put("file_id", fileVo.getFile_uuid());
+	      paramMap.put("file_name", fileVo.getFile_uuid());
+	      paramMap.put("file_full_path", fileVo.getFile_uuid());
+	      paramMap.put("file_size", fileVo.getFile_uuid());
+	      
+	      resultCnt = this.orgMngService.insertCommon(paramMap);
+	      
+	      //FileUtil.deleteFile(request, fileFullPath);
+
+	      
+	      result.put("result", resultCnt > 0 ? "SUCCESS" : "FAIL");
+	    }
+	    catch (Exception e)
+	    {
+	    	result.put("result", "FAIL");
+	    }
+
+	    return result;
+	  }
 	
 	@RequestMapping(value = "/orgOnOutputWarrant.do")
 	public String orgOnWarrantOutput(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {

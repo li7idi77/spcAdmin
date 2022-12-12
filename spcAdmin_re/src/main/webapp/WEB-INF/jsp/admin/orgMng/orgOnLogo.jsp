@@ -8,7 +8,7 @@
 <script type="text/javascript" src="<c:url value='/resources/common/jquery.js'/>"></script>
 
  <script type="text/javaScript" language="javascript" defer="defer">
-     <!--
+
      
  	function goOkPage(){	
 		var frm = document.commonForm;
@@ -80,21 +80,13 @@
 		frm.action = "<c:url value='/main/fileDownload.do'/>";
 		frm.submit();
 	}
- 	 //-->
  </script>
  
 
           <form  id="commonForm" name="commonForm"  method="post"   enctype="multipart/form-data" >
-			<input type="hidden" id="gubun1"  name="gubun1"  value=''/>
-			<input type="hidden" id="gubun2"  name="gubun2"  value="logo" />
+			<input type="hidden" id="file_gubun"  name="file_gubun"  value="warrantLogo" />
 			
-			<c:if test="${empty mainForm.logo_no }">
-	           	<input type="hidden" id="logo_no"  name="logo_no"  value="1" />
-	        </c:if>    
-            <c:if test="${not empty mainForm.logo_no }">
-               <input type="hidden" id="logo_no"  name="logo_no"  value="${mainForm.logo_no}" />
-            </c:if>
-           <h1 class="h1-tit">로고 등록</h1>
+           <h1 class="h1-tit">배너 등록</h1>
 <!-- EDU_FILE 수료증 banner1,2,3으로 등록 해야함 -->
              <div class="table-wrap">
                  <table class="detail-tb">
@@ -127,12 +119,7 @@
              </div>
 
              <div class="btn-cont">
-             	<c:if test="${empty mainForm.logo_no }">
 		           	<button type="button" class="mid-btn blue-btn"  onClick="javascript:fn_save('I');">저장</button>
-		        </c:if>    
-                <c:if test="${not empty mainForm.logo_no }">
-	                <button type="button" class="mid-btn blue-btn"  onClick="javascript:fn_save('E');">수정</button>
-	            </c:if>
                </div>
 			</form>
 	            
