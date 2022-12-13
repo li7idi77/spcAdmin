@@ -639,7 +639,7 @@ public class OrgMngController
 	
 	@RequestMapping({"/imgSave.do"})
 	  @ResponseBody
-	  public Map<String, Object> imgSave(HttpServletRequest request, @RequestParam Map<String, Object> paramMap) throws Exception
+	  public Map<String, Object> imgSave(@RequestParam("multiFile") List<MultipartFile> multiFileList, HttpServletRequest request, @RequestParam Map<String, Object> paramMap) throws Exception
 	  {
 	    int resultCnt = 0;
 	    Map<String, Object> result = new HashMap<String, Object>();
@@ -653,18 +653,15 @@ public class OrgMngController
 
 	      String fileAddpath = this.filePath + File.separator + paramMap.get("file_gubun");
 	      
-	      BoardVo fileVo = FileUtil.uploadFile(request, fileAddpath);
+	      List<Map<String, Object>> fileList = FileUtil.uploadFileMulti(multiFileList, request, fileAddpath);
 
-	      paramMap.put("file_id", fileVo.getFile_uuid());
-	      paramMap.put("file_name", fileVo.getFile_uuid());
-	      paramMap.put("file_full_path", fileVo.getFile_uuid());
-	      paramMap.put("file_size", fileVo.getFile_uuid());
-	      
-	      resultCnt = this.orgMngService.insertCommon(paramMap);
+	      for(Map<String, Object> fileMap : fileList) {
+	    	  //fileMap에 insert시 필요한거 추가해야함
+	    	  resultCnt += this.orgMngService.insertCommon(paramMap);
+	      }      
 	      
 	      //FileUtil.deleteFile(request, fileFullPath);
 
-	      
 	      result.put("result", resultCnt > 0 ? "SUCCESS" : "FAIL");
 	    }
 	    catch (Exception e)

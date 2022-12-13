@@ -88,7 +88,70 @@ public class FileUtil {
 		}
 	 return boardVo;
  	}															
- 
+	
+	public static List<Map<String, Object>> multiUploadFile (HttpServletRequest request,String filePath) {
+		 
+		List<Map<String, Object>> fileList = new ArrayList<Map<String, Object>>();
+		 try {
+			 //파일이 저장될 path 설정 
+			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+			Map<String, MultipartFile> files = multiRequest.getFileMap();
+		
+			Iterator<Entry<String, MultipartFile>> itr = files.entrySet().iterator();
+			MultipartFile mfile;
+				
+			// 디레토리가 없다면 생성 
+			File dir = new File(filePath); 
+			if (!dir.isDirectory()) {
+				dir.mkdirs(); 
+			}
+
+			String file_uuid         = "";
+			String file_name     = ""; 
+			String file_full_path = "";
+			long file_size = 0L;
+			
+			while (itr.hasNext()) {
+				Map<String, Object> fileMap = new HashMap<String, Object>();
+				Entry<String, MultipartFile> entry = itr.next();
+				// 내용을 가져와서 
+				mfile = entry.getValue();
+				
+				file_size = mfile.getSize();
+				
+				//file_name = new String(mfile.getOriginalFilename().getBytes("8859_1"), "UTF-8"); //한글꺠짐 방지 
+				file_name = mfile.getOriginalFilename();
+				// 파일명이 없다면 
+				if ("".equals(file_name)) { continue; } 
+				// 파일 명 변경(uuid로 암호화) 
+				String ext = file_name.substring(file_name.lastIndexOf('.')); // 확장자
+				
+				file_uuid = StringUtil.getUuid();
+					
+				file_full_path = filePath + File.separator + file_uuid + ext;
+			
+				// 설정한 path에 파일저장 
+				File serverFile = new File( file_full_path );			
+				mfile.transferTo(serverFile);
+
+				fileMap.put("file_size", file_size);
+				fileMap.put("file_uuid", file_uuid);
+				fileMap.put("file_name", file_name);
+				fileMap.put("file_full_path", file_full_path);
+								
+				fileList.add(fileMap);
+			}
+			
+			
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		 return fileList;
+	 	}		
  	/**
  	 * FileDownLoad
  	 * **/

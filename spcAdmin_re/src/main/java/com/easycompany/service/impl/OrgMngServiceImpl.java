@@ -52,6 +52,5 @@ public class OrgMngServiceImpl extends EgovAbstractServiceImpl  implements OrgMn
 	    	  return orgMngMapper.insertCommonFile(paramMap);
 	      }
 
-	    return 0;
 	  }
 }
