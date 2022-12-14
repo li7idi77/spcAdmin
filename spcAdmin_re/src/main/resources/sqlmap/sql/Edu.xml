@@ -715,10 +715,7 @@
 
 
 		, REG_ID
-
-		<if test=" coper_nm !=null and coper_nm !=''">
-			, COPER_NM
-		</if>
+		, COPER_NM
 		<if test=" coper_nm_auto !=null and coper_nm_auto !=''">
 			, COPER_NM_AUTO
 		</if>
@@ -762,10 +759,7 @@
 		, #{edu_goals}
 
 		, IFNULL(#{user_id},'SYSTEM')
-
-		<if test=" coper_nm !=null and coper_nm !=''">
-			, #{coper_nm}
-		</if>
+		, (SELECT INSTR_INST_ND_ENTRPS_NM FROM COM_USER WHERE USER_ID = #{user_id})
 		<if test=" coper_nm_auto !=null and coper_nm_auto !=''">
 			, #{coper_nm_auto}
 		</if>
@@ -1565,6 +1559,7 @@
  				   , A.INST_NM, A.TRAIN_S_DATE, A.TRAIN_E_DATE, A.EDU_TARGET,A.EDU_TIME
 		           , A.EDU_GARDEN, A.EDU_STATUS,A.EDU_CONT,A.EDU_METHOD, A.EXP_USE_YN
 		           , A.COPER_NM , A.COPER_NM_AUTO, A.COPER_ID, A.COPER_CHECK,A.REG_DT
+		           , (SELECT TELNO FROM COM_USER WHERE USER_ID = A.REG_ID) AS TELNO
 			  FROM EDU_REGISTRATION A, CLASS B
 			 WHERE A.CATEGORY1_KEY = B.CATEGORY1_KEY 
 			   AND A.CATEGORY2_KEY = B.CATEGORY2_KEY 
@@ -1623,6 +1618,7 @@
  				   , A.INST_NM, A.TRAIN_S_DATE, A.TRAIN_E_DATE, A.EDU_TARGET,A.EDU_TIME
 		           , A.EDU_GARDEN, A.EDU_STATUS,A.EDU_CONT,A.EDU_METHOD, A.EXP_USE_YN
 		           , A.COPER_NM , A.COPER_NM_AUTO, A.COPER_ID, A.COPER_CHECK,A.REG_DT
+		           ,(SELECT TELNO FROM COM_USER WHERE USER_ID = a.REG_ID) AS TELNO
 			  FROM EDU_REGISTRATION A, CLASS B
 			 WHERE A.CATEGORY1_KEY = B.CATEGORY1_KEY 
 			   AND A.CATEGORY2_KEY = B.CATEGORY2_KEY 

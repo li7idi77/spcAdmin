@@ -1040,25 +1040,52 @@
 				</if>
 	</select>
 	
+	<select id="warrantLogoList" parameterType="java.util.Map"	resultType="java.util.Map">
+	    SELECT FILE_GUBUN, FILE_ID, FILE_NAME, FILE_FULL_PATH
+		FROM EDU_FILE
+		WHERE FILE_GUBUN like 'warrantLogo%'
+	    ORDER BY FILE_GUBUN ASC
+	</select>
+	
+	<select id="selectCommonFile" parameterType="java.util.Map" resultType="int">
+		 SELECT COUNT(*) cnt
+	       	    FROM EDU_FILE
+	      WHERE FILE_GUBUN = #{file_gubun}
+	</select>
+	
+	<insert id="updateCommonFile" parameterType="java.util.Map">
+		UPDATE EDU_FILE
+		   SET FILE_NAME      = #{file_name}
+		     , FILE_FULL_PATH = #{file_full_path}
+		     , FILE_SIZE      = #{file_size}
+		     , FILE_ID        = #{file_uuid}
+		 WHERE FILE_GUBUN     = #{file_gubun}
+	</insert>
+	
 	<insert id="insertCommonFile" parameterType="java.util.Map">
-		INSERT 
-		INTO EDU_BANNER
+		<selectKey resultType="int" keyProperty="file_seq"
+			order="BEFORE">
+			SELECT IFNULL(MAX(FILE_SEQ), 0) + 1
+			FROM EDU_FILE
+		</selectKey>
+		INSERT
+		INTO EDU_FILE
 		(
-		  	  BANNER_NO
-		  	, BANNER_NM
-		  	, BANNER_POS
-		  	, LINK_URL
-		  	, REG_ID
-		  	, FILE_ID
-		) 
-		VALUES 
+		  FILE_GUBUN
+		, FILE_ID
+		, FILE_NAME
+		, FILE_FULL_PATH
+		, FILE_SEQ
+		, FILE_SIZE
+		)
+		VALUES
 		(
-			  #{banner_no}
-			, #{banner_nm}
-			, #{banner_pos}
-			, #{link_url}
-			, IFNULL(#{user_id},'SYSTEM')
-			, #{file_id}
-		)	
+		  #{file_gubun}
+		, #{file_uuid}
+		, #{file_name}
+		, #{file_full_path}
+		, #{file_seq}
+		, #{file_size}
+		)
 	</insert>
 </mapper>

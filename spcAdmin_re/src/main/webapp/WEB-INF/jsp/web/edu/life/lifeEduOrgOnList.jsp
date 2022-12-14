@@ -127,7 +127,7 @@
             <div class="search-wrap">
                 <div class="search-cont">
                     <label>분류 :</label>
-                    <select class="select" id="category1_key" name="category1_key">
+                    <%-- <select class="select" id="category1_key" name="category1_key">
                     	<c:forEach var="result" items="${category1list}" varStatus="status">
                         	<option value='${result.code_cd}' <c:if test="${categoryVo.category1_name == result.code_name}">selected </c:if> >${result.code_name}</option>
                         </c:forEach>
@@ -136,7 +136,7 @@
                     	<c:forEach var="result" items="${category2list}" varStatus="status">
                         	<option value='${result.code_cd}' <c:if test="${categoryVo.category2_name == result.code_name}">selected </c:if>>${result.code_name}</option>
                         </c:forEach>
-                    </select>
+                    </select> --%>
                     <select class="select" id="category3_key" name="category3_key">
                         <option value=''>선택 하세요</option>
                     	<c:forEach var="result" items="${category3list}" varStatus="status">
@@ -175,19 +175,7 @@
               <ul>
               	<c:forEach var="result" items="${resultList}" varStatus="status">
                   <li>
-                   <c:if test="${result.category1_name =='일반'}">
-                   	<span class="badge-normal">일반</span>
-                   </c:if>
-                   <c:if test="${result.category1_name =='기관'}">
-                   	<span class="badge-org">기관</span>
-                   </c:if>
-                   <c:if test="${result.category1_name =='강사'}">
-                   	<span class="badge-instruct">강사</span>
-                   </c:if>
-                   <c:if test="${result.category1_name =='실무자'}">
-                   	<span class="badge-worker">실무자</span>
-                   </c:if>               
-                    
+                   	<span class="badge-org">${result.coper_nm}</span>          
                     <span class="tag">${result.category2_name}</span>
                     <h3 class="h3-tit" data-no="${result.edu_no}" data-site="${result.edu_site }"  >${result.category3_name}</h3>
                     <ul class="summary-cont">
@@ -210,6 +198,10 @@
                         <li>
                             <label>강사명 :</label>
                             <span>${result.inst_nm}</span>
+                        </li>
+                        <li>
+                            <label>연락처 :</label>
+                            <span>${result.telno}</span>
                         </li>
                     </ul>
                   </li>

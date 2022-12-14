@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
 
@@ -632,19 +633,26 @@ public class OrgMngController
 	
 	@RequestMapping(value = "/orgOnLogo.do")
 	public String orgOnLogo(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
+		paramMap.put("sqlName", "warrantLogoList");
+		List<Map<String, Object>> list = orgMngService.getSelectList(paramMap);
+		model.addAttribute("resultList", list);
+		  
 		model.addAllAttributes(paramMap);
 		model.addAttribute("path", request.getServletPath());
+		model.addAttribute("webPath", webPath);
+
 		return "orgOnLogo";
 	}
 	
 	@RequestMapping({"/imgSave.do"})
 	  @ResponseBody
-	  public Map<String, Object> imgSave(@RequestParam("multiFile") List<MultipartFile> multiFileList, HttpServletRequest request, @RequestParam Map<String, Object> paramMap) throws Exception
+	  public Map<String, Object> imgSave(MultipartHttpServletRequest requestFile, HttpServletRequest request, @RequestParam Map<String, Object> paramMap) throws Exception
 	  {
 	    int resultCnt = 0;
 	    Map<String, Object> result = new HashMap<String, Object>();
 	    try
 	    {
+	    	List<MultipartFile> multiFileList = requestFile.getFiles("files");
 	      LoginVo loginvo = (LoginVo)WebUtils.getSessionAttribute(request, "AdminAccount");
 	      paramMap.put("user_id", loginvo.getUser_id());
 	      paramMap.put("reg_id", loginvo.getId());
@@ -654,10 +662,14 @@ public class OrgMngController
 	      String fileAddpath = this.filePath + File.separator + paramMap.get("file_gubun");
 	      
 	      List<Map<String, Object>> fileList = FileUtil.uploadFileMulti(multiFileList, request, fileAddpath);
-
+	      
+	      int fileIdx = 1;
 	      for(Map<String, Object> fileMap : fileList) {
+	    	  
 	    	  //fileMap에 insert시 필요한거 추가해야함
-	    	  resultCnt += this.orgMngService.insertCommon(paramMap);
+	    	  fileMap.put("file_gubun", paramMap.get("file_gubun").toString()+fileIdx);
+	    	  resultCnt += this.orgMngService.insertCommon(fileMap);
+	    	  fileIdx++;
 	      }      
 	      
 	      //FileUtil.deleteFile(request, fileFullPath);

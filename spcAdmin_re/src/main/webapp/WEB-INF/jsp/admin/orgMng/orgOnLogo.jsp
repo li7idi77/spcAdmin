@@ -20,18 +20,14 @@
 	    
      function fn_save(gubun1){
     	
-    	var file= $("input[name=files]")[0].files[0];
+    	var file= $("input[name=files]")[0];
 
  		if( file ==null || file =='null' || file =='undefined' || file ==undefined){
  			alert("선택된 파일이 없습니다.");	
  			return;
  		}
  		
- 		var formData = new FormData(); 
- 		formData.append("gubun1", gubun1);
- 		formData.append("gubun2", "logo");
- 		formData.append("logo_no", $("#logo_no").val());
- 		formData.append("files",  $("input[name=files]")[0].files[0]);
+ 		var formData = new FormData($('#commonForm')[0]); 
  		
  		var msg = "로고를 등록 하시겠습니까?";
  		if (gubun1 == "E"){
@@ -43,7 +39,8 @@
  				
  			$.ajax({	
  				data       : formData,
- 			    url		   : "<c:url value='/main/logoSave.do'/>",
+ 				enctype	   : 'multipart/form-data',
+ 			    url		   : "<c:url value='/orgMng/imgSave.do'/>",
  			    dataType   : "JSON",
  		        processData: false, 
  		        contentType: false,
@@ -76,7 +73,7 @@
  	function fileDownload(){	
 		var frm = document.commonForm;
 		$("#gubun1").val('R'); 
-		$("#gubun2").val('logo'); 
+		$("#gubun2").val('warrantLogo'); 
 		frm.action = "<c:url value='/main/fileDownload.do'/>";
 		frm.submit();
 	}
@@ -97,21 +94,49 @@
                      </colgroup>
                      <tbody>
                          <tr>
-                             <th>이미지 업로드</th>
+                             <th>하단 좌측 로고</th>
                              <td>
                                   <div class="upload-box">
-                                      <input id="files" name="files" type="file"  id="fileNm"  accept=".jpg, .jpeg, .png"/>
+                                      <input id="files1" name="files" type="file" accept=".jpg, .jpeg, .png"/>
                                   </div>
-						 			<c:if test="${not empty mainForm.logo_no }">
-							 			 <c:if test="${not empty mainForm.file_name }">
-								           	<c:set var="ppx" value="${fn:split(mainForm.file_name,'.')}" />
-									          <a onclick='javascript:fileDownload();'>  
-									          	<img heigth="200px" width="120px" src="/${mainVo.webPath}/${mainVo.gubun2}/${mainForm.file_id}.${ppx[1]}"  alt="${mainForm.file_name}"/>
-									         </a>
+						 			<c:if test="${not empty resultList[0] }">
+							 			 <c:if test="${not empty resultList[0].FILE_ID }">
+								           	<c:set var="ppx" value="${fn:split(resultList[0].FILE_NAME,'.')}" />
+									          	<img heigth="200px" width="120px" src="/${webPath}/warrantLogo/${resultList[0].FILE_ID}.${ppx[1]}"  alt="${resultList[0].FILE_NAME}"/>
 									        </c:if>
 						                     
 						            </c:if>
-                                 <p class="point">업로드 이미지 사이즈 : 1200px * 500px</p>
+                                 <!-- <p class="point">업로드 이미지 사이즈 : 1200px * 500px</p> -->
+                             </td>
+                         </tr>
+                         <tr>
+                             <th>하단 중앙 로고</th>
+                             <td>
+                                  <div class="upload-box">
+                                      <input id="files2" name="files" type="file" accept=".jpg, .jpeg, .png"/>
+                                  </div>
+                                  <c:if test="${not empty resultList[1] }">
+							 			 <c:if test="${not empty resultList[1].FILE_ID }">
+								           	<c:set var="ppx" value="${fn:split(resultList[1].FILE_NAME,'.')}" />
+									          	<img heigth="200px" width="120px" src="/${webPath}/warrantLogo/${resultList[1].FILE_ID}.${ppx[1]}"  alt="${resultList[1].FILE_NAME}"/>
+									        </c:if>
+						                     
+						            </c:if>
+                             </td>
+                         </tr>
+                         <tr>
+                             <th>하단 우측 로고</th>
+                             <td>
+                                  <div class="upload-box">
+                                      <input id="files3" name="files" type="file" accept=".jpg, .jpeg, .png"/>
+                                  </div>
+                                  <c:if test="${not empty resultList[2] }">
+							 			 <c:if test="${not empty resultList[2].FILE_ID }">
+								           	<c:set var="ppx" value="${fn:split(resultList[2].FILE_NAME,'.')}" />
+									          	<img heigth="200px" width="120px" src="/${webPath}/warrantLogo/${resultList[2].FILE_ID}.${ppx[1]}"  alt="${resultList[2].FILE_NAME}"/>
+									        </c:if>
+						                     
+						            </c:if>
                              </td>
                          </tr>
                      </tbody>

@@ -40,7 +40,7 @@ public class OrgMngMapper extends EgovAbstractMapper {
 	}
 	
 	public int selectCommonFile(Map<String, Object> paramMap){
-	    return Integer.valueOf(selectOne(this.nameSpace + "." + "selectCommonFile", paramMap)).intValue();
+	    return ((Integer)selectOne(this.nameSpace + "." + "selectCommonFile", paramMap)).intValue();
 	}
 	
 	public int insertCommonFile(Map<String, Object> paramMap){
