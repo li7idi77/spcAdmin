@@ -276,3 +276,7 @@ body{min-width:1440px; position: relative;}
 .warrant-wrap .warrant-cont2 .date{text-align: center;}
 .warrant-wrap .warrant-cont2 .date span{padding: 0px 3px 0px 10px;}
 .warrant-wrap .warrant-cont2 .date span:first-child{padding: 0px 3px 0px 0px;}
+
+.warrant-wrap .warrant-foot2{padding: 0px 50px; text-align: right;}
+.warrant-wrap .warrant-foot2 span{font-size: 20px; line-height: 30px; font-weight: 600; color: #000;}
+.warrant-wrap .warrant-foot2 img{width: 32%; max-width: 300px;}

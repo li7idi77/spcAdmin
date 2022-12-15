@@ -626,8 +626,14 @@ public class OrgMngController
 	
 	@RequestMapping(value = "/orgOnWarrant.do")
 	public String orgOnWarrant(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
+		paramMap.put("sqlName", "warrantLogoList");
+		List<Map<String, Object>> list = orgMngService.getSelectList(paramMap);
+		model.addAttribute("resultList", list);
+		
 		model.addAllAttributes(paramMap);
 		model.addAttribute("path", request.getServletPath());
+		model.addAttribute("webPath", webPath);
+		
 		return "orgOnWarrant";
 	}
 	
