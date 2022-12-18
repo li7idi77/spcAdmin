@@ -14,17 +14,16 @@
 <div class="search-wrap">
     <form id="listForm" name="listForm" target="_self" action="" method="post" onsubmit="">
     <input type="hidden" id="category3" name="category3" value="${category3_key}">
+    <input type="hidden" id="searchType" name="searchType" value="name">
     <div class="search-cont">
+        <h3 class="h3-tit">분류</h3>
         <select class="select lg-width"  id="category3_key" name="category3_key">
             <option value=''>선택 하세요</option>
 			<c:forEach var="result" items="${category3list}" varStatus="status">
 			     <option value='${result.CATEGORY3_KEY}' <c:if test="${category3_key == result.CATEGORY3_KEY}">selected</c:if>>${result.CATEGORY3_NAME}</option>
 			</c:forEach>
         </select>
-		<select class="select" id="searchType" name="searchType">
-            <option value="name">이름</option>
-            <option value="id">아이디</option>
-        </select>
+        <h3 class="h3-tit">이름</h3>
         <input type="text" id="searchText" name="searchText" class="input-box lg-width" placeholder="직접입력">
         
         <button class="search-btn">검색</button>
@@ -42,8 +41,10 @@
     <table class="list-tb">
        <caption>선택, 분류3(교육명), 이름, 아이디, 소속, 연락처, 수료증 발급 등록 정보가 있는 테이블</caption>
        <colgroup>
-           <col width="6%"/>
+           <col width="3%"/>
+           <col width="3%"/>
            <col width="8%"/>
+           <col width="12%"/>
            <col width="*"/>
            <col width="10%"/>
            <col width="12%"/>
@@ -55,12 +56,14 @@
             <tr>
                 <th><input type="checkbox" class="check-box"/></th>
                 <th>No.</th>
+                <th>분류1</th>
+                <th>분류2</th>
                 <th>분류3(교육명)</th>
                 <th>이름</th>
                 <th>아이디</th>
                 <th>소속</th>
                 <th>연락처</th>
-                <th>수료증 발급 등록</th>
+                <th>수료증 발급하기</th>
             </tr>
         </thead>
         <tbody>
@@ -68,12 +71,14 @@
 	            <tr>
 	            	<td><input type="checkbox" id='checkNo' name='checkNo' value="${result.COUR_NO}" class="check-box"/></td>
                     <td>${status.index + 1}</td>
-                    <td class="tl">${result.EDU_NAME}</td>
+                    <td>기관</td>
+                    <td>교육 기관별(ON-LINE)</td>
+                    <td>${result.EDU_NAME}</td>
                     <td>${result.USER_NM}</td>
                     <td>${result.USER_ID}</td>
                     <td>${result.COPER_NM}</td>
                     <td>${result.MBL_TELNO}</td>
-                    <td><c:if test="${result.ADD_CHK == null || result.ADD_CHK == ''}"><button onClick="javascript:openWindowPop('<c:url value='/warrant/popWarrantNumberReq.do'/>?cour_no=${result.COUR_NO}','popup');" class="sm-btn black-btn">등록하기</button></c:if></td>
+                    <td><button onClick="javascript:openWindowPop('<c:url value='/orgMng/popMyOrgWarrant.do'/>?cour_no=${result.COUR_NO}&edu_no=${result.EDU_NO}','popup');" class="sm-btn black-btn">발급하기</button>
 	            </tr>
             </c:forEach>
             <c:if test="${empty resultList }">
@@ -202,14 +207,14 @@ var setDel = function(idxArray){
 };
 
 function openWindowPop(url, name){
-    var options = 'top=10, left=10, width=540px, height=360px, status=no, menubar=no, toolbar=no, resizable=no';
+    var options = 'top=10, left=10, width=810px, height=1200px, status=no, menubar=no, toolbar=no, resizable=no';
     window.open(url, name, options);
 }	
 
 function fn_egov_link_page(pageNo){
 	 var frm = document.commonForm;
 	 $("#pageIndex").val(pageNo); 
-	 frm.action = "<c:url value='/warrant/warrantNumberReqList.do'/>";
+	 frm.action = "<c:url value='/orgMng/orgOnOutputWarrant.do'/>";
   	 frm.submit();
 }
  </script>

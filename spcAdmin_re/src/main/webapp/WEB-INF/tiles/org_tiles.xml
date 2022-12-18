@@ -95,4 +95,9 @@
 	       <put-attribute name="title" value="수료증 발급" />  
 	       <put-attribute name="body"  value="/WEB-INF/jsp/admin/orgMng/orgOnOutputWarrant.jsp" />  
 	   </definition>
+	   
+	   <definition name="popMyOrgWarrant" extends="popUp-definition">  
+	       <put-attribute name="title" value="수료증발급" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/admin/popup/popMyOrgWarrant.jsp" />  
+	   </definition>
   </tiles-definitions>

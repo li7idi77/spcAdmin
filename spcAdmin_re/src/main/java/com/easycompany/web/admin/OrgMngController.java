@@ -26,8 +26,10 @@ import com.easycompany.cmm.vo.DefaultVO;
 import com.easycompany.cmm.vo.LoginVo;
 import com.easycompany.service.EduService;
 import com.easycompany.service.LmsService;
+import com.easycompany.service.MyService;
 import com.easycompany.service.OrgMngService;
 import com.easycompany.service.SectorService;
+import com.easycompany.service.WarrantService;
 import com.easycompany.service.vo.BoardVo;
 import com.easycompany.service.vo.CategoryVo;
 import com.easycompany.service.vo.MainVo;
@@ -44,7 +46,13 @@ public class OrgMngController
   private OrgMngService orgMngService;
   
   @Autowired
+  private MyService myService;
+  
+  @Autowired
   private EduService eduService;
+  
+  @Autowired
+  private WarrantService warrantService;
   
   @Autowired
   private LmsService lmsService;
@@ -718,11 +726,11 @@ public class OrgMngController
 		model.addAttribute("category3list", category3list);
 		
 		paramMap.put("sqlName", "warrantNumberReqList");
-		List<Map<String, Object>> list = orgMngService.getSelectList(paramMap);
+		List<Map<String, Object>> list = warrantService.getSelectList(paramMap);
 		model.addAttribute("resultList", list);
 		  
 		paramMap.put("sqlName", "warrantNumberReqListCnt");
-		int totCnt = orgMngService.getSelectListCnt(paramMap);
+		int totCnt = warrantService.getSelectListCnt(paramMap);
 		model.addAttribute("totCnt", totCnt);
 		paginationInfo.setTotalRecordCount(totCnt);
 
@@ -732,4 +740,21 @@ public class OrgMngController
 		  
 		return "orgOnOutputWarrant";
 	}
+	
+	@RequestMapping({"/popMyOrgWarrant.do"})
+	  public String popMyOrgWarrant(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model ,HttpServletRequest request)  throws Exception {
+		  paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
+		  paramMap.put("sqlName", "getMyWarrant");
+		  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
+		  model.addAttribute("result", myService.getSelectData(paramMap));
+		  
+		  paramMap.put("sqlName", "warrantLogoList");
+		  List<Map<String, Object>> list = orgMngService.getSelectList(paramMap);
+		  model.addAttribute("resultList", list);
+		  model.addAttribute("path", request.getServletPath());
+		  model.addAttribute("webPath", webPath);
+		  model.addAllAttributes(paramMap);
+		
+		  return "popMyOrgWarrant";
+	  }
 }
