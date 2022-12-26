@@ -130,6 +130,9 @@
 .black-btn:hover{background: #000000 !important; border: 1px solid #000000;}
 .black-btn:focus{background: #000000 !important; border: 1px solid #000000;}
 
+.yellow-btn{background: #FFE400 !important; border: 1px solid #dddddd !important; color: #333 !important;}
+.yellow-btn:hover{background: #FFBB00 !important; border: 1px solid #dddddd !important; color: #333 !important;}
+.yellow-btn:focus{background: #FFBB00 !important; border: 1px solid #dddddd !important; color: #333 !important;}
 
 .white-btn{background: #fff !important; border: 1px solid #dddddd !important; color: #333 !important;}
 .white-btn:hover{background: #eee !important; border: 1px solid #dddddd !important; color: #333 !important;}

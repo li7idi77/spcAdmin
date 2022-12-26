@@ -35,6 +35,8 @@
               , (SELECT CD_NM FROM COM_CD_MNG  WHERE UP_CD_NO ='265' AND IFNULL(A.EDU_AUTHOR_CD,'01') = CD) AS EDU_AUTH_CD_NM
               , DATE_FORMAT(SYSDATE(),'%Y-%m-%d %T') AS LOGIN_DT
               , DATE_FORMAT(PASSWORD_CHG_DT,'%Y-%m-%d') AS PASSWORD_CHG_DT_NM
+              , INST_MNGR_APLY_YN AS INST_MNGR
+              , INST_MNGR_APLY_STTUS_CD AS INST_MNGR_STAT
 	     FROM COM_USER	A    
 	    WHERE 1=1
 	    <if test=" user_id !=null and user_id !=''">

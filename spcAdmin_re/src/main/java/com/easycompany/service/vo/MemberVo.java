@@ -78,6 +78,9 @@ public class MemberVo extends DefaultVO {
 	private String edu_auth_cd;/* 교육권한_코드 */
 	private String instructor_coper_nm;/* 강사_기관및 업체명 */
 	
+	private String inst_mngr;/* 강사_기관및 업체명 */
+	private String inst_mngr_stat;/* 강사_기관및 업체명 */
+	
 	private String user_group_cd_nm; /* 권한코드명 */
 	private String login_dt;
 	private String password_chg_dt_nm;
@@ -525,6 +528,18 @@ public class MemberVo extends DefaultVO {
 	}
 	public void setOrg_manage_sttus_cd(String org_manage_sttus_cd) {
 		this.org_manage_sttus_cd = org_manage_sttus_cd;
+	}
+	public String getInst_mngr_stat() {
+		return inst_mngr_stat;
+	}
+	public void setInst_mngr_stat(String inst_mngr_stat) {
+		this.inst_mngr_stat = inst_mngr_stat;
+	}
+	public String getInst_mngr() {
+		return inst_mngr;
+	}
+	public void setInst_mngr(String inst_mngr) {
+		this.inst_mngr = inst_mngr;
 	}
 
 	

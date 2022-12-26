@@ -10,7 +10,10 @@ path 사용하기 위해
 Controller에 추가하면 사용 가능.
 model.addAttribute("path", request.getServletPath());
  -->
+
  <ul class="depth01-menu">
+ <c:if test="${sessionId.inst_mngr != 'Y' || sessionId.inst_mngr_stat != 'Y'}">
+
     <li <c:if test="${fn:contains(path, '/main/logo') || fn:contains(path, '/main/img')  || fn:contains(path, '/main/banner') || fn:contains(path, '/main/popup') }">  class="on" </c:if> >
         <a href="#">메인화면</a>
         <ul class="depth02-menu">
@@ -90,7 +93,7 @@ model.addAttribute("path", request.getServletPath());
             <li><a href="#">업로드 자료</a></li>
         </ul>
     </li>
-    
+    </c:if>
     <li <c:if test="${fn:contains(path, '/orgMng/orgOn') }">  class="on" </c:if>>
         <a href="#">기관관리자</a>
         <ul class="depth02-menu">

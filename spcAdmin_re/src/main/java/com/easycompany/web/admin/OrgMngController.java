@@ -117,6 +117,7 @@ public class OrgMngController
 	
 	    int totCnt = this.eduService.getEducationCount(categoryVo);
 	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 	    model.addAttribute("paginationInfo", paginationInfo);
 	    model.addAttribute("categoryVo", categoryVo);
 	    model.addAttribute("path", request.getServletPath());
@@ -156,7 +157,7 @@ public class OrgMngController
 		    List categoryFormSubList = this.eduService.getEduCationDetailSub(categoryVo);
 		    model.addAttribute("categoryFormSubList", categoryFormSubList);
 	    }
-	
+	    model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 	    model.addAttribute("categoryVo", categoryVo);
 	    model.addAttribute("path", request.getServletPath());
 	  return "orgOnlineReq";
@@ -168,7 +169,7 @@ public class OrgMngController
 	  int resultCnt = 0;
 	    try
 	    {
-	      LoginVo loginvo = (LoginVo)WebUtils.getSessionAttribute(request, "AdminAccount");
+	      LoginVo loginvo = (LoginVo)WebUtils.getSessionAttribute(request, "UserAccount");
 	
 	      categoryVo.setUser_id(loginvo.getUser_id());
 	      categoryVo.setReg_id(loginvo.getId());
@@ -292,7 +293,7 @@ public class OrgMngController
 	public String contentsList(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
 		  paramMap.put("pageSize", 10);
 		  paramMap.put("recordCountPerPage", 10);
-		  paramMap.put("UserAccount", request.getSession().getAttribute("AdminAccount"));
+		  paramMap.put("UserAccount", request.getSession().getAttribute("UserAccount"));
 		  if(!paramMap.containsKey("pageIndex")) {
 			  paramMap.put("pageIndex", 1);
 		  }
@@ -338,6 +339,7 @@ public class OrgMngController
 	public String noticeReq(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
 		paramMap.put("sqlName", "selectDetailLms");	
 		Map<String, Object> result = lmsService.getSelectData(paramMap);
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 		model.addAttribute("result", result);  
 	  	model.addAttribute("path", request.getServletPath());
 		model.addAllAttributes(paramMap);
@@ -351,7 +353,7 @@ public class OrgMngController
 		int resultCnt = 0;
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
+			paramMap.put("UserAccount", request.getSession().getAttribute("UserAccount"));
 		    
 		      
 		    String fileAddpath  = this.filePath + File.separator + paramMap.get("file_gubun");
@@ -384,7 +386,7 @@ public class OrgMngController
 		int resultCnt = 0;
 		String result = "";
 		try {
-			paramMap.put("UserAccount", request.getSession().getAttribute("AdminAccount"));
+			paramMap.put("UserAccount", request.getSession().getAttribute("UserAccount"));
 			paramMap.put("sqlName", "deleteContents"); 
 			resultCnt = lmsService.updateData(paramMap);
 		    result = (resultCnt > 0 ? "SUCCESS" : "FAIL");
@@ -439,6 +441,7 @@ public class OrgMngController
  	
  	    int totCnt = this.eduService.getEducationCount(categoryVo);
  	    paginationInfo.setTotalRecordCount(totCnt);
+ 	   model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
  	    model.addAttribute("paginationInfo", paginationInfo);
  	    model.addAttribute("categoryVo", categoryVo);
  	    model.addAttribute("path", request.getServletPath());
@@ -487,6 +490,7 @@ public class OrgMngController
  	
  	    int totCnt = this.eduService.getEducationCount(categoryVo);
  	    paginationInfo.setTotalRecordCount(totCnt);
+ 	   model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
  	    model.addAttribute("paginationInfo", paginationInfo);
  	    model.addAttribute("categoryVo", categoryVo);
  	    model.addAttribute("path", request.getServletPath());
@@ -498,7 +502,7 @@ public class OrgMngController
 	public String studentList(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
 		  paramMap.put("pageSize", 10);
 		  paramMap.put("recordCountPerPage", 10);
-		  paramMap.put("UserAccount", request.getSession().getAttribute("AdminAccount"));
+		  paramMap.put("UserAccount", request.getSession().getAttribute("UserAccount"));
 		  if(!paramMap.containsKey("pageIndex")) {
 			  paramMap.put("pageIndex", 1);
 		  }
@@ -543,7 +547,7 @@ public class OrgMngController
 	public String studentLearn(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
 		  paramMap.put("pageSize", 10);
 		  paramMap.put("recordCountPerPage", 10);
-		  paramMap.put("UserAccount", request.getSession().getAttribute("AdminAccount"));
+		  paramMap.put("UserAccount", request.getSession().getAttribute("UserAccount"));
 		  if(!paramMap.containsKey("pageIndex")) {
 			  paramMap.put("pageIndex", 1);
 		  }
@@ -576,7 +580,7 @@ public class OrgMngController
 	public String studentGraduate(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
 		  paramMap.put("pageSize", 10);
 		  paramMap.put("recordCountPerPage", 10);
-		  paramMap.put("UserAccount", request.getSession().getAttribute("AdminAccount"));
+		  paramMap.put("UserAccount", request.getSession().getAttribute("UserAccount"));
 		  if(!paramMap.containsKey("pageIndex")) {
 			  paramMap.put("pageIndex", 1);
 		  }
@@ -611,7 +615,7 @@ public class OrgMngController
 		int resultCnt = 0;
 		String result = "";
 		try {
-			LoginVo loginvo = (LoginVo) WebUtils.getSessionAttribute(request, "AdminAccount");
+			LoginVo loginvo = (LoginVo) WebUtils.getSessionAttribute(request, "UserAccount");
 			/*List<Long> boardIdxList = new ArrayList<Long>();
 			
 			for(String idxStr : boardIdxStrArray){
@@ -639,6 +643,7 @@ public class OrgMngController
 		model.addAttribute("resultList", list);
 		
 		model.addAllAttributes(paramMap);
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 		model.addAttribute("path", request.getServletPath());
 		model.addAttribute("webPath", webPath);
 		
@@ -652,6 +657,7 @@ public class OrgMngController
 		model.addAttribute("resultList", list);
 		  
 		model.addAllAttributes(paramMap);
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 		model.addAttribute("path", request.getServletPath());
 		model.addAttribute("webPath", webPath);
 
@@ -667,7 +673,7 @@ public class OrgMngController
 	    try
 	    {
 	    	List<MultipartFile> multiFileList = requestFile.getFiles("files");
-	      LoginVo loginvo = (LoginVo)WebUtils.getSessionAttribute(request, "AdminAccount");
+	      LoginVo loginvo = (LoginVo)WebUtils.getSessionAttribute(request, "UserAccount");
 	      paramMap.put("user_id", loginvo.getUser_id());
 	      paramMap.put("reg_id", loginvo.getId());
 	      paramMap.put("user_nm", loginvo.getUser_nm());
@@ -702,7 +708,7 @@ public class OrgMngController
 	public String orgOnWarrantOutput(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
 		paramMap.put("pageSize", 10);
 		paramMap.put("recordCountPerPage", 10);
-		paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
+		paramMap.put("UserAccount", request.getSession().getAttribute("UserAccount"));
 		if(!paramMap.containsKey("pageIndex")) {
 		  paramMap.put("pageIndex", 1);
 		}
@@ -734,6 +740,7 @@ public class OrgMngController
 		model.addAttribute("totCnt", totCnt);
 		paginationInfo.setTotalRecordCount(totCnt);
 
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 		model.addAttribute("paginationInfo", paginationInfo);
 		model.addAttribute("path", request.getServletPath());
 		model.addAllAttributes(paramMap);
@@ -743,7 +750,7 @@ public class OrgMngController
 	
 	@RequestMapping({"/popMyOrgWarrant.do"})
 	  public String popMyOrgWarrant(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model ,HttpServletRequest request)  throws Exception {
-		  paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
+		  paramMap.put("UserAccount", request.getSession().getAttribute("UserAccount"));
 		  paramMap.put("sqlName", "getMyWarrant");
 		  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 		  model.addAttribute("result", myService.getSelectData(paramMap));
