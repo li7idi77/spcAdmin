@@ -212,7 +212,9 @@
 	                    	<li <c:if test="${fn:contains(path, '/my/my04eduApp') }">    class="active" </c:if>> <a href="${pageContext.request.contextPath}/my/my04eduApp.do">교육명 별 신청자</a></li>
 	                    	<li <c:if test="${fn:contains(path, '/my/my04eduResult') }">    class="active" </c:if>> <a href="${pageContext.request.contextPath}/my/my04eduResult.do">교육 결과 보고서 제출/수료증</a></li>
 	                    	<li <c:if test="${fn:contains(path, '/my/my04mylist') }">    class="active" </c:if>> <a href="${pageContext.request.contextPath}/my/my04mylist.do">나의 글 보기</a></li>
-	                    	<li style="text-align:center"><button type="button" class="yellow-btn search-btn ml20" onClick="location.href = '<c:url value='/orgMng/orgOnlineList.do' />';">기관관리자</button></li>
+	                    	<c:if test="${sessionId.inst_mngr == 'Y'}">
+	                    		<li style="text-align:center"><button type="button" class="yellow-btn search-btn ml20" onClick="location.href = '<c:url value='/orgMng/orgOnlineList.do' />';">기관관리자</button></li>
+                        	</c:if>
                         </ul>
 	                 </li> 
 	                </c:if>

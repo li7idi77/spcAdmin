@@ -94,6 +94,7 @@ model.addAttribute("path", request.getServletPath());
         </ul>
     </li>
     </c:if>
+    <c:if test="${sessionId.inst_mngr == 'Y'}">
     <li <c:if test="${fn:contains(path, '/orgMng/orgOn') }">  class="on" </c:if>>
         <a href="#">기관관리자</a>
         <ul class="depth02-menu">
@@ -106,4 +107,5 @@ model.addAttribute("path", request.getServletPath());
             <li <c:if test="${fn:contains(path, '/orgMng/orgOnOutputWarrant')}">   class="active" </c:if>><a href="<c:url value='/orgMng/orgOnOutputWarrant.do' />">수료증 발급</a></li>
         </ul>
     </li>
+    </c:if>
 </ul>
