@@ -1294,4 +1294,43 @@
 			AND FN_DECRYPT(b.ENCPT_USER_NM) LIKE CONCAT('%',#{user_nm},'%')
 		</if>
 	</select>
+	
+	<select id="getMyWarrantList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT a.SCHEDULE_NO
+			    ,(SELECT CATEGORY1_NAME FROM EDU_CLASS_CATEGORY1 WHERE CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY1_NAME
+				,(SELECT CATEGORY2_NAME FROM EDU_CLASS_CATEGORY2 WHERE CATEGORY2_KEY = a.CATEGORY2_KEY AND CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY2_NAME
+		        ,(SELECT CATEGORY3_NAME FROM EDU_CLASS_CATEGORY3 WHERE CATEGORY3_KEY = a.CATEGORY3_KEY AND CATEGORY2_KEY = a.CATEGORY2_KEY AND CATEGORY1_KEY = a.CATEGORY1_KEY) AS CATEGORY3_NAME
+		        ,DATE_FORMAT(a.REG_DT,'%Y-%m-%d') AS REG_DT
+			    ,CASE WHEN b.SCH_STATUS = 'S' THEN '완료' ELSE '미완료' END AS SCH_STATUS
+		FROM EDU_SCHEDULE a,
+			 EDU_SCHEDULE_DETAIL b
+             
+		WHERE 1=1
+		AND a.SCHEDULE_NO = b.SCHEDULE_NO
+		AND a.REG_ID = #{UserAccount.user_id}
+		<!-- AND a.CATEGORY1_KEY = '9'
+		AND a.CATEGORY2_KEY = '16' -->
+		AND b.SCH_STATUS = 'S'
+        <if test="category3_key != '' and category3_key != null">
+			AND a.CATEGORY3_KEY = #{category3_key}
+		</if>
+		ORDER BY a.SCHEDULE_NO DESC
+		LIMIT #{recordCountPerPage} OFFSET #{offset}
+	</select>
+	
+	<select id="getMyWarrantListCnt" parameterType="java.util.Map" resultType="int">
+		SELECT COUNT(*) 
+		FROM EDU_SCHEDULE a,
+			 EDU_SCHEDULE_DETAIL b
+             
+		WHERE 1=1
+		AND a.SCHEDULE_NO = b.SCHEDULE_NO
+		AND a.REG_ID = #{UserAccount.user_id}
+		<!-- AND a.CATEGORY1_KEY = '9'
+		AND a.CATEGORY2_KEY = '16' -->
+		AND b.SCH_STATUS = 'S'
+        <if test="category3_key != '' and category3_key != null">
+			AND a.CATEGORY3_KEY = #{category3_key}
+		</if>
+	</select>
 </mapper>

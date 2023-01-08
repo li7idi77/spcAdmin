@@ -138,4 +138,19 @@
 	       <put-attribute name="title" value="마이페이지 - 나의 글 보기" />  
 	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my04mylist.jsp" />  
 	   </definition> 
+	   
+	   <definition name="my04warrant" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 수료증(비회원/직접기입)" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my04warrant.jsp" />  
+	   </definition>
+	   
+	   <definition name="my04warrantAdd" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 수료증(비회원/직접기입) 출력" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my04warrantAdd.jsp" />  
+	   </definition>
+	   
+	   <definition name="my04onApp" extends="common-definition">  
+	       <put-attribute name="title" value="마이페이지 - 온라인 컨텐츠 신청" />  
+	       <put-attribute name="body" value="/WEB-INF/jsp/web/my/my04onApp.jsp" />  
+	   </definition>
   </tiles-definitions>
