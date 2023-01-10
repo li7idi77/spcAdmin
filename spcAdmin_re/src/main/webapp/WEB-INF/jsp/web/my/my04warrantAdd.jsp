@@ -26,6 +26,10 @@
 	 	 frm.action = "<c:url value='/my/my04warrantAdd.do'/>";
 	   	 frm.submit();
 	 }
+	function fn_egov_regist_cxcel(){
+		document.commonForm.action = "<c:url value='/my/my04excelUpload.do'/>";
+	   	document.commonForm.submit();
+	}
 </script>
      <!-- container  begin -->
             <div id="container">
@@ -47,7 +51,7 @@
                     <div class="contents-wrap">
 
                         <!---- search-wrap begin ---->
-                        <form  id="commonForm" name="commonForm"  method="post"  action="">
+                        <form  id="commonForm" name="commonForm" method="post" action="" enctype="multipart/form-data">
                         <div class="search-wrap">
                         
                         <!---- search-wrap end ---->
@@ -69,16 +73,61 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach var="result" items="${resultList}" varStatus="status">
+                                    <c:forEach var="data" items="${dataList}" varStatus="status">
                                         <tr>
                                             <td>${status.index + 1}</td>
-                                            <td><input type="text" name="warrant_name" class="input-box lg-width" value="${warrant_name}"/></td>
-                                            <td><input type="text" name="warrant_entrps" class="input-box lg-width" value="${warrant_entrps}"/></td>
+                                            <td><input type="text" name="warrant_name" class="input-box" value="${data.name}"/></td>
+                                            <td><input type="text" name="warrant_entrps" class="input-box" value="${data.ins}"/></td>
                                         </tr>
                                     </c:forEach>
-                                    <c:if test="${empty resultList }">
+                                    <c:if test="${empty dataList }">
 							             <tr>
 							                <td>1</td>
+                                            <td><input type="text" name="warrant_name" class="input-box" value=""/></td>
+                                            <td><input type="text" name="warrant_entrps" class="input-box" value=""/></td>
+                                         </tr>
+                                         <tr>
+                                            <td>2</td>
+                                            <td><input type="text" name="warrant_name" class="input-box" value=""/></td>
+                                            <td><input type="text" name="warrant_entrps" class="input-box" value=""/></td>
+                                         </tr>
+                                         <tr>
+                                            <td>3</td>
+                                            <td><input type="text" name="warrant_name" class="input-box" value=""/></td>
+                                            <td><input type="text" name="warrant_entrps" class="input-box" value=""/></td>
+                                         </tr>
+                                         <tr>
+                                            <td>4</td>
+                                            <td><input type="text" name="warrant_name" class="input-box" value=""/></td>
+                                            <td><input type="text" name="warrant_entrps" class="input-box" value=""/></td>
+                                         </tr>
+                                         <tr>   
+                                            <td>5</td>
+                                            <td><input type="text" name="warrant_name" class="input-box" value=""/></td>
+                                            <td><input type="text" name="warrant_entrps" class="input-box" value=""/></td>
+                                         </tr>
+                                         <tr>   
+                                            <td>6</td>
+                                            <td><input type="text" name="warrant_name" class="input-box" value=""/></td>
+                                            <td><input type="text" name="warrant_entrps" class="input-box" value=""/></td>
+                                         </tr>
+                                         <tr>   
+                                            <td>7</td>
+                                            <td><input type="text" name="warrant_name" class="input-box" value=""/></td>
+                                            <td><input type="text" name="warrant_entrps" class="input-box" value=""/></td>
+                                         </tr>
+                                         <tr>   
+                                            <td>8</td>
+                                            <td><input type="text" name="warrant_name" class="input-box" value=""/></td>
+                                            <td><input type="text" name="warrant_entrps" class="input-box" value=""/></td>
+                                         </tr>
+                                         <tr>   
+                                            <td>9</td>
+                                            <td><input type="text" name="warrant_name" class="input-box" value=""/></td>
+                                            <td><input type="text" name="warrant_entrps" class="input-box" value=""/></td>
+                                         </tr>
+                                         <tr>   
+                                            <td>10</td>
                                             <td><input type="text" name="warrant_name" class="input-box" value=""/></td>
                                             <td><input type="text" name="warrant_entrps" class="input-box" value=""/></td>
 							             </tr>
@@ -89,8 +138,8 @@
                         </div>
                         	<div class="btn-cont" style="height:30px;">
                         		<div style="float: left;border:1px solid #999;padding:0 0 0 5px;"> 
-                        			<input type="file" id="file1" name="file1"/>
-                                	<button type="button" class="lg-btn blue-btn" onClick="fn_clear();">적용</button>	
+                        			<input type="file" id="fileNm" name="fileNm"/>
+                                	<button type="button" class="lg-btn blue-btn" onclick="fn_egov_regist_cxcel(); return false;">적용</button>	
                         		</div>
                                 
                                 <div style="float: right;"> 

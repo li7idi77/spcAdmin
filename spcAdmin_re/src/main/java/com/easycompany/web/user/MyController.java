@@ -1,14 +1,22 @@
 package com.easycompany.web.user;
 
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -16,6 +24,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.easycompany.cmm.util.FileUtil;
 import com.easycompany.cmm.vo.DefaultVO;
@@ -1233,6 +1243,73 @@ public class MyController
 	  
 	  return "my04warrantAdd";
   }
+  
+  @RequestMapping(value = "/my04excelUpload.do")
+	public String excelUpload(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
+		final MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+		final Map<String, MultipartFile> files = multiRequest.getFileMap();
+		InputStream fis = null;
+
+		Iterator<Entry<String, MultipartFile>> itr = files.entrySet().iterator();
+		MultipartFile file;
+		
+		List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
+		Workbook workbook = null;
+		
+		while (itr.hasNext()) {
+			Entry<String, MultipartFile> entry = itr.next();
+
+			file = entry.getValue();
+			if (!"".equals(file.getOriginalFilename())) {
+				// 업로드 파일에 대한 확장자를 체크
+				if (file.getOriginalFilename().endsWith(".xls") || file.getOriginalFilename().endsWith(".XLS")) {
+					try {
+						fis = file.getInputStream();
+						workbook = new HSSFWorkbook(file.getInputStream());
+					} catch (Exception e) {
+						throw e;
+					} finally {
+						if (fis != null) {
+							fis.close();
+						}
+					}
+				} else if (file.getOriginalFilename().endsWith(".xlsx") || file.getOriginalFilename().endsWith(".XLSX")){
+					try {
+						fis = file.getInputStream();
+						workbook = new XSSFWorkbook(file.getInputStream());
+					} catch (Exception e) {
+						throw e;
+					} finally {
+						if (fis != null) {
+							fis.close();
+						}
+					}
+				} else {
+					return "my04warrantAdd";
+				}
+				
+				Sheet worksheet = workbook.getSheetAt(0);
+
+			    for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) { // 4
+
+			      Row row = worksheet.getRow(i);
+
+			      Map<String, Object> data = new HashMap<String, Object>();
+			      
+			      data.put("name", row.getCell(1).getStringCellValue());
+			      data.put("ins", row.getCell(2).getStringCellValue());
+			      
+			      dataList.add(data);
+			    }
+			}
+		}
+		
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
+		model.addAttribute("path", request.getServletPath());
+		model.addAttribute("dataList", dataList);
+		model.addAllAttributes(paramMap);
+		return "my04warrantAdd";
+	}
   
   @RequestMapping({"/my04onApp.do"})
   public String my04onApp(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model, HttpServletRequest request) throws Exception{
