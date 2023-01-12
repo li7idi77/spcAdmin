@@ -30,6 +30,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.easycompany.cmm.util.FileUtil;
 import com.easycompany.cmm.vo.DefaultVO;
 import com.easycompany.service.MyService;
+import com.easycompany.service.OrgMngService;
 import com.easycompany.service.SectorService;
 import com.easycompany.service.vo.BoardVo;
 
@@ -40,7 +41,9 @@ import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 @RequestMapping({"my"})
 public class MyController
 {
-
+  @Autowired
+  private OrgMngService orgMngService;
+	
   @Autowired
   private MyService myService;
   
@@ -1310,6 +1313,26 @@ public class MyController
 		model.addAllAttributes(paramMap);
 		return "my04warrantAdd";
 	}
+  
+  @RequestMapping({"/popMyWarrant2.do"})
+  public String popMyWarrant2(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model ,HttpServletRequest request)  throws Exception {
+	  paramMap.put("UserAccount", request.getSession().getAttribute("UserAccount"));
+	  paramMap.put("sqlName", "getMyWarrant2");
+	  Map<String, Object> result = myService.getSelectData(paramMap);
+	  model.addAttribute("result", result);
+	  
+	  paramMap.put("sqlName", "warrantLogoList");
+	  List<Map<String, Object>> list = orgMngService.getSelectList(paramMap);
+	  model.addAttribute("resultList", list);
+
+	  model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
+	  model.addAttribute("path", request.getServletPath());
+	  model.addAttribute("webPath", webPath);
+	  
+	  model.addAllAttributes(paramMap);
+	  
+	  return "popMyWarrant2";
+  }
   
   @RequestMapping({"/my04onApp.do"})
   public String my04onApp(@RequestParam Map<String, Object> paramMap, DefaultVO vo, ModelMap model, HttpServletRequest request) throws Exception{

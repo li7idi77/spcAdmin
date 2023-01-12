@@ -17,7 +17,7 @@
  });
  
 	function openWindowPop(url, name){
-	    var options = 'top=10, left=10, width=800px, height=1200px, status=no, menubar=no, toolbar=no, resizable=no';
+		var options = 'top=10, left=10, width=810px, height=1200px, status=no, menubar=no, toolbar=no, resizable=no';
 	    window.open(url, name, options);
 	}	
 	function fn_egov_link_page(pageNo){
@@ -30,6 +30,21 @@
 		document.commonForm.action = "<c:url value='/my/my04excelUpload.do'/>";
 	   	document.commonForm.submit();
 	}
+	function nameArr(){
+		var list = new Array();
+		$("input[name=warrant_name]").each(function(index, item){
+		   list.push($(item).val());
+		});
+		return list;
+	}
+	function entrpsArr(){
+		var list = new Array();
+		$("input[name=warrant_entrps]").each(function(index, item){
+		   list.push($(item).val());
+		});
+		return list;
+	}
+	
 </script>
      <!-- container  begin -->
             <div id="container">
@@ -52,6 +67,7 @@
 
                         <!---- search-wrap begin ---->
                         <form  id="commonForm" name="commonForm" method="post" action="" enctype="multipart/form-data">
+                        <input type="hidden" id="sch_no"  name="sch_no" value="${sch_no}" />
                         <div class="search-wrap">
                         
                         <!---- search-wrap end ---->
@@ -144,7 +160,7 @@
                                 
                                 <div style="float: right;"> 
 	                                <button type="button" class="lg-btn white-btn" onClick="fn_clear();">등록양식 다운로드</button>
-	                                <button type="button" class="lg-btn orange-btn">출력</button>
+	                                <button type="button" class="lg-btn orange-btn" onClick="javascript:openWindowPop('<c:url value='/my/popMyWarrant2.do'/>?sch_no=${sch_no}','popup');">출력</button>
                                 </div>
                             </div>
                         </div>
