@@ -16,7 +16,6 @@
         <li><a href="<c:url value='/warrant/warrantGeneralDefault.do' />">기본 양식</a></li>
         <li class="on"><a href="<c:url value='/warrant/warrantOnlineList.do' />">온라인 등록</a></li>
         <li><a href="<c:url value='/warrant/warrantOfflineList.do' />">오프라인 등록</a></li>
-        <li><a href="<c:url value='/warrant/warrantOrgList.do' />">기관교육 등록</a></li>
     </ul>
 </div>
 

@@ -47,7 +47,7 @@ public class WarrantController {
 	
 	@RequestMapping(value = "/warrantGeneralDefault.do")
 	public String warrantGeneralDefault(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
-
+		model.addAttribute("path", request.getServletPath());
 		return "warrantGeneralDefault";
 	}
 	
@@ -90,6 +90,7 @@ public class WarrantController {
 		model.addAttribute("totCnt", totCnt);
 		paginationInfo.setTotalRecordCount(totCnt);
 
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 		model.addAttribute("paginationInfo", paginationInfo);
 		model.addAttribute("path", request.getServletPath());
 		model.addAllAttributes(paramMap);
@@ -121,6 +122,7 @@ public class WarrantController {
 			List<Map<String, Object>> category3list = sectorService.getSelectList(paramMap);
 			model.addAttribute("category3list", category3list);
 		}
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 		model.addAttribute("path", request.getServletPath());
 		model.addAllAttributes(paramMap);
 		return "warrantOnlineReq";
@@ -194,6 +196,7 @@ public class WarrantController {
 		model.addAttribute("totCnt", totCnt);
 		paginationInfo.setTotalRecordCount(totCnt);
 
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 		model.addAttribute("paginationInfo", paginationInfo);
 		model.addAttribute("path", request.getServletPath());
 		model.addAllAttributes(paramMap);
@@ -224,6 +227,7 @@ public class WarrantController {
 			List<Map<String, Object>> category3list = sectorService.getSelectList(paramMap);
 			model.addAttribute("category3list", category3list);
 		}
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 		model.addAttribute("path", request.getServletPath());
 		model.addAllAttributes(paramMap);
 		return "warrantOfflineReq";
@@ -268,6 +272,7 @@ public class WarrantController {
 		model.addAttribute("totCnt", totCnt);
 		paginationInfo.setTotalRecordCount(totCnt);
 
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 		model.addAttribute("paginationInfo", paginationInfo);
 		model.addAttribute("path", request.getServletPath());
 		model.addAllAttributes(paramMap);
@@ -298,6 +303,7 @@ public class WarrantController {
 			List<Map<String, Object>> category3list = sectorService.getSelectList(paramMap);
 			model.addAttribute("category3list", category3list);
 		}
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 		model.addAttribute("path", request.getServletPath());
 		model.addAllAttributes(paramMap);
 		
@@ -333,7 +339,7 @@ public class WarrantController {
 	
 	@RequestMapping(value = "/warrantNumber.do")
 	public String warrantNumber(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
-
+		model.addAttribute("path", request.getServletPath());
 		return "warrantNumber";
 	}
 	
@@ -378,6 +384,7 @@ public class WarrantController {
 		model.addAttribute("totCnt", totCnt);
 		paginationInfo.setTotalRecordCount(totCnt);
 
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 		model.addAttribute("paginationInfo", paginationInfo);
 		model.addAttribute("path", request.getServletPath());
 		model.addAllAttributes(paramMap);
@@ -454,6 +461,7 @@ public class WarrantController {
 		model.addAttribute("totCnt", totCnt);
 		paginationInfo.setTotalRecordCount(totCnt);
 
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 		model.addAttribute("paginationInfo", paginationInfo);
 		model.addAttribute("path", request.getServletPath());
 		model.addAllAttributes(paramMap);
@@ -514,6 +522,7 @@ public class WarrantController {
 		model.addAttribute("totCnt", totCnt);
 		paginationInfo.setTotalRecordCount(totCnt);
 
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 		model.addAttribute("paginationInfo", paginationInfo);
 		model.addAttribute("path", request.getServletPath());
 		model.addAllAttributes(paramMap);
@@ -523,7 +532,7 @@ public class WarrantController {
 	
 	@RequestMapping(value = "/warrantOfficerDefault.do")
 	public String warrantOfficerDefault(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
-
+		model.addAttribute("path", request.getServletPath());
 		return "warrantOfficerDefault";
 	}
 	
@@ -566,6 +575,7 @@ public class WarrantController {
 		model.addAttribute("totCnt", totCnt);
 		paginationInfo.setTotalRecordCount(totCnt);
 
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 		model.addAttribute("paginationInfo", paginationInfo);
 		model.addAttribute("path", request.getServletPath());
 		model.addAllAttributes(paramMap);
@@ -597,6 +607,7 @@ public class WarrantController {
 			List<Map<String, Object>> category3list = sectorService.getSelectList(paramMap);
 			model.addAttribute("category3list", category3list);
 		}
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 		model.addAttribute("path", request.getServletPath());
 		model.addAllAttributes(paramMap);
 		return "warrantOfficerOnReq";
@@ -670,6 +681,7 @@ public class WarrantController {
 		model.addAttribute("totCnt", totCnt);
 		paginationInfo.setTotalRecordCount(totCnt);
 
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 		model.addAttribute("paginationInfo", paginationInfo);
 		model.addAttribute("path", request.getServletPath());
 		model.addAllAttributes(paramMap);
@@ -700,6 +712,7 @@ public class WarrantController {
 			List<Map<String, Object>> category3list = sectorService.getSelectList(paramMap);
 			model.addAttribute("category3list", category3list);
 		}
+		model.addAttribute("sessionId", request.getSession().getAttribute("UserAccount"));
 		model.addAttribute("path", request.getServletPath());
 		model.addAllAttributes(paramMap);
 		return "warrantOfficerOffReq";
