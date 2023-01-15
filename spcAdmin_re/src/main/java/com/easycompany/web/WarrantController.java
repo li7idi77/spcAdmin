@@ -475,5 +475,233 @@ public class WarrantController {
 		return "popWarrantNumberMod";
 	}
 	
+	@RequestMapping(value = "/warrantIssueList.do")
+	public String warrantIssueList(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
+		paramMap.put("pageSize", 10);
+		paramMap.put("recordCountPerPage", 10);
+		paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
+		if(!paramMap.containsKey("pageIndex")) {
+		  paramMap.put("pageIndex", 1);
+		}
+		PaginationInfo paginationInfo = new PaginationInfo();
+		paginationInfo.setCurrentPageNo(Integer.parseInt(paramMap.get("pageIndex").toString()));
+		paginationInfo.setRecordCountPerPage(Integer.parseInt(paramMap.get("recordCountPerPage").toString()));
+		paginationInfo.setPageSize(Integer.parseInt(paramMap.get("pageSize").toString()));
+		  
+		int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
+		paramMap.put("offset",offset);
+		  
+		paramMap.put("site", "on");
+		paramMap.put("sqlName", "getCategoryList1");
+		List<Map<String, Object>> category1list = sectorService.getSelectList(paramMap);
+		model.addAttribute("category1list", category1list);
+		
+		paramMap.put("sqlName", "getCategoryList2");
+		List<Map<String, Object>> category2list = sectorService.getSelectList(paramMap);
+		model.addAttribute("category2list", category2list);
+		  
+		paramMap.put("sqlName", "getCategoryList3");
+		List<Map<String, Object>> category3list = sectorService.getSelectList(paramMap);
+		model.addAttribute("category3list", category3list);
+		
+		paramMap.put("license_type", "A");
+		paramMap.put("sqlName", "warrantOnlineList");
+		List<Map<String, Object>> list = warrantService.getSelectList(paramMap);
+		model.addAttribute("resultList", list);
+		  
+		paramMap.put("sqlName", "warrantOnlineListCnt");
+		int totCnt = warrantService.getSelectListCnt(paramMap);
+		model.addAttribute("totCnt", totCnt);
+		paginationInfo.setTotalRecordCount(totCnt);
+
+		model.addAttribute("paginationInfo", paginationInfo);
+		model.addAttribute("path", request.getServletPath());
+		model.addAllAttributes(paramMap);
+		  
+		return "warrantIssueList";
+	}
 	
+	@RequestMapping(value = "/warrantOfficerDefault.do")
+	public String warrantOfficerDefault(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
+
+		return "warrantOfficerDefault";
+	}
+	
+	@RequestMapping(value = "/warrantOfficerOnList.do")
+	public String warrantOfficerOnList(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
+		paramMap.put("pageSize", 10);
+		paramMap.put("recordCountPerPage", 10);
+		paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
+		if(!paramMap.containsKey("pageIndex")) {
+		  paramMap.put("pageIndex", 1);
+		}
+		PaginationInfo paginationInfo = new PaginationInfo();
+		paginationInfo.setCurrentPageNo(Integer.parseInt(paramMap.get("pageIndex").toString()));
+		paginationInfo.setRecordCountPerPage(Integer.parseInt(paramMap.get("recordCountPerPage").toString()));
+		paginationInfo.setPageSize(Integer.parseInt(paramMap.get("pageSize").toString()));
+		  
+		int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
+		paramMap.put("offset",offset);
+		  
+		paramMap.put("site", "on");
+		paramMap.put("sqlName", "getCategoryList1");
+		List<Map<String, Object>> category1list = sectorService.getSelectList(paramMap);
+		model.addAttribute("category1list", category1list);
+		
+		paramMap.put("sqlName", "getCategoryList2");
+		List<Map<String, Object>> category2list = sectorService.getSelectList(paramMap);
+		model.addAttribute("category2list", category2list);
+		  
+		paramMap.put("sqlName", "getCategoryList3");
+		List<Map<String, Object>> category3list = sectorService.getSelectList(paramMap);
+		model.addAttribute("category3list", category3list);
+		
+		paramMap.put("license_type", "A");
+		paramMap.put("sqlName", "warrantOnlineList");
+		List<Map<String, Object>> list = warrantService.getSelectList(paramMap);
+		model.addAttribute("resultList", list);
+		  
+		paramMap.put("sqlName", "warrantOnlineListCnt");
+		int totCnt = warrantService.getSelectListCnt(paramMap);
+		model.addAttribute("totCnt", totCnt);
+		paginationInfo.setTotalRecordCount(totCnt);
+
+		model.addAttribute("paginationInfo", paginationInfo);
+		model.addAttribute("path", request.getServletPath());
+		model.addAllAttributes(paramMap);
+		  
+		return "warrantOfficerOnList";
+	}
+	
+	@RequestMapping(value = "/warrantOfficerOnReq.do")
+	public String warrantOfficerOnReq(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
+		paramMap.put("site", "on");
+		paramMap.put("sqlName", "getCategoryList1");
+		List<Map<String, Object>> category1list = sectorService.getSelectList(paramMap);
+		model.addAttribute("category1list", category1list);
+		if(paramMap.get("actFlag").toString().equals("U")) {
+			paramMap.put("license_type", "A");
+			paramMap.put("sqlName", "selectDetailOnline");	
+			Map<String, Object> result = warrantService.getSelectData(paramMap);
+		  	model.addAttribute("result", result);
+		  	
+		  	paramMap.put("category1_key", result.get("CATEGORY1_KEY"));
+		  	paramMap.put("category2_key", result.get("CATEGORY2_KEY"));
+		  	paramMap.put("category3_key", result.get("CATEGORY3_KEY"));
+		  	
+			paramMap.put("sqlName", "getCategoryList2");
+			List<Map<String, Object>> category2list = sectorService.getSelectList(paramMap);
+			model.addAttribute("category2list", category2list);
+			  
+			paramMap.put("sqlName", "getCategoryList3");
+			List<Map<String, Object>> category3list = sectorService.getSelectList(paramMap);
+			model.addAttribute("category3list", category3list);
+		}
+		model.addAttribute("path", request.getServletPath());
+		model.addAllAttributes(paramMap);
+		return "warrantOfficerOnReq";
+	}
+	
+	@RequestMapping(value = "/warrantOfficerSave.do")
+	@ResponseBody
+	public Map<String, Object> warrantOfficerSave(HttpServletRequest request, @RequestParam Map<String, Object> paramMap) throws Exception {
+		int resultCnt = 0;
+		 Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
+			
+			if ("I".equals(paramMap.get("actFlag").toString())) { // 저장
+				if(paramMap.get("license_type").toString().equals("C")) {
+					paramMap.put("license_status", 1);
+				}else {
+					paramMap.put("license_status", 0);
+				}
+				paramMap.put("sqlName", "warrantSave");
+				resultCnt = warrantService.insertData(paramMap);
+				
+			} else if("U".equals(paramMap.get("actFlag").toString())) { // 수정
+				paramMap.put("sqlName", "warrantUpdate");
+				resultCnt = warrantService.updateData(paramMap);
+			}
+//			
+		} catch (Exception e) {
+			result.put("result", "FAIL");	 
+		}
+		result.put("result",resultCnt > 0 ? "SUCCESS" : "FAIL");
+		return result;
+	}
+	
+	@RequestMapping(value = "/warrantOfficerOffList.do")
+	public String warrantOfficerOffList(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
+		paramMap.put("pageSize", 10);
+		paramMap.put("recordCountPerPage", 10);
+		paramMap.put("AdminAccount", request.getSession().getAttribute("AdminAccount"));
+		if(!paramMap.containsKey("pageIndex")) {
+		  paramMap.put("pageIndex", 1);
+		}
+		PaginationInfo paginationInfo = new PaginationInfo();
+		paginationInfo.setCurrentPageNo(Integer.parseInt(paramMap.get("pageIndex").toString()));
+		paginationInfo.setRecordCountPerPage(Integer.parseInt(paramMap.get("recordCountPerPage").toString()));
+		paginationInfo.setPageSize(Integer.parseInt(paramMap.get("pageSize").toString()));
+		  
+		int offset = (paginationInfo.getCurrentPageNo() - 1) * paginationInfo.getRecordCountPerPage();
+		paramMap.put("offset",offset);
+		  
+		paramMap.put("site", "off");
+		paramMap.put("sqlName", "getCategoryList1");
+		List<Map<String, Object>> category1list = sectorService.getSelectList(paramMap);
+		model.addAttribute("category1list", category1list);
+		
+		paramMap.put("sqlName", "getCategoryList2");
+		List<Map<String, Object>> category2list = sectorService.getSelectList(paramMap);
+		model.addAttribute("category2list", category2list);
+		  
+		paramMap.put("sqlName", "getCategoryList3");
+		List<Map<String, Object>> category3list = sectorService.getSelectList(paramMap);
+		model.addAttribute("category3list", category3list);
+		
+		paramMap.put("license_type", "B");
+		paramMap.put("sqlName", "warrantOnlineList");
+		List<Map<String, Object>> list = warrantService.getSelectList(paramMap);
+		model.addAttribute("resultList", list);
+		  
+		paramMap.put("sqlName", "warrantOnlineListCnt");
+		int totCnt = warrantService.getSelectListCnt(paramMap);
+		model.addAttribute("totCnt", totCnt);
+		paginationInfo.setTotalRecordCount(totCnt);
+
+		model.addAttribute("paginationInfo", paginationInfo);
+		model.addAttribute("path", request.getServletPath());
+		model.addAllAttributes(paramMap);
+		
+		return "warrantOfficerOffList";
+	}
+	@RequestMapping(value = "/warrantOfficerOffReq.do")
+	public String warrantOfficerOffReq(@RequestParam Map<String, Object> paramMap, ModelMap model, HttpServletRequest request) throws Exception {
+		paramMap.put("site", "off");
+		paramMap.put("sqlName", "getCategoryList1");
+		List<Map<String, Object>> category1list = sectorService.getSelectList(paramMap);
+		model.addAttribute("category1list", category1list);
+		if(paramMap.get("actFlag").toString().equals("U")) {
+			paramMap.put("license_type", "B");
+			paramMap.put("sqlName", "selectDetailOnline");	
+			Map<String, Object> result = warrantService.getSelectData(paramMap);
+		  	model.addAttribute("result", result);
+		  	
+		  	paramMap.put("category1_key", result.get("CATEGORY1_KEY"));
+		  	paramMap.put("category2_key", result.get("CATEGORY2_KEY"));
+		  	paramMap.put("category3_key", result.get("CATEGORY3_KEY"));
+		  	
+			paramMap.put("sqlName", "getCategoryList2");
+			List<Map<String, Object>> category2list = sectorService.getSelectList(paramMap);
+			model.addAttribute("category2list", category2list);
+			  
+			paramMap.put("sqlName", "getCategoryList3");
+			List<Map<String, Object>> category3list = sectorService.getSelectList(paramMap);
+			model.addAttribute("category3list", category3list);
+		}
+		model.addAttribute("path", request.getServletPath());
+		model.addAllAttributes(paramMap);
+		return "warrantOfficerOffReq";
+	}
 }

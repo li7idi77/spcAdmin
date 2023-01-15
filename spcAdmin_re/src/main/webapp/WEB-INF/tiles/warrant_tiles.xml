@@ -52,4 +52,34 @@
        <put-attribute name="title" value="번호수료증 목록/수정" />  
        <put-attribute name="body" value="/WEB-INF/jsp/admin/warrant/warrantNumberModList.jsp" />  
    </definition>
+   
+   <definition name="warrantIssueList" extends="base-definition">  
+       <put-attribute name="title" value="수료증발급" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/warrant/warrantIssueList.jsp" />  
+   </definition>
+   
+   <definition name="warrantOfficerDefault" extends="base-definition">  
+       <put-attribute name="title" value="일반수료증" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/warrant/warrantOfficerDefault.jsp" />  
+   </definition>
+   
+   <definition name="warrantOfficerOnList" extends="base-definition">  
+       <put-attribute name="title" value="온라인등록" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/warrant/warrantOfficerOnList.jsp" />  
+   </definition>
+   
+   <definition name="warrantOfficerOnReq" extends="base-definition">  
+       <put-attribute name="title" value="온라인등록" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/warrant/warrantOfficerOnReq.jsp" />  
+   </definition>
+   
+   <definition name="warrantOfficerOffList" extends="base-definition">  
+       <put-attribute name="title" value="오프라인등록" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/warrant/warrantOfficerOffList.jsp" />  
+   </definition>
+   
+   <definition name="warrantOfficerOffReq" extends="base-definition">  
+       <put-attribute name="title" value="오프라인등록" />  
+       <put-attribute name="body" value="/WEB-INF/jsp/admin/warrant/warrantOfficerOffReq.jsp" />  
+   </definition>
 </tiles-definitions>

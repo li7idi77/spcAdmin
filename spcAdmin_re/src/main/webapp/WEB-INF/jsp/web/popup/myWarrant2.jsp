@@ -14,13 +14,25 @@
 
 
 <style>
-.warrant-wrap{width: 515px; height: 762px; position: relative; margin: 0 auto; padding: 40px 40px;}
+@page{
+	size:A4
+}
+@media print{
+	html, body{
+		width:210mm;
+		-webkit-print-color-adjust:exact;
+	}
+}
+body{
+	width:100%;
+	min-width:810px;
+}
+.warrant-wrap{width: 670px; height: 1000px; position: relative; margin: 20px; padding: 50px;}
 .warrant-wrap.number{background: url(../images/common/02bg.jpg) no-repeat center center; background-size: cover;}
-.warrant-wrap.number .warrant-tit{padding-top: 85px;}
-.warrant-wrap .warrant-tit{font-size: 40px;font-weight: 600; font-family: batang; color: #333; text-align: center; line-height: 54px; padding-top: 120px; letter-spacing: 8px;}
+.warrant-wrap .warrant-tit{font-size: 70px;font-weight: 600; font-family: batang; color: #333; text-align: center; line-height: 54px; padding-top: 120px; letter-spacing: 8px;}
 
-.warrant-wrap .warrant-cont2{padding: 55px 70px;}
-.warrant-wrap .warrant-cont2 p{margin-bottom: 45px; font-size: 16px; font-weight: 500; line-height: 24px; text-align: center; color: #333;}
+.warrant-wrap .warrant-cont2{padding: 110px 60px;}
+.warrant-wrap .warrant-cont2 p{margin-bottom: 55px; font-size: 25px; font-weight: 500; line-height: 24px; text-align: center; color: #333;}
 .warrant-wrap .warrant-cont2 p span{padding: 0px 3px 0px 0px; font-weight: 700; color: #000;}
 
 .warrant-wrap .warrant-cont2 .name{}
@@ -31,7 +43,7 @@
 .warrant-wrap .warrant-cont2 .date span{padding: 0px 3px 0px 10px;}
 .warrant-wrap .warrant-cont2 .date span:first-child{padding: 0px 3px 0px 0px;}
 
-.warrant-wrap .warrant-foot2{padding: 0px 50px; text-align: right;}
+.warrant-wrap .warrant-foot2{padding: 0px 10px; text-align: right;}
 .warrant-wrap .warrant-foot2 span{font-size: 20px; line-height: 30px; font-weight: 600; color: #000;}
 .warrant-wrap .warrant-foot2 img{width: 32%; max-width: 300px;}
 </style>
@@ -40,38 +52,48 @@
  $(document).ready(function(){	
 	 var nameList = opener.nameArr();
 	 var entrpsList = opener.entrpsArr();
+	 var printHtml = $("#warrant_shot").html();
+	 for(var i=0;i<nameList.length;i++){
+		 $("#printDiv").append('<div id="warrant_shot" class="warrant-wrap number" >'+printHtml+'</div>');
+	 }
+	 
+	 for(var j=0;j<$("span[name=name]").length;j++){
+		 $("span[name=name]").eq(j).text(nameList[j]);
+		 $("span[name=entrps]").eq(j).text(entrpsList[j]);
+	 }
+	 //eq(1).text("11");
 	 //alert(nameList);
 	 //alert(entrpsList);
-	 imgShot();
+	 //imgShot();
  });
- function imgShot(){
-	 html2canvas(document.querySelector("#warrant_shot")).then(canvas => {
-		   document.body.appendChild(canvas)
-		   $("#print_url").val(canvas.toDataURL());
-	});
-	 $("#warrant_shot").hide();
- }
-
  
- function downloadURI(){
-	 var uri = $("#print_url").val();
-	 var name = $("#print_name").val()+"님_수료증.png";
-     var link = document.createElement("a")
-     link.download = name;
-     link.href = uri;
-     document.body.appendChild(link);
-     link.click();
+ window.onbeforeprint = beforePrint;
+ window.onafterprint = afterPrint;
+ 
+ function beforePrint(){
+	$("#printbtn").hide(); 
+	$("#warrant_shot").hide(); 
+ }
+ 
+ function afterPrint(){
+	 $("#printbtn").show();
+	 $("#warrant_shot").show(); 
+ }
+ 
+ function printPage(){
+	 window.print();
  }
 </script>
 <input type="hidden" id="print_name" name="print_name" value="${result.USER_NM}">
 <input type="hidden" id="print_url" name="print_url">
+<button id="printbtn" type="button" onClick="printPage();" class="sm-btn white-btn">프린트 출력</button>
 <div id="warrant_shot" class="warrant-wrap number" >
     <h1 class="warrant-tit">수료증</h1>
 
     <div class="warrant-cont2">
-        <p class="name" style="text-align:right;"><span>홍길동</span>님</p>
+        <p class="name" style="text-align:right;"><span name="name">홍길동</span>님</p>
         <p class="title">교육명 :<span>${result.CATEGORY3_NAME}</span></p>
-        <p class="subtitle"><span>서울 강남 역삼보건소</span></p>
+        <p class="subtitle"><span name="entrps">서울 강남 역삼보건소</span></p>
         <p class="des">에 시행하는 ○○○○ ○ ○○○○ ○○ ○○○<br/>○○○○ ○○○○ ○○ ○○ ○○ ○○<br/>○○○○○○○○○ ○○○○ ○○○ ○○○<br/>이 수료증을 드립니다.</p>
         <p class="date"><span>${result.DATE1}</span></p>
     </div>
@@ -84,6 +106,8 @@
 		<c:set var="ppx3" value="${fn:split(resultList[2].FILE_NAME,'.')}" />
 		<img src="/${webPath}/warrantLogo/${resultList[2].FILE_ID}.${ppx3[1]}"  alt="${resultList[2].FILE_NAME}"/>
     </div>
+</div>
+<div id="printDiv">
 </div>
 
 		<!-- <button type="button" onClick="downloadURI();" class="sm-btn white-btn">다운로드</button> -->
